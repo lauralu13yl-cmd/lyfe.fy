@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Find a Game — Lyfe.fy</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Arial', sans-serif; background: #F5EDD8; color: #1A2410; }
+
+    .nav {
+      background: #2D4A1E; padding: 16px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 3px solid #A8915A;
+    }
+    .nav-logo { color: white; font-size: 22px; font-weight: bold; text-decoration: none; }
+    .nav-logo span { color: #A8915A; }
+    .nav-back { color: #C4AA74; font-size: 14px; text-decoration: none; }
+    .nav-back:hover { color: white; }
+
+    .header {
+      background: #2D4A1E; padding: 48px 32px 40px;
+      text-align: center; border-bottom: 3px solid #A8915A;
+    }
+    .header h1 { color: white; font-size: 36px; margin-bottom: 8px; }
+    .header h1 em { color: #C4AA74; font-style: italic; }
+    .header p { color: #A8C890; font-size: 16px; }
+
+    .filters {
+      display: flex; gap: 12px; padding: 24px 32px;
+      flex-wrap: wrap; max-width: 900px; margin: 0 auto;
+    }
+    .filter-btn {
+      padding: 8px 18px; border-radius: 20px; border: 1.5px solid #A8915A;
+      background: white; color: #2D4A1E; font-size: 13px; cursor: pointer;
+      font-weight: 600; transition: all 0.2s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: #2D4A1E; color: white; border-color: #2D4A1E;
+    }
+
+    .games-grid {
+      max-width: 900px; margin: 0 auto;
+      padding: 0 32px 64px; display: flex; flex-direction: column; gap: 20px;
+    }
+
+    .game-card {
+      background: white; border-radius: 12px;
+      border: 1.5px solid #E8DDBE;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      overflow: hidden; transition: box-shadow 0.2s;
+    }
+    .game-card:hover { box-shadow: 0 4px 20px rgba(45,74,30,0.15); }
+
+    .card-top {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 6px 20px;
+      border-bottom: 1px solid #F0E8D0;
+    }
+    .tier-badge {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      padding: 4px 10px; border-radius: 4px;
+    }
+    .tier-1 { background: #2D4A1E; color: #C4AA74; }
+    .tier-3 { background: #E8F0E0; color: #2D4A1E; }
+    .tier-4 { background: #F5EDD8; color: #6B7A5D; }
+    .spots-left { font-size: 12px; color: #7A8A68; font-weight: 600; }
+    .spots-left strong { color: #2D4A1E; }
+
+    .card-body { padding: 20px; display: flex; gap: 20px; align-items: flex-start; }
+
+    .host-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: #2D4A1E; display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: bold; color: #C4AA74;
+      flex-shrink: 0; border: 2px solid #A8915A;
+    }
+
+    .card-info { flex: 1; }
+    .card-info h3 { font-size: 18px; color: #1A2410; margin-bottom: 4px; }
+    .host-name { font-size: 13px; color: #A8915A; font-weight: 600; margin-bottom: 10px; }
+    .host-name span { color: #7A8A68; font-weight: 400; }
+
+    .meta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 10px; }
+    .meta-item { font-size: 13px; color: #3D4F30; display: flex; align-items: center; gap: 5px; }
+    .meta-item .icon { font-size: 14px; }
+
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag {
+      font-size: 11px; padding: 3px 10px; border-radius: 12px;
+      background: #F0E8D0; color: #3D4F30; font-weight: 600;
+    }
+
+    .card-action {
+      padding: 16px 20px; border-top: 1px solid #F0E8D0;
+      display: flex; justify-content: space-between; align-items: center;
+      background: #FDFAF5;
+    }
+    .deposit-note { font-size: 12px; color: #7A8A68; }
+    .deposit-note strong { color: #2D4A1E; }
+
+    .request-btn {
+      background: #2D4A1E; color: white;
+      padding: 10px 24px; border-radius: 8px;
+      font-size: 14px; font-weight: 700; border: none; cursor: pointer;
+      text-decoration: none; display: inline-block;
+      transition: background 0.2s;
+    }
+    .request-btn:hover { background: #3B5A1F; }
+
+    .waitlist-banner {
+      background: #A8915A; color: white;
+      text-align: center; padding: 16px 32px;
+      font-size: 14px;
+    }
+    .waitlist-banner a {
+      color: white; font-weight: bold; text-decoration: underline; cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .card-body { flex-direction: column; }
+      .filters { padding: 16px; }
+      .games-grid { padding: 0 16px 48px; }
+      .header { padding: 32px 16px; }
+      .header h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo">Lyfe<span>.</span>fy</a>
+  <a href="/" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="waitlist-banner">
+  🚀 Launching in Boston this spring — <a onclick="document.getElementById('waitlist-modal').style.display='flex'">Join the waitlist for early access</a>
+</div>
+
+<div class="header">
+  <h1>Find a <em>Game</em></h1>
+  <p>Upcoming games in your city — hosted by certified athletes</p>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active">All Games</button>
+  <button class="filter-btn">Golf ⛳</button>
+  <button class="filter-btn">Tennis 🎾</button>
+  <button class="filter-btn">Beginner Friendly</button>
+  <button class="filter-btn">This Weekend</button>
+  <button class="filter-btn">Athlete-Led</button>
+</div>
+
+<div class="games-grid">
+
+  <!-- GAME 1 -->
+  <div class="game-card">
+    <div class="card-top">
+      <span class="tier-badge tier-1">⭐ ATHLETE-LED</span>
+      <span class="spots-left"><strong>2 spots left</strong> of 4</span>
+    </div>
+    <div class="card-body">
+      <div class="host-avatar">SR</div>
+      <div class="card-info">
+        <h3>Saturday Morning Golf — Back Bay</h3>
+        <div class="host-name">Sofia R. <span>· Stanford Golf · D1 Athlete · ⭐ 4.98</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="icon">🗓</span> Sat, Mar 22 · 9:00–11:30 AM</span>
+          <span class="meta-item"><span class="icon">📍</span> Boston, MA</span>
+          <span class="meta-item"><span class="icon">⛳</span> Handicap 8–18</span>
+          <span class="meta-item"><span class="icon">👥</span> 4 players max</span>
+        </div>
+        <div class="tags">
+          <span class="tag">Golf</span>
+          <span class="tag">Skill-Focused</span>
+          <span class="tag">Coached Elements</span>
+          <span class="tag">Networking</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-action">
+      <div class="deposit-note"><strong>$10 refundable deposit</strong> to secure your spot<br>Full refund if group doesn't fill</div>
+      <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" class="request-btn">Request Spot →</a>
+    </div>
+  </div>
+
+  <!-- GAME 2 -->
+  <div class="game-card">
+    <div class="card-top">
+      <span class="tier-badge tier-3">🤖 AI-MATCHED</span>
+      <span class="spots-left"><strong>3 spots left</strong> of 4</span>
+    </div>
+    <div class="card-body">
+      <div class="host-avatar">MT</div>
+      <div class="card-info">
+        <h3>Sunday Beginner Golf — Welcoming All Levels</h3>
+        <div class="host-name">Marcus T. <span>· Duke Golf · NCAA · ⭐ 4.95</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="icon">🗓</span> Sun, Mar 23 · 8:00–10:00 AM</span>
+          <span class="meta-item"><span class="icon">📍</span> Boston, MA</span>
+          <span class="meta-item"><span class="icon">⛳</span> All levels welcome</span>
+          <span class="meta-item"><span class="icon">👥</span> 4 players max</span>
+        </div>
+        <div class="tags">
+          <span class="tag">Golf</span>
+          <span class="tag">Beginner Friendly</span>
+          <span class="tag">Social</span>
+          <span class="tag">AI-Matched</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-action">
+      <div class="deposit-note"><strong>$10 refundable deposit</strong> to secure your spot<br>Full refund if group doesn't fill</div>
+      <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" class="request-btn">Request Spot →</a>
+    </div>
+  </div>
+
+  <!-- GAME 3 -->
+  <div class="game-card">
+    <div class="card-top">
+      <span class="tier-badge tier-1">⭐ ATHLETE-LED</span>
+      <span class="spots-left"><strong>1 spot left</strong> of 4</span>
+    </div>
+    <div class="card-body">
+      <div class="host-avatar">JK</div>
+      <div class="card-info">
+        <h3>Pro Tennis Social — Intermediate to Advanced</h3>
+        <div class="host-name">James K. <span>· Pro Tennis · 4.5 UTR · ⭐ 4.97</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="icon">🗓</span> Sat, Mar 22 · 10:00 AM–12:00 PM</span>
+          <span class="meta-item"><span class="icon">📍</span> New York, NY</span>
+          <span class="meta-item"><span class="icon">🎾</span> UTR 3.5–5.0</span>
+          <span class="meta-item"><span class="icon">👥</span> 4 players max</span>
+        </div>
+        <div class="tags">
+          <span class="tag">Tennis</span>
+          <span class="tag">Competitive</span>
+          <span class="tag">Skill Drills</span>
+          <span class="tag">Social After</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-action">
+      <div class="deposit-note"><strong>$10 refundable deposit</strong> to secure your spot<br>Full refund if group doesn't fill</div>
+      <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" class="request-btn">Request Spot →</a>
+    </div>
+  </div>
+
+  <!-- GAME 4 -->
+  <div class="game-card">
+    <div class="card-top">
+      <span class="tier-badge tier-4">🤝 SOCIAL PLAY</span>
+      <span class="spots-left"><strong>4 spots left</strong> of 4</span>
+    </div>
+    <div class="card-body">
+      <div class="host-avatar">AL</div>
+      <div class="card-info">
+        <h3>Casual Friday Evening Golf — Pure Social</h3>
+        <div class="host-name">Alex L. <span>· Georgetown Golf · Club Competitive · ⭐ 4.91</span></div>
+        <div class="meta-row">
+          <span class="meta-item"><span class="icon">🗓</span> Fri, Mar 21 · 5:30–7:30 PM</span>
+          <span class="meta-item"><span class="icon">📍</span> Washington D.C.</span>
+          <span class="meta-item"><span class="icon">⛳</span> Handicap 15–30 · Relaxed pace</span>
+          <span class="meta-item"><span class="icon">👥</span> 4 players max</span>
+        </div>
+        <div class="tags">
+          <span class="tag">Golf</span>
+          <span class="tag">Casual</span>
+          <span class="tag">After-Work</span>
+          <span class="tag">No Pressure</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-action">
+      <div class="deposit-note"><strong>$10 refundable deposit</strong> to secure your spot<br>Full refund if group doesn't fill</div>
+      <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" class="request-btn">Request Spot →</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- WAITLIST MODAL -->
+<div id="waitlist-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1000; align-items:center; justify-content:center;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:white; border-radius:16px; padding:40px; max-width:420px; width:90%; border-top:4px solid #A8915A;">
+    <h2 style="font-size:22px; color:#2D4A1E; margin-bottom:8px;">Join the Waitlist</h2>
+    <p style="color:#6B7A5D; font-size:14px; margin-bottom:24px;">Be first to access games when we launch in your city.</p>
+    <iframe data-tally-src="https://tally.so/embed/REPLACE_WITH_TALLY_ID?hideTitle=1&transparentBackground=1" width="100%" height="200" frameborder="0" marginheight="0" marginwidth="0" title="Waitlist"></iframe>
+    <p style="font-size:12px; color:#A8915A; margin-top:16px; text-align:center;">No spam. Launch notification only.</p>
+  </div>
+</div>
+
+</body>
+</html>
