@@ -286,6 +286,47 @@ section { position: relative; z-index: 1; padding: 112px 24px; }
 .how-card:hover .how-rule { width: 38px; opacity: 1; }
 .how-title { font-family: 'Fraunces', serif; font-size: 17.5px; font-weight: 600; color: var(--ink); margin-bottom: 14px; line-height: 1.25; }
 .how-desc { font-size: 14px; font-weight: 300; color: var(--ink-70); line-height: 1.72; }
+   .how-desc-short {
+  font-size: 14px; font-weight: 300; color: var(--ink-70); line-height: 1.72;
+}
+.how-desc-full {
+  font-size: 14px; font-weight: 300; color: var(--ink-70); line-height: 1.72;
+  max-height: 0; overflow: hidden; opacity: 0; margin-top: 0;
+  transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.3s ease;
+}
+.how-card-actions {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  max-height: 0; overflow: hidden; opacity: 0; margin-top: 0;
+  transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.3s ease;
+}
+.how-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  padding: 7px 16px; border-radius: 100px;
+  text-decoration: none; transition: all 0.2s; white-space: nowrap;
+}
+.how-btn-primary {
+  background: var(--forest); color: var(--parchment); border: 1px solid var(--forest);
+}
+.how-btn-primary:hover { background: var(--forest-deep); }
+.how-btn-ghost {
+  background: transparent; color: var(--forest); border: 1px solid var(--rule);
+}
+.how-btn-ghost:hover { border-color: var(--forest); background: var(--forest-soft); }
+.how-expand {
+  font-size: 10.5px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--brass); margin-top: 18px; transition: opacity 0.2s;
+}
+.how-card.open .how-desc-full {
+  max-height: 200px; opacity: 1; margin-top: 14px;
+}
+.how-card.open .how-card-actions {
+  max-height: 80px; opacity: 1; margin-top: 20px;
+}
+.how-card.open .how-desc-short { display: none; }
+.how-card.open .how-expand { opacity: 0; pointer-events: none; }
+.how-card { cursor: pointer; }
+   
 
 /* ─── AI SECTION ─── */
 .ai-section { background: var(--forest); overflow: hidden; }
@@ -884,6 +925,10 @@ footer {
       background: 'rgba(251,248,240,0.97)', backdropFilter: 'blur(20px)',
       padding: '28px 32px', gap: '20px',
       borderBottom: '1px solid rgba(45,74,30,0.12)'
+       function toggleTier(card) {
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.how-card').forEach(c => c.classList.remove('open'));
+  if (!isOpen) card.classList.add('open');
     });
   }
 </script>
