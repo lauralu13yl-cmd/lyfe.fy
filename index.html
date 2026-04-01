@@ -939,13 +939,6 @@ footer {
   window.addEventListener('load', async () => {
 if (!window.Clerk) return;
       await Clerk.load();
-         
-       window.addEventListener('load', async () => {
-    const publishableKey = 'pk_live_Y2xlcmsubHlmZWZ5LmNvbSQ';
-    const clerk = new Clerk(publishableKey); 
-
-   
-      await clerk.load(); // Load the instance
 
     const accountBtn     = document.getElementById('account-btn');
     const accountWrap    = document.getElementById('account-wrap');
