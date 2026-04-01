@@ -944,12 +944,8 @@ footer {
     const publishableKey = 'pk_live_Y2xlcmsubHlmZWZ5LmNvbSQ';
     const clerk = new Clerk(publishableKey); 
 
-    try {
+   
       await clerk.load(); // Load the instance
-    } catch (err) {
-      console.error("Clerk failed to load:", err);
-      return;
-
 
     const accountBtn     = document.getElementById('account-btn');
     const accountWrap    = document.getElementById('account-wrap');
