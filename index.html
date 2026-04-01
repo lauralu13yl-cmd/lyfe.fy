@@ -936,10 +936,20 @@ footer {
      ═══════════════════════════════════════════ -->
 <script>
   // ── Clerk Auth Logic ──────────────────────────
-  window.addEventListener('load', async () => {
-    if (!window.Clerk) return;
+ // window.addEventListener('load', async () => {
+// if (!window.Clerk) return;
+      //await Clerk.load();
+         
+       window.addEventListener('load', async () => {
+    const publishableKey = 'pk_live_Y2xlcmsubHlmZWZ5LmNvbSQ';
+    const clerk = new Clerk(publishableKey); 
 
-    await Clerk.load();
+    try {
+      await clerk.load(); // Load the instance
+    } catch (err) {
+      console.error("Clerk failed to load:", err);
+      return;
+
 
     const accountBtn     = document.getElementById('account-btn');
     const accountWrap    = document.getElementById('account-wrap');
