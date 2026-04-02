@@ -936,52 +936,82 @@ footer {
      ═══════════════════════════════════════════ -->
 <script>
   // ── Clerk Auth Logic ──────────────────────────
-  window.addEventListener('load', async () => {
-if (!window.Clerk) return;
-      await Clerk.load();
-
-    const accountBtn     = document.getElementById('account-btn');
-    const accountWrap    = document.getElementById('account-wrap');
-    const accountDrop    = document.getElementById('account-dropdown');
-    const signInBtn      = document.getElementById('sign-in-btn');
-    const signUpBtn      = document.getElementById('sign-up-btn');
-    const ctaSignUpBtn   = document.getElementById('cta-sign-up-btn');
-    const userButtonWrap = document.getElementById('user-button-wrap');
-    const userGreeting   = document.getElementById('user-greeting');
-
-    // Toggle dropdown on Account button click
-    accountBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      accountDrop.classList.toggle('open');
-    });
-
-    // Close dropdown when clicking outside
-    document.addEventListener('click', () => accountDrop.classList.remove('open'));
-
-    // Dropdown options
-    signInBtn.addEventListener('click', () => { accountDrop.classList.remove('open'); Clerk.openSignIn(); });
-    signUpBtn.addEventListener('click', () => { accountDrop.classList.remove('open'); Clerk.openSignUp(); });
-    ctaSignUpBtn.addEventListener('click', () => Clerk.openSignUp());
-
-    function updateAuthUI() {
-      const user = Clerk.user;
-      if (user) {
-        accountWrap.style.display    = 'none';
-        userButtonWrap.style.display = 'flex';
-        const name = user.firstName || user.emailAddresses[0]?.emailAddress || 'Welcome';
-        userGreeting.textContent = `Hi, ${name}`;
-        Clerk.mountUserButton(document.getElementById('user-button'));
-      } else {
-        accountWrap.style.display    = '';
-        userButtonWrap.style.display = 'none';
-      }
+  function initClerk() {
+    if (!window.Clerk) {
+      setTimeout(initClerk, 50); // Wait until Clerk script loads
+      return;
     }
 
-    Clerk.addListener(() => updateAuthUI());
-    updateAuthUI();
-  });
+    Clerk.load().then(() => {
+      const accountBtn     = document.getElementById('account-btn');
+      const accountWrap    = document.getElementById('account-wrap');
+      const accountDrop    = document.getElementById('account-dropdown');
+      const signInBtn      = document.getElementById('sign-in-btn');
+      const signUpBtn      = document.getElementById('sign-up-btn');
+      const ctaSignUpBtn   = document.getElementById('cta-sign-up-btn');
+      const userButtonWrap = document.getElementById('user-button-wrap');
+      const userGreeting   = document.getElementById('user-greeting');
 
-  // ── Existing scroll + reveal logic ──────────────
+      // Toggle dropdown
+      accountBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        accountDrop.classList.toggle('open');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', () => accountDrop.classList.remove('open'));
+
+      // Sign In
+      signInBtn.addEventListener('click', () => {
+        accountDrop.classList.remove('open');
+        Clerk.openSignIn();
+      });
+
+      // Sign Up (dropdown)
+      signUpBtn.addEventListener('click', () => {
+        accountDrop.classList.remove('open');
+        Clerk.openSignUp();
+      });
+
+      // Sign Up (CTA hero button)
+      if (ctaSignUpBtn) {
+        ctaSignUpBtn.addEventListener('click', () => Clerk.openSignUp());
+      }
+
+      function updateAuthUI() {
+        const user = Clerk.user;
+        if (user) {
+          accountWrap.style.display    = 'none';
+          userButtonWrap.style.display = 'flex';
+          const name = user.firstName
+            || user.emailAddresses?.[0]?.emailAddress
+            || 'there';
+          userGreeting.textContent = `Hi, ${name}`;
+
+          // Only mount if not already mounted
+          const userButtonEl = document.getElementById('user-button');
+          if (userButtonEl && !userButtonEl.hasChildNodes()) {
+            Clerk.mountUserButton(userButtonEl);
+          }
+        } else {
+          accountWrap.style.display    = '';
+          userButtonWrap.style.display = 'none';
+
+          // Unmount user button if present
+          const userButtonEl = document.getElementById('user-button');
+          if (userButtonEl) userButtonEl.innerHTML = '';
+        }
+      }
+
+      // Listen for auth state changes
+      Clerk.addListener(({ user }) => updateAuthUI());
+      updateAuthUI();
+    });
+  }
+
+  initClerk();
+
+  // ── Scroll + reveal logic ──────────────
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
     navbar.classList.toggle('scrolled', window.scrollY > 20);
