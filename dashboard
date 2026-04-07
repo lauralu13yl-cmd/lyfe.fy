@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Lyfefy</title>
+
+  <!-- Clerk JS SDK — replace pk_live_Y2xlcmsubHlmZWZ5LmNvbSQ -->
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_live_Y2xlcmsubHlmZWZ5LmNvbSQ"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+    type="text/javascript"
+  ></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ══════════════════════════════════════
+       LYFEFY — Ralph Lauren Palette
+       ══════════════════════════════════════ */
+    :root {
+      --forest:       #2D4A1E;
+      --forest-deep:  #1E3212;
+      --forest-soft:  rgba(45,74,30,0.07);
+      --parchment:    #F5EDD8;
+      --parchment-dk: #E8DDBE;
+      --ivory:        #FBF8F0;
+      --ivory-warm:   #F8F3E8;
+      --cream:        #F0E8D0;
+      --brass:        #A8915A;
+      --brass-light:  rgba(168,145,90,0.18);
+      --brass-faint:  rgba(168,145,90,0.08);
+      --ink:          #1A2410;
+      --ink-70:       rgba(26,36,16,0.70);
+      --ink-40:       rgba(26,36,16,0.40);
+      --rule:         rgba(45,74,30,0.12);
+      --rule-light:   rgba(45,74,30,0.07);
+      --radius:       16px;
+      --radius-sm:    10px;
+      --radius-xs:    6px;
+      --serif:        'Cormorant Garamond', Georgia, serif;
+      --sans:         'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--ivory);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* hide everything until Clerk loads */
+    #dashboard { display: none; }
+
+    /* ── Shell ── */
+    .shell {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── Top Bar ── */
+    .topbar {
+      height: 54px;
+      background: var(--ivory-warm);
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .logo {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--forest-deep);
+      letter-spacing: 0.03em;
+      text-decoration: none;
+    }
+    .logo span { color: var(--brass); }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
+
+    .icon-btn {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: none;
+      border: 1px solid var(--rule);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--ink-70);
+      position: relative;
+      transition: border-color 0.15s;
+    }
+    .icon-btn:hover { border-color: var(--brass); }
+
+    .notif-dot {
+      width: 7px; height: 7px;
+      background: #C05A2A;
+      border-radius: 50%;
+      position: absolute;
+      top: 3px; right: 3px;
+      border: 1.5px solid var(--ivory-warm);
+    }
+
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--forest);
+      border: 2px solid var(--brass);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--parchment-dk);
+      font-family: var(--serif);
+      font-size: 13px; font-weight: 600;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── Profile Dropdown ── */
+    .prof-drop {
+      position: absolute;
+      top: 42px; right: 0;
+      background: var(--ivory-warm);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius-sm);
+      width: 210px;
+      z-index: 100;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(26,36,16,0.08);
+      display: none;
+    }
+    .prof-drop.open { display: block; }
+
+    .drop-head {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--rule-light);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .drop-av {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--forest);
+      border: 2px solid var(--brass);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--parchment-dk);
+      font-family: var(--serif);
+      font-size: 13px; font-weight: 600;
+      overflow: hidden;
+    }
+    .drop-av img { width: 100%; height: 100%; object-fit: cover; }
+    .drop-name { font-family: var(--serif); font-size: 14px; font-weight: 600; color: var(--forest-deep); }
+    .drop-email { font-size: 11px; color: var(--ink-40); }
+
+    .drop-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px;
+      font-size: 13px; color: var(--ink-70);
+      cursor: pointer;
+      background: none; border: none;
+      width: 100%; text-align: left;
+      font-family: var(--sans);
+      transition: background 0.12s, color 0.12s;
+    }
+    .drop-item:hover { background: var(--forest-soft); color: var(--forest); }
+    .drop-sep { height: 1px; background: var(--rule-light); margin: 2px 0; }
+
+    .cert-row {
+      background: var(--brass-faint);
+      border-top: 1px solid var(--brass-light);
+      cursor: pointer;
+    }
+    .cert-row-inner {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px;
+      transition: background 0.12s;
+    }
+    .cert-row-inner:hover { background: var(--brass-light); }
+    .cert-badge {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--brass);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Main ── */
+    .main {
+      flex: 1;
+      padding: 20px 22px 90px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* ── Panels ── */
+    .panel { display: none; flex-direction: column; gap: 14px; }
+    .panel.active { display: flex; }
+
+    /* ── Bottom Tab Bar ── */
+    .tabbar {
+      height: 58px;
+      background: var(--ivory-warm);
+      border-top: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 50;
+      padding: 0 8px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .tab {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: var(--radius-xs);
+      border: none; background: none;
+      font-family: var(--sans);
+      color: var(--ink-40);
+      transition: color 0.15s;
+      flex: 1;
+    }
+    .tab:hover { color: var(--forest); }
+    .tab.active { color: var(--forest); }
+    .tab-label { font-size: 10px; font-weight: 500; letter-spacing: 0.02em; }
+    .tab-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--brass);
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .tab.active .tab-dot { opacity: 1; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--parchment);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .card-flat {
+      background: var(--cream);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+    }
+    .card-title {
+      font-family: var(--serif);
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--brass);
+      margin-bottom: 10px;
+    }
+    .card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .card-header .card-title { margin-bottom: 0; }
+    .card-link {
+      font-size: 12px; color: var(--brass);
+      cursor: pointer; background: none; border: none;
+      font-family: var(--sans);
+    }
+
+    /* ── Greeting ── */
+    .greet {
+      background: var(--parchment);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      display: flex; align-items: center; gap: 18px;
+    }
+    .greet-av {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--forest);
+      border: 2.5px solid var(--brass);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--parchment-dk);
+      font-family: var(--serif); font-size: 20px; font-weight: 600;
+      overflow: hidden;
+    }
+    .greet-av img { width: 100%; height: 100%; object-fit: cover; }
+    .greet-title { font-family: var(--serif); font-size: 21px; font-weight: 600; color: var(--forest-deep); }
+    .greet-sub { font-size: 13px; color: var(--ink-70); margin-top: 3px; }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-flex;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 500;
+      white-space: nowrap;
+    }
+    .badge-brass { background: var(--brass-light); color: #6B5027; }
+    .badge-forest { background: rgba(45,74,30,0.1); color: var(--forest); }
+
+    /* ── Snap Grid ── */
+    .snap-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 10px;
+    }
+    .snap-card {
+      background: var(--parchment);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius-sm);
+      padding: 14px 12px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .snap-card:hover { border-color: var(--brass); }
+    .snap-icon {
+      width: 28px; height: 28px;
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 8px;
+    }
+    .snap-num {
+      font-family: var(--serif); font-size: 28px; font-weight: 600;
+      color: var(--forest-deep); line-height: 1;
+    }
+    .snap-label { font-size: 11px; color: var(--ink-40); margin-top: 4px; }
+
+    /* ── Rank Card ── */
+    .rank-card {
+      background: var(--forest);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex; align-items: center;
+    }
+    .rank-left { flex: 1; }
+    .rank-ey {
+      font-family: var(--serif); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.09em; text-transform: uppercase;
+      color: var(--brass); margin-bottom: 4px;
+    }
+    .rank-num { font-family: var(--serif); font-size: 38px; font-weight: 600; color: var(--parchment-dk); line-height: 1; }
+    .rank-sub { font-size: 12px; color: rgba(245,237,216,0.5); margin-top: 4px; }
+    .rank-tier {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(168,145,90,0.2);
+      border: 1px solid rgba(168,145,90,0.28);
+      border-radius: 20px; padding: 4px 11px; margin-top: 10px;
+    }
+    .rank-tier-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brass); }
+    .rank-tier-lbl { font-size: 11px; color: var(--brass); font-weight: 500; letter-spacing: 0.04em; }
+    .rank-div { width: 1px; height: 52px; background: rgba(168,145,90,0.22); margin: 0 22px; flex-shrink: 0; }
+    .rank-right { text-align: center; flex-shrink: 0; }
+    .rank-pts-lbl { font-family: var(--serif); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brass); margin-bottom: 5px; }
+    .rank-pts { font-family: var(--serif); font-size: 30px; font-weight: 600; color: var(--parchment-dk); line-height: 1; }
+    .rank-pts-sub { font-size: 11px; color: rgba(245,237,216,0.45); margin-top: 3px; }
+    .rank-prog { margin-top: 11px; }
+    .rank-prog-lbls { display: flex; justify-content: space-between; font-size: 10px; color: rgba(245,237,216,0.38); margin-bottom: 4px; }
+    .rank-prog-bg { height: 3px; background: rgba(168,145,90,0.16); border-radius: 2px; overflow: hidden; }
+    .rank-prog-fill { height: 100%; background: var(--brass); border-radius: 2px; transition: width 0.6s ease; }
+    .rank-prog-next { font-size: 10px; color: rgba(245,237,216,0.35); margin-top: 3px; }
+
+    /* ── Two Col ── */
+    .two-col { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+
+    /* ── Empty ── */
+    .empty { text-align: center; padding: 22px 0; color: var(--ink-40); font-size: 13px; }
+    .empty-cta { color: var(--brass); cursor: pointer; font-size: 12px; display: inline-block; margin-top: 4px; background: none; border: none; font-family: var(--sans); }
+
+    /* ── Game Row ── */
+    .game-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--rule-light);
+    }
+    .game-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .game-row:first-child { padding-top: 0; }
+    .g-date { text-align: center; width: 34px; flex-shrink: 0; }
+    .g-day { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--forest-deep); line-height: 1; }
+    .g-mon { font-size: 9px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-40); }
+    .g-info { flex: 1; min-width: 0; }
+    .g-title { font-size: 13px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .g-sub { font-size: 11px; color: var(--ink-40); margin-top: 1px; }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      background: var(--forest); color: var(--parchment);
+      border: none; padding: 5px 11px;
+      border-radius: var(--radius-xs);
+      font-size: 12px; cursor: pointer;
+      font-family: var(--sans); font-weight: 500;
+      transition: background 0.15s; flex-shrink: 0;
+    }
+    .btn-primary:hover { background: var(--forest-deep); }
+    .btn-primary-lg { width: 100%; padding: 10px; border-radius: var(--radius-sm); font-size: 13px; }
+    .btn-outline {
+      background: none; border: 1px solid var(--rule);
+      padding: 4px 9px; border-radius: var(--radius-xs);
+      font-size: 11px; cursor: pointer; color: var(--ink-70);
+      font-family: var(--sans); transition: border-color 0.15s, color 0.15s;
+    }
+    .btn-outline:hover { border-color: var(--forest); color: var(--forest); }
+
+    /* ── Sub Tabs ── */
+    .sub-tabs { display: flex; border-bottom: 1px solid var(--rule); margin-bottom: 14px; }
+    .sub-tab {
+      background: none; border: none;
+      font-family: var(--sans); font-size: 13px;
+      color: var(--ink-40); padding: 8px 14px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all 0.15s;
+    }
+    .sub-tab:hover { color: var(--forest); }
+    .sub-tab.active { color: var(--forest); border-bottom-color: var(--brass); font-weight: 500; }
+
+    /* ── Form ── */
+    .f-group { margin-bottom: 12px; }
+    .f-label { font-size: 12px; font-weight: 500; color: var(--ink-70); display: block; margin-bottom: 4px; }
+    .f-input {
+      width: 100%; background: var(--ivory);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius-xs);
+      padding: 8px 12px;
+      font-family: var(--sans); font-size: 13px; color: var(--ink);
+      outline: none; transition: border-color 0.15s;
+    }
+    .f-input:focus { border-color: var(--brass); }
+    .f-input::placeholder { color: var(--ink-40); }
+    .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* ── Profile Hero ── */
+    .prof-hero {
+      background: var(--parchment); border: 1px solid var(--rule);
+      border-radius: var(--radius); padding: 24px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .prof-av-lg {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: var(--forest); border: 3px solid var(--brass);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+      color: var(--parchment-dk);
+      font-family: var(--serif); font-size: 26px; font-weight: 600;
+      overflow: hidden;
+    }
+    .prof-av-lg img { width: 100%; height: 100%; object-fit: cover; }
+    .prof-name { font-family: var(--serif); font-size: 24px; font-weight: 600; color: var(--forest-deep); }
+    .prof-sport { font-size: 13px; color: var(--ink-70); margin-top: 2px; }
+    .prof-bio { font-size: 12px; color: var(--ink-40); font-style: italic; margin-top: 8px; max-width: 400px; line-height: 1.65; }
+    .stats-row { display: flex; gap: 8px; margin-top: 14px; width: 100%; max-width: 360px; }
+    .stat-pill { flex: 1; background: var(--cream); border: 1px solid var(--rule); border-radius: var(--radius-xs); padding: 8px; text-align: center; }
+    .stat-num { font-family: var(--serif); font-size: 19px; font-weight: 600; color: var(--forest-deep); }
+    .stat-lbl { font-size: 10px; color: var(--ink-40); margin-top: 1px; }
+
+    /* ── Connect Row ── */
+    .conn-row { display: flex; align-items: center; gap: 9px; padding: 8px 0; border-bottom: 1px solid var(--rule-light); }
+    .conn-row:last-child { border-bottom: none; }
+    .conn-av { width: 32px; height: 32px; border-radius: 50%; background: var(--forest); display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 12px; font-weight: 600; color: var(--parchment); flex-shrink: 0; }
+    .conn-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+    .conn-sub { font-size: 11px; color: var(--ink-40); }
+
+    /* ── Upload Zone ── */
+    .upload-zone {
+      border: 1.5px dashed var(--rule); border-radius: var(--radius-sm);
+      padding: 26px; text-align: center; cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .upload-zone:hover { border-color: var(--brass); background: var(--brass-faint); }
+
+    /* ── Cert Modal ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(26,36,16,0.45); z-index: 200;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--ivory-warm); border-radius: var(--radius);
+      border: 1px solid var(--rule); width: 340px;
+      max-width: calc(100vw - 32px); overflow: hidden;
+      box-shadow: 0 4px 24px rgba(26,36,16,0.12);
+    }
+    .modal-head { background: var(--forest); padding: 20px 22px; display: flex; align-items: center; gap: 12px; }
+    .modal-badge { width: 40px; height: 40px; border-radius: 50%; background: var(--brass); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .modal-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--parchment-dk); }
+    .modal-subtitle { font-size: 12px; color: rgba(245,237,216,0.55); margin-top: 2px; }
+    .modal-body { padding: 16px 20px; display: flex; flex-direction: column; gap: 9px; }
+    .cert-item { display: flex; align-items: center; gap: 10px; padding: 11px 13px; background: var(--parchment); border: 1px solid var(--rule); border-radius: var(--radius-sm); cursor: pointer; transition: border-color 0.15s; }
+    .cert-item:hover { border-color: var(--brass); }
+    .cert-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--cream); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .cert-title { font-size: 13px; font-weight: 500; color: var(--ink); }
+    .cert-desc { font-size: 11px; color: var(--ink-40); margin-top: 2px; line-height: 1.4; }
+    .modal-foot { padding: 0 20px 18px; }
+
+    /* ── Notif Row ── */
+    .notif-row { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--rule-light); align-items: flex-start; }
+    .notif-row:last-child { border-bottom: none; }
+    .notif-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--cream); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .notif-text { font-size: 12px; color: var(--ink); line-height: 1.5; }
+    .notif-time { font-size: 11px; color: var(--ink-40); margin-top: 2px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 520px) {
+      .snap-grid { grid-template-columns: repeat(2, 1fr); }
+      .two-col { grid-template-columns: 1fr; }
+      .f-row { grid-template-columns: 1fr; }
+      .rank-card { flex-direction: column; gap: 14px; }
+      .rank-div { width: 100%; height: 1px; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hidden until Clerk loads -->
+<div id="dashboard">
+  <div class="shell">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <a href="/" class="logo">Lyfe<span>fy</span></a>
+      <div class="topbar-right">
+
+        <!-- Bell -->
+        <button class="icon-btn" onclick="goTab('notifs')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <div class="notif-dot"></div>
+        </button>
+
+        <!-- Avatar — filled by Clerk -->
+        <div class="avatar" id="topAv" onclick="toggleDrop()"></div>
+
+        <!-- Dropdown -->
+        <div class="prof-drop" id="profDrop">
+          <div class="drop-head">
+            <div class="drop-av" id="dropAv"></div>
+            <div>
+              <div class="drop-name" id="dropName"></div>
+              <div class="drop-email" id="dropEmail"></div>
+            </div>
+          </div>
+          <button class="drop-item" onclick="goTab('profile');closeDrop()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            View Profile
+          </button>
+          <button class="drop-item" onclick="goTab('edit');closeDrop()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit Profile
+          </button>
+          <div class="drop-sep"></div>
+          <div class="cert-row" onclick="openCert()">
+            <div class="cert-row-inner">
+              <div class="cert-badge">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ivory-warm)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:500;color:var(--ink)">Get Certified</div>
+                <div style="font-size:11px;color:var(--ink-40);margin-top:1px">Verify your athlete identity</div>
+              </div>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+          <div class="drop-sep"></div>
+          <button class="drop-item" style="color:var(--ink-40)" id="signOutBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Sign out
+          </button>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+      <!-- ── HOME ── -->
+      <div class="panel active" id="panel-home">
+
+        <div class="greet">
+          <div class="greet-av" id="greetAv"></div>
+          <div style="flex:1">
+            <div class="greet-title" id="greetTitle">Welcome to Lyfefy</div>
+            <div class="greet-sub">Complete your profile — games and teammates are waiting</div>
+          </div>
+          <span class="badge badge-brass">New Member</span>
+        </div>
+
+        <div class="snap-grid">
+          <div class="snap-card" onclick="goTab('games')">
+            <div class="snap-icon" style="background:rgba(45,74,30,0.08)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+            </div>
+            <div class="snap-num">0</div>
+            <div class="snap-label">Upcoming</div>
+          </div>
+          <div class="snap-card" onclick="goTab('games')">
+            <div class="snap-icon" style="background:rgba(45,74,30,0.08)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2" stroke-linecap="round"><polyline points="9,11 12,14 22,4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </div>
+            <div class="snap-num">0</div>
+            <div class="snap-label">Played</div>
+          </div>
+          <div class="snap-card" onclick="goTab('connect')">
+            <div class="snap-icon" style="background:var(--brass-faint)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
+            </div>
+            <div class="snap-num">0</div>
+            <div class="snap-label">Connections</div>
+          </div>
+          <div class="snap-card" onclick="goTab('team')">
+            <div class="snap-icon" style="background:var(--brass-faint)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="snap-num">0</div>
+            <div class="snap-label">Team</div>
+          </div>
+        </div>
+
+        <!-- Rank card -->
+        <div class="rank-card">
+          <div class="rank-left">
+            <div class="rank-ey">Your Ranking</div>
+            <div class="rank-num">—</div>
+            <div class="rank-sub">Play games to earn your rank</div>
+            <div class="rank-tier">
+              <div class="rank-tier-dot"></div>
+              <div class="rank-tier-lbl">Unranked</div>
+            </div>
+          </div>
+          <div class="rank-div"></div>
+          <div class="rank-right">
+            <div class="rank-pts-lbl">Points</div>
+            <div class="rank-pts">0</div>
+            <div class="rank-pts-sub">pts earned</div>
+            <div class="rank-prog">
+              <div class="rank-prog-lbls"><span>0 pts</span><span>100 pts</span></div>
+              <div class="rank-prog-bg"><div class="rank-prog-fill" style="width:0%"></div></div>
+              <div class="rank-prog-next">to Bronze tier</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Upcoming Games</div>
+              <button class="card-link" onclick="goTab('games')">Browse →</button>
+            </div>
+            <div class="empty">No games yet<br><button class="empty-cta" onclick="goTab('games')">Find a game near you</button></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Recent Results</div>
+            <div class="empty">No results yet<br><button class="empty-cta" onclick="goTab('games')">Play your first game</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── GAMES ── -->
+      <div class="panel" id="panel-games">
+        <div class="sub-tabs">
+          <button class="sub-tab active" onclick="gTab(this,'g-upcoming')">Upcoming</button>
+          <button class="sub-tab" onclick="gTab(this,'g-history')">History</button>
+          <button class="sub-tab" onclick="gTab(this,'g-create')">+ Create game</button>
+        </div>
+
+        <div id="g-upcoming">
+          <div class="card" style="margin-bottom:12px">
+            <div class="card-title">Your upcoming games</div>
+            <div class="empty">You haven't joined any games yet</div>
+          </div>
+          <div class="card">
+            <div class="card-title">Near you</div>
+            <div class="game-row">
+              <div class="g-date"><div class="g-day">14</div><div class="g-mon">Apr</div></div>
+              <div class="g-info"><div class="g-title">Pickup Basketball — Roxbury Park</div><div class="g-sub">5v5 · Intermediate · 7:00 PM · 3 spots</div></div>
+              <button class="btn-primary">Request</button>
+            </div>
+            <div class="game-row">
+              <div class="g-date"><div class="g-day">17</div><div class="g-mon">Apr</div></div>
+              <div class="g-info"><div class="g-title">Soccer — Franklin Field</div><div class="g-sub">7v7 · All levels · 6:30 PM · 5 spots</div></div>
+              <button class="btn-primary">Request</button>
+            </div>
+            <div class="game-row">
+              <div class="g-date"><div class="g-day">20</div><div class="g-mon">Apr</div></div>
+              <div class="g-info"><div class="g-title">Spring Open Tournament</div><div class="g-sub">Basketball · Riverside Courts · 10:00 AM</div></div>
+              <button class="btn-primary">Register</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="g-history" style="display:none">
+          <div class="card">
+            <div class="card-title">Games history</div>
+            <div class="empty">Your game history will appear here after you play.</div>
+          </div>
+        </div>
+
+        <div id="g-create" style="display:none">
+          <div class="card">
+            <div class="card-title" style="margin-bottom:14px">Create a game</div>
+            <div class="f-group"><label class="f-label">Game title</label><input class="f-input" type="text" placeholder="e.g. Pickup Basketball at Roxbury Park"></div>
+            <div class="f-row">
+              <div class="f-group"><label class="f-label">Sport</label><select class="f-input"><option value="">Select...</option><option>Basketball</option><option>Soccer</option><option>Football</option><option>Tennis</option><option>Volleyball</option><option>Other</option></select></div>
+              <div class="f-group"><label class="f-label">Format</label><select class="f-input"><option value="">Select...</option><option>1v1</option><option>3v3</option><option>5v5</option><option>7v7</option><option>Open</option></select></div>
+            </div>
+            <div class="f-row">
+              <div class="f-group"><label class="f-label">Date</label><input class="f-input" type="date"></div>
+              <div class="f-group"><label class="f-label">Time</label><input class="f-input" type="time"></div>
+            </div>
+            <div class="f-group"><label class="f-label">Location</label><input class="f-input" type="text" placeholder="Park name or address"></div>
+            <div class="f-row">
+              <div class="f-group"><label class="f-label">Skill level</label><select class="f-input"><option>All levels</option><option>Intermediate</option><option>Advanced</option></select></div>
+              <div class="f-group"><label class="f-label">Type</label><select class="f-input"><option>Casual</option><option>Ranked</option><option>Tournament</option></select></div>
+            </div>
+            <button class="btn-primary btn-primary-lg">Create Game</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PHOTOS ── -->
+      <div class="panel" id="panel-photos">
+        <div class="upload-zone">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="1.8" stroke-linecap="round" style="margin-bottom:8px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+          <div style="font-size:13px;font-weight:500;color:var(--ink-70)">Drop photos and videos here</div>
+          <div style="font-size:11px;color:var(--ink-40);margin-top:3px">AI auto-tags teammates, events, and locations</div>
+        </div>
+        <div class="card">
+          <div class="card-title">Your gallery — 0 photos</div>
+          <div class="empty">Game moments, lifestyle shots, and highlights live here</div>
+        </div>
+        <div class="two-col">
+          <div class="card-flat"><div style="font-family:var(--serif);font-size:13px;font-weight:600;color:var(--ink-70);margin-bottom:4px">Game Moments</div><div style="font-size:11px;color:var(--ink-40)">0 photos</div></div>
+          <div class="card-flat"><div style="font-family:var(--serif);font-size:13px;font-weight:600;color:var(--ink-70);margin-bottom:4px">Lifestyle</div><div style="font-size:11px;color:var(--ink-40)">0 photos</div></div>
+          <div class="card-flat"><div style="font-family:var(--serif);font-size:13px;font-weight:600;color:var(--ink-70);margin-bottom:4px">Highlights</div><div style="font-size:11px;color:var(--ink-40)">0 photos</div></div>
+          <div class="card-flat" style="border:1.5px dashed var(--rule);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <div style="font-size:11px;color:var(--brass)">New album</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CONNECT ── -->
+      <div class="panel" id="panel-connect">
+        <div class="card">
+          <div class="card-title">Find teammates</div>
+          <input class="f-input" type="text" placeholder="Search by name, sport, or city...">
+        </div>
+        <div class="two-col">
+          <div class="card"><div class="card-title">Requests (0)</div><div class="empty" style="padding:14px 0">No pending requests</div></div>
+          <div class="card"><div class="card-title">Your connections</div><div class="empty" style="padding:14px 0">No connections yet<br><button class="empty-cta" onclick="goTab('games')">Join a game to meet players</button></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Athletes near you</div>
+          <div style="font-size:11px;color:var(--ink-40);padding-top:4px">Set your sport and location to see suggestions</div>
+        </div>
+      </div>
+
+      <!-- ── TEAM ── -->
+      <div class="panel" id="panel-team">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Your Team</div>
+            <button class="btn-primary" style="font-size:11px;padding:4px 10px">+ Invite</button>
+          </div>
+          <div class="empty">You haven't joined a team yet.<br><button class="empty-cta" onclick="goTab('games')">Join a game to connect with teammates</button></div>
+        </div>
+        <div class="two-col">
+          <div class="card"><div class="card-title">Team Chat</div><div class="empty" style="padding:14px 0">No messages yet</div></div>
+          <div class="card"><div class="card-title">Team Games</div><div class="empty" style="padding:14px 0">No games scheduled</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Team Leaderboard</div>
+          <div style="font-size:11px;color:var(--ink-40);padding-top:4px">Play games with your team to build the leaderboard</div>
+        </div>
+      </div>
+
+      <!-- ── PROFILE ── -->
+      <div class="panel" id="panel-profile">
+        <div class="prof-hero">
+          <div class="prof-av-lg" id="profAvLg"></div>
+          <div class="prof-name" id="profName">Your Name</div>
+          <div class="prof-sport">Sport · Location · Level</div>
+          <span class="badge badge-brass" style="margin-top:7px">New Member</span>
+          <div class="prof-bio">Add a bio to tell teammates who you are and what you play</div>
+          <div class="stats-row">
+            <div class="stat-pill"><div class="stat-num">0</div><div class="stat-lbl">Games</div></div>
+            <div class="stat-pill"><div class="stat-num">—</div><div class="stat-lbl">Win rate</div></div>
+            <div class="stat-pill"><div class="stat-num">0</div><div class="stat-lbl">Followers</div></div>
+            <div class="stat-pill"><div class="stat-num">0</div><div class="stat-lbl">Pts</div></div>
+          </div>
+          <button class="btn-primary" style="margin-top:14px;padding:9px 22px" onclick="goTab('edit')">Complete Profile</button>
+        </div>
+        <div class="card"><div class="card-title">Highlight reels</div><div class="empty">Play games and upload photos to build your reels</div></div>
+        <div class="card"><div class="card-title">Performance</div><div class="empty">Log your first game to start tracking stats</div></div>
+      </div>
+
+      <!-- ── EDIT PROFILE ── -->
+      <div class="panel" id="panel-edit">
+        <div class="card">
+          <div class="card-title" style="margin-bottom:14px">Complete your profile</div>
+          <div class="f-group"><label class="f-label">Full name</label><input class="f-input" type="text" placeholder="Your name" id="editName"></div>
+          <div class="f-row">
+            <div class="f-group"><label class="f-label">Primary sport</label><select class="f-input"><option value="">Select...</option><option>Basketball</option><option>Soccer</option><option>Football</option><option>Tennis</option><option>Volleyball</option><option>Baseball</option><option>Other</option></select></div>
+            <div class="f-group"><label class="f-label">Position</label><input class="f-input" type="text" placeholder="e.g. Point Guard"></div>
+          </div>
+          <div class="f-row">
+            <div class="f-group"><label class="f-label">Skill level</label><select class="f-input"><option>Beginner</option><option>Intermediate</option><option>Advanced</option><option>Semi-pro</option><option>Pro</option></select></div>
+            <div class="f-group"><label class="f-label">City</label><input class="f-input" type="text" placeholder="Boston, MA"></div>
+          </div>
+          <div class="f-group"><label class="f-label">Bio</label><input class="f-input" type="text" placeholder="Tell your story — sports, goals, what you're about"></div>
+          <div class="f-group"><label class="f-label">Instagram (optional)</label><input class="f-input" type="text" placeholder="@yourhandle"></div>
+          <button class="btn-primary btn-primary-lg" onclick="goTab('profile')">Save Profile</button>
+        </div>
+      </div>
+
+      <!-- ── NOTIFICATIONS ── -->
+      <div class="panel" id="panel-notifs">
+        <div class="card">
+          <div class="card-title">Notifications</div>
+          <div class="notif-row" style="padding-top:0">
+            <div class="notif-icon">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+            </div>
+            <div>
+              <div class="notif-text">Welcome to Lyfefy — finish your profile to unlock all features</div>
+              <div class="notif-time">Just now</div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--ink-40);padding-top:10px;border-top:1px solid var(--rule-light);margin-top:4px">Game invites, requests, and tags will appear here</div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- BOTTOM TAB BAR -->
+    <nav class="tabbar">
+      <button class="tab active" id="tab-home" onclick="goTab('home')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span class="tab-label">Home</span><div class="tab-dot"></div>
+      </button>
+      <button class="tab" id="tab-games" onclick="goTab('games')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="tab-label">Games</span><div class="tab-dot"></div>
+      </button>
+      <button class="tab" id="tab-photos" onclick="goTab('photos')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+        <span class="tab-label">Photos</span><div class="tab-dot"></div>
+      </button>
+      <button class="tab" id="tab-connect" onclick="goTab('connect')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+        <span class="tab-label">Connect</span><div class="tab-dot"></div>
+      </button>
+      <button class="tab" id="tab-team" onclick="goTab('team')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="tab-label">Team</span><div class="tab-dot"></div>
+      </button>
+      <button class="tab" id="tab-profile" onclick="goTab('profile')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        <span class="tab-label">Profile</span><div class="tab-dot"></div>
+      </button>
+    </nav>
+
+  </div><!-- /shell -->
+</div><!-- /dashboard -->
+
+<!-- CERT MODAL -->
+<div class="modal-overlay" id="certModal" onclick="if(event.target===this)closeCert()">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-badge">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ivory-warm)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div>
+        <div class="modal-title">Get Certified</div>
+        <div class="modal-subtitle">Verify your athlete identity on Lyfefy</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="cert-item">
+        <div class="cert-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+        <div style="flex:1"><div class="cert-title">Athlete Verification</div><div class="cert-desc">Confirm your sport, skill level, and playing history</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg></div>
+        <div style="flex:1"><div class="cert-title">Upload ID or League Card</div><div class="cert-desc">Verify via government ID, student card, or league membership</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="cert-item">
+        <div class="cert-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="1.8" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l1.27-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div style="flex:1"><div class="cert-title">Connect Social Account</div><div class="cert-desc">Link Instagram or X to verify your public athlete presence</div></div>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--brass)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-outline" style="width:100%;padding:9px" onclick="closeCert()">Maybe later</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Navigation ─────────────────────────────────────────
+  const TABS = ['home','games','photos','connect','team','profile','edit','notifs'];
+
+  function goTab(name) {
+    TABS.forEach(id => {
+      const p = document.getElementById('panel-' + id);
+      if (p) p.classList.toggle('active', id === name);
+      const t = document.getElementById('tab-' + id);
+      if (t) t.classList.toggle('active', id === name);
+    });
+    closeDrop();
+    window.scrollTo(0, 0);
+  }
+
+  // ── Games sub-tabs ─────────────────────────────────────
+  function gTab(btn, targetId) {
+    document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ['g-upcoming','g-history','g-create'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = id === targetId ? 'flex' : 'none';
+    });
+    const el = document.getElementById(targetId);
+    if (el) el.style.display = 'block';
+  }
+
+  // ── Dropdown ────────────────────────────────────────────
+  function toggleDrop() {
+    document.getElementById('profDrop').classList.toggle('open');
+  }
+  function closeDrop() {
+    document.getElementById('profDrop').classList.remove('open');
+  }
+  document.addEventListener('click', function(e) {
+    const drop = document.getElementById('profDrop');
+    const av   = document.getElementById('topAv');
+    if (drop.classList.contains('open') && !drop.contains(e.target) && !av.contains(e.target)) {
+      closeDrop();
+    }
+  });
+
+  // ── Cert Modal ─────────────────────────────────────────
+  function openCert() { closeDrop(); document.getElementById('certModal').classList.add('open'); }
+  function closeCert() { document.getElementById('certModal').classList.remove('open'); }
+
+  // ── Clerk Integration ──────────────────────────────────
+  window.addEventListener('load', async function() {
+    await Clerk.load();
+
+    // Not signed in → redirect to your existing login page
+    if (!Clerk.user) {
+      window.location.href = '/';   // change to your sign-in page if different
+      return;
+    }
+
+    const user = Clerk.user;
+
+    // Helper: initials fallback
+    const first    = user.firstName || '';
+    const last     = user.lastName  || '';
+    const fullName = [first, last].filter(Boolean).join(' ') || 'Athlete';
+    const initials = (first[0] || '') + (last[0] || '') || '?';
+    const email    = user.primaryEmailAddress?.emailAddress || '';
+    const imgUrl   = user.imageUrl;
+
+    // ── Fill greeting ──
+    document.getElementById('greetTitle').textContent =
+      first ? `Welcome back, ${first}` : 'Welcome to Lyfefy';
+
+    // ── Fill avatars (photo if available, else initials) ──
+    function fillAvatar(el, size) {
+      if (!el) return;
+      if (imgUrl) {
+        el.innerHTML = `<img src="${imgUrl}" alt="${fullName}" />`;
+      } else {
+        el.textContent = initials;
+      }
+    }
+
+    fillAvatar(document.getElementById('topAv'));
+    fillAvatar(document.getElementById('dropAv'));
+    fillAvatar(document.getElementById('greetAv'));
+    fillAvatar(document.getElementById('profAvLg'));
+
+    // ── Fill dropdown name / email ──
+    document.getElementById('dropName').textContent  = fullName;
+    document.getElementById('dropEmail').textContent = email;
+
+    // ── Fill profile name ──
+    document.getElementById('profName').textContent = fullName;
+
+    // ── Pre-fill edit form name ──
+    const editNameInput = document.getElementById('editName');
+    if (editNameInput) editNameInput.value = fullName;
+
+    // ── Sign out button ──
+    document.getElementById('signOutBtn').addEventListener('click', async function() {
+      await Clerk.signOut();
+      window.location.href = '/';
+    });
+
+    // ── Show dashboard ──
+    document.getElementById('dashboard').style.display = 'block';
+  });
+</script>
+
+</body>
+</html>
