@@ -984,8 +984,7 @@ footer {
           const name = user.firstName
             || user.emailAddresses?.[0]?.emailAddress
             || 'there';
-          userGreeting.textContent = `Hi, ${name}`;
-
+        userGreeting.innerHTML = `<a href="/dashboard.html" style="color:var(--forest);text-decoration:none;font-size:11.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Hi, ${name}</a>`;
           // Only mount if not already mounted
           const userButtonEl = document.getElementById('user-button');
           if (userButtonEl && !userButtonEl.hasChildNodes()) {
