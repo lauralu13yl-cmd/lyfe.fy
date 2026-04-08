@@ -965,6 +965,30 @@
   }
 
   // ── Create Session ────────────────────────────────────
+  // ── Tag picker helpers ───────────────────────────────
+  function toggleTag(el) {
+    el.classList.toggle('selected');
+  }
+
+  function getSelectedTags() {
+    return Array.from(document.querySelectorAll('.tag-option.selected'))
+      .map(function(el) { return el.dataset.tag; });
+  }
+
+  function updateTagSuggestions() {
+    var sport = document.getElementById('newSport').value;
+    var sportTags = {
+      'Tennis':     ['Skill-Focused','Coached Elements','Social','Competitive'],
+      'Golf':       ['Networking','Skill-Focused','Beginner Friendly','Social'],
+      'Basketball': ['Competitive','Social','Cardio','Athlete-Led'],
+      'Soccer':     ['Social','Competitive','Cardio','Beginner Friendly']
+    };
+    var suggested = sportTags[sport] || [];
+    document.querySelectorAll('.tag-option').forEach(function(el) {
+      el.classList.toggle('selected', suggested.indexOf(el.dataset.tag) !== -1);
+    });
+  }
+
   async function createSession() {
     if (!currentUser) return;
     const title = document.getElementById('newTitle').value.trim();
