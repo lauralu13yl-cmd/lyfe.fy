@@ -7,360 +7,106 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
 <style>
-
-:root {
-  --forest:       #2D4A1E;
-  --forest-deep:  #1E3212;
-  --forest-soft:  rgba(45,74,30,0.08);
-  --parchment:    #F5EDD8;
-  --parchment-dk: #E8DDBE;
-  --ivory:        #FBF8F0;
-  --ivory-warm:   #F8F3E8;
-  --cream:        #F0E8D0;
-  --brass:        #A8915A;
-  --brass-light:  rgba(168,145,90,0.22);
-  --brass-faint:  rgba(168,145,90,0.09);
-  --ink:          #1A2410;
-  --ink-70:       rgba(26,36,16,0.7);
-  --ink-40:       rgba(26,36,16,0.4);
-  --ink-15:       rgba(26,36,16,0.15);
-  --rule:         rgba(45,74,30,0.14);
-  --rule-light:   rgba(45,74,30,0.08);
-  --radius:    16px;
-  --radius-sm: 10px;
-  --radius-xs: 6px;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--ivory);
-  color: var(--ink);
-  overflow-x: hidden;
-  font-size: 16px;
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
-}
-
-body::before {
-  content: '';
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 80% 60% at 10% 5%,  rgba(236,224,193,0.55) 0%, transparent 55%),
-    radial-gradient(ellipse 65% 55% at 88% 92%, rgba(210,200,170,0.42) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(245,237,216,0.28) 0%, transparent 70%),
-    linear-gradient(168deg, #FBF8F0 0%, #F4ECD6 32%, #EBE1C5 65%, #F2EAD3 100%);
-}
-
-/* ─── NAV ─── */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 52px; height: 72px;
-  background: rgba(251,248,240,0.92);
-  backdrop-filter: blur(24px) saturate(1.2);
-  border-bottom: 1px solid var(--rule-light);
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-nav.scrolled { border-bottom-color: var(--rule); box-shadow: 0 1px 28px rgba(26,36,16,0.06); }
-
-.nav-logo {
-  font-family: 'Fraunces', serif;
-  font-size: 24px; font-weight: 700; letter-spacing: -0.3px;
-  color: var(--forest); text-decoration: none;
-  display: inline-flex; align-items: baseline; gap: 1px;
-}
-.nav-logo-dot { color: var(--brass); }
-.nav-logo-fy  { font-size: 14px; font-weight: 400; font-style: italic; color: var(--forest); opacity: 0.6; }
-
-.nav-links { display: flex; gap: 40px; list-style: none; }
-.nav-links a {
-  font-size: 11.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--ink-40); text-decoration: none; transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--forest); }
-
-.nav-cta { display: flex; gap: 12px; align-items: center; }
-
-.btn-ghost {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--forest); background: transparent;
-  border: 1px solid var(--rule); padding: 9px 22px;
-  border-radius: 100px;
-  cursor: pointer; text-decoration: none; transition: all 0.2s;
-}
-.btn-ghost:hover { background: var(--forest); color: var(--parchment); border-color: var(--forest); }
-
-.btn-primary {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--parchment); background: var(--forest);
-  border: 1px solid var(--forest); padding: 10px 24px;
-  border-radius: 100px;
-  cursor: pointer; text-decoration: none; transition: all 0.2s;
-}
-.btn-primary:hover { background: var(--forest-deep); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(45,74,30,0.22); }
-
-.btn-forest {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11.5px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
-  color: var(--parchment); background: var(--forest);
-  border: 1px solid var(--forest); padding: 16px 44px;
-  border-radius: 100px;
-  cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.25s;
-}
-.btn-forest:hover { background: var(--forest-deep); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(45,74,30,0.22); }
-
-.btn-outline {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11.5px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
-  color: var(--forest); background: transparent;
-  border: 1px solid var(--rule); padding: 16px 44px;
-  border-radius: 100px;
-  cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.25s;
-}
-.btn-outline:hover { border-color: var(--forest); background: var(--forest-soft); }
-
-/* ─── PAGE HEADER ─── */
-.page-header {
-  padding-top: 72px; position: relative; z-index: 1;
-  background: var(--forest); overflow: hidden;
-}
-.page-header::before {
-  content: ''; position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 55% 55% at 88% 50%, rgba(168,145,90,0.1) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 4% 14%, rgba(20,42,12,0.55) 0%, transparent 55%);
-}
-.page-header-inner {
-  position: relative; z-index: 2;
-  max-width: 1120px; margin: 0 auto;
-  padding: 80px 24px 72px;
-}
-.page-header-eyebrow {
-  font-size: 10.5px; font-weight: 600; letter-spacing: 2.8px; text-transform: uppercase;
-  color: var(--brass); margin-bottom: 16px;
-}
-.page-header-title {
-  font-family: 'Fraunces', serif;
-  font-size: clamp(38px, 5.5vw, 64px); font-weight: 700;
-  letter-spacing: -1.5px; line-height: 1.05;
-  color: var(--parchment); margin-bottom: 20px;
-}
-.page-header-title em { font-style: italic; color: var(--brass); font-weight: 600; }
-.page-header-rule { width: 32px; height: 1px; background: var(--brass); margin-bottom: 22px; opacity: 0.7; }
-.page-header-sub {
-  font-size: 17px; font-weight: 300;
-  color: rgba(245,237,216,0.62); max-width: 480px; line-height: 1.78;
-}
-
-/* ─── FILTERS ─── */
-.filters-bar {
-  position: relative; z-index: 1;
-  border-bottom: 1px solid var(--rule-light);
-  background: rgba(251,248,240,0.85);
-  backdrop-filter: blur(14px);
-}
-.filters-inner {
-  max-width: 1120px; margin: 0 auto;
-  padding: 20px 24px;
-  display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
-}
-.filter-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--ink-40); margin-right: 6px; white-space: nowrap;
-}
-.filter-btn {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
-  color: var(--ink-40); background: transparent;
-  border: 1px solid var(--rule); padding: 7px 18px;
-  border-radius: 100px; cursor: pointer; transition: all 0.2s;
-}
-.filter-btn:hover, .filter-btn.active {
-  color: var(--forest); border-color: var(--forest);
-  background: var(--forest-soft);
-}
-.filter-btn.active { color: var(--parchment); background: var(--forest); border-color: var(--forest); }
-
-/* ─── GAMES SECTION ─── */
-.games-section { position: relative; z-index: 1; padding: 64px 24px 112px; }
-.games-container { max-width: 1120px; margin: 0 auto; }
-
-.games-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-}
-
-/* ─── GAME CARD ─── */
-.game-card {
-  background: rgba(251,248,240,0.7);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: 0 4px 24px rgba(45,74,30,0.05);
-  transition: box-shadow 0.3s, transform 0.3s;
-  display: flex; flex-direction: column;
-}
-.game-card:hover {
-  box-shadow: 0 8px 40px rgba(45,74,30,0.12);
-  transform: translateY(-2px);
-}
-
-.card-tier-bar {
-  height: 3px; width: 100%;
-}
-.tier-athlete  { background: var(--forest); }
-.tier-ai       { background: var(--brass); }
-.tier-social   { background: var(--parchment-dk); }
-
-.card-body { padding: 34px 34px 28px; flex: 1; }
-
-.card-tier-label {
-  font-size: 9.5px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--brass); margin-bottom: 18px;
-}
-
-.card-title {
-  font-family: 'Fraunces', serif;
-  font-size: 21px; font-weight: 600; line-height: 1.22;
-  color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px;
-}
-
-.card-rule { width: 22px; height: 1px; background: var(--brass); margin-bottom: 18px; opacity: 0.6; }
-
-.card-host {
-  font-size: 13px; font-weight: 500; color: var(--forest);
-  margin-bottom: 6px;
-}
-.card-host-sub {
-  font-size: 12.5px; font-weight: 300; color: var(--ink-40);
-  margin-bottom: 28px;
-}
-
-.card-meta { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-.card-meta-row { display: flex; gap: 32px; flex-wrap: wrap; }
-.card-meta-item { display: flex; flex-direction: column; gap: 2px; }
-.card-meta-label {
-  font-size: 9.5px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase;
-  color: var(--ink-40);
-}
-.card-meta-value {
-  font-size: 14px; font-weight: 400; color: var(--ink);
-}
-
-.card-tags { display: flex; gap: 8px; flex-wrap: wrap; }
-.card-tag {
-  font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--forest); background: var(--forest-soft);
-  border: 1px solid var(--rule); border-radius: 100px;
-  padding: 4px 12px;
-}
-
-.card-footer {
-  border-top: 1px solid var(--rule-light);
-  padding: 22px 34px;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  background: rgba(232,221,190,0.22);
-}
-.card-deposit {
-  font-size: 12.5px; font-weight: 300; color: var(--ink-70); line-height: 1.55;
-}
-.card-deposit strong {
-  font-weight: 600; color: var(--ink); display: block;
-  font-size: 13.5px; margin-bottom: 2px;
-}
-.card-spots {
-  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--brass);
-}
-
-.btn-card {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
-  color: var(--parchment); background: var(--forest);
-  border: 1px solid var(--forest); padding: 12px 28px;
-  border-radius: 100px;
-  cursor: pointer; text-decoration: none; white-space: nowrap;
-  transition: all 0.2s; display: inline-block;
-}
-.btn-card:hover { background: var(--forest-deep); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(45,74,30,0.2); }
-
-/* ─── LAUNCH BANNER ─── */
-.launch-banner {
-  position: relative; z-index: 1;
-  background: var(--parchment-dk);
-  border-top: 1px solid var(--rule-light);
-  border-bottom: 1px solid var(--rule-light);
-  padding: 18px 24px; text-align: center;
-}
-.launch-banner-inner {
-  max-width: 1120px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: center; gap: 28px; flex-wrap: wrap;
-}
-.launch-banner-text {
-  font-size: 13.5px; font-weight: 300; color: var(--ink-70);
-}
-.launch-banner-text strong { font-weight: 600; color: var(--ink); }
-
-/* ─── SCROLL REVEAL ─── */
-.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.8s ease, transform 0.8s ease; }
-.reveal.visible { opacity: 1; transform: none; }
-.reveal-delay-1 { transition-delay: 0.08s; }
-.reveal-delay-2 { transition-delay: 0.16s; }
-.reveal-delay-3 { transition-delay: 0.24s; }
-.reveal-delay-4 { transition-delay: 0.32s; }
-
-/* ─── FOOTER ─── */
-footer {
-  background: var(--forest-deep); border-top: 1px solid rgba(168,145,90,0.18);
-  padding: 48px 24px; position: relative; z-index: 1;
-}
-.footer-inner {
-  max-width: 1120px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 28px;
-}
-.footer-logo {
-  font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700;
-  color: var(--parchment); text-decoration: none;
-  display: inline-flex; align-items: baseline; gap: 1px;
-}
-.footer-logo-dot { color: var(--brass); }
-.footer-logo-fy { font-size: 12px; font-weight: 400; font-style: italic; color: rgba(245,237,216,0.5); }
-.footer-links { display: flex; gap: 36px; flex-wrap: wrap; }
-.footer-links a {
-  font-size: 11px; font-weight: 600; letter-spacing: 0.9px; text-transform: uppercase;
-  color: rgba(245,237,216,0.32); text-decoration: none; transition: color 0.2s;
-}
-.footer-links a:hover { color: rgba(245,237,216,0.68); }
-.footer-copy { font-size: 11.5px; color: rgba(245,237,216,0.22); font-weight: 300; }
-
-/* ─── HAMBURGER ─── */
-.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-.hamburger span { display: block; width: 22px; height: 1.5px; background: var(--ink); }
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 960px) {
-  nav { padding: 0 24px; }
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-  .games-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 600px) {
-  nav .nav-cta { display: none; }
-  .card-footer { flex-direction: column; align-items: flex-start; gap: 14px; }
-  .card-body { padding: 24px; }
-  .card-footer { padding: 18px 24px; }
-}
+:root{--forest:#2D4A1E;--forest-deep:#1E3212;--forest-soft:rgba(45,74,30,0.08);--parchment:#F5EDD8;--parchment-dk:#E8DDBE;--ivory:#FBF8F0;--ivory-warm:#F8F3E8;--cream:#F0E8D0;--brass:#A8915A;--brass-light:rgba(168,145,90,0.22);--brass-faint:rgba(168,145,90,0.09);--ink:#1A2410;--ink-70:rgba(26,36,16,0.7);--ink-40:rgba(26,36,16,0.4);--ink-15:rgba(26,36,16,0.15);--rule:rgba(45,74,30,0.14);--rule-light:rgba(45,74,30,0.08);--radius:16px;--radius-sm:10px;--radius-xs:6px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"DM Sans",sans-serif;background:var(--ivory);color:var(--ink);overflow-x:hidden;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 10% 5%,rgba(236,224,193,0.55) 0%,transparent 55%),radial-gradient(ellipse 65% 55% at 88% 92%,rgba(210,200,170,0.42) 0%,transparent 55%),radial-gradient(ellipse 50% 50% at 50% 50%,rgba(245,237,216,0.28) 0%,transparent 70%),linear-gradient(168deg,#FBF8F0 0%,#F4ECD6 32%,#EBE1C5 65%,#F2EAD3 100%)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:72px;background:rgba(251,248,240,0.92);backdrop-filter:blur(24px) saturate(1.2);border-bottom:1px solid var(--rule-light);transition:border-color 0.3s,box-shadow 0.3s}
+nav.scrolled{border-bottom-color:var(--rule);box-shadow:0 1px 28px rgba(26,36,16,0.06)}
+.nav-logo{font-family:"Fraunces",serif;font-size:24px;font-weight:700;letter-spacing:-0.3px;color:var(--forest);text-decoration:none;display:inline-flex;align-items:baseline;gap:1px}
+.nav-logo-dot{color:var(--brass)}.nav-logo-fy{font-size:14px;font-weight:400;font-style:italic;color:var(--forest);opacity:0.6}
+.nav-links{display:flex;gap:40px;list-style:none}
+.nav-links a{font-size:11.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--ink-40);text-decoration:none;transition:color 0.2s}
+.nav-links a:hover{color:var(--forest)}
+.nav-cta{display:flex;gap:12px;align-items:center}
+.btn-ghost{font-family:"DM Sans",sans-serif;font-size:11.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--forest);background:transparent;border:1px solid var(--rule);padding:9px 22px;border-radius:100px;cursor:pointer;text-decoration:none;transition:all 0.2s}
+.btn-ghost:hover{background:var(--forest);color:var(--parchment);border-color:var(--forest)}
+.btn-primary{font-family:"DM Sans",sans-serif;font-size:11.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--parchment);background:var(--forest);border:1px solid var(--forest);padding:10px 24px;border-radius:100px;cursor:pointer;text-decoration:none;transition:all 0.2s}
+.btn-primary:hover{background:var(--forest-deep);transform:translateY(-1px);box-shadow:0 6px 20px rgba(45,74,30,0.22)}
+.btn-forest{font-family:"DM Sans",sans-serif;font-size:11.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--parchment);background:var(--forest);border:1px solid var(--forest);padding:16px 44px;border-radius:100px;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.25s}
+.btn-forest:hover{background:var(--forest-deep);transform:translateY(-2px);box-shadow:0 10px 28px rgba(45,74,30,0.22)}
+.page-header{padding-top:72px;position:relative;z-index:1;background:var(--forest);overflow:hidden}
+.page-header::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 88% 50%,rgba(168,145,90,0.1) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 4% 14%,rgba(20,42,12,0.55) 0%,transparent 55%)}
+.page-header-inner{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:80px 24px 72px}
+.page-header-eyebrow{font-size:10.5px;font-weight:600;letter-spacing:2.8px;text-transform:uppercase;color:var(--brass);margin-bottom:16px}
+.page-header-title{font-family:"Fraunces",serif;font-size:clamp(38px,5.5vw,64px);font-weight:700;letter-spacing:-1.5px;line-height:1.05;color:var(--parchment);margin-bottom:20px}
+.page-header-title em{font-style:italic;color:var(--brass);font-weight:600}
+.page-header-rule{width:32px;height:1px;background:var(--brass);margin-bottom:22px;opacity:0.7}
+.page-header-sub{font-size:17px;font-weight:300;color:rgba(245,237,216,0.62);max-width:480px;line-height:1.78}
+.filters-bar{position:relative;z-index:1;border-bottom:1px solid var(--rule-light);background:rgba(251,248,240,0.85);backdrop-filter:blur(14px)}
+.filters-inner{max-width:1120px;margin:0 auto;padding:20px 24px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.filter-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-40);margin-right:6px;white-space:nowrap}
+.filter-btn{font-family:"DM Sans",sans-serif;font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--ink-40);background:transparent;border:1px solid var(--rule);padding:7px 18px;border-radius:100px;cursor:pointer;transition:all 0.2s}
+.filter-btn:hover,.filter-btn.active{color:var(--forest);border-color:var(--forest);background:var(--forest-soft)}
+.filter-btn.active{color:var(--parchment);background:var(--forest);border-color:var(--forest)}
+.filter-sep{width:1px;height:22px;background:var(--rule);margin:0 6px;flex-shrink:0}
+.format-wrap{position:relative;display:flex;align-items:center}
+.format-select{font-family:"DM Sans",sans-serif;font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--ink-40);background:transparent;border:1px solid var(--rule);padding:7px 32px 7px 16px;border-radius:100px;cursor:pointer;transition:all 0.2s;appearance:none;-webkit-appearance:none;min-width:120px}
+.format-select:hover,.format-select:focus{color:var(--forest);border-color:var(--forest);background:var(--forest-soft);outline:none}
+.format-chevron{position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--ink-40)}
+.launch-banner{position:relative;z-index:1;background:var(--parchment-dk);border-top:1px solid var(--rule-light);border-bottom:1px solid var(--rule-light);padding:18px 24px;text-align:center}
+.launch-banner-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap}
+.launch-banner-text{font-size:13.5px;font-weight:300;color:var(--ink-70)}
+.launch-banner-text strong{font-weight:600;color:var(--ink)}
+.games-section{position:relative;z-index:1;padding:64px 24px 112px}
+.games-container{max-width:1120px;margin:0 auto}
+.games-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.loading-state{grid-column:1/-1;text-align:center;padding:60px 0;color:var(--ink-40)}
+.loading-state p{font-size:14px;margin-top:10px}
+.loading-spinner{width:32px;height:32px;border:2px solid var(--rule);border-top-color:var(--forest);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.live-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(45,74,30,0.1);border:1px solid rgba(45,74,30,0.2);border-radius:100px;padding:4px 10px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--forest);margin-bottom:14px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--forest);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.game-card{background:rgba(251,248,240,0.7);border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 24px rgba(45,74,30,0.05);transition:box-shadow 0.3s,transform 0.3s;display:flex;flex-direction:column}
+.game-card:hover{box-shadow:0 8px 40px rgba(45,74,30,0.12);transform:translateY(-2px)}
+.card-tier-bar{height:3px;width:100%}
+.tier-athlete{background:var(--forest)}.tier-ai{background:var(--brass)}.tier-social{background:var(--parchment-dk)}.tier-coached{background:var(--forest)}.tier-training{background:var(--brass)}.tier-tournament{background:#8B3015}
+.card-body{padding:34px 34px 28px;flex:1}
+.card-tier-label{font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brass);margin-bottom:18px}
+.card-title{font-family:"Fraunces",serif;font-size:21px;font-weight:600;line-height:1.22;color:var(--ink);margin-bottom:8px;letter-spacing:-0.3px}
+.card-rule{width:22px;height:1px;background:var(--brass);margin-bottom:18px;opacity:0.6}
+.card-host{font-size:13px;font-weight:500;color:var(--forest);margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.card-host-cert{width:15px;height:15px;background:var(--brass);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-host-sub{font-size:12.5px;font-weight:300;color:var(--ink-40);margin-bottom:28px}
+.card-meta{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.card-meta-row{display:flex;gap:32px;flex-wrap:wrap}
+.card-meta-item{display:flex;flex-direction:column;gap:2px}
+.card-meta-label{font-size:9.5px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:var(--ink-40)}
+.card-meta-value{font-size:14px;font-weight:400;color:var(--ink)}
+.card-tags{display:flex;gap:8px;flex-wrap:wrap}
+.card-tag{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--forest);background:var(--forest-soft);border:1px solid var(--rule);border-radius:100px;padding:4px 12px}
+.card-footer{border-top:1px solid var(--rule-light);padding:22px 34px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:rgba(232,221,190,0.22)}
+.card-deposit{font-size:12.5px;font-weight:300;color:var(--ink-70);line-height:1.55}
+.card-deposit strong{font-weight:600;color:var(--ink);display:block;font-size:13.5px;margin-bottom:2px}
+.card-spots{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--brass)}
+.card-spots.urgent{color:#C05A2A}
+.btn-card{font-family:"DM Sans",sans-serif;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--parchment);background:var(--forest);border:1px solid var(--forest);padding:12px 28px;border-radius:100px;cursor:pointer;text-decoration:none;white-space:nowrap;transition:all 0.2s;display:inline-block}
+.btn-card:hover{background:var(--forest-deep);transform:translateY(-1px);box-shadow:0 6px 18px rgba(45,74,30,0.2)}
+.btn-card.full{background:var(--ink-15);border-color:var(--ink-15);color:var(--ink-40);cursor:not-allowed}
+.section-divider{grid-column:1/-1;display:flex;align-items:center;gap:16px;margin:16px 0 8px}
+.section-divider-line{flex:1;height:1px;background:var(--rule-light)}
+.section-divider-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-40);white-space:nowrap}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.8s ease,transform 0.8s ease}
+.reveal.visible{opacity:1;transform:none}
+.reveal-delay-1{transition-delay:0.08s}.reveal-delay-2{transition-delay:0.16s}.reveal-delay-3{transition-delay:0.24s}.reveal-delay-4{transition-delay:0.32s}
+footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);padding:48px 24px;position:relative;z-index:1}
+.footer-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:28px}
+.footer-logo{font-family:"Fraunces",serif;font-size:20px;font-weight:700;color:var(--parchment);text-decoration:none;display:inline-flex;align-items:baseline;gap:1px}
+.footer-logo-dot{color:var(--brass)}.footer-logo-fy{font-size:12px;font-weight:400;font-style:italic;color:rgba(245,237,216,0.5)}
+.footer-links{display:flex;gap:36px;flex-wrap:wrap}
+.footer-links a{font-size:11px;font-weight:600;letter-spacing:0.9px;text-transform:uppercase;color:rgba(245,237,216,0.32);text-decoration:none;transition:color 0.2s}
+.footer-links a:hover{color:rgba(245,237,216,0.68)}
+.footer-copy{font-size:11.5px;color:rgba(245,237,216,0.22);font-weight:300}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--ink)}
+@media(max-width:960px){nav{padding:0 24px}.nav-links{display:none}.hamburger{display:flex}.games-grid{grid-template-columns:1fr}}
+@media(max-width:600px){nav .nav-cta{display:none}.card-footer{flex-direction:column;align-items:flex-start;gap:14px}.card-body{padding:24px}.card-footer{padding:18px 24px}}
 </style>
 </head>
 <body>
 
-<!-- ─── NAV ─── -->
 <nav id="navbar">
   <a href="index.html" class="nav-logo">Lyfe<span class="nav-logo-dot">.</span><span class="nav-logo-fy">fy</span></a>
   <ul class="nav-links">
@@ -374,352 +120,77 @@ footer {
     <a href="https://tally.so/r/MeO4Mg" target="_blank" class="btn-ghost">Become a Host</a>
     <a href="games.html" class="btn-primary">Find a Game</a>
   </div>
-  <div class="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
 
-<!-- ─── PAGE HEADER ─── -->
 <div class="page-header">
   <div class="page-header-inner">
     <div class="page-header-eyebrow">Available Now</div>
     <h1 class="page-header-title">Find a <em>Game</em></h1>
     <div class="page-header-rule"></div>
-    <p class="page-header-sub">Upcoming games hosted by certified athletes. Commit your spot — group fills, then you play.</p>
+    <p class="page-header-sub">Upcoming sessions hosted by certified athletes. Commit your spot &mdash; group fills, then you play.</p>
   </div>
 </div>
 
-<!-- ─── LAUNCH BANNER ─── -->
 <div class="launch-banner">
   <div class="launch-banner-inner">
-    <p class="launch-banner-text">Launching in <strong>Boston, New York & Washington D.C.</strong> this spring —</p>
-    <a href="https://tally.so/r/MeO4Mg" target="_blank" class="btn-forest" style="padding: 10px 28px; font-size: 11px;">Join the Waitlist</a>
+    <p class="launch-banner-text">Launching in <strong>Boston, New York &amp; Washington D.C.</strong> this spring &mdash;</p>
+    <a href="https://tally.so/r/MeO4Mg" target="_blank" class="btn-forest" style="padding:10px 28px;font-size:11px">Join the Waitlist</a>
   </div>
 </div>
 
-<!-- ─── FILTERS ─── -->
 <div class="filters-bar">
   <div class="filters-inner">
-    <span class="filter-label">Filter</span>
-    <button class="filter-btn active" onclick="filterGames('all', this)">All Games</button>
-    <button class="filter-btn" onclick="filterGames('golf', this)">Golf</button>
-    <button class="filter-btn" onclick="filterGames('tennis', this)">Tennis</button>
-    <button class="filter-btn" onclick="filterGames('athlete', this)">Athlete-Led</button>
-    <button class="filter-btn" onclick="filterGames('beginner', this)">Beginner Friendly</button>
-    <button class="filter-btn" onclick="filterGames('weekend', this)">This Weekend</button>
+    <span class="filter-label">Sport</span>
+    <button class="filter-btn active" data-filter="all" onclick="applyFilter('all',this)">All</button>
+    <button class="filter-btn" data-filter="golf" onclick="applyFilter('golf',this)">Golf</button>
+    <button class="filter-btn" data-filter="tennis" onclick="applyFilter('tennis',this)">Tennis</button>
+    <button class="filter-btn" data-filter="basketball" onclick="applyFilter('basketball',this)">Basketball</button>
+    <button class="filter-btn" data-filter="soccer" onclick="applyFilter('soccer',this)">Soccer</button>
+    <button class="filter-btn" data-filter="volleyball" onclick="applyFilter('volleyball',this)">Volleyball</button>
+
+    <div class="filter-sep"></div>
+    <span class="filter-label">Tier</span>
+    <button class="filter-btn" data-filter="athlete-led" onclick="applyFilter('athlete-led',this)">Athlete-Led</button>
+    <button class="filter-btn" data-filter="ai-matched" onclick="applyFilter('ai-matched',this)">AI-Matched</button>
+    <button class="filter-btn" data-filter="social" onclick="applyFilter('social',this)">Social Play</button>
+    <button class="filter-btn" data-filter="tournament" onclick="applyFilter('tournament',this)">Tournament</button>
+    <button class="filter-btn" data-filter="coached" onclick="applyFilter('coached',this)">Coached</button>
+
+    <div class="filter-sep"></div>
+    <span class="filter-label">Tags</span>
+    <button class="filter-btn" data-filter="beginner" onclick="applyFilter('beginner',this)">Beginner Friendly</button>
+    <button class="filter-btn" data-filter="competitive" onclick="applyFilter('competitive',this)">Competitive</button>
+    <button class="filter-btn" data-filter="networking" onclick="applyFilter('networking',this)">Networking</button>
+    <button class="filter-btn" data-filter="weekend" onclick="applyFilter('weekend',this)">This Weekend</button>
+    <button class="filter-btn" data-filter="free" onclick="applyFilter('free',this)">Free</button>
+
+    <div class="filter-sep"></div>
+    <span class="filter-label">Format</span>
+    <div class="format-wrap">
+      <select class="format-select" id="formatSelect" onchange="applyFormat(this.value)">
+        <option value="all">All Formats</option>
+        <option value="1v1">1v1</option>
+        <option value="small group">Small Group (2-4)</option>
+        <option value="group">Group (5-10)</option>
+        <option value="open">Open</option>
+      </select>
+      <svg class="format-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
   </div>
 </div>
 
-<!-- ─── GAMES ─── -->
 <section class="games-section">
   <div class="games-container">
-    <div class="games-grid">
-
-      <!-- GAME 1 — Athlete-Led Golf -->
-      <div class="game-card reveal" data-tags="golf athlete weekend">
-        <div class="card-tier-bar tier-athlete"></div>
-        <div class="card-body">
-          <div class="card-tier-label">Athlete-Led Experience</div>
-          <h2 class="card-title">Saturday Morning Golf — Back Bay</h2>
-          <div class="card-rule"></div>
-          <div class="card-host">Sofia R.</div>
-          <div class="card-host-sub">Stanford Golf · D1 Athlete · 4.98 rated</div>
-          <div class="card-meta">
-            <div class="card-meta-row">
-              <div class="card-meta-item">
-                <span class="card-meta-label">Date & Time</span>
-                <span class="card-meta-value">Sat, Mar 22 · 9:00 – 11:30 AM</span>
-              </div>
-              <div class="card-meta-item">
-                <span class="card-meta-label">Location</span>
-                <span class="card-meta-value">Boston, MA</span>
-              </div>
-            </div>
-            <div class="card-meta-row">
-              <div class="card-meta-item">
-                <span class="card-meta-label">Skill Level</span>
-                <span class="card-meta-value">Handicap 8 – 18</span>
-              </div>
-              <div class="card-meta-item">
-                <span class="card-meta-label">Group Size</span>
-                <span class="card-meta-value">4 players max</span>
-              </div>
-            </div>
-          </div>
-          <div class="card-tags">
-            <span class="card-tag">Golf</span>
-            <span class="card-tag">Skill-Focused</span>
-            <span class="card-tag">Coached Elements</span>
-            <span class="card-tag">Networking</span>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div>
-            <div class="card-deposit">
-              <strong>$10 refundable deposit</strong>
-              Full refund if group doesn't fill
-            </div>
-            <div class="card-spots">2 spots remaining</div>
-          </div>
-          <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" class="btn-card">Request Spot</a>
-        </div>
+    <div class="games-grid" id="gamesGrid">
+      <div class="loading-state">
+        <div class="loading-spinner"></div>
+        <p>Loading sessions...</p>
       </div>
-
-      <!-- GAME 2 — AI-Matched Golf Beginner -->
-      <div class="game-card reveal reveal-delay-1" data-tags="golf beginner weekend">
-        <div class="card-tier-bar tier-ai"></div>
-        <div class="card-body">
-          <div class="card-tier-label">AI Interest-Matched Play</div>
-          <h2 class="card-title">Sunday Beginner Golf — All Levels Welcome</h2>
-          <div class="card-rule"></div>
-          <div class="card-host">Marcus T.</div>
-          <div class="card-host-sub">Duke Golf · NCAA Athlete · 4.95 rated</div>
-          <div class="card-meta">
-            <div class="card-meta-row">
-              <div class="card-meta-item">
-                <span class="card-meta-label">Date & Time</span>
-                <span class="card-meta-value">Sun, Mar 23 · 8:00 – 10:00 AM</span>
-              </div>
-              <div class="card-meta-item">
-                <span class="card-meta-label">Location</span>
-                <span class="card-meta-value">Boston, MA</span>
-              </div>
-            </div>
-            <div class="card-meta-row">
-              <div class="card-meta-item">
-                <span class="card-meta-label">Skill Level</span>
-                <span class="card-meta-value">All levels welcome</span>
-              </div>
-              <div class="card-meta-item">
-                <span class="card-meta-label">Group Size</span>
-                <span class="card-meta-value">4 players max</span>
-              </div>
-            </div>
-          </div>
-          <div class="card-tags">
-            <span class="card-tag">Golf</span>
-            <span class="card-tag">Beginner Friendly</span>
-            <span class="card-tag">Social</span>
-            <span class="card-tag">AI-Matched</span>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div>
-            <div class="card-deposit">
-              <strong>$10 refundable deposit</strong>
-              Full refund if group doesn't fill
-            </div>
-            <div class="card-spots">3 spots remaining</div>
-          </div>
-          <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" class="btn-card">Request Spot</a>
-        </div>
-      </div>
-
-      <!-- GAME 3 — Athlete-Led Tennis -->
-      <div class="game-card reveal reveal-delay-2" data-tags="tennis athlete weekend">
-        <div class="card-tier-bar tier-athlete"></div>
-        <div class="card-body">
-          <div class="card-tier-label">Athlete-Led Experience</div>
-          <h2 class="card-title">Pro Tennis Social — Intermediate to Advanced</h2>
-          <div class="card-rule"></div>
-          <div class="card-host">James K.</div>
-          <div class="card-host-sub">Pro Tennis · 4.5 UTR · 4.97 rated</div>
-          <div class="card-meta">
-            <div class="card-meta-row">
-              <div class="card-meta-item">
-                <span class="card-meta-label">Date & Time</span>
-                <span class="card-meta-value">Sat, Mar 22 · 10:00 AM – 12:00 PM</span>
-              </div>
-              <div class="card-meta-item">
-                <span class="card-meta-label">Location</span>
-                <span class="card-meta-value">New York, NY</span>
-              </div>
-            </div>
-            <div class="card-meta-row">
-              <div class="card-meta-item">
-                <span class="card-meta-label">Skill Level</span>
-                <span class="card-meta-value">UTR 3.5 – 5.0</span>
-              </div>
-              <div class="card-meta-item">
-                <span class="card-meta-label">Group Size</span>
-                <span class="card-meta-value">4 players max</span>
-              </div>
-            </div>
-          </div>
-          <div class="card-tags">
-            <span class="card-tag">Tennis</span>
-            <span class="card-tag">Competitive</span>
-            <span class="card-tag">Skill Drills</span>
-            <span class="card-tag">Social After</span>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div>
-            <div class="card-deposit">
-              <strong>$10 refundable deposit</strong>
-              Full refund if group doesn't fill
-            </div>
-            <div class="card-spots">1 spot remaining</div>
-          </div>
-          <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" class="btn-card">Request Spot</a>
-        </div>
-      </div>
-
-      <!-- GAME 4 — Social Golf -->
-      <div class="game-card reveal reveal-delay-3" data-tags="golf social weekend">
-        <div class="card-tier-bar tier-social"></div>
-        <div class="card-body">
-          <div class="card-tier-label">Pure Social Play</div>
-          <h2 class="card-title">Casual Friday Evening Golf — Pure Social</h2>
-          <div class="card-rule"></div>
-          <div class="card-host">Alex L.</div>
-          <div class="card-host-sub">Georgetown Golf · Club Competitive · 4.91 rated</div>
-          <div class="card-meta">
-            <div class="card-meta-row">
-              <div class="card-meta-item">
-                <span class="card-meta-label">Date & Time</span>
-                <span class="card-meta-value">Fri, Mar 21 · 5:30 – 7:30 PM</span>
-              </div>
-              <div class="card-meta-item">
-                <span class="card-meta-label">Location</span>
-                <span class="card-meta-value">Washington D.C.</span>
-              </div>
-            </div>
-            <div class="card-meta-row">
-              <div class="card-meta-item">
-                <span class="card-meta-label">Skill Level</span>
-                <span class="card-meta-value">Handicap 15 – 30 · Relaxed pace</span>
-              </div>
-              <div class="card-meta-item">
-                <span class="card-meta-label">Group Size</span>
-                <span class="card-meta-value">4 players max</span>
-              </div>
-            </div>
-          </div>
-          <div class="card-tags">
-            <span class="card-tag">Golf</span>
-            <span class="card-tag">Casual</span>
-            <span class="card-tag">After-Work</span>
-            <span class="card-tag">No Pressure</span>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div>
-            <div class="card-deposit">
-              <strong>$10 refundable deposit</strong>
-              Full refund if group doesn't fill
-            </div>
-            <div class="card-spots">4 spots remaining</div>
-          </div>
-          <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" class="btn-card">Request Spot</a>
-        </div>
-      </div>
-
-      <!-- GAME 5 — AI Tennis Beginner -->
-      <div class="game-card reveal reveal-delay-1" data-tags="tennis beginner">
-        <div class="card-tier-bar tier-ai"></div>
-        <div class="card-body">
-          <div class="card-tier-label">AI Interest-Matched Play</div>
-          <h2 class="card-title">Beginner Tennis Morning — Social & Low Pressure</h2>
-          <div class="card-rule"></div>
-          <div class="card-host">Priya M.</div>
-          <div class="card-host-sub">Northwestern Tennis · D1 Athlete · 4.93 rated</div>
-          <div class="card-meta">
-            <div class="card-meta-row">
-              <div class="card-meta-item">
-                <span class="card-meta-label">Date & Time</span>
-                <span class="card-meta-value">Sat, Mar 29 · 9:30 – 11:00 AM</span>
-              </div>
-              <div class="card-meta-item">
-                <span class="card-meta-label">Location</span>
-                <span class="card-meta-value">Boston, MA</span>
-              </div>
-            </div>
-            <div class="card-meta-row">
-              <div class="card-meta-item">
-                <span class="card-meta-label">Skill Level</span>
-                <span class="card-meta-value">UTR 1.0 – 3.0 · All welcome</span>
-              </div>
-              <div class="card-meta-item">
-                <span class="card-meta-label">Group Size</span>
-                <span class="card-meta-value">4 players max</span>
-              </div>
-            </div>
-          </div>
-          <div class="card-tags">
-            <span class="card-tag">Tennis</span>
-            <span class="card-tag">Beginner Friendly</span>
-            <span class="card-tag">AI-Matched</span>
-            <span class="card-tag">Community</span>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div>
-            <div class="card-deposit">
-              <strong>$10 refundable deposit</strong>
-              Full refund if group doesn't fill
-            </div>
-            <div class="card-spots">3 spots remaining</div>
-          </div>
-          <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" class="btn-card">Request Spot</a>
-        </div>
-      </div>
-
-      <!-- GAME 6 — Athlete Golf NYC -->
-      <div class="game-card reveal reveal-delay-2" data-tags="golf athlete">
-        <div class="card-tier-bar tier-athlete"></div>
-        <div class="card-body">
-          <div class="card-tier-label">Athlete-Led Experience</div>
-          <h2 class="card-title">Weekend Golf — Competitive Play, New York</h2>
-          <div class="card-rule"></div>
-          <div class="card-host">Daniel W.</div>
-          <div class="card-host-sub">USC Golf · Semi-Professional · 4.96 rated</div>
-          <div class="card-meta">
-            <div class="card-meta-row">
-              <div class="card-meta-item">
-                <span class="card-meta-label">Date & Time</span>
-                <span class="card-meta-value">Sun, Mar 30 · 7:00 – 9:30 AM</span>
-              </div>
-              <div class="card-meta-item">
-                <span class="card-meta-label">Location</span>
-                <span class="card-meta-value">New York, NY</span>
-              </div>
-            </div>
-            <div class="card-meta-row">
-              <div class="card-meta-item">
-                <span class="card-meta-label">Skill Level</span>
-                <span class="card-meta-value">Handicap 0 – 12</span>
-              </div>
-              <div class="card-meta-item">
-                <span class="card-meta-label">Group Size</span>
-                <span class="card-meta-value">4 players max</span>
-              </div>
-            </div>
-          </div>
-          <div class="card-tags">
-            <span class="card-tag">Golf</span>
-            <span class="card-tag">Competitive</span>
-            <span class="card-tag">Stroke Play</span>
-            <span class="card-tag">Athlete-Led</span>
-          </div>
-        </div>
-        <div class="card-footer">
-          <div>
-            <div class="card-deposit">
-              <strong>$10 refundable deposit</strong>
-              Full refund if group doesn't fill
-            </div>
-            <div class="card-spots">2 spots remaining</div>
-          </div>
-          <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" class="btn-card">Request Spot</a>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
 
-<!-- ─── FOOTER ─── -->
 <footer>
   <div class="footer-inner">
     <a href="index.html" class="footer-logo">Lyfe<span class="footer-logo-dot">.</span><span class="footer-logo-fy">fy</span></a>
@@ -731,51 +202,137 @@ footer {
       <a href="#">Careers</a>
       <a href="#">Privacy</a>
     </div>
-    <div class="footer-copy">© 2025 Lyfe, Inc.</div>
+    <div class="footer-copy">&copy; 2025 Lyfe, Inc.</div>
   </div>
 </footer>
 
 <script>
-  /* ── Nav scroll ── */
-  const navbar = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 20);
-  });
+  const SUPABASE_URL  = "https://bcvhlkncezqzzzrrbkum.supabase.co";
+  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4";
+  const STRIPE_LINK   = "https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK";
 
-  /* ── Scroll reveal ── */
-  const reveals = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.08 });
-  reveals.forEach(el => io.observe(el));
+  let allLive = [];
 
-  /* ── Filter ── */
-  function filterGames(tag, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.game-card').forEach(card => {
-      if (tag === 'all') {
-        card.style.display = '';
-      } else {
-        const tags = card.dataset.tags || '';
-        card.style.display = tags.includes(tag) ? '' : 'none';
-      }
+  async function fetchSessions() {
+    const today = new Date().toISOString().split("T")[0];
+    try {
+      const res = await fetch(SUPABASE_URL + "/rest/v1/sessions?status=eq.active&date=gte." + today + "&order=date.asc,time.asc&select=*", {
+        headers: { "apikey": SUPABASE_ANON, "Authorization": "Bearer " + SUPABASE_ANON }
+      });
+      const d = await res.json();
+      return Array.isArray(d) ? d : [];
+    } catch(e) { return []; }
+  }
+
+  function fmtDate(d) { const dt = new Date(d+"T00:00:00"); return dt.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}); }
+  function fmtTime(t) { const [h,m]=t.split(":").map(Number); return (h%12||12)+":"+String(m).padStart(2,"0")+" "+(h>=12?"PM":"AM"); }
+  function fmtMoney(n) { return parseFloat(n)<=0 ? "Free" : "$"+parseFloat(n).toFixed(2); }
+  function isWeekend(ds) { const d=new Date(ds+"T00:00:00"),now=new Date(),dy=d.getDay(),diff=d-now; return (dy===0||dy===6)&&diff>=0&&diff<7*24*3600*1000; }
+
+  function tierInfo(t) {
+    return {coached:{label:"Athlete-Led Experience",cls:"tier-athlete"},tournament:{label:"Tournament",cls:"tier-tournament"},training:{label:"Training Session",cls:"tier-training"},casual:{label:"Social Play",cls:"tier-social"}}[t]||{label:"Social Play",cls:"tier-social"};
+  }
+
+  function buildCard(s) {
+    const tier=tierInfo(s.type), tags=Array.isArray(s.tags)?s.tags:[], left=s.spots_left||0, isFree=parseFloat(s.price)===0, isUrgent=left<=2;
+    const certMark=s.host_certified?'<span class="card-host-cert"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="var(--forest-deep)" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></span>':"";
+    const filterTags=[s.sport?s.sport.toLowerCase():"",tags.some(t=>t.toLowerCase().includes("athlete"))?"athlete":"",tags.some(t=>t.toLowerCase().includes("beginner"))?"beginner":"",isWeekend(s.date)?"weekend":""].filter(Boolean).join(" ");
+    const tagsHtml=[s.sport,s.skill_level,...tags].filter((t,i,a)=>t&&a.indexOf(t)===i).slice(0,5).map(t=>'<span class="card-tag">'+t+"</span>").join("");
+    const priceBlock=isFree?"<strong>Free Session</strong>Reserve your spot now":"<strong>"+fmtMoney(s.price)+" per spot</strong>Secure checkout via Stripe";
+    const bookBtn=left>0?'<a href="'+( isFree?"dashboard.html":STRIPE_LINK )+'" class="btn-card">'+( isFree?"Reserve Spot":"Request Spot" )+"</a>":'<span class="btn-card full">Session Full</span>';
+    return '<div class="game-card reveal" data-tags="'+filterTags+'" data-id="'+s.id+'" data-type="'+(s.type||'casual')+'" data-format="'+((s.format||'open').toLowerCase())+'" data-price="'+(parseFloat(s.price)===0?'free':s.price)+'"><div class="card-tier-bar '+tier.cls+'"></div><div class="card-body"><span class="live-badge"><span class="live-dot"></span>Live Session</span><div class="card-tier-label">'+tier.label.toUpperCase()+'</div><h2 class="card-title">'+s.title+'</h2><div class="card-rule"></div><div class="card-host">'+( s.host_name||"Lyfe.fy Host" )+certMark+'</div><div class="card-host-sub">'+( s.description||(s.sport+" &middot; "+(s.skill_level||"All levels")) )+'</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">'+fmtDate(s.date)+" &middot; "+fmtTime(s.time)+'</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">'+s.location+'</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">'+( s.skill_level||"All levels welcome" )+'</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">'+( s.spots_total||"?" )+" players max</span></div></div></div><div class="card-tags">"+tagsHtml+"</div></div><div class="card-footer"><div><div class="card-deposit">"+priceBlock+"</div><div class="card-spots"+(isUrgent?" urgent":"")+"">"+left+" SPOT"+(left!==1?"S":"")+" REMAINING</div></div>"+bookBtn+"</div></div>";
+  }
+
+  const STATIC = '<div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">Featured Sessions</div><div class="section-divider-line"></div></div><div class="game-card reveal" data-tags="golf athlete weekend" data-type="coached" data-format="small group" data-price="10"><div class="card-tier-bar tier-athlete"></div><div class="card-body"><div class="card-tier-label">ATHLETE-LED EXPERIENCE</div><h2 class="card-title">Saturday Morning Golf &mdash; Back Bay</h2><div class="card-rule"></div><div class="card-host">Sofia R.</div><div class="card-host-sub">Stanford Golf &middot; D1 Athlete &middot; 4.98 rated</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, Mar 22 &middot; 9:00 &ndash; 11:30 AM</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Boston, MA</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">Handicap 8 &ndash; 18</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div></div></div><div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Skill-Focused</span><span class="card-tag">Coached Elements</span><span class="card-tag">Networking</span></div></div><div class="card-footer"><div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">2 spots remaining</div></div><a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a></div></div><div class="game-card reveal reveal-delay-1" data-tags="golf beginner weekend ai-matched" data-type="casual" data-format="small group" data-price="10"><div class="card-tier-bar tier-ai"></div><div class="card-body"><div class="card-tier-label">AI INTEREST-MATCHED PLAY</div><h2 class="card-title">Sunday Beginner Golf &mdash; All Levels Welcome</h2><div class="card-rule"></div><div class="card-host">Marcus T.</div><div class="card-host-sub">Duke Golf &middot; NCAA Athlete &middot; 4.95 rated</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sun, Mar 23 &middot; 8:00 &ndash; 10:00 AM</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Boston, MA</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">All levels welcome</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div></div></div><div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Beginner Friendly</span><span class="card-tag">Social</span><span class="card-tag">AI-Matched</span></div></div><div class="card-footer"><div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">3 spots remaining</div></div><a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a></div></div><div class="game-card reveal reveal-delay-2" data-tags="tennis athlete weekend" data-type="coached" data-format="small group" data-price="10"><div class="card-tier-bar tier-athlete"></div><div class="card-body"><div class="card-tier-label">ATHLETE-LED EXPERIENCE</div><h2 class="card-title">Pro Tennis Social &mdash; Intermediate to Advanced</h2><div class="card-rule"></div><div class="card-host">James K.</div><div class="card-host-sub">Pro Tennis &middot; 4.5 UTR &middot; 4.97 rated</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, Mar 22 &middot; 10:00 AM &ndash; 12:00 PM</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">New York, NY</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">UTR 3.5 &ndash; 5.0</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div></div></div><div class="card-tags"><span class="card-tag">Tennis</span><span class="card-tag">Competitive</span><span class="card-tag">Skill Drills</span><span class="card-tag">Social After</span></div></div><div class="card-footer"><div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">1 spot remaining</div></div><a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a></div></div><div class="game-card reveal reveal-delay-3" data-tags="golf social weekend" data-type="casual" data-format="small group" data-price="10"><div class="card-tier-bar tier-social"></div><div class="card-body"><div class="card-tier-label">PURE SOCIAL PLAY</div><h2 class="card-title">Casual Friday Evening Golf &mdash; Pure Social</h2><div class="card-rule"></div><div class="card-host">Alex L.</div><div class="card-host-sub">Georgetown Golf &middot; Club Competitive &middot; 4.91 rated</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Fri, Mar 21 &middot; 5:30 &ndash; 7:30 PM</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Washington D.C.</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">Handicap 15 &ndash; 30</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div></div></div><div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Casual</span><span class="card-tag">After-Work</span><span class="card-tag">No Pressure</span></div></div><div class="card-footer"><div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">4 spots remaining</div></div><a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a></div></div>';
+
+  function renderGrid(live) {
+    const grid = document.getElementById("gamesGrid");
+    let html = "";
+    if (live.length > 0) {
+      html += '<div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">Live Now &middot; '+live.length+' Session'+( live.length!==1?"s":"" )+"</div><div class="section-divider-line"></div></div>";
+      html += live.map(s => buildCard(s)).join("");
+    }
+    html += STATIC;
+    grid.innerHTML = html;
+    requestAnimationFrame(function() {
+      const io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if(e.isIntersecting) e.target.classList.add("visible"); });
+      }, {threshold:0.08});
+      document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
     });
   }
 
-  /* ── Mobile menu ── */
-  function toggleMenu() {
-    const links = document.querySelector('.nav-links');
-    if (!links) return;
-    const open = links.style.display === 'flex';
-    if (open) { links.style.display = ''; return; }
-    Object.assign(links.style, {
-      display: 'flex', flexDirection: 'column', position: 'absolute',
-      top: '72px', left: '0', right: '0',
-      background: 'rgba(251,248,240,0.97)', backdropFilter: 'blur(20px)',
-      padding: '28px 32px', gap: '20px',
-      borderBottom: '1px solid rgba(45,74,30,0.12)'
+  var activeTag    = "all";
+  var activeFormat = "all";
+
+  function applyFilter(tag, btn) {
+    activeTag = tag;
+    document.querySelectorAll(".filter-btn").forEach(function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
+    filterCards();
+  }
+
+  function applyFormat(val) {
+    activeFormat = val.toLowerCase();
+    filterCards();
+  }
+
+  function cardMatchesTag(card, tag) {
+    if (tag === "all") return true;
+    var dtags = (card.dataset.tags || "").toLowerCase();
+    var dtype = (card.dataset.type || "").toLowerCase();
+    var dfmt  = (card.dataset.format || "").toLowerCase();
+    // sport tags
+    if (["golf","tennis","basketball","soccer","volleyball"].includes(tag)) return dtags.includes(tag);
+    // tier tags
+    if (tag === "athlete-led")  return dtags.includes("athlete") || dtype === "coached";
+    if (tag === "ai-matched")   return dtags.includes("ai-matched") || dtags.includes("ai matched");
+    if (tag === "social")       return dtype === "casual" || dtags.includes("social");
+    if (tag === "tournament")   return dtype === "tournament";
+    if (tag === "coached")      return dtype === "coached" || dtags.includes("coached");
+    // interest tags
+    if (tag === "beginner")     return dtags.includes("beginner");
+    if (tag === "competitive")  return dtags.includes("competitive");
+    if (tag === "networking")   return dtags.includes("networking");
+    if (tag === "weekend")      return dtags.includes("weekend");
+    if (tag === "free")         return card.dataset.price === "0" || card.dataset.price === "free";
+    return dtags.includes(tag);
+  }
+
+  function cardMatchesFormat(card, fmt) {
+    if (fmt === "all") return true;
+    var dfmt = (card.dataset.format || "").toLowerCase();
+    return dfmt.includes(fmt);
+  }
+
+  function filterCards() {
+    document.querySelectorAll(".game-card").forEach(function(card){
+      var tagOk = cardMatchesTag(card, activeTag);
+      var fmtOk = cardMatchesFormat(card, activeFormat);
+      card.style.display = (tagOk && fmtOk) ? "" : "none";
     });
+    document.querySelectorAll(".section-divider").forEach(function(div){
+      var next=div.nextElementSibling, anyVisible=false;
+      while(next && !next.classList.contains("section-divider")){ if(next.style.display!=="none") anyVisible=true; next=next.nextElementSibling; }
+      div.style.display = anyVisible ? "" : "none";
+    });
+  }
+
+  async function init() {
+    var sessions = await fetchSessions();
+    allLive = sessions;
+    renderGrid(sessions);
+  }
+  init();
+
+  var navbar = document.getElementById("navbar");
+  window.addEventListener("scroll", function(){ navbar.classList.toggle("scrolled", window.scrollY>20); });
+
+  function toggleMenu() {
+    var links = document.querySelector(".nav-links");
+    if (!links) return;
+    if (links.style.display==="flex") { links.style.display=""; return; }
+    Object.assign(links.style,{display:"flex",flexDirection:"column",position:"absolute",top:"72px",left:"0",right:"0",background:"rgba(251,248,240,0.97)",backdropFilter:"blur(20px)",padding:"28px 32px",gap:"20px",borderBottom:"1px solid rgba(45,74,30,0.12)"});
   }
 </script>
 </body>
