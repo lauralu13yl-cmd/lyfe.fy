@@ -243,23 +243,97 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
   }
 
   function buildCard(s) {
-    const tier=tierInfo(s.type), tags=Array.isArray(s.tags)?s.tags:[], left=s.spots_left||0, isFree=parseFloat(s.price)===0, isUrgent=left<=2;
-    const certMark=s.host_certified?'<span class="card-host-cert"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="var(--forest-deep)" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></span>':"";
-    // Build comprehensive filter tags from all fields
-    const filterTags=[
+    var tier     = tierInfo(s.type);
+    var tags     = Array.isArray(s.tags) ? s.tags : [];
+    var left     = s.spots_left || 0;
+    var isFree   = parseFloat(s.price) === 0;
+    var isUrgent = left <= 2;
+
+    var certMark = s.host_certified
+      ? '<span class="card-host-cert"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="var(--forest-deep)" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></span>'
+      : "";
+
+    var filterTags = [
       s.sport ? s.sport.toLowerCase() : "",
       s.type  ? s.type.toLowerCase()  : "",
       isWeekend(s.date) ? "weekend" : "",
-      isFree ? "free" : "",
-      ...tags.map(t => t.toLowerCase())
-    ].filter(Boolean).join(" ");
-    const tagsHtml=[s.sport,s.skill_level,...tags].filter((t,i,a)=>t&&a.indexOf(t)===i).slice(0,5).map(t=>'<span class="card-tag">'+t+"</span>").join("");
-    const priceBlock=isFree?"<strong>Free Session</strong>Reserve your spot now":"<strong>"+fmtMoney(s.price)+" per spot</strong>Secure checkout via Stripe";
-    const bookBtn=left>0?'<a href="'+( isFree?"dashboard.html":STRIPE_LINK )+'" class="btn-card">'+( isFree?"Reserve Spot":"Request Spot" )+"</a>":'<span class="btn-card full">Session Full</span>';
-    return '<div class="game-card reveal" data-tags="'+filterTags+'" data-id="'+s.id+'" data-type="'+(s.type||'casual')+'" data-format="'+((s.format||'open').toLowerCase())+'" data-price="'+(parseFloat(s.price)===0?'free':s.price)+'"><div class="card-tier-bar '+tier.cls+'"></div><div class="card-body"><span class="live-badge"><span class="live-dot"></span>Live Session</span><div class="card-tier-label">'+tier.label.toUpperCase()+'</div><h2 class="card-title">'+s.title+'</h2><div class="card-rule"></div><div class="card-host">'+( s.host_name||"Lyfe.fy Host" )+certMark+'</div><div class="card-host-sub">'+( s.description||(s.sport+" &middot; "+(s.skill_level||"All levels")) )+'</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">'+fmtDate(s.date)+" &middot; "+fmtTime(s.time)+'</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">'+s.location+'</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">'+( s.skill_level||"All levels welcome" )+'</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">'+( s.spots_total||"?" )+" players max</span></div></div></div><div class="card-tags">"+tagsHtml+"</div></div><div class="card-footer"><div><div class="card-deposit">"+priceBlock+"</div><div class="card-spots"+(isUrgent?" urgent":"")+"">"+left+" SPOT"+(left!==1?"S":"")+" REMAINING</div></div>"+bookBtn+"</div></div>";
+      isFree ? "free" : ""
+    ].concat(tags.map(function(t){ return t.toLowerCase(); })).filter(Boolean).join(" ");
+
+    var tagsHtml = [s.sport, s.skill_level].concat(tags)
+      .filter(function(t,i,a){ return t && a.indexOf(t)===i; })
+      .slice(0,5)
+      .map(function(t){ return '<span class="card-tag">' + t + '</span>'; })
+      .join("");
+
+    var priceBlock = isFree
+      ? "<strong>Free Session</strong>Reserve your spot now"
+      : "<strong>" + fmtMoney(s.price) + " per spot</strong>Secure checkout via Stripe";
+
+    var bookBtn = left > 0
+      ? '<a href="' + (isFree ? "dashboard.html" : STRIPE_LINK) + '" class="btn-card">' + (isFree ? "Reserve Spot" : "Request Spot") + "</a>"
+      : '<span class="btn-card full">Session Full</span>';
+
+    var spotsClass = "card-spots" + (isUrgent ? " urgent" : "");
+    var hostName   = s.host_name || "Lyfe.fy Host";
+    var hostSub    = s.description || (s.sport + " &middot; " + (s.skill_level || "All levels"));
+    var skillVal   = s.skill_level || "All levels welcome";
+    var groupVal   = (s.spots_total || "?") + " players max";
+    var dataType   = s.type   || "casual";
+    var dataFmt    = (s.format || "open").toLowerCase();
+    var dataPrice  = isFree ? "free" : s.price;
+
+    return [
+      '<div class="game-card reveal"',
+        ' data-tags="'  + filterTags + '"',
+        ' data-id="'    + s.id       + '"',
+        ' data-type="'  + dataType   + '"',
+        ' data-format="'+ dataFmt    + '"',
+        ' data-price="' + dataPrice  + '">',
+      '<div class="card-tier-bar ' + tier.cls + '"></div>',
+      '<div class="card-body">',
+        '<span class="live-badge"><span class="live-dot"></span>Live Session</span>',
+        '<div class="card-tier-label">' + tier.label.toUpperCase() + '</div>',
+        '<h2 class="card-title">' + s.title + '</h2>',
+        '<div class="card-rule"></div>',
+        '<div class="card-host">' + hostName + certMark + '</div>',
+        '<div class="card-host-sub">' + hostSub + '</div>',
+        '<div class="card-meta">',
+          '<div class="card-meta-row">',
+            '<div class="card-meta-item">',
+              '<span class="card-meta-label">Date &amp; Time</span>',
+              '<span class="card-meta-value">' + fmtDate(s.date) + " &middot; " + fmtTime(s.time) + '</span>',
+            '</div>',
+            '<div class="card-meta-item">',
+              '<span class="card-meta-label">Location</span>',
+              '<span class="card-meta-value">' + s.location + '</span>',
+            '</div>',
+          '</div>',
+          '<div class="card-meta-row">',
+            '<div class="card-meta-item">',
+              '<span class="card-meta-label">Skill Level</span>',
+              '<span class="card-meta-value">' + skillVal + '</span>',
+            '</div>',
+            '<div class="card-meta-item">',
+              '<span class="card-meta-label">Group Size</span>',
+              '<span class="card-meta-value">' + groupVal + '</span>',
+            '</div>',
+          '</div>',
+        '</div>',
+        '<div class="card-tags">' + tagsHtml + '</div>',
+      '</div>',
+      '<div class="card-footer">',
+        '<div>',
+          '<div class="card-deposit">' + priceBlock + '</div>',
+          '<div class="' + spotsClass + '">' + left + ' SPOT' + (left !== 1 ? "S" : "") + ' REMAINING</div>',
+        '</div>',
+        bookBtn,
+      '</div>',
+      '</div>'
+    ].join("");
   }
 
-  const STATIC = '<div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">Featured Sessions</div><div class="section-divider-line"></div></div><div class="game-card reveal" data-tags="golf athlete weekend" data-type="coached" data-format="small group" data-price="10"><div class="card-tier-bar tier-athlete"></div><div class="card-body"><div class="card-tier-label">ATHLETE-LED EXPERIENCE</div><h2 class="card-title">Saturday Morning Golf &mdash; Back Bay</h2><div class="card-rule"></div><div class="card-host">Sofia R.</div><div class="card-host-sub">Stanford Golf &middot; D1 Athlete &middot; 4.98 rated</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, Mar 22 &middot; 9:00 &ndash; 11:30 AM</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Boston, MA</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">Handicap 8 &ndash; 18</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div></div></div><div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Skill-Focused</span><span class="card-tag">Coached Elements</span><span class="card-tag">Networking</span></div></div><div class="card-footer"><div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">2 spots remaining</div></div><a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a></div></div><div class="game-card reveal reveal-delay-1" data-tags="golf beginner weekend ai-matched" data-type="casual" data-format="small group" data-price="10"><div class="card-tier-bar tier-ai"></div><div class="card-body"><div class="card-tier-label">AI INTEREST-MATCHED PLAY</div><h2 class="card-title">Sunday Beginner Golf &mdash; All Levels Welcome</h2><div class="card-rule"></div><div class="card-host">Marcus T.</div><div class="card-host-sub">Duke Golf &middot; NCAA Athlete &middot; 4.95 rated</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sun, Mar 23 &middot; 8:00 &ndash; 10:00 AM</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Boston, MA</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">All levels welcome</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div></div></div><div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Beginner Friendly</span><span class="card-tag">Social</span><span class="card-tag">AI-Matched</span></div></div><div class="card-footer"><div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">3 spots remaining</div></div><a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a></div></div><div class="game-card reveal reveal-delay-2" data-tags="tennis athlete weekend" data-type="coached" data-format="small group" data-price="10"><div class="card-tier-bar tier-athlete"></div><div class="card-body"><div class="card-tier-label">ATHLETE-LED EXPERIENCE</div><h2 class="card-title">Pro Tennis Social &mdash; Intermediate to Advanced</h2><div class="card-rule"></div><div class="card-host">James K.</div><div class="card-host-sub">Pro Tennis &middot; 4.5 UTR &middot; 4.97 rated</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, Mar 22 &middot; 10:00 AM &ndash; 12:00 PM</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">New York, NY</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">UTR 3.5 &ndash; 5.0</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div></div></div><div class="card-tags"><span class="card-tag">Tennis</span><span class="card-tag">Competitive</span><span class="card-tag">Skill Drills</span><span class="card-tag">Social After</span></div></div><div class="card-footer"><div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">1 spot remaining</div></div><a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a></div></div><div class="game-card reveal reveal-delay-3" data-tags="golf social weekend" data-type="casual" data-format="small group" data-price="10"><div class="card-tier-bar tier-social"></div><div class="card-body"><div class="card-tier-label">PURE SOCIAL PLAY</div><h2 class="card-title">Casual Friday Evening Golf &mdash; Pure Social</h2><div class="card-rule"></div><div class="card-host">Alex L.</div><div class="card-host-sub">Georgetown Golf &middot; Club Competitive &middot; 4.91 rated</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Fri, Mar 21 &middot; 5:30 &ndash; 7:30 PM</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Washington D.C.</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">Handicap 15 &ndash; 30</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div></div></div><div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Casual</span><span class="card-tag">After-Work</span><span class="card-tag">No Pressure</span></div></div><div class="card-footer"><div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">4 spots remaining</div></div><a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a></div></div>';
+  const STATIC = '<div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">Featured Sessions</div><div class="section-divider-line"></div></div><div class="game-card reveal" data-tags="golf athlete weekend" data-type="coached" data-format="small group" data-price="10"><div class="card-tier-bar tier-athlete"></div><div class="card-body"><div class="card-tier-label">ATHLETE-LED EXPERIENCE</div><h2 class="card-title">Saturday Morning Golf &mdash; Back Bay</h2><div class="card-rule"></div><div class="card-host">Sofia R.</div><div class="card-host-sub">Stanford Golf &middot; D1 Athlete &middot; 4.98 rated</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, Mar 22 &middot; 9:00 &ndash; 11:30 AM</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Boston, MA</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">Handicap 8 &ndash; 18</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div></div></div><div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Skill-Focused</span><span class="card-tag">Coached Elements</span><span class="card-tag">Networking</span></div></div><div class="card-footer"><div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn&#39;t fill</div><div class="card-spots">2 spots remaining</div></div><a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a></div></div><div class="game-card reveal reveal-delay-1" data-tags="golf beginner weekend ai-matched" data-type="casual" data-format="small group" data-price="10"><div class="card-tier-bar tier-ai"></div><div class="card-body"><div class="card-tier-label">AI INTEREST-MATCHED PLAY</div><h2 class="card-title">Sunday Beginner Golf &mdash; All Levels Welcome</h2><div class="card-rule"></div><div class="card-host">Marcus T.</div><div class="card-host-sub">Duke Golf &middot; NCAA Athlete &middot; 4.95 rated</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sun, Mar 23 &middot; 8:00 &ndash; 10:00 AM</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Boston, MA</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">All levels welcome</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div></div></div><div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Beginner Friendly</span><span class="card-tag">Social</span><span class="card-tag">AI-Matched</span></div></div><div class="card-footer"><div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn&#39;t fill</div><div class="card-spots">3 spots remaining</div></div><a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a></div></div><div class="game-card reveal reveal-delay-2" data-tags="tennis athlete weekend" data-type="coached" data-format="small group" data-price="10"><div class="card-tier-bar tier-athlete"></div><div class="card-body"><div class="card-tier-label">ATHLETE-LED EXPERIENCE</div><h2 class="card-title">Pro Tennis Social &mdash; Intermediate to Advanced</h2><div class="card-rule"></div><div class="card-host">James K.</div><div class="card-host-sub">Pro Tennis &middot; 4.5 UTR &middot; 4.97 rated</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, Mar 22 &middot; 10:00 AM &ndash; 12:00 PM</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">New York, NY</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">UTR 3.5 &ndash; 5.0</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div></div></div><div class="card-tags"><span class="card-tag">Tennis</span><span class="card-tag">Competitive</span><span class="card-tag">Skill Drills</span><span class="card-tag">Social After</span></div></div><div class="card-footer"><div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn&#39;t fill</div><div class="card-spots">1 spot remaining</div></div><a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a></div></div><div class="game-card reveal reveal-delay-3" data-tags="golf social weekend" data-type="casual" data-format="small group" data-price="10"><div class="card-tier-bar tier-social"></div><div class="card-body"><div class="card-tier-label">PURE SOCIAL PLAY</div><h2 class="card-title">Casual Friday Evening Golf &mdash; Pure Social</h2><div class="card-rule"></div><div class="card-host">Alex L.</div><div class="card-host-sub">Georgetown Golf &middot; Club Competitive &middot; 4.91 rated</div><div class="card-meta"><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Fri, Mar 21 &middot; 5:30 &ndash; 7:30 PM</span></div><div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Washington D.C.</span></div></div><div class="card-meta-row"><div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">Handicap 15 &ndash; 30</span></div><div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div></div></div><div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Casual</span><span class="card-tag">After-Work</span><span class="card-tag">No Pressure</span></div></div><div class="card-footer"><div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn&#39;t fill</div><div class="card-spots">4 spots remaining</div></div><a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a></div></div>';
 
   function renderGrid(live) {
     const grid = document.getElementById("gamesGrid");
