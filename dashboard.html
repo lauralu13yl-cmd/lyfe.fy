@@ -697,6 +697,11 @@
       method: opts.method || 'GET',
       body: opts.body ? JSON.stringify(opts.body) : undefined
     });
+    if (!r.ok) {
+      const errText = await r.text();
+      console.error('Supabase error', r.status, path, errText);
+      return null;
+    }
     const t = await r.text();
     return t ? JSON.parse(t) : [];
   }
@@ -962,42 +967,55 @@
   // ── Create Session ────────────────────────────────────
   async function createSession() {
     if (!currentUser) return;
-    const title  = document.getElementById('newTitle').value.trim();
-    const sport  = document.getElementById('newSport').value;
-    const date   = document.getElementById('newDate').value;
-    const time   = document.getElementById('newTime').value;
-    const loc    = document.getElementById('newLocation').value.trim();
-    const price  = parseFloat(document.getElementById('newPrice').value) || 0;
-    const spots  = parseInt(document.getElementById('newSpots').value)   || 10;
+    const title = document.getElementById('newTitle').value.trim();
+    const sport = document.getElementById('newSport').value;
+    const date  = document.getElementById('newDate').value;
+    const time  = document.getElementById('newTime').value;
+    const loc   = document.getElementById('newLocation').value.trim();
 
     if (!title || !sport || !date || !time || !loc) {
       toast('Please fill in all required fields'); return;
     }
 
-    const result = await sb('sessions', {
-      method: 'POST',
-      body: {
-        host_id:     currentUser.id,
-        title, sport, date, time,
-        location:    loc,
-        format:      document.getElementById('newFormat').value,
-        skill_level: document.getElementById('newSkill').value,
-        type:        document.getElementById('newType').value,
-        description: document.getElementById('newDesc').value,
-        price, spots_total: spots, spots_left: spots, status: 'active'
-      }
-    });
+    const price    = parseFloat(document.getElementById('newPrice').value) || 0;
+    const spots    = parseInt(document.getElementById('newSpots').value)   || 10;
+    const tags     = getSelectedTags();
+    const hostName = [currentUser.firstName, currentUser.lastName].filter(Boolean).join(' ') || 'Lyfe.fy Host';
+    const isCert   = (userRole === 'certified' || userRole === 'host');
+
+    const body = {
+      host_id:        currentUser.id,
+      host_name:      hostName,
+      host_certified: isCert,
+      host_bio:       document.getElementById('editBio') ? document.getElementById('editBio').value.trim() : '',
+      title, sport, date, time,
+      location:       loc,
+      format:         document.getElementById('newFormat').value,
+      skill_level:    document.getElementById('newSkill').value,
+      type:           document.getElementById('newType').value,
+      description:    document.getElementById('newDesc').value.trim(),
+      tags:           tags.length > 0 ? tags : [],
+      price,
+      spots_total:    spots,
+      spots_left:     spots,
+      status:         'active'
+    };
+
+    console.log('Creating session:', body);
+
+    const result = await sb('sessions', { method: 'POST', body });
 
     if (result && result.length > 0) {
-      toast('Session published!');
-      // Reset form
+      toast('Session published! It will appear on Find a Game instantly.');
       ['newTitle','newDate','newTime','newLocation','newPrice','newSpots','newDesc'].forEach(id => {
         const el = document.getElementById(id); if (el) el.value = '';
       });
-      sTab(null, 's-browse');
+      document.querySelectorAll('.tag-option').forEach(el => el.classList.remove('selected'));
+      sTab(document.getElementById('st-browse'), 's-browse');
       loadSessions();
     } else {
-      toast('Failed to publish. Check Supabase RLS policies.');
+      console.error('Session insert failed. Result:', result);
+      toast('Failed to publish — check console for details.');
     }
   }
 
