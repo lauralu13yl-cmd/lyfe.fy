@@ -214,14 +214,23 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
   let allLive = [];
 
   async function fetchSessions() {
-    const today = new Date().toISOString().split("T")[0];
     try {
-      const res = await fetch(SUPABASE_URL + "/rest/v1/sessions?status=eq.active&date=gte." + today + "&order=date.asc,time.asc&select=*", {
-        headers: { "apikey": SUPABASE_ANON, "Authorization": "Bearer " + SUPABASE_ANON }
-      });
+      // Fetch all active sessions regardless of date so nothing is missed
+      const res = await fetch(
+        SUPABASE_URL + "/rest/v1/sessions?status=eq.active&order=date.asc,time.asc&select=*",
+        { headers: { "apikey": SUPABASE_ANON, "Authorization": "Bearer " + SUPABASE_ANON } }
+      );
+      if (!res.ok) {
+        console.error("Supabase error:", res.status, await res.text());
+        return [];
+      }
       const d = await res.json();
+      console.log("Lyfefy: fetched", d.length, "sessions from Supabase", d);
       return Array.isArray(d) ? d : [];
-    } catch(e) { return []; }
+    } catch(e) {
+      console.error("Lyfefy fetch failed:", e);
+      return [];
+    }
   }
 
   function fmtDate(d) { const dt = new Date(d+"T00:00:00"); return dt.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}); }
@@ -236,7 +245,14 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
   function buildCard(s) {
     const tier=tierInfo(s.type), tags=Array.isArray(s.tags)?s.tags:[], left=s.spots_left||0, isFree=parseFloat(s.price)===0, isUrgent=left<=2;
     const certMark=s.host_certified?'<span class="card-host-cert"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="var(--forest-deep)" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></span>':"";
-    const filterTags=[s.sport?s.sport.toLowerCase():"",tags.some(t=>t.toLowerCase().includes("athlete"))?"athlete":"",tags.some(t=>t.toLowerCase().includes("beginner"))?"beginner":"",isWeekend(s.date)?"weekend":""].filter(Boolean).join(" ");
+    // Build comprehensive filter tags from all fields
+    const filterTags=[
+      s.sport ? s.sport.toLowerCase() : "",
+      s.type  ? s.type.toLowerCase()  : "",
+      isWeekend(s.date) ? "weekend" : "",
+      isFree ? "free" : "",
+      ...tags.map(t => t.toLowerCase())
+    ].filter(Boolean).join(" ");
     const tagsHtml=[s.sport,s.skill_level,...tags].filter((t,i,a)=>t&&a.indexOf(t)===i).slice(0,5).map(t=>'<span class="card-tag">'+t+"</span>").join("");
     const priceBlock=isFree?"<strong>Free Session</strong>Reserve your spot now":"<strong>"+fmtMoney(s.price)+" per spot</strong>Secure checkout via Stripe";
     const bookBtn=left>0?'<a href="'+( isFree?"dashboard.html":STRIPE_LINK )+'" class="btn-card">'+( isFree?"Reserve Spot":"Request Spot" )+"</a>":'<span class="btn-card full">Session Full</span>';
