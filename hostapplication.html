@@ -586,7 +586,7 @@ nav {
           </label>
           <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
             <input type="checkbox" id="agree3" style="margin-top:3px;accent-color:var(--ac-strong);">
-            <span style="font-size:13px;color:var(--ink-70);">I understand hosts must complete onbaord orientation before hosting their first session.</span>
+            <span style="font-size:13px;color:var(--ink-70);">I understand hosts must complete a 30-minute orientation call before hosting their first session.</span>
           </label>
         </div>
       </div>
@@ -1002,18 +1002,15 @@ nav {
     document.getElementById('onboardFill').style.width = pct + '%';
   }
 
-  // ─────────────────────────────────────────────────────
-  // PAGE LOAD — resume pending submission after Clerk redirect
-  // If a user went through sign-up and got redirected back,
-  // localStorage will still have their form data. We finish
-  // the submission automatically.
-  // ─────────────────────────────────────────────────────
+  // ── GUARD: redirect if already a host ─────────────────
+  // Runs on page load — if user is already certified or host
+  // there is no reason to be on this page, send them to dashboard
   window.addEventListener('load', async function() {
+
+    // First handle any pending application from a Clerk redirect
     var pending = null;
     try { pending = localStorage.getItem(STORAGE_KEY); } catch(e) {}
-    if (!pending) return; // nothing waiting — normal page load
 
-    // Wait up to 5 seconds for Clerk to be available
     var clerkReady = await new Promise(function(resolve) {
       if (window.Clerk) { resolve(true); return; }
       var attempts = 0;
@@ -1024,25 +1021,47 @@ nav {
       }, 100);
     });
 
-    if (!clerkReady) return; // Clerk never loaded, bail
-
+    if (!clerkReady) return;
     try { await Clerk.load(); } catch(e) {}
 
-    // Only proceed if user is now signed in
-    if (!Clerk.user) return;
+    // If returning from Clerk sign-up with a pending application, finish it
+    if (pending && Clerk.user) {
+      var formData = null;
+      try { formData = JSON.parse(pending); } catch(e) {}
+      if (formData) {
+        showToast('Completing your application...');
+        try {
+          await saveApplicationToSupabase(formData, Clerk.user.id);
+          try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+          showSuccess(formData);
+        } catch(err) {
+          console.error('Resume submission error:', err);
+          showToast('Could not complete submission — please try again.');
+        }
+        return; // don't run guard after resuming
+      }
+    }
 
-    var formData = null;
-    try { formData = JSON.parse(pending); } catch(e) { return; }
-
-    showToast('Completing your application...');
-
-    try {
-      await saveApplicationToSupabase(formData, Clerk.user.id);
-      try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
-      showSuccess(formData);
-    } catch(err) {
-      console.error('Resume submission error:', err);
-      showToast('Could not complete submission — please try again.');
+    // Guard: if user is already a certified host, redirect to dashboard
+    if (Clerk.user) {
+      try {
+        var r = await fetch(SUPABASE_URL + '/rest/v1/profiles?id=eq.' + Clerk.user.id + '&select=role', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        var d = await r.json();
+        var role = (d && d[0]) ? d[0].role : 'member';
+        if (role === 'host' || role === 'certified') {
+          // Already a host — no need to apply again
+          window.location.href = 'dashboard.html';
+          return;
+        }
+        if (role === 'pending_host') {
+          // Application already submitted — show a message and redirect
+          showToast('Your application is already under review. Redirecting to dashboard...', 3000);
+          setTimeout(function() { window.location.href = 'dashboard.html'; }, 3000);
+          return;
+        }
+      } catch(e) { /* network error — let them proceed */ }
     }
   });
 </script>
