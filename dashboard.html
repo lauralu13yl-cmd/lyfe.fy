@@ -557,6 +557,73 @@
 
     .loading { text-align: center; padding: 28px; color: var(--ink-40); font-size: 12.5px; }
 
+    /* ── PENDING BANNER ── */
+    .pending-banner {
+      background: var(--base-dk); border: 0.5px solid var(--ac-border);
+      border-radius: var(--radius); padding: 20px 22px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .pending-icon {
+      width: 40px; height: 40px; border-radius: 50%; background: var(--ac-light);
+      border: 0.5px solid var(--ac-border);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .pending-title { font-family: var(--serif); font-size: 15px; font-weight: 600; color: var(--ink); }
+    .pending-sub   { font-size: 12px; color: var(--ink-40); margin-top: 3px; font-weight: 300; }
+    .pending-steps {
+      display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap;
+    }
+    .pending-step {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+      color: var(--ink-40); text-transform: uppercase;
+    }
+    .pending-step-dot {
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 700; flex-shrink: 0;
+    }
+    .pending-step-dot.done  { background: var(--ac-strong); color: white; }
+    .pending-step-dot.active { background: var(--ac-light); color: var(--ac-deep); border: 1px solid var(--ac-border); }
+    .pending-step-dot.todo  { background: var(--base-dkr); color: var(--ink-40); }
+
+    /* ── HOST HOME STATS ── */
+    .host-stats-bar {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      background: var(--ink); border-radius: var(--radius);
+      overflow: hidden; position: relative;
+    }
+    .host-stats-bar::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 55% 55% at 88% 50%, rgba(61,122,86,0.12) 0%, transparent 60%);
+    }
+    .host-stat-cell {
+      padding: 20px 18px; border-right: 0.5px solid rgba(245,242,237,0.08);
+      position: relative; z-index: 1;
+    }
+    .host-stat-cell:last-child { border-right: none; }
+    .host-stat-num { font-family: var(--serif); font-size: 26px; font-weight: 600; color: var(--base); line-height: 1; }
+    .host-stat-lbl { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ac-mid); margin-top: 5px; }
+
+    /* ── HOST UPCOMING SESSIONS CARD ── */
+    .host-next-session {
+      background: var(--surface); border: 0.5px solid var(--border);
+      border-radius: var(--radius-sm); padding: 16px 18px;
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 8px; transition: background 0.15s, border-color 0.15s;
+    }
+    .host-next-session:hover { background: var(--ac-light); border-color: var(--ac-border); }
+    .host-next-session:last-child { margin-bottom: 0; }
+    .hns-date { text-align: center; width: 36px; flex-shrink: 0; }
+    .hns-day { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--ink); line-height: 1; }
+    .hns-mon { font-size: 9px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-40); }
+    .hns-info { flex: 1; min-width: 0; }
+    .hns-title { font-size: 13px; font-weight: 500; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hns-sub   { font-size: 11px; color: var(--ink-40); margin-top: 2px; }
+    .hns-booked { text-align: right; flex-shrink: 0; }
+    .hns-booked-num { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--ac-deep); }
+    .hns-booked-lbl { font-size: 10px; color: var(--ink-40); }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 520px) {
       .snap-grid { grid-template-columns: repeat(2, 1fr); }
@@ -636,7 +703,28 @@
           <span class="badge badge-dark" id="roleBadge" style="position:relative;z-index:1">New Member</span>
         </div>
 
-        <div class="snap-grid">
+        <!-- ── PENDING HOST BANNER (hidden until role=pending_host) ── -->
+        <div id="pending-banner" style="display:none">
+          <div class="pending-banner">
+            <div class="pending-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ac-strong)" stroke-width="2" stroke-linecap="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div style="flex:1">
+              <div class="pending-title">Application under review</div>
+              <div class="pending-sub">We'll email you within 24–48 hours. In the meantime, complete your onboarding below.</div>
+              <div class="pending-steps">
+                <div class="pending-step"><div class="pending-step-dot done">✓</div>Application submitted</div>
+                <div class="pending-step"><div class="pending-step-dot active">2</div>Under review</div>
+                <div class="pending-step"><div class="pending-step-dot todo">3</div>Get approved</div>
+                <div class="pending-step"><div class="pending-step-dot todo">4</div>Host sessions</div>
+              </div>
+            </div>
+            <a href="hostapplication.html#onboarding" style="font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--ac-deep);text-decoration:none;white-space:nowrap;flex-shrink:0;">Continue Onboarding →</a>
+          </div>
+        </div>
+
+        <!-- ── MEMBER: snap grid (no earnings card) ── -->
+        <div id="member-snap-grid" class="snap-grid">
           <div class="snap-card" onclick="goTab('sessions')">
             <div class="snap-icon" style="background:var(--ac-light)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ac-strong)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
@@ -658,15 +746,32 @@
             <div class="snap-num">0</div>
             <div class="snap-label">Connections</div>
           </div>
-          <div class="snap-card" onclick="goTab('revenue')" id="snapRevCard">
+          <div class="snap-card" onclick="goTab('profile')">
             <div class="snap-icon" style="background:var(--base-dk)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-40)" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-40)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
             </div>
-            <div class="snap-num" id="snapRevenue">$0</div>
-            <div class="snap-label" id="snapRevenueLabel">Earnings</div>
+            <div class="snap-num" id="snapRating">—</div>
+            <div class="snap-label">My Rating</div>
           </div>
         </div>
 
+        <!-- ── HOST: stats bar (replaces snap grid) ── -->
+        <div id="host-stats-bar" class="host-stats-bar" style="display:none">
+          <div class="host-stat-cell">
+            <div class="host-stat-num" id="hostStatEarnings">$0</div>
+            <div class="host-stat-lbl">This Month</div>
+          </div>
+          <div class="host-stat-cell">
+            <div class="host-stat-num" id="hostStatSessions">0</div>
+            <div class="host-stat-lbl">Sessions Hosted</div>
+          </div>
+          <div class="host-stat-cell">
+            <div class="host-stat-num" id="hostStatRating">—</div>
+            <div class="host-stat-lbl">Host Rating</div>
+          </div>
+        </div>
+
+        <!-- rank card — same for all -->
         <div class="rank-card">
           <div class="rank-left">
             <div class="rank-ey">Your Ranking</div>
@@ -687,7 +792,8 @@
           </div>
         </div>
 
-        <div class="two-col">
+        <!-- ── MEMBER home cards ── -->
+        <div class="two-col" id="member-home-cards">
           <div class="card">
             <div class="card-header">
               <div class="card-title">Upcoming Sessions</div>
@@ -698,6 +804,33 @@
           <div class="card">
             <div class="card-title">Recent Bookings</div>
             <div id="homeRecentBookings"><div class="loading">Loading...</div></div>
+          </div>
+        </div>
+
+        <!-- ── HOST home cards (replaces member cards) ── -->
+        <div class="two-col" id="host-home-cards" style="display:none">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Your Upcoming Sessions</div>
+              <button class="card-link" onclick="sTab(document.querySelector(\'#hostCreateTab\'),\'s-create\');goTab(\'sessions\')">+ New</button>
+            </div>
+            <div id="hostUpcomingSessions"><div class="loading">Loading...</div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Recent Bookings Received</div>
+            <div id="hostRecentBookings"><div class="loading">Loading...</div></div>
+          </div>
+        </div>
+
+        <!-- ── MEMBER CTA: become a host nudge (hidden for hosts/pending) ── -->
+        <div id="member-host-nudge">
+          <div class="locked-card" style="display:flex;align-items:center;gap:18px;text-align:left;padding:20px 22px;">
+            <div class="locked-icon" style="margin-bottom:0;font-size:20px;flex-shrink:0">🏅</div>
+            <div style="flex:1">
+              <div class="locked-title" style="font-size:14px">Want to earn from your sport?</div>
+              <div class="locked-sub" style="margin:4px 0 0;font-size:12px;max-width:100%">Top hosts earn $1,200–$3,500/month leading sessions on their own schedule.</div>
+            </div>
+            <a href="hostapplication.html" class="locked-cta" style="white-space:nowrap;flex-shrink:0">Apply to Host</a>
           </div>
         </div>
       </div>
@@ -1078,32 +1211,74 @@
 
   function applyRoleUI(role) {
     userRole = role;
+
+    // ── Greeting badge ──
     const badge = document.getElementById('roleBadge');
-    if (role === 'host') {
-      badge.textContent = 'Host'; badge.className = 'badge badge-host';
-    } else if (role === 'certified') {
-      badge.textContent = '✓ Certified'; badge.className = 'badge badge-cert';
-    } else {
-      badge.textContent = 'Member'; badge.className = 'badge badge-dark';
+    if (role === 'host')         { badge.textContent = 'Host';          badge.className = 'badge badge-host'; }
+    else if (role === 'certified') { badge.textContent = '✓ Certified'; badge.className = 'badge badge-cert'; }
+    else if (role === 'pending_host') { badge.textContent = 'Under Review'; badge.className = 'badge badge-green'; }
+    else                         { badge.textContent = 'Member';        badge.className = 'badge badge-dark'; }
+
+    // ── Greeting sub-text ──
+    const greetSub = document.getElementById('greetSub');
+    if (greetSub) {
+      if (role === 'host' || role === 'certified')
+        greetSub.textContent = 'Your sessions, earnings, and player bookings are below.';
+      else if (role === 'pending_host')
+        greetSub.textContent = 'Your application is under review — complete your onboarding while you wait.';
+      else
+        greetSub.textContent = 'Find a game, connect with players, and build your profile.';
     }
+
+    // ── Dropdown role label ──
     document.getElementById('dropRole').textContent =
-      role === 'host' ? 'Certified Host' : role === 'certified' ? 'Certified Athlete' : 'Member';
+      role === 'host' ? 'Certified Host' :
+      role === 'certified' ? 'Certified Athlete' :
+      role === 'pending_host' ? 'Application Pending' : 'Member';
+
+    // ── Tab bar: Revenue only for hosts ──
     const revTab = document.getElementById('tab-revenue');
-    if (revTab) revTab.style.display = role === 'host' ? 'flex' : 'none';
+    if (revTab) revTab.style.display = (role === 'host' || role === 'certified') ? 'flex' : 'none';
+
+    // ── Sessions: host create tab ──
     const hct = document.getElementById('hostCreateTab');
     if (hct) hct.style.display = (role === 'host' || role === 'certified') ? 'block' : 'none';
-    if (role === 'certified' || role === 'host') {
-      const cr = document.getElementById('certRowDrop');
-      if (cr) cr.style.display = 'none';
-      const ls = document.getElementById('lockedCertSection');
-      if (ls) ls.style.display = 'none';
-    }
+
+    // ── Dropdown cert row ──
+    const certRow = document.getElementById('certRowDrop');
+    if (certRow) certRow.style.display = (role === 'certified' || role === 'host' || role === 'pending_host') ? 'none' : '';
+
+    // ── Profile: locked cert section ──
+    const lockedCert = document.getElementById('lockedCertSection');
+    if (lockedCert) lockedCert.style.display = (role === 'certified' || role === 'host') ? 'none' : '';
+
+    // ── Profile: badges ──
     const pb = document.getElementById('profBadges');
     if (pb) {
-      if (role === 'host')       pb.innerHTML = '<span class="badge badge-host">Host</span>';
-      else if (role === 'certified') pb.innerHTML = '<span class="badge badge-cert">✓ Certified Athlete</span>';
-      else                       pb.innerHTML = '<span class="badge badge-member">New Member</span>';
+      if (role === 'host')            pb.innerHTML = '<span class="badge badge-host">Host</span>';
+      else if (role === 'certified')  pb.innerHTML = '<span class="badge badge-cert">✓ Certified Athlete</span>';
+      else if (role === 'pending_host') pb.innerHTML = '<span class="badge badge-green">Application Pending</span>';
+      else                            pb.innerHTML = '<span class="badge badge-member">New Member</span>';
     }
+
+    // ── Home panel: show/hide role-specific sections ──
+    const pendingBanner   = document.getElementById('pending-banner');
+    const memberSnapGrid  = document.getElementById('member-snap-grid');
+    const hostStatsBar    = document.getElementById('host-stats-bar');
+    const memberHomeCards = document.getElementById('member-home-cards');
+    const hostHomeCards   = document.getElementById('host-home-cards');
+    const memberNudge     = document.getElementById('member-host-nudge');
+
+    const isHost = (role === 'host' || role === 'certified');
+    const isPending = (role === 'pending_host');
+
+    if (pendingBanner)   pendingBanner.style.display   = isPending ? '' : 'none';
+    if (memberSnapGrid)  memberSnapGrid.style.display  = isHost ? 'none' : '';
+    if (hostStatsBar)    hostStatsBar.style.display    = isHost ? '' : 'none';
+    if (memberHomeCards) memberHomeCards.style.display = isHost ? 'none' : '';
+    if (hostHomeCards)   hostHomeCards.style.display   = isHost ? '' : 'none';
+    // Hide "become a host" nudge for hosts and pending users
+    if (memberNudge)     memberNudge.style.display     = (isHost || isPending) ? 'none' : '';
   }
 
   function fillAv(el) {
@@ -1278,22 +1453,87 @@
 
   async function loadHomeData() {
     const today = new Date().toISOString().split('T')[0];
-    const upcoming = await sb(`sessions?status=eq.active&date=gte.${today}&order=date.asc&select=*&limit=3`);
-    const uEl = document.getElementById('homeUpcomingSessions');
-    if (!upcoming || upcoming.length === 0) {
-      uEl.innerHTML = '<div class="empty">No sessions yet<br><button class="empty-cta" onclick="goTab(\'sessions\')">Browse sessions</button></div>';
+    const isHost = (userRole === 'host' || userRole === 'certified');
+
+    if (isHost) {
+      // ── HOST HOME ──────────────────────────────────────
+
+      // Host's own upcoming sessions
+      const hostSessions = await sb(`sessions?host_id=eq.${currentUser.id}&date=gte.${today}&order=date.asc&select=*&limit=5`);
+      const hsEl = document.getElementById('hostUpcomingSessions');
+      if (!hostSessions || hostSessions.length === 0) {
+        hsEl.innerHTML = '<div class="empty">No upcoming sessions.<br><button class="empty-cta" onclick="sTab(document.getElementById(\'hostCreateTab\'),\'s-create\');goTab(\'sessions\')">Create your first session</button></div>';
+      } else {
+        hsEl.innerHTML = hostSessions.map(s => {
+          const d = new Date(s.date + 'T00:00:00');
+          const booked = (s.spots_total || 0) - (s.spots_left || 0);
+          return `<div class="host-next-session">
+            <div class="hns-date"><div class="hns-day">${d.getDate()}</div><div class="hns-mon">${d.toLocaleString('en-US',{month:'short'})}</div></div>
+            <div class="hns-info"><div class="hns-title">${s.title}</div><div class="hns-sub">${s.sport} · ${fmtTime(s.time)} · ${s.location}</div></div>
+            <div class="hns-booked"><div class="hns-booked-num">${booked}/${s.spots_total}</div><div class="hns-booked-lbl">booked</div></div>
+          </div>`;
+        }).join('');
+      }
+
+      // Host's recent bookings received
+      const sessionIds = (hostSessions || []).map(s => s.id);
+      const hrEl = document.getElementById('hostRecentBookings');
+      if (sessionIds.length > 0) {
+        const recentBookings = await sb(`bookings?session_id=in.(${sessionIds.join(',')})&order=created_at.desc&select=*&limit=5`);
+        if (!recentBookings || recentBookings.length === 0) {
+          hrEl.innerHTML = '<div class="empty">No bookings yet — share your sessions to fill spots.</div>';
+        } else {
+          hrEl.innerHTML = recentBookings.map(b => `
+            <div class="booking-row">
+              <div class="booking-av">${initials(b.player_name || '?')}</div>
+              <div class="booking-info"><div class="booking-name">${b.player_name || 'Player'}</div><div class="booking-detail">${new Date(b.created_at).toLocaleDateString()}</div></div>
+              <div class="booking-amount">${fmtMoney(parseFloat(b.amount_paid) * 0.9)}</div>
+            </div>`).join('');
+        }
+      } else {
+        hrEl.innerHTML = '<div class="empty">No bookings yet.</div>';
+      }
+
+      // Host stats bar — earnings this month + sessions hosted + rating
+      const allHostSessions = await sb(`sessions?host_id=eq.${currentUser.id}&select=id,spots_total,spots_left`);
+      const allHostIds = (allHostSessions || []).map(s => s.id);
+      let monthEarnings = 0;
+      if (allHostIds.length > 0) {
+        const allBookings = await sb(`bookings?session_id=in.(${allHostIds.join(',')})&select=amount_paid,created_at`);
+        const now = new Date(); const mo = now.getMonth(); const yr = now.getFullYear();
+        (allBookings || []).forEach(b => {
+          const bd = new Date(b.created_at);
+          if (bd.getMonth() === mo && bd.getFullYear() === yr)
+            monthEarnings += parseFloat(b.amount_paid || 0) * 0.9;
+        });
+      }
+      const hostStatEarnings = document.getElementById('hostStatEarnings');
+      const hostStatSessions = document.getElementById('hostStatSessions');
+      if (hostStatEarnings) hostStatEarnings.textContent = '$' + monthEarnings.toFixed(0);
+      if (hostStatSessions) hostStatSessions.textContent = (allHostSessions || []).length;
+
     } else {
-      uEl.innerHTML = upcoming.map(s => `<div class="game-row">
-        <div class="g-date"><div class="g-day">${new Date(s.date+'T00:00:00').getDate()}</div><div class="g-mon">${new Date(s.date+'T00:00:00').toLocaleString('en-US',{month:'short'})}</div></div>
-        <div class="g-info"><div class="g-title">${s.title}</div><div class="g-sub">${s.sport} · ${fmtTime(s.time)}</div></div>
-        <button class="btn-primary" onclick='openBook(${JSON.stringify(s).replace(/'/g,"&#39;")})'>Book</button>
-      </div>`).join('');
-    }
-    if (currentUser) {
+      // ── MEMBER HOME ────────────────────────────────────
+
+      // Upcoming available sessions to browse
+      const upcoming = await sb(`sessions?status=eq.active&date=gte.${today}&order=date.asc&select=*&limit=3`);
+      const uEl = document.getElementById('homeUpcomingSessions');
+      if (!upcoming || upcoming.length === 0) {
+        uEl.innerHTML = '<div class="empty">No sessions yet.<br><button class="empty-cta" onclick="goTab(\'sessions\')">Browse sessions</button></div>';
+      } else {
+        uEl.innerHTML = upcoming.map(s => `<div class="game-row">
+          <div class="g-date"><div class="g-day">${new Date(s.date+'T00:00:00').getDate()}</div><div class="g-mon">${new Date(s.date+'T00:00:00').toLocaleString('en-US',{month:'short'})}</div></div>
+          <div class="g-info"><div class="g-title">${s.title}</div><div class="g-sub">${s.sport} · ${fmtTime(s.time)}</div></div>
+          <button class="btn-primary" onclick='openBook(${JSON.stringify(s).replace(/'/g,"&#39;")})'>Book</button>
+        </div>`).join('');
+      }
+      document.getElementById('snapUpcoming').textContent = (upcoming || []).length;
+
+      // My recent bookings
       const myB = await sb(`bookings?player_id=eq.${currentUser.id}&order=created_at.desc&select=*,sessions(title,date,time)&limit=3`);
       const bEl = document.getElementById('homeRecentBookings');
       if (!myB || myB.length === 0) {
-        bEl.innerHTML = '<div class="empty">No bookings yet<br><button class="empty-cta" onclick="goTab(\'sessions\')">Find a session</button></div>';
+        bEl.innerHTML = '<div class="empty">No bookings yet.<br><button class="empty-cta" onclick="goTab(\'sessions\')">Find a session</button></div>';
       } else {
         bEl.innerHTML = myB.map(b => {
           const s = b.sessions;
@@ -1303,7 +1543,6 @@
           </div>`;
         }).join('');
       }
-      document.getElementById('snapUpcoming').textContent = (upcoming || []).length;
     }
   }
 
@@ -1345,35 +1584,47 @@
 
   window.addEventListener('load', async function() {
     await Clerk.load();
-    if (!Clerk.user) { window.location.href = '/'; return; }
+    if (!Clerk.user) { window.location.href = 'index.html'; return; }
     currentUser = Clerk.user;
-    userRole    = currentUser.publicMetadata?.role || 'member';
+
     const first = currentUser.firstName || '';
     const last  = currentUser.lastName  || '';
     const name  = [first, last].filter(Boolean).join(' ') || 'Athlete';
     const email = currentUser.primaryEmailAddress?.emailAddress || '';
+
     ['topAv','dropAv','greetAv','profAvLg'].forEach(id => fillAv(document.getElementById(id)));
-    document.getElementById('greetTitle').textContent  = first ? `Welcome back, ${first}` : 'Welcome to Lyfe.fy';
-    document.getElementById('dropName').textContent    = name;
-    document.getElementById('dropEmail').textContent   = email;
-    document.getElementById('profName').textContent    = name;
-    document.getElementById('editName').value          = name;
-    applyRoleUI(userRole);
+    document.getElementById('greetTitle').textContent = first ? `Welcome back, ${first}` : 'Welcome to Lyfe.fy';
+    document.getElementById('dropName').textContent   = name;
+    document.getElementById('dropEmail').textContent  = email;
+    document.getElementById('profName').textContent   = name;
+    document.getElementById('editName').value         = name;
+
+    // ── Read role from Supabase (source of truth) ──
     const profile = await sb(`profiles?id=eq.${currentUser.id}&select=*`);
     if (!profile || profile.length === 0) {
-      await sb('profiles', { method: 'POST', body: { id: currentUser.id, name, email, role: userRole } });
+      // New user — create profile row
+      await sb('profiles', { method: 'POST', body: { id: currentUser.id, name, email, role: 'member' } });
+      userRole = 'member';
     } else {
       const p = profile[0];
+      userRole = p.role || 'member';
       if (p.sport && p.city) document.getElementById('profSport').textContent = `${p.sport} · ${p.city}`;
       if (p.bio && !p.bio.startsWith('[CERT')) document.getElementById('profBio').textContent = p.bio;
-      if (p.sport)  document.getElementById('editSport').value = p.sport;
-      if (p.city)   document.getElementById('editCity').value  = p.city;
+      if (p.sport) document.getElementById('editSport').value = p.sport;
+      if (p.city)  document.getElementById('editCity').value  = p.city;
       if (p.bio && !p.bio.startsWith('[CERT')) document.getElementById('editBio').value = p.bio;
     }
+
+    // Apply role-specific UI (snap grids, host stats, banners, tabs, badges)
+    applyRoleUI(userRole);
+
     document.getElementById('signOutBtn').addEventListener('click', async function() {
-      await Clerk.signOut(); window.location.href = '/';
+      await Clerk.signOut(); window.location.href = 'index.html';
     });
+
+    // Load home data after role is known so correct sections populate
     await loadHomeData();
+
     document.getElementById('dashboard').style.display = 'block';
   });
 </script>
