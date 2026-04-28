@@ -66,27 +66,46 @@
 
     /* ── TOPBAR ── */
     .topbar {
-      height: 68px;
-      background: rgba(245,242,237,0.92);
+      height: 56px;
+      background: rgba(245,242,237,0.95);
       backdrop-filter: blur(24px);
       border-bottom: 0.5px solid var(--border-lt);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 32px;
+      padding: 0 28px;
       position: sticky; top: 0; z-index: 50;
       transition: border-color 0.3s, box-shadow 0.3s;
+      gap: 8px;
     }
-    .topbar.scrolled { border-bottom-color: var(--border); box-shadow: 0 1px 24px rgba(44,44,42,0.06); }
+    .topbar.scrolled { border-bottom-color: var(--border); box-shadow: 0 1px 20px rgba(44,44,42,0.06); }
 
     .logo {
       font-family: var(--serif);
-      font-size: 22px; font-weight: 700; letter-spacing: -0.3px;
+      font-size: 20px; font-weight: 700; letter-spacing: -0.3px;
       color: var(--ink); text-decoration: none;
       display: inline-flex; align-items: baseline; gap: 1px;
+      flex-shrink: 0;
     }
     .logo-dot { color: var(--ac-mid); }
-    .logo-fy  { font-size: 13px; font-weight: 400; font-style: italic; color: var(--ink-40); }
+    .logo-fy  { font-size: 12px; font-weight: 400; font-style: italic; color: var(--ink-40); }
 
-    .topbar-right { display: flex; align-items: center; gap: 8px; position: relative; }
+    /* Inline nav links in topbar */
+    .topnav {
+      display: flex; align-items: center; gap: 2px;
+      flex: 1; justify-content: center;
+    }
+    .topnav-btn {
+      font-family: var(--sans); font-size: 11.5px; font-weight: 500;
+      color: var(--ink-40); background: none; border: none;
+      padding: 6px 12px; border-radius: var(--radius-xs);
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .topnav-btn:hover { color: var(--ink); background: var(--base-dk); }
+    .topnav-btn.active { color: var(--ac-deep); background: var(--ac-light); font-weight: 600; }
+    /* Revenue nav btn — hidden for members, shown for hosts */
+    #tnav-revenue { display: none; }
+
+    .topbar-right { display: flex; align-items: center; gap: 6px; position: relative; flex-shrink: 0; }
 
     .icon-btn {
       width: 34px; height: 34px; border-radius: 50%;
@@ -165,7 +184,7 @@
 
     /* ── MAIN ── */
     .main {
-      flex: 1; padding: 24px 32px 90px;
+      flex: 1; padding: 24px 32px 48px;
       display: flex; flex-direction: column; gap: 14px;
       max-width: 1100px; width: 100%; margin: 0 auto; align-self: center;
     }
@@ -638,8 +657,12 @@
       .rank-card { flex-direction: column; gap: 14px; }
       .rank-div  { width: 100%; height: 0.5px; margin: 0; }
       .rev-card  { grid-template-columns: 1fr; }
-      .main      { padding: 16px 16px 90px; }
+      .main      { padding: 16px 16px 32px; }
       .topbar    { padding: 0 16px; }
+      .topnav    { display: none; } /* hide text nav on mobile — use dropdown instead */
+    }
+    @media (max-width: 800px) {
+      .topnav-btn span.label-text { display: none; } /* keep buttons but hide text if tight */
     }
   </style>
 </head>
@@ -651,8 +674,19 @@
     <!-- TOPBAR -->
     <header class="topbar" id="topbar">
       <a href="index.html" class="logo">Lyfe<span class="logo-dot">.</span><span class="logo-fy">fy</span></a>
+
+      <!-- Inline nav — all tabs here, no bottom bar -->
+      <nav class="topnav">
+        <button class="topnav-btn active" id="tnav-home" onclick="goTab('home')">Home</button>
+        <button class="topnav-btn" id="tnav-sessions" onclick="goTab('sessions')">Sessions</button>
+        <button class="topnav-btn" id="tnav-revenue" onclick="goTab('revenue')">Revenue</button>
+        <button class="topnav-btn" id="tnav-photos" onclick="goTab('photos')">Photos</button>
+        <button class="topnav-btn" id="tnav-connect" onclick="goTab('connect')">Connect</button>
+        <button class="topnav-btn" id="tnav-profile" onclick="goTab('profile')">Profile</button>
+      </nav>
+
       <div class="topbar-right">
-        <button class="icon-btn" onclick="goTab('notifs')">
+        <button class="icon-btn" onclick="goTab('notifs')" title="Notifications">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <div class="notif-dot"></div>
         </button>
@@ -1036,34 +1070,6 @@
       </div>
 
     </main>
-
-    <!-- TABBAR -->
-    <nav class="tabbar">
-      <button class="tab active" id="tab-home" onclick="goTab('home')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-        <span class="tab-label">Home</span><div class="tab-dot"></div>
-      </button>
-      <button class="tab" id="tab-sessions" onclick="goTab('sessions')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        <span class="tab-label">Sessions</span><div class="tab-dot"></div>
-      </button>
-      <button class="tab" id="tab-revenue" onclick="goTab('revenue')" style="display:none">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        <span class="tab-label">Revenue</span><div class="tab-dot"></div>
-      </button>
-      <button class="tab" id="tab-photos" onclick="goTab('photos')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
-        <span class="tab-label">Photos</span><div class="tab-dot"></div>
-      </button>
-      <button class="tab" id="tab-connect" onclick="goTab('connect')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-        <span class="tab-label">Connect</span><div class="tab-dot"></div>
-      </button>
-      <button class="tab" id="tab-profile" onclick="goTab('profile')">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        <span class="tab-label">Profile</span><div class="tab-dot"></div>
-      </button>
-    </nav>
   </div>
 </div>
 
@@ -1163,7 +1169,8 @@
     TABS.forEach(id => {
       const p = document.getElementById('panel-' + id);
       if (p) p.classList.toggle('active', id === name);
-      const t = document.getElementById('tab-' + id);
+      // Update topnav active state
+      const t = document.getElementById('tnav-' + id);
       if (t) t.classList.toggle('active', id === name);
     });
     closeDrop();
@@ -1249,8 +1256,8 @@
       role === 'pending_host' ? 'Application Pending' : 'Member';
 
     // ── Tab bar: Revenue only for hosts ──
-    const revTab = document.getElementById('tab-revenue');
-    if (revTab) revTab.style.display = (role === 'host' || role === 'certified') ? 'flex' : 'none';
+    const revTab = document.getElementById('tnav-revenue');
+    if (revTab) revTab.style.display = (role === 'host' || role === 'certified') ? '' : 'none';
 
     // ── Sessions: host create tab ──
     const hct = document.getElementById('hostCreateTab');
