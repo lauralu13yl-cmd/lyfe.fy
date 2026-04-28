@@ -444,7 +444,10 @@ footer { background: var(--ink); border-top: 0.5px solid rgba(111,168,130,0.15);
     <li><a href="#app">Download App</a></li>
   </ul>
   <div class="nav-cta">
-<a href="hostapplication.html" class="btn-ghost">Become a Host</a>
+    <!-- shown to guests and members only — hidden for host/pending_host -->
+    <a href="hostapplication.html" class="btn-ghost" id="nav-become-host">Become a Host</a>
+    <!-- shown to hosts only -->
+    <a href="dashboard.html" class="btn-ghost" id="nav-host-dashboard" style="display:none">Host Dashboard</a>
     <a href="games.html" class="btn-primary">Find a Game</a>
     <div class="account-wrap" id="account-wrap">
       <button id="account-btn">Account</button>
@@ -553,8 +556,16 @@ footer { background: var(--ink); border-top: 0.5px solid rgba(111,168,130,0.15);
             <div class="host-perk-desc">Connect with young professionals, fellow athletes, and brand partners in a premium social context.</div>
           </div>
         </div>
-        <div style="margin-top: 40px;">
-         <a href="hostapplication.html" class="btn-ghost">Become a Host</a>
+        <div style="margin-top: 40px;" id="host-apply-wrap">
+          <!-- guests + members: show apply button -->
+          <a href="hostapplication.html" class="btn-forest" id="host-apply-btn">Apply to Host</a>
+          <!-- pending hosts: show status message -->
+          <div id="host-pending-msg" style="display:none;">
+            <span style="font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--ac-mid);">Application Under Review</span>
+            <p style="font-size:13px;color:var(--ink-70);margin-top:6px;font-weight:300;">We'll email you within 24–48 hours.</p>
+          </div>
+          <!-- certified hosts: go to dashboard -->
+          <a href="dashboard.html" class="btn-forest" id="host-dashboard-btn" style="display:none;">Go to Host Dashboard</a>
         </div>
       </div>
       <div class="hosts-visual reveal reveal-delay-2">
@@ -669,7 +680,10 @@ footer { background: var(--ink); border-top: 0.5px solid rgba(111,168,130,0.15);
       <div class="cta-rule"></div>
       <p class="cta-sub">Stop waiting for plans that fall through. Join a platform built to make premium play reliable, social, and on-demand — every single time.</p>
       <div class="cta-actions">
+        <!-- shown to guests only -->
         <button id="cta-sign-up-btn">Create Your Account</button>
+        <!-- shown to logged-in users -->
+        <a href="dashboard.html" id="cta-dashboard-btn" class="btn-outline-light" style="display:none;">Go to Dashboard</a>
         <a href="games.html" class="btn-outline-light">Find a Game</a>
       </div>
       <div class="app-badges">
@@ -702,9 +716,64 @@ footer { background: var(--ink); border-top: 0.5px solid rgba(111,168,130,0.15);
 </footer>
 
 <script>
+  const SUPABASE_URL  = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
+  const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
+
+  async function getUserRole(clerkUserId) {
+    try {
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${clerkUserId}&select=role`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      const d = await r.json();
+      return (d && d[0]) ? d[0].role : 'member';
+    } catch(e) { return 'member'; }
+  }
+
+  function applyRoleUI(role) {
+    // Nav buttons
+    const becomeHost    = document.getElementById('nav-become-host');
+    const hostDashNav   = document.getElementById('nav-host-dashboard');
+    if (role === 'host' || role === 'certified') {
+      if (becomeHost)  becomeHost.style.display  = 'none';
+      if (hostDashNav) hostDashNav.style.display = '';
+    } else {
+      if (becomeHost)  becomeHost.style.display  = '';
+      if (hostDashNav) hostDashNav.style.display = 'none';
+    }
+
+    // Hosts section apply button
+    const applyBtn    = document.getElementById('host-apply-btn');
+    const pendingMsg  = document.getElementById('host-pending-msg');
+    const dashBtn     = document.getElementById('host-dashboard-btn');
+    if (role === 'host' || role === 'certified') {
+      if (applyBtn)   applyBtn.style.display   = 'none';
+      if (pendingMsg) pendingMsg.style.display = 'none';
+      if (dashBtn)    dashBtn.style.display    = '';
+    } else if (role === 'pending_host') {
+      if (applyBtn)   applyBtn.style.display   = 'none';
+      if (pendingMsg) pendingMsg.style.display = '';
+      if (dashBtn)    dashBtn.style.display    = 'none';
+    } else {
+      if (applyBtn)   applyBtn.style.display   = '';
+      if (pendingMsg) pendingMsg.style.display = 'none';
+      if (dashBtn)    dashBtn.style.display    = 'none';
+    }
+
+    // CTA section
+    const ctaSignUp  = document.getElementById('cta-sign-up-btn');
+    const ctaDash    = document.getElementById('cta-dashboard-btn');
+    if (role && role !== 'guest') {
+      if (ctaSignUp) ctaSignUp.style.display = 'none';
+      if (ctaDash)   ctaDash.style.display   = '';
+    } else {
+      if (ctaSignUp) ctaSignUp.style.display = '';
+      if (ctaDash)   ctaDash.style.display   = 'none';
+    }
+  }
+
   function initClerk() {
     if (!window.Clerk) { setTimeout(initClerk, 50); return; }
-    Clerk.load().then(() => {
+    Clerk.load().then(async () => {
       const accountBtn     = document.getElementById('account-btn');
       const accountWrap    = document.getElementById('account-wrap');
       const accountDrop    = document.getElementById('account-dropdown');
@@ -723,24 +792,32 @@ footer { background: var(--ink); border-top: 0.5px solid rgba(111,168,130,0.15);
       signUpBtn.addEventListener('click', () => { accountDrop.classList.remove('open'); Clerk.openSignUp(); });
       if (ctaSignUpBtn) ctaSignUpBtn.addEventListener('click', () => Clerk.openSignUp());
 
-      function updateAuthUI() {
+      async function updateAuthUI() {
         const user = Clerk.user;
         if (user) {
+          // Signed in — hide Account button, show greeting
           accountWrap.style.display    = 'none';
           userButtonWrap.style.display = 'flex';
           const name = user.firstName || user.emailAddresses?.[0]?.emailAddress || 'there';
-          userGreeting.innerHTML = `<a href="/dashboard.html" style="color:var(--ac-deep);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Hi, ${name}</a>`;
+          userGreeting.innerHTML = `<a href="dashboard.html" style="color:var(--ac-deep);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Hi, ${name}</a>`;
           const userButtonEl = document.getElementById('user-button');
           if (userButtonEl && !userButtonEl.hasChildNodes()) Clerk.mountUserButton(userButtonEl);
+
+          // Fetch role from Supabase and adapt UI
+          const role = await getUserRole(user.id);
+          applyRoleUI(role);
         } else {
+          // Guest
           accountWrap.style.display    = '';
           userButtonWrap.style.display = 'none';
           const userButtonEl = document.getElementById('user-button');
           if (userButtonEl) userButtonEl.innerHTML = '';
+          applyRoleUI('guest');
         }
       }
-      Clerk.addListener(({ user }) => updateAuthUI());
-      updateAuthUI();
+
+      Clerk.addListener(() => updateAuthUI());
+      await updateAuthUI();
     });
   }
   initClerk();
