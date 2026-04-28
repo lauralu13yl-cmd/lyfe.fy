@@ -879,14 +879,16 @@ nav {
         </div>
       </div>
 
-      <div class="form-actions">
-        <button class="btn-back" onclick="prevStep(3)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-          Back
-        </button>
-        <button class="btn-submit" onclick="submitApplication()">Submit Application ✓</button>
-      </div>
-    </div>
+     <div class="form-actions">
+  <button class="btn-back" onclick="prevStep(3)">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Back
+  </button>
+  <button class="btn-submit" id="submitBtn" onclick="submitApplication()">
+    Submit Application ✓
+  </button>
+</div>
+      
 
     <!-- STEP 5: ONBOARDING -->
     <div class="form-step" id="step-4">
