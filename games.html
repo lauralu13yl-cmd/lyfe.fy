@@ -7,102 +7,349 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
 <style>
-:root{--forest:#2D4A1E;--forest-deep:#1E3212;--forest-soft:rgba(45,74,30,0.08);--parchment:#F5EDD8;--parchment-dk:#E8DDBE;--ivory:#FBF8F0;--ivory-warm:#F8F3E8;--cream:#F0E8D0;--brass:#A8915A;--brass-light:rgba(168,145,90,0.22);--brass-faint:rgba(168,145,90,0.09);--ink:#1A2410;--ink-70:rgba(26,36,16,0.7);--ink-40:rgba(26,36,16,0.4);--ink-15:rgba(26,36,16,0.15);--rule:rgba(45,74,30,0.14);--rule-light:rgba(45,74,30,0.08);--radius:16px;--radius-sm:10px;--radius-xs:6px}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:"DM Sans",sans-serif;background:var(--ivory);color:var(--ink);overflow-x:hidden;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
-body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 10% 5%,rgba(236,224,193,0.55) 0%,transparent 55%),radial-gradient(ellipse 65% 55% at 88% 92%,rgba(210,200,170,0.42) 0%,transparent 55%),radial-gradient(ellipse 50% 50% at 50% 50%,rgba(245,237,216,0.28) 0%,transparent 70%),linear-gradient(168deg,#FBF8F0 0%,#F4ECD6 32%,#EBE1C5 65%,#F2EAD3 100%)}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:72px;background:rgba(251,248,240,0.92);backdrop-filter:blur(24px) saturate(1.2);border-bottom:1px solid var(--rule-light);transition:border-color 0.3s,box-shadow 0.3s}
-nav.scrolled{border-bottom-color:var(--rule);box-shadow:0 1px 28px rgba(26,36,16,0.06)}
-.nav-logo{font-family:"Fraunces",serif;font-size:24px;font-weight:700;letter-spacing:-0.3px;color:var(--forest);text-decoration:none;display:inline-flex;align-items:baseline;gap:1px}
-.nav-logo-dot{color:var(--brass)}.nav-logo-fy{font-size:14px;font-weight:400;font-style:italic;color:var(--forest);opacity:0.6}
-.nav-links{display:flex;gap:40px;list-style:none}
-.nav-links a{font-size:11.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--ink-40);text-decoration:none;transition:color 0.2s}
-.nav-links a:hover{color:var(--forest)}
-.nav-cta{display:flex;gap:12px;align-items:center}
-.btn-ghost{font-family:"DM Sans",sans-serif;font-size:11.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--forest);background:transparent;border:1px solid var(--rule);padding:9px 22px;border-radius:100px;cursor:pointer;text-decoration:none;transition:all 0.2s}
-.btn-ghost:hover{background:var(--forest);color:var(--parchment);border-color:var(--forest)}
-.btn-primary{font-family:"DM Sans",sans-serif;font-size:11.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--parchment);background:var(--forest);border:1px solid var(--forest);padding:10px 24px;border-radius:100px;cursor:pointer;text-decoration:none;transition:all 0.2s}
-.btn-primary:hover{background:var(--forest-deep);transform:translateY(-1px);box-shadow:0 6px 20px rgba(45,74,30,0.22)}
-.btn-forest{font-family:"DM Sans",sans-serif;font-size:11.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--parchment);background:var(--forest);border:1px solid var(--forest);padding:16px 44px;border-radius:100px;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.25s}
-.btn-forest:hover{background:var(--forest-deep);transform:translateY(-2px);box-shadow:0 10px 28px rgba(45,74,30,0.22)}
-.page-header{padding-top:72px;position:relative;z-index:1;background:var(--forest);overflow:hidden}
-.page-header::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 88% 50%,rgba(168,145,90,0.1) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 4% 14%,rgba(20,42,12,0.55) 0%,transparent 55%)}
-.page-header-inner{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:80px 24px 72px}
-.page-header-eyebrow{font-size:10.5px;font-weight:600;letter-spacing:2.8px;text-transform:uppercase;color:var(--brass);margin-bottom:16px}
-.page-header-title{font-family:"Fraunces",serif;font-size:clamp(38px,5.5vw,64px);font-weight:700;letter-spacing:-1.5px;line-height:1.05;color:var(--parchment);margin-bottom:20px}
-.page-header-title em{font-style:italic;color:var(--brass);font-weight:600}
-.page-header-rule{width:32px;height:1px;background:var(--brass);margin-bottom:22px;opacity:0.7}
-.page-header-sub{font-size:17px;font-weight:300;color:rgba(245,237,216,0.62);max-width:480px;line-height:1.78}
-.filters-bar{position:relative;z-index:1;border-bottom:1px solid var(--rule-light);background:rgba(251,248,240,0.85);backdrop-filter:blur(14px)}
-.filters-inner{max-width:1120px;margin:0 auto;padding:20px 24px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.filter-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-40);margin-right:6px;white-space:nowrap}
-.filter-btn{font-family:"DM Sans",sans-serif;font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--ink-40);background:transparent;border:1px solid var(--rule);padding:7px 18px;border-radius:100px;cursor:pointer;transition:all 0.2s}
-.filter-btn:hover,.filter-btn.active{color:var(--forest);border-color:var(--forest);background:var(--forest-soft)}
-.filter-btn.active{color:var(--parchment);background:var(--forest);border-color:var(--forest)}
-.filter-sep{width:1px;height:22px;background:var(--rule);margin:0 6px;flex-shrink:0}
-.format-wrap{position:relative;display:flex;align-items:center}
-.format-select{font-family:"DM Sans",sans-serif;font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--ink-40);background:transparent;border:1px solid var(--rule);padding:7px 32px 7px 16px;border-radius:100px;cursor:pointer;transition:all 0.2s;appearance:none;-webkit-appearance:none;min-width:120px}
-.format-select:hover,.format-select:focus{color:var(--forest);border-color:var(--forest);background:var(--forest-soft);outline:none}
-.format-chevron{position:absolute;right:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--ink-40)}
-.launch-banner{position:relative;z-index:1;background:var(--parchment-dk);border-top:1px solid var(--rule-light);border-bottom:1px solid var(--rule-light);padding:18px 24px;text-align:center}
-.launch-banner-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap}
-.launch-banner-text{font-size:13.5px;font-weight:300;color:var(--ink-70)}
-.launch-banner-text strong{font-weight:600;color:var(--ink)}
-.games-section{position:relative;z-index:1;padding:64px 24px 112px}
-.games-container{max-width:1120px;margin:0 auto}
-.games-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
-.loading-state{grid-column:1/-1;text-align:center;padding:60px 0;color:var(--ink-40)}
-.loading-state p{font-size:14px;margin-top:10px}
-.loading-spinner{width:32px;height:32px;border:2px solid var(--rule);border-top-color:var(--forest);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto}
-@keyframes spin{to{transform:rotate(360deg)}}
-.live-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(45,74,30,0.1);border:1px solid rgba(45,74,30,0.2);border-radius:100px;padding:4px 10px;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--forest);margin-bottom:14px}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--forest);animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.game-card{background:rgba(251,248,240,0.7);border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 24px rgba(45,74,30,0.05);transition:box-shadow 0.3s,transform 0.3s;display:flex;flex-direction:column}
-.game-card:hover{box-shadow:0 8px 40px rgba(45,74,30,0.12);transform:translateY(-2px)}
-.card-tier-bar{height:3px;width:100%}
-.tier-athlete{background:var(--forest)}.tier-ai{background:var(--brass)}.tier-social{background:var(--parchment-dk)}.tier-coached{background:var(--forest)}.tier-training{background:var(--brass)}.tier-tournament{background:#8B3015}
-.card-body{padding:34px 34px 28px;flex:1}
-.card-tier-label{font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brass);margin-bottom:18px}
-.card-title{font-family:"Fraunces",serif;font-size:21px;font-weight:600;line-height:1.22;color:var(--ink);margin-bottom:8px;letter-spacing:-0.3px}
-.card-rule{width:22px;height:1px;background:var(--brass);margin-bottom:18px;opacity:0.6}
-.card-host{font-size:13px;font-weight:500;color:var(--forest);margin-bottom:4px;display:flex;align-items:center;gap:5px}
-.card-host-cert{width:15px;height:15px;background:var(--brass);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
-.card-host-sub{font-size:12.5px;font-weight:300;color:var(--ink-40);margin-bottom:28px}
-.card-meta{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
-.card-meta-row{display:flex;gap:32px;flex-wrap:wrap}
-.card-meta-item{display:flex;flex-direction:column;gap:2px}
-.card-meta-label{font-size:9.5px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:var(--ink-40)}
-.card-meta-value{font-size:14px;font-weight:400;color:var(--ink)}
-.card-tags{display:flex;gap:8px;flex-wrap:wrap}
-.card-tag{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--forest);background:var(--forest-soft);border:1px solid var(--rule);border-radius:100px;padding:4px 12px}
-.card-footer{border-top:1px solid var(--rule-light);padding:22px 34px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:rgba(232,221,190,0.22)}
-.card-deposit{font-size:12.5px;font-weight:300;color:var(--ink-70);line-height:1.55}
-.card-deposit strong{font-weight:600;color:var(--ink);display:block;font-size:13.5px;margin-bottom:2px}
-.card-spots{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--brass)}
-.card-spots.urgent{color:#C05A2A}
-.btn-card{font-family:"DM Sans",sans-serif;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--parchment);background:var(--forest);border:1px solid var(--forest);padding:12px 28px;border-radius:100px;cursor:pointer;text-decoration:none;white-space:nowrap;transition:all 0.2s;display:inline-block}
-.btn-card:hover{background:var(--forest-deep);transform:translateY(-1px);box-shadow:0 6px 18px rgba(45,74,30,0.2)}
-.btn-card.full{background:var(--ink-15);border-color:var(--ink-15);color:var(--ink-40);cursor:not-allowed}
-.section-divider{grid-column:1/-1;display:flex;align-items:center;gap:16px;margin:16px 0 8px}
-.section-divider-line{flex:1;height:1px;background:var(--rule-light)}
-.section-divider-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-40);white-space:nowrap}
-.reveal{opacity:0;transform:translateY(22px);transition:opacity 0.8s ease,transform 0.8s ease}
-.reveal.visible{opacity:1;transform:none}
-.reveal-delay-1{transition-delay:0.08s}.reveal-delay-2{transition-delay:0.16s}.reveal-delay-3{transition-delay:0.24s}.reveal-delay-4{transition-delay:0.32s}
-footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);padding:48px 24px;position:relative;z-index:1}
-.footer-inner{max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:28px}
-.footer-logo{font-family:"Fraunces",serif;font-size:20px;font-weight:700;color:var(--parchment);text-decoration:none;display:inline-flex;align-items:baseline;gap:1px}
-.footer-logo-dot{color:var(--brass)}.footer-logo-fy{font-size:12px;font-weight:400;font-style:italic;color:rgba(245,237,216,0.5)}
-.footer-links{display:flex;gap:36px;flex-wrap:wrap}
-.footer-links a{font-size:11px;font-weight:600;letter-spacing:0.9px;text-transform:uppercase;color:rgba(245,237,216,0.32);text-decoration:none;transition:color 0.2s}
-.footer-links a:hover{color:rgba(245,237,216,0.68)}
-.footer-copy{font-size:11.5px;color:rgba(245,237,216,0.22);font-weight:300}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
-.hamburger span{display:block;width:22px;height:1.5px;background:var(--ink)}
-@media(max-width:960px){nav{padding:0 24px}.nav-links{display:none}.hamburger{display:flex}.games-grid{grid-template-columns:1fr}}
-@media(max-width:600px){nav .nav-cta{display:none}.card-footer{flex-direction:column;align-items:flex-start;gap:14px}.card-body{padding:24px}.card-footer{padding:18px 24px}}
+:root {
+  --base:      #F5F2ED;
+  --base-dk:   #EDE9E1;
+  --base-dkr:  #E2DDD3;
+  --surface:   #FBF9F5;
+  --border:    #D3D1C7;
+  --border-lt: rgba(180,178,169,0.4);
+  --ink:       #2C2C2A;
+  --ink-70:    rgba(44,44,42,0.7);
+  --ink-40:    rgba(44,44,42,0.4);
+  --ink-15:    rgba(44,44,42,0.15);
+  --ac-light:  #E4F0E8;
+  --ac-mid:    #6FA882;
+  --ac-strong: #3D7A56;
+  --ac-deep:   #2A5C3F;
+  --ac-border: #B6D4BF;
+  --ac-soft:   rgba(61,122,86,0.08);
+  --radius:    16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--base);
+  color: var(--ink);
+  overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 8% 6%,  rgba(228,240,232,0.45) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 50% at 90% 90%, rgba(182,212,191,0.28) 0%, transparent 55%),
+    linear-gradient(168deg, #F5F2ED 0%, #EDE9E1 50%, #F0EDE7 100%);
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 52px; height: 68px;
+  background: rgba(245,242,237,0.92);
+  backdrop-filter: blur(24px) saturate(1.1);
+  border-bottom: 0.5px solid var(--border-lt);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+nav.scrolled { border-bottom-color: var(--border); box-shadow: 0 1px 24px rgba(44,44,42,0.06); }
+
+.nav-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 22px; font-weight: 700; letter-spacing: -0.3px;
+  color: var(--ink); text-decoration: none;
+  display: inline-flex; align-items: baseline; gap: 1px;
+}
+.nav-logo-dot { color: var(--ac-mid); }
+.nav-logo-fy  { font-size: 13px; font-weight: 400; font-style: italic; color: var(--ink-40); }
+
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--ink-40); text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ac-deep); }
+
+.nav-cta { display: flex; gap: 10px; align-items: center; }
+
+.btn-ghost {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--ink); background: transparent;
+  border: 0.5px solid var(--border); padding: 9px 20px;
+  border-radius: 100px; cursor: pointer; text-decoration: none; transition: all 0.2s;
+}
+.btn-ghost:hover { border-color: var(--ac-strong); color: var(--ac-deep); background: var(--ac-light); }
+
+.btn-primary {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--surface); background: var(--ink);
+  border: 0.5px solid var(--ink); padding: 10px 22px;
+  border-radius: 100px; cursor: pointer; text-decoration: none; transition: all 0.2s;
+}
+.btn-primary:hover { background: var(--ac-deep); border-color: var(--ac-deep); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(42,92,63,0.2); }
+
+.btn-forest {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--surface); background: var(--ink);
+  border: 0.5px solid var(--ink); padding: 10px 28px;
+  border-radius: 100px; cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.25s;
+}
+.btn-forest:hover { background: var(--ac-deep); border-color: var(--ac-deep); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(42,92,63,0.2); }
+
+/* PAGE HEADER */
+.page-header {
+  padding-top: 68px; position: relative; z-index: 1;
+  background: var(--ink); overflow: hidden;
+}
+.page-header::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 55% 55% at 88% 50%, rgba(61,122,86,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 4% 14%, rgba(0,0,0,0.3) 0%, transparent 55%);
+}
+.page-header-inner {
+  position: relative; z-index: 2;
+  max-width: 1100px; margin: 0 auto; padding: 72px 24px 64px;
+}
+.page-header-eyebrow {
+  font-size: 10px; font-weight: 600; letter-spacing: 2.8px; text-transform: uppercase;
+  color: var(--ac-mid); margin-bottom: 14px;
+}
+.page-header-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(36px, 5.5vw, 62px); font-weight: 700;
+  letter-spacing: -1.5px; line-height: 1.05; color: var(--base); margin-bottom: 18px;
+}
+.page-header-title em { font-style: italic; color: var(--ac-mid); font-weight: 600; }
+.page-header-rule { width: 28px; height: 1px; background: var(--ac-mid); margin-bottom: 20px; opacity: 0.7; }
+.page-header-sub { font-size: 16px; font-weight: 300; color: rgba(245,242,237,0.55); max-width: 460px; line-height: 1.8; }
+
+/* LAUNCH BANNER */
+.launch-banner {
+  position: relative; z-index: 1;
+  background: var(--ac-light);
+  border-top: 0.5px solid var(--ac-border);
+  border-bottom: 0.5px solid var(--ac-border);
+  padding: 16px 24px;
+}
+.launch-banner-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap;
+}
+.launch-banner-text { font-size: 13px; font-weight: 300; color: var(--ac-deep); }
+.launch-banner-text strong { font-weight: 600; color: var(--ink); }
+
+/* FILTERS BAR */
+.filters-bar {
+  position: relative; z-index: 1;
+  border-bottom: 0.5px solid var(--border);
+  background: rgba(245,242,237,0.88);
+  backdrop-filter: blur(14px);
+}
+.filters-inner {
+  max-width: 1100px; margin: 0 auto; padding: 18px 24px;
+  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+}
+.filter-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--ink-40); margin-right: 4px; white-space: nowrap;
+}
+.filter-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--ink-40); background: transparent;
+  border: 0.5px solid var(--border); padding: 6px 16px;
+  border-radius: 100px; cursor: pointer; transition: all 0.2s;
+}
+.filter-btn:hover { color: var(--ac-deep); border-color: var(--ac-strong); background: var(--ac-light); }
+.filter-btn.active { color: var(--surface); background: var(--ink); border-color: var(--ink); }
+
+.filter-sep { width: 0.5px; height: 20px; background: var(--border); margin: 0 4px; flex-shrink: 0; }
+
+.format-wrap { position: relative; display: flex; align-items: center; }
+.format-select {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--ink-40); background: transparent;
+  border: 0.5px solid var(--border); padding: 6px 30px 6px 14px;
+  border-radius: 100px; cursor: pointer; transition: all 0.2s;
+  appearance: none; -webkit-appearance: none; min-width: 120px;
+}
+.format-select:hover, .format-select:focus { color: var(--ac-deep); border-color: var(--ac-strong); background: var(--ac-light); outline: none; }
+.format-chevron { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--ink-40); }
+
+/* GAMES GRID */
+.games-section { position: relative; z-index: 1; padding: 56px 24px 104px; }
+.games-container { max-width: 1100px; margin: 0 auto; }
+.games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+/* LOADING */
+.loading-state { grid-column: 1/-1; text-align: center; padding: 60px 0; color: var(--ink-40); }
+.loading-state p { font-size: 13px; margin-top: 10px; }
+.loading-spinner {
+  width: 28px; height: 28px;
+  border: 1.5px solid var(--border); border-top-color: var(--ac-strong);
+  border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* LIVE BADGE */
+.live-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--ac-light); border: 0.5px solid var(--ac-border);
+  border-radius: 100px; padding: 4px 10px;
+  font-size: 9.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--ac-deep); margin-bottom: 12px;
+}
+.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ac-strong); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* GAME CARD */
+.game-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.game-card:hover { box-shadow: 0 8px 36px rgba(44,44,42,0.1); transform: translateY(-2px); }
+
+/* tier accent bars */
+.card-tier-bar { height: 2px; width: 100%; }
+.tier-athlete  { background: var(--ac-strong); }
+.tier-ai       { background: var(--ac-mid); }
+.tier-social   { background: var(--ac-border); }
+.tier-coached  { background: var(--ac-strong); }
+.tier-training { background: var(--ac-mid); }
+.tier-tournament { background: var(--ink); }
+
+.card-body { padding: 30px 30px 24px; flex: 1; }
+
+.card-tier-label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--ac-mid); margin-bottom: 16px;
+}
+.card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 20px; font-weight: 600; line-height: 1.22;
+  color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px;
+}
+.card-rule { width: 20px; height: 1px; background: var(--ac-mid); margin-bottom: 16px; opacity: 0.6; }
+
+.card-host { font-size: 13px; font-weight: 500; color: var(--ac-deep); margin-bottom: 3px; display: flex; align-items: center; gap: 5px; }
+.card-host-cert {
+  width: 14px; height: 14px; background: var(--ac-strong); border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.card-host-sub { font-size: 12px; font-weight: 300; color: var(--ink-40); margin-bottom: 24px; }
+
+.card-meta { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+.card-meta-row { display: flex; gap: 28px; flex-wrap: wrap; }
+.card-meta-item { display: flex; flex-direction: column; gap: 2px; }
+.card-meta-label { font-size: 9.5px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--ink-40); }
+.card-meta-value { font-size: 13.5px; font-weight: 400; color: var(--ink); }
+
+.card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.card-tag {
+  font-size: 9.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--ac-deep); background: var(--ac-light);
+  border: 0.5px solid var(--ac-border); border-radius: 100px; padding: 3px 10px;
+}
+
+.card-footer {
+  border-top: 0.5px solid var(--border);
+  padding: 20px 30px;
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  background: var(--base-dk);
+}
+.card-deposit { font-size: 12px; font-weight: 300; color: var(--ink-70); line-height: 1.55; }
+.card-deposit strong { font-weight: 600; color: var(--ink); display: block; font-size: 13px; margin-bottom: 1px; }
+.card-spots { font-size: 10.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--ac-strong); margin-top: 4px; }
+.card-spots.urgent { color: #C05A2A; }
+
+.btn-card {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--surface); background: var(--ink);
+  border: 0.5px solid var(--ink); padding: 11px 24px;
+  border-radius: 100px; cursor: pointer; text-decoration: none;
+  white-space: nowrap; transition: all 0.2s; display: inline-block;
+}
+.btn-card:hover { background: var(--ac-deep); border-color: var(--ac-deep); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(42,92,63,0.2); }
+.btn-card.full { background: var(--ink-15); border-color: var(--ink-15); color: var(--ink-40); cursor: not-allowed; }
+.btn-card.full:hover { transform: none; box-shadow: none; background: var(--ink-15); border-color: var(--ink-15); }
+
+/* DIVIDERS */
+.section-divider {
+  grid-column: 1/-1; display: flex; align-items: center; gap: 14px; margin: 14px 0 6px;
+}
+.section-divider-line { flex: 1; height: 0.5px; background: var(--border); }
+.section-divider-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--ink-40); white-space: nowrap;
+}
+
+/* SCROLL REVEAL */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+.reveal-delay-4 { transition-delay: 0.32s; }
+
+/* FOOTER */
+footer {
+  background: var(--ink); border-top: 0.5px solid rgba(111,168,130,0.15);
+  padding: 44px 24px; position: relative; z-index: 1;
+}
+.footer-inner {
+  max-width: 1100px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px;
+}
+.footer-logo {
+  font-family: 'Fraunces', serif; font-size: 19px; font-weight: 700;
+  color: var(--base); text-decoration: none;
+  display: inline-flex; align-items: baseline; gap: 1px;
+}
+.footer-logo-dot { color: var(--ac-mid); }
+.footer-logo-fy  { font-size: 11px; font-weight: 400; font-style: italic; color: rgba(245,242,237,0.35); }
+.footer-links { display: flex; gap: 32px; flex-wrap: wrap; }
+.footer-links a {
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.9px; text-transform: uppercase;
+  color: rgba(245,242,237,0.28); text-decoration: none; transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--ac-mid); }
+.footer-copy { font-size: 11px; color: rgba(245,242,237,0.18); font-weight: 300; }
+
+/* HAMBURGER */
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+.hamburger span { display: block; width: 20px; height: 1.5px; background: var(--ink); }
+
+@media (max-width: 960px) {
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .games-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  nav .nav-cta { display: none; }
+  .card-footer { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .card-body { padding: 22px; }
+  .card-footer { padding: 16px 22px; }
+}
 </style>
 </head>
 <body>
@@ -135,7 +382,7 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
 <div class="launch-banner">
   <div class="launch-banner-inner">
     <p class="launch-banner-text">Launching in <strong>Boston, New York &amp; Washington D.C.</strong> this spring &mdash;</p>
-    <a href="https://tally.so/r/MeO4Mg" target="_blank" class="btn-forest" style="padding:10px 28px;font-size:11px">Join the Waitlist</a>
+    <a href="https://tally.so/r/MeO4Mg" target="_blank" class="btn-forest">Join the Waitlist</a>
   </div>
 </div>
 
@@ -215,22 +462,15 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
 
   async function fetchSessions() {
     try {
-      // Fetch all active sessions regardless of date so nothing is missed
       const res = await fetch(
         SUPABASE_URL + "/rest/v1/sessions?status=eq.active&order=date.asc,time.asc&select=*",
         { headers: { "apikey": SUPABASE_ANON, "Authorization": "Bearer " + SUPABASE_ANON } }
       );
-      if (!res.ok) {
-        console.error("Supabase error:", res.status, await res.text());
-        return [];
-      }
+      if (!res.ok) { console.error("Supabase error:", res.status, await res.text()); return []; }
       const d = await res.json();
       console.log("Lyfefy: fetched", d.length, "sessions from Supabase", d);
       return Array.isArray(d) ? d : [];
-    } catch(e) {
-      console.error("Lyfefy fetch failed:", e);
-      return [];
-    }
+    } catch(e) { console.error("Lyfefy fetch failed:", e); return []; }
   }
 
   function fmtDate(d) { const dt = new Date(d+"T00:00:00"); return dt.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}); }
@@ -239,7 +479,12 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
   function isWeekend(ds) { const d=new Date(ds+"T00:00:00"),now=new Date(),dy=d.getDay(),diff=d-now; return (dy===0||dy===6)&&diff>=0&&diff<7*24*3600*1000; }
 
   function tierInfo(t) {
-    return {coached:{label:"Athlete-Led Experience",cls:"tier-athlete"},tournament:{label:"Tournament",cls:"tier-tournament"},training:{label:"Training Session",cls:"tier-training"},casual:{label:"Social Play",cls:"tier-social"}}[t]||{label:"Social Play",cls:"tier-social"};
+    return {
+      coached:    { label:"Athlete-Led Experience", cls:"tier-athlete" },
+      tournament: { label:"Tournament",             cls:"tier-tournament" },
+      training:   { label:"Training Session",       cls:"tier-training" },
+      casual:     { label:"Social Play",            cls:"tier-social" }
+    }[t] || { label:"Social Play", cls:"tier-social" };
   }
 
   function buildCard(s) {
@@ -250,7 +495,7 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
     var isUrgent = left <= 2;
 
     var certMark = s.host_certified
-      ? '<span class="card-host-cert"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="var(--forest-deep)" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></span>'
+      ? '<span class="card-host-cert"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="rgba(245,242,237,0.9)" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></span>'
       : "";
 
     var filterTags = [
@@ -285,11 +530,11 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
 
     return [
       '<div class="game-card reveal"',
-        ' data-tags="'  + filterTags + '"',
-        ' data-id="'    + s.id       + '"',
-        ' data-type="'  + dataType   + '"',
-        ' data-format="'+ dataFmt    + '"',
-        ' data-price="' + dataPrice  + '">',
+        ' data-tags="'   + filterTags + '"',
+        ' data-id="'     + s.id       + '"',
+        ' data-type="'   + dataType   + '"',
+        ' data-format="' + dataFmt    + '"',
+        ' data-price="'  + dataPrice  + '">',
       '<div class="card-tier-bar ' + tier.cls + '"></div>',
       '<div class="card-body">',
         '<span class="live-badge"><span class="live-dot"></span>Live Session</span>',
@@ -300,24 +545,12 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
         '<div class="card-host-sub">' + hostSub + '</div>',
         '<div class="card-meta">',
           '<div class="card-meta-row">',
-            '<div class="card-meta-item">',
-              '<span class="card-meta-label">Date &amp; Time</span>',
-              '<span class="card-meta-value">' + fmtDate(s.date) + " &middot; " + fmtTime(s.time) + '</span>',
-            '</div>',
-            '<div class="card-meta-item">',
-              '<span class="card-meta-label">Location</span>',
-              '<span class="card-meta-value">' + s.location + '</span>',
-            '</div>',
+            '<div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">' + fmtDate(s.date) + " &middot; " + fmtTime(s.time) + '</span></div>',
+            '<div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">' + s.location + '</span></div>',
           '</div>',
           '<div class="card-meta-row">',
-            '<div class="card-meta-item">',
-              '<span class="card-meta-label">Skill Level</span>',
-              '<span class="card-meta-value">' + skillVal + '</span>',
-            '</div>',
-            '<div class="card-meta-item">',
-              '<span class="card-meta-label">Group Size</span>',
-              '<span class="card-meta-value">' + groupVal + '</span>',
-            '</div>',
+            '<div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">' + skillVal + '</span></div>',
+            '<div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">' + groupVal + '</span></div>',
           '</div>',
         '</div>',
         '<div class="card-tags">' + tagsHtml + '</div>',
@@ -337,27 +570,20 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
     return document.getElementById("staticCards").innerHTML;
   }
 
-    function renderGrid(live) {
+  function renderGrid(live) {
     var grid = document.getElementById("gamesGrid");
     var html = "";
-
     if (live.length > 0) {
       var label = "Live Now &middot; " + live.length + " Session" + (live.length !== 1 ? "s" : "");
-      html += "<div class='section-divider'>";
-      html += "<div class='section-divider-line'></div>";
-      html += "<div class='section-divider-label'>" + label + "</div>";
-      html += "<div class='section-divider-line'></div>";
-      html += "</div>";
+      html += "<div class='section-divider'><div class='section-divider-line'></div><div class='section-divider-label'>" + label + "</div><div class='section-divider-line'></div></div>";
       html += live.map(function(s){ return buildCard(s); }).join("");
     }
-
     html += getStaticCards();
     grid.innerHTML = html;
-
     requestAnimationFrame(function() {
       var io = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add("visible"); });
-      }, {threshold: 0.08});
+      }, { threshold: 0.08 });
       document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
     });
   }
@@ -381,16 +607,12 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
     if (tag === "all") return true;
     var dtags = (card.dataset.tags || "").toLowerCase();
     var dtype = (card.dataset.type || "").toLowerCase();
-    var dfmt  = (card.dataset.format || "").toLowerCase();
-    // sport tags
     if (["golf","tennis","basketball","soccer","volleyball"].includes(tag)) return dtags.includes(tag);
-    // tier tags
     if (tag === "athlete-led")  return dtags.includes("athlete") || dtype === "coached";
     if (tag === "ai-matched")   return dtags.includes("ai-matched") || dtags.includes("ai matched");
     if (tag === "social")       return dtype === "casual" || dtags.includes("social");
     if (tag === "tournament")   return dtype === "tournament";
     if (tag === "coached")      return dtype === "coached" || dtags.includes("coached");
-    // interest tags
     if (tag === "beginner")     return dtags.includes("beginner");
     if (tag === "competitive")  return dtags.includes("competitive");
     if (tag === "networking")   return dtags.includes("networking");
@@ -426,13 +648,19 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
   init();
 
   var navbar = document.getElementById("navbar");
-  window.addEventListener("scroll", function(){ navbar.classList.toggle("scrolled", window.scrollY>20); });
+  window.addEventListener("scroll", function(){ navbar.classList.toggle("scrolled", window.scrollY > 20); });
 
   function toggleMenu() {
     var links = document.querySelector(".nav-links");
     if (!links) return;
-    if (links.style.display==="flex") { links.style.display=""; return; }
-    Object.assign(links.style,{display:"flex",flexDirection:"column",position:"absolute",top:"72px",left:"0",right:"0",background:"rgba(251,248,240,0.97)",backdropFilter:"blur(20px)",padding:"28px 32px",gap:"20px",borderBottom:"1px solid rgba(45,74,30,0.12)"});
+    if (links.style.display === "flex") { links.style.display = ""; return; }
+    Object.assign(links.style, {
+      display: "flex", flexDirection: "column", position: "absolute",
+      top: "68px", left: "0", right: "0",
+      background: "rgba(245,242,237,0.97)", backdropFilter: "blur(20px)",
+      padding: "24px 28px", gap: "18px",
+      borderBottom: "0.5px solid rgba(180,178,169,0.4)"
+    });
   }
 </script>
 
@@ -454,7 +682,7 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
       <div class="card-host-sub">Stanford Golf &middot; D1 Athlete &middot; 4.98 rated</div>
       <div class="card-meta">
         <div class="card-meta-row">
-          <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, Mar 22 &middot; 9:00 &ndash; 11:30 AM</span></div>
+          <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, May 3 &middot; 9:00 &ndash; 11:30 AM</span></div>
           <div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Boston, MA</span></div>
         </div>
         <div class="card-meta-row">
@@ -480,7 +708,7 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
       <div class="card-host-sub">Duke Golf &middot; NCAA Athlete &middot; 4.95 rated</div>
       <div class="card-meta">
         <div class="card-meta-row">
-          <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sun, Mar 23 &middot; 8:00 &ndash; 10:00 AM</span></div>
+          <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sun, May 4 &middot; 8:00 &ndash; 10:00 AM</span></div>
           <div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Boston, MA</span></div>
         </div>
         <div class="card-meta-row">
@@ -506,7 +734,7 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
       <div class="card-host-sub">Pro Tennis &middot; 4.5 UTR &middot; 4.97 rated</div>
       <div class="card-meta">
         <div class="card-meta-row">
-          <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, Mar 22 &middot; 10:00 AM &ndash; 12:00 PM</span></div>
+          <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, May 3 &middot; 10:00 AM &ndash; 12:00 PM</span></div>
           <div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">New York, NY</span></div>
         </div>
         <div class="card-meta-row">
@@ -517,7 +745,7 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
       <div class="card-tags"><span class="card-tag">Tennis</span><span class="card-tag">Competitive</span><span class="card-tag">Skill Drills</span><span class="card-tag">Social After</span></div>
     </div>
     <div class="card-footer">
-      <div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">1 spot remaining</div></div>
+      <div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots urgent">1 spot remaining</div></div>
       <a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a>
     </div>
   </div>
@@ -532,7 +760,7 @@ footer{background:var(--forest-deep);border-top:1px solid rgba(168,145,90,0.18);
       <div class="card-host-sub">Georgetown Golf &middot; Club Competitive &middot; 4.91 rated</div>
       <div class="card-meta">
         <div class="card-meta-row">
-          <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Fri, Mar 21 &middot; 5:30 &ndash; 7:30 PM</span></div>
+          <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Fri, May 2 &middot; 5:30 &ndash; 7:30 PM</span></div>
           <div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Washington D.C.</span></div>
         </div>
         <div class="card-meta-row">
