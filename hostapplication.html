@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Become a Host — Lyfe.fy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --base:      #F5F2ED;
+  --base-dk:   #EDE9E1;
+  --base-dkr:  #E2DDD3;
+  --surface:   #FBF9F5;
+  --border:    #D3D1C7;
+  --border-lt: rgba(180,178,169,0.4);
+  --ink:       #2C2C2A;
+  --ink-70:    rgba(44,44,42,0.7);
+  --ink-40:    rgba(44,44,42,0.4);
+  --ink-15:    rgba(44,44,42,0.15);
+  --ac-light:  #E4F0E8;
+  --ac-mid:    #6FA882;
+  --ac-strong: #3D7A56;
+  --ac-deep:   #2A5C3F;
+  --ac-border: #B6D4BF;
+  --ac-soft:   rgba(61,122,86,0.08);
+  --radius:    16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --err:       #C05A2A;
+  --err-light: #FBF0E8;
+}
+
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--base);
+  color: var(--ink);
+  overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 8% 6%,  rgba(228,240,232,0.45) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 50% at 90% 90%, rgba(182,212,191,0.28) 0%, transparent 55%),
+    linear-gradient(168deg, #F5F2ED 0%, #EDE9E1 50%, #F0EDE7 100%);
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 52px; height: 68px;
+  background: rgba(245,242,237,0.92);
+  backdrop-filter: blur(24px);
+  border-bottom: 0.5px solid var(--border-lt);
+}
+.nav-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 22px; font-weight: 700; letter-spacing: -0.3px;
+  color: var(--ink); text-decoration: none;
+  display: inline-flex; align-items: baseline; gap: 1px;
+}
+.nav-logo-dot { color: var(--ac-mid); }
+.nav-logo-fy  { font-size: 13px; font-weight: 400; font-style: italic; color: var(--ink-40); }
+.nav-back {
+  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--ink-40); text-decoration: none; transition: color 0.2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.nav-back:hover { color: var(--ac-deep); }
+.nav-back svg { transition: transform 0.2s; }
+.nav-back:hover svg { transform: translateX(-3px); }
+
+/* ── LAYOUT ── */
+.app-shell {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  min-height: 100vh;
+  padding-top: 68px;
+  position: relative; z-index: 1;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  background: var(--ink);
+  position: sticky; top: 68px; height: calc(100vh - 68px);
+  overflow-y: auto;
+  display: flex; flex-direction: column;
+  padding: 52px 40px;
+}
+.sidebar::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 90% 10%, rgba(61,122,86,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 10% 90%, rgba(0,0,0,0.2) 0%, transparent 55%);
+}
+.sidebar-content { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; }
+
+.sidebar-eyebrow {
+  font-size: 10px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--ac-mid); margin-bottom: 14px;
+}
+.sidebar-title {
+  font-family: 'Fraunces', serif;
+  font-size: 28px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.1;
+  color: var(--base); margin-bottom: 8px;
+}
+.sidebar-title em { font-style: italic; color: var(--ac-mid); }
+.sidebar-rule { width: 24px; height: 1px; background: var(--ac-mid); margin-bottom: 18px; opacity: 0.6; }
+.sidebar-sub { font-size: 13px; font-weight: 300; color: rgba(245,242,237,0.5); line-height: 1.75; margin-bottom: 40px; }
+
+/* STEP NAV */
+.step-nav { display: flex; flex-direction: column; gap: 4px; margin-bottom: 48px; }
+.step-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  cursor: default; transition: background 0.2s;
+  position: relative;
+}
+.step-item.clickable { cursor: pointer; }
+.step-item.clickable:hover { background: rgba(245,242,237,0.04); }
+.step-item.active { background: rgba(61,122,86,0.12); }
+
+.step-connector {
+  position: absolute; left: 24px; top: 100%; width: 1px; height: 4px;
+  background: rgba(245,242,237,0.08);
+}
+
+.step-circle {
+  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600;
+  border: 1px solid rgba(245,242,237,0.15);
+  color: rgba(245,242,237,0.3);
+  transition: all 0.3s;
+  margin-top: 1px;
+}
+.step-item.active .step-circle {
+  background: var(--ac-strong); border-color: var(--ac-strong);
+  color: var(--base);
+}
+.step-item.done .step-circle {
+  background: var(--ac-mid); border-color: var(--ac-mid); color: var(--base);
+}
+
+.step-text { flex: 1; }
+.step-label {
+  font-size: 11.5px; font-weight: 600; letter-spacing: 0.3px;
+  color: rgba(245,242,237,0.3); transition: color 0.3s; line-height: 1.3;
+}
+.step-item.active .step-label { color: var(--base); }
+.step-item.done .step-label { color: rgba(245,242,237,0.6); }
+.step-desc {
+  font-size: 11px; font-weight: 300; color: rgba(245,242,237,0.2);
+  margin-top: 2px; transition: color 0.3s;
+}
+.step-item.active .step-desc { color: rgba(245,242,237,0.45); }
+.step-item.done .step-desc { color: rgba(245,242,237,0.25); }
+
+/* EARNINGS PREVIEW */
+.earnings-card {
+  margin-top: auto;
+  background: rgba(61,122,86,0.12); border: 0.5px solid rgba(111,168,130,0.2);
+  border-radius: var(--radius-sm); padding: 20px;
+}
+.earnings-label {
+  font-size: 9.5px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--ac-mid); margin-bottom: 10px; opacity: 0.8;
+}
+.earnings-range {
+  font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700;
+  color: var(--base); letter-spacing: -0.5px; line-height: 1; margin-bottom: 6px;
+}
+.earnings-sub { font-size: 11.5px; font-weight: 300; color: rgba(245,242,237,0.4); }
+
+/* ── MAIN FORM AREA ── */
+.form-area {
+  padding: 52px 64px;
+  display: flex; flex-direction: column;
+}
+
+/* STEPS */
+.form-step { display: none; animation: stepIn 0.4s ease both; }
+.form-step.active { display: block; }
+@keyframes stepIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+.form-step-eyebrow {
+  font-size: 10px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--ac-mid); margin-bottom: 12px;
+}
+.form-step-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(26px, 3.5vw, 38px); font-weight: 700;
+  letter-spacing: -0.8px; line-height: 1.08; color: var(--ink); margin-bottom: 8px;
+}
+.form-step-title em { font-style: italic; color: var(--ac-strong); }
+.form-step-rule { width: 24px; height: 1px; background: var(--ac-mid); margin-bottom: 16px; opacity: 0.7; }
+.form-step-sub { font-size: 15px; font-weight: 300; color: var(--ink-70); margin-bottom: 40px; max-width: 480px; line-height: 1.75; }
+
+/* PROGRESS BAR */
+.progress-wrap { margin-bottom: 48px; }
+.progress-label {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+}
+.progress-text { font-size: 10.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-40); }
+.progress-pct { font-size: 10.5px; font-weight: 600; color: var(--ac-strong); }
+.progress-track {
+  width: 100%; height: 3px; background: var(--border);
+  border-radius: 100px; overflow: hidden;
+}
+.progress-fill {
+  height: 100%; background: var(--ac-strong); border-radius: 100px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* FORM FIELDS */
+.field-group { display: flex; flex-direction: column; gap: 20px; margin-bottom: 36px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--ink-40);
+}
+.field-required { color: var(--ac-mid); }
+
+.field input, .field select, .field textarea {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 300; color: var(--ink);
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 13px 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none; width: 100%;
+  -webkit-appearance: none;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--ac-strong);
+  box-shadow: 0 0 0 3px rgba(61,122,86,0.1);
+}
+.field input::placeholder, .field textarea::placeholder { color: var(--ink-40); }
+.field select { cursor: pointer; }
+.field textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+.field-hint { font-size: 11.5px; color: var(--ink-40); font-weight: 300; }
+.field-error { font-size: 11.5px; color: var(--err); font-weight: 400; display: none; }
+.field.has-error input, .field.has-error select, .field.has-error textarea {
+  border-color: var(--err); box-shadow: 0 0 0 3px rgba(192,90,42,0.08);
+}
+.field.has-error .field-error { display: block; }
+
+/* SPORT PICKER */
+.sport-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 36px; }
+.sport-card {
+  border: 0.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 18px 16px; cursor: pointer; transition: all 0.2s;
+  background: var(--surface); text-align: center;
+  position: relative;
+}
+.sport-card:hover { border-color: var(--ac-strong); background: var(--ac-light); }
+.sport-card.selected {
+  border-color: var(--ac-strong); background: var(--ac-light);
+  box-shadow: 0 0 0 1px var(--ac-strong);
+}
+.sport-card input { position: absolute; opacity: 0; pointer-events: none; }
+.sport-icon { font-size: 22px; margin-bottom: 6px; }
+.sport-name { font-size: 12px; font-weight: 600; letter-spacing: 0.5px; color: var(--ink); }
+.sport-card.selected .sport-name { color: var(--ac-deep); }
+
+/* LEVEL PICKER */
+.level-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 36px; }
+.level-card {
+  border: 0.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 16px 20px; cursor: pointer; transition: all 0.2s;
+  background: var(--surface); display: flex; align-items: center; gap: 16px;
+  position: relative;
+}
+.level-card:hover { border-color: var(--ac-strong); background: var(--ac-light); }
+.level-card.selected { border-color: var(--ac-strong); background: var(--ac-light); box-shadow: 0 0 0 1px var(--ac-strong); }
+.level-card input { position: absolute; opacity: 0; pointer-events: none; }
+.level-badge {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  background: var(--base-dk); color: var(--ink-40);
+  transition: all 0.2s;
+}
+.level-card.selected .level-badge { background: var(--ac-strong); color: var(--base); }
+.level-info { flex: 1; }
+.level-name { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.level-desc { font-size: 12px; font-weight: 300; color: var(--ink-40); }
+.level-card.selected .level-name { color: var(--ac-deep); }
+
+/* AVAILABILITY PICKER */
+.avail-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 12px; }
+.avail-day {
+  border: 0.5px solid var(--border); border-radius: var(--radius-xs);
+  padding: 10px 4px; cursor: pointer; transition: all 0.2s;
+  background: var(--surface); text-align: center;
+  position: relative;
+}
+.avail-day:hover { border-color: var(--ac-strong); background: var(--ac-light); }
+.avail-day.selected { border-color: var(--ac-strong); background: var(--ac-light); box-shadow: 0 0 0 1px var(--ac-strong); }
+.avail-day input { position: absolute; opacity: 0; pointer-events: none; }
+.avail-day-name { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink-40); margin-bottom: 4px; }
+.avail-day.selected .avail-day-name { color: var(--ac-deep); }
+.avail-day-check { width: 14px; height: 14px; border-radius: 50%; background: var(--base-dk); margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+.avail-day.selected .avail-day-check { background: var(--ac-strong); }
+
+/* UPLOAD AREA */
+.upload-area {
+  border: 1px dashed var(--ac-border); border-radius: var(--radius-sm);
+  padding: 36px 24px; text-align: center; cursor: pointer;
+  background: var(--ac-light); transition: all 0.2s; margin-bottom: 36px;
+}
+.upload-area:hover { border-color: var(--ac-strong); background: #D8EBE0; }
+.upload-icon { font-size: 28px; margin-bottom: 10px; opacity: 0.6; }
+.upload-text { font-size: 14px; font-weight: 300; color: var(--ink-70); margin-bottom: 4px; }
+.upload-text strong { font-weight: 600; color: var(--ac-deep); }
+.upload-hint { font-size: 11.5px; color: var(--ink-40); }
+.upload-area input { display: none; }
+
+/* ONBOARDING SCREEN */
+.onboard-step { display: none; }
+.onboard-step.active { display: block; animation: stepIn 0.4s ease both; }
+
+.onboard-header { text-align: center; padding: 60px 24px 48px; }
+.onboard-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: var(--ac-light); border: 0.5px solid var(--ac-border);
+  margin: 0 auto 24px; display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+}
+.onboard-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(24px, 4vw, 36px); font-weight: 700;
+  letter-spacing: -0.8px; color: var(--ink); margin-bottom: 12px;
+}
+.onboard-title em { font-style: italic; color: var(--ac-strong); }
+.onboard-sub { font-size: 15px; font-weight: 300; color: var(--ink-70); max-width: 440px; margin: 0 auto; line-height: 1.75; }
+
+.onboard-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 700px; margin: 0 auto 48px; }
+.onboard-card {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: var(--radius); padding: 28px 22px; text-align: center;
+  transition: all 0.2s;
+}
+.onboard-card:hover { background: var(--ac-light); border-color: var(--ac-border); transform: translateY(-2px); }
+.onboard-card-num {
+  font-family: 'Fraunces', serif; font-size: 36px; font-weight: 300; font-style: italic;
+  color: var(--ink-15); line-height: 1; margin-bottom: 12px;
+}
+.onboard-card-title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.onboard-card-desc { font-size: 12.5px; font-weight: 300; color: var(--ink-70); line-height: 1.65; }
+
+.checklist {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: var(--radius); padding: 8px; max-width: 560px; margin: 0 auto 40px;
+}
+.checklist-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; border-radius: var(--radius-sm);
+  transition: background 0.2s; cursor: pointer;
+}
+.checklist-item:hover { background: var(--ac-light); }
+.checklist-item.done .check-box { background: var(--ac-strong); border-color: var(--ac-strong); }
+.checklist-item.done .check-box svg { opacity: 1; }
+.checklist-item.done .checklist-text { text-decoration: line-through; color: var(--ink-40); }
+.check-box {
+  width: 22px; height: 22px; border-radius: 6px; flex-shrink: 0;
+  border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.check-box svg { opacity: 0; transition: opacity 0.2s; }
+.checklist-text { font-size: 13.5px; color: var(--ink); transition: all 0.2s; }
+.checklist-badge {
+  margin-left: auto; font-size: 10px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--ac-deep); background: var(--ac-light); border: 0.5px solid var(--ac-border);
+  padding: 3px 10px; border-radius: 100px;
+}
+
+/* FORM ACTIONS */
+.form-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 8px; }
+.btn-back {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--ink-40); background: transparent; border: none;
+  cursor: pointer; padding: 12px 0; transition: color 0.2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-back:hover { color: var(--ink); }
+.btn-next {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--surface); background: var(--ink);
+  border: 0.5px solid var(--ink); padding: 14px 40px;
+  border-radius: 100px; cursor: pointer; transition: all 0.25s;
+}
+.btn-next:hover { background: var(--ac-deep); border-color: var(--ac-deep); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(42,92,63,0.2); }
+.btn-next:disabled { background: var(--border); border-color: var(--border); color: var(--ink-40); cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-submit {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--surface); background: var(--ac-strong);
+  border: 0.5px solid var(--ac-strong); padding: 14px 40px;
+  border-radius: 100px; cursor: pointer; transition: all 0.25s;
+}
+.btn-submit:hover { background: var(--ac-deep); border-color: var(--ac-deep); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(42,92,63,0.25); }
+
+/* SUCCESS SCREEN */
+.success-screen { display: none; }
+.success-screen.active { display: block; animation: stepIn 0.5s ease both; }
+.success-inner {
+  text-align: center; padding: 80px 24px;
+  max-width: 560px; margin: 0 auto;
+}
+.success-mark {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--ac-light); border: 0.5px solid var(--ac-border);
+  margin: 0 auto 28px; display: flex; align-items: center; justify-content: center;
+  animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.success-title {
+  font-family: 'Fraunces', serif;
+  font-size: 36px; font-weight: 700; letter-spacing: -1px;
+  color: var(--ink); margin-bottom: 12px;
+}
+.success-title em { font-style: italic; color: var(--ac-strong); }
+.success-sub { font-size: 15px; font-weight: 300; color: var(--ink-70); line-height: 1.75; margin-bottom: 40px; }
+.success-details {
+  background: var(--surface); border: 0.5px solid var(--border);
+  border-radius: var(--radius); padding: 24px; margin-bottom: 36px; text-align: left;
+}
+.success-detail-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 0.5px solid var(--border-lt);
+  font-size: 13px;
+}
+.success-detail-row:last-child { border-bottom: none; }
+.success-detail-label { color: var(--ink-40); font-weight: 300; }
+.success-detail-value { font-weight: 600; color: var(--ink); }
+.btn-dashboard {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--surface); background: var(--ink);
+  border: 0.5px solid var(--ink); padding: 14px 40px;
+  border-radius: 100px; cursor: pointer; text-decoration: none;
+  display: inline-block; transition: all 0.25s;
+}
+.btn-dashboard:hover { background: var(--ac-deep); border-color: var(--ac-deep); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(42,92,63,0.2); }
+
+/* CHAR COUNTER */
+.char-counter { font-size: 11px; color: var(--ink-40); text-align: right; margin-top: -4px; }
+.char-counter.warn { color: var(--err); }
+
+/* RESPONSIVE */
+@media (max-width: 960px) {
+  .app-shell { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; }
+  .form-area { padding: 36px 28px; }
+  .sport-grid { grid-template-columns: repeat(3, 1fr); }
+  .onboard-cards { grid-template-columns: 1fr; }
+  nav { padding: 0 24px; }
+}
+@media (max-width: 600px) {
+  .field-row { grid-template-columns: 1fr; }
+  .sport-grid { grid-template-columns: repeat(2, 1fr); }
+  .avail-grid { grid-template-columns: repeat(4, 1fr); }
+  .form-area { padding: 24px 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Lyfe<span class="nav-logo-dot">.</span><span class="nav-logo-fy">fy</span></a>
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Back to home
+  </a>
+</nav>
+
+<div class="app-shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-content">
+      <div class="sidebar-eyebrow">Host Application</div>
+      <h2 class="sidebar-title">Lead the<br>premium <em>field</em></h2>
+      <div class="sidebar-rule"></div>
+      <p class="sidebar-sub">Join our certified host network and turn your athletic skills into consistent income — on your schedule.</p>
+
+      <nav class="step-nav" id="stepNav">
+        <div class="step-item active" id="nav-0">
+          <div class="step-circle">1</div>
+          <div class="step-text">
+            <div class="step-label">Your Profile</div>
+            <div class="step-desc">Name, contact & background</div>
+          </div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-item" id="nav-1">
+          <div class="step-circle">2</div>
+          <div class="step-text">
+            <div class="step-label">Sport & Credentials</div>
+            <div class="step-desc">Sport, level & certifications</div>
+          </div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-item" id="nav-2">
+          <div class="step-circle">3</div>
+          <div class="step-text">
+            <div class="step-label">Hosting Style</div>
+            <div class="step-desc">Session type & availability</div>
+          </div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-item" id="nav-3">
+          <div class="step-circle">4</div>
+          <div class="step-text">
+            <div class="step-label">Verification</div>
+            <div class="step-desc">Photo & agreement</div>
+          </div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-item" id="nav-4">
+          <div class="step-circle">5</div>
+          <div class="step-text">
+            <div class="step-label">Onboarding</div>
+            <div class="step-desc">Setup your host profile</div>
+          </div>
+        </div>
+      </nav>
+
+      <div class="earnings-card">
+        <div class="earnings-label">Top hosts earn</div>
+        <div class="earnings-range">$1,200 – $3,500</div>
+        <div class="earnings-sub">per month on your schedule</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="form-area">
+
+    <!-- STEP 1: Profile -->
+    <div class="form-step active" id="step-0">
+      <div class="form-step-eyebrow">Step 1 of 4</div>
+      <h1 class="form-step-title">Tell us about <em>yourself</em></h1>
+      <div class="form-step-rule"></div>
+      <p class="form-step-sub">We use this to verify your identity and match you with the right players in your city.</p>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span class="progress-text">Application Progress</span>
+          <span class="progress-pct" id="progressPct">20%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-row">
+          <div class="field" id="f-first">
+            <label class="field-label">First Name <span class="field-required">*</span></label>
+            <input type="text" id="firstName" placeholder="Sofia" autocomplete="given-name">
+            <span class="field-error">First name is required</span>
+          </div>
+          <div class="field" id="f-last">
+            <label class="field-label">Last Name <span class="field-required">*</span></label>
+            <input type="text" id="lastName" placeholder="Rodriguez" autocomplete="family-name">
+            <span class="field-error">Last name is required</span>
+          </div>
+        </div>
+        <div class="field" id="f-email">
+          <label class="field-label">Email Address <span class="field-required">*</span></label>
+          <input type="email" id="email" placeholder="sofia@stanford.edu" autocomplete="email">
+          <span class="field-hint">We'll send your host confirmation here</span>
+          <span class="field-error">Please enter a valid email address</span>
+        </div>
+        <div class="field" id="f-phone">
+          <label class="field-label">Phone Number <span class="field-required">*</span></label>
+          <input type="tel" id="phone" placeholder="+1 (617) 000-0000" autocomplete="tel">
+          <span class="field-error">Phone number is required</span>
+        </div>
+        <div class="field" id="f-city">
+          <label class="field-label">Your City <span class="field-required">*</span></label>
+          <select id="city">
+            <option value="">Select your city</option>
+            <option value="boston">Boston, MA</option>
+            <option value="nyc">New York, NY</option>
+            <option value="dc">Washington, D.C.</option>
+            <option value="other">Other (join waitlist)</option>
+          </select>
+          <span class="field-hint">We're currently launching in Boston, NYC, and D.C.</span>
+          <span class="field-error">Please select your city</span>
+        </div>
+        <div class="field">
+          <label class="field-label">School / Organization</label>
+          <input type="text" id="school" placeholder="Stanford University" autocomplete="organization">
+          <span class="field-hint">Current school, club, or professional team</span>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <span></span>
+        <button class="btn-next" onclick="nextStep(0)">Continue &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Sport & Credentials -->
+    <div class="form-step" id="step-1">
+      <div class="form-step-eyebrow">Step 2 of 4</div>
+      <h1 class="form-step-title">Your sport &amp; <em>credentials</em></h1>
+      <div class="form-step-rule"></div>
+      <p class="form-step-sub">Select the sport you'll host and your competitive level. Verified credentials help us match you with the right players.</p>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span class="progress-text">Application Progress</span>
+          <span class="progress-pct">40%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:40%"></div></div>
+      </div>
+
+      <div class="form-step-eyebrow" style="margin-bottom:14px;">Primary Sport <span style="color:var(--ac-mid)">*</span></div>
+      <div class="sport-grid" id="sportGrid">
+        <label class="sport-card" onclick="selectSport(this,'golf')">
+          <input type="radio" name="sport" value="golf">
+          <div class="sport-icon">⛳</div>
+          <div class="sport-name">Golf</div>
+        </label>
+        <label class="sport-card" onclick="selectSport(this,'tennis')">
+          <input type="radio" name="sport" value="tennis">
+          <div class="sport-icon">🎾</div>
+          <div class="sport-name">Tennis</div>
+        </label>
+        <label class="sport-card" onclick="selectSport(this,'basketball')">
+          <input type="radio" name="sport" value="basketball">
+          <div class="sport-icon">🏀</div>
+          <div class="sport-name">Basketball</div>
+        </label>
+        <label class="sport-card" onclick="selectSport(this,'soccer')">
+          <input type="radio" name="sport" value="soccer">
+          <div class="sport-icon">⚽</div>
+          <div class="sport-name">Soccer</div>
+        </label>
+        <label class="sport-card" onclick="selectSport(this,'volleyball')">
+          <input type="radio" name="sport" value="volleyball">
+          <div class="sport-icon">🏐</div>
+          <div class="sport-name">Volleyball</div>
+        </label>
+        <label class="sport-card" onclick="selectSport(this,'other')">
+          <input type="radio" name="sport" value="other">
+          <div class="sport-icon">🏅</div>
+          <div class="sport-name">Other</div>
+        </label>
+      </div>
+
+      <div class="form-step-eyebrow" style="margin-bottom:14px;">Competitive Level <span style="color:var(--ac-mid)">*</span></div>
+      <div class="level-list" id="levelList">
+        <label class="level-card" onclick="selectLevel(this,'d1')">
+          <input type="radio" name="level" value="d1">
+          <div class="level-badge">D1</div>
+          <div class="level-info">
+            <div class="level-name">NCAA Division I Athlete</div>
+            <div class="level-desc">Current or former D1 collegiate athlete</div>
+          </div>
+        </label>
+        <label class="level-card" onclick="selectLevel(this,'d2d3')">
+          <input type="radio" name="level" value="d2d3">
+          <div class="level-badge">D2</div>
+          <div class="level-info">
+            <div class="level-name">NCAA Division II / III</div>
+            <div class="level-desc">Current or former D2/D3 collegiate athlete</div>
+          </div>
+        </label>
+        <label class="level-card" onclick="selectLevel(this,'pro')">
+          <input type="radio" name="level" value="pro">
+          <div class="level-badge">Pro</div>
+          <div class="level-info">
+            <div class="level-name">Professional Athlete</div>
+            <div class="level-desc">Currently competing professionally or on tour</div>
+          </div>
+        </label>
+        <label class="level-card" onclick="selectLevel(this,'certified')">
+          <input type="radio" name="level" value="certified">
+          <div class="level-badge">Cert</div>
+          <div class="level-info">
+            <div class="level-name">Certified Coach / Instructor</div>
+            <div class="level-desc">Holds an official coaching or instruction certification</div>
+          </div>
+        </label>
+        <label class="level-card" onclick="selectLevel(this,'competitive')">
+          <input type="radio" name="level" value="competitive">
+          <div class="level-badge">Comp</div>
+          <div class="level-info">
+            <div class="level-name">Highly Competitive Club Player</div>
+            <div class="level-desc">Ranked club player with strong coaching skills</div>
+          </div>
+        </label>
+      </div>
+
+      <div class="field-group">
+        <div class="field">
+          <label class="field-label">Skill Rating / Credential</label>
+          <input type="text" id="rating" placeholder="e.g. Handicap 4, UTR 5.2, USTA 4.5">
+          <span class="field-hint">Any relevant ranking, handicap, or rating system</span>
+        </div>
+        <div class="field">
+          <label class="field-label">Years of Experience</label>
+          <select id="experience">
+            <option value="">Select experience</option>
+            <option value="1-3">1 – 3 years</option>
+            <option value="4-7">4 – 7 years</option>
+            <option value="8-12">8 – 12 years</option>
+            <option value="13+">13+ years</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-back" onclick="prevStep(1)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </button>
+        <button class="btn-next" onclick="nextStep(1)">Continue &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Hosting Style -->
+    <div class="form-step" id="step-2">
+      <div class="form-step-eyebrow">Step 3 of 4</div>
+      <h1 class="form-step-title">Your hosting <em>style</em></h1>
+      <div class="form-step-rule"></div>
+      <p class="form-step-sub">Tell us how you'd like to run sessions and when you're available. We use this to match you with compatible players.</p>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span class="progress-text">Application Progress</span>
+          <span class="progress-pct">60%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:60%"></div></div>
+      </div>
+
+      <div class="field-group">
+        <div class="field">
+          <label class="field-label">Session Type <span class="field-required">*</span></label>
+          <select id="sessionType">
+            <option value="">Select preferred session type</option>
+            <option value="athlete-led">Athlete-Led Experience (structured coaching)</option>
+            <option value="social">Social Play (casual, community-focused)</option>
+            <option value="competitive">Competitive Match Play</option>
+            <option value="training">Training & Drills Session</option>
+            <option value="mixed">Mixed (I can do multiple types)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">Preferred Group Size</label>
+          <select id="groupSize">
+            <option value="">Select group size</option>
+            <option value="1v1">1-on-1 sessions</option>
+            <option value="2-4">Small group (2 – 4 players)</option>
+            <option value="5-8">Medium group (5 – 8 players)</option>
+            <option value="open">Open / flexible</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">Target Player Level</label>
+          <select id="targetLevel">
+            <option value="">Select target level</option>
+            <option value="beginner">Beginner (new to the sport)</option>
+            <option value="intermediate">Intermediate (some experience)</option>
+            <option value="advanced">Advanced (competitive players)</option>
+            <option value="all">All levels welcome</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-step-eyebrow" style="margin-bottom:14px; margin-top: 8px;">Weekly Availability</div>
+      <div class="avail-grid" id="availGrid">
+        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="mon"><div class="avail-day-name">Mon</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
+        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="tue"><div class="avail-day-name">Tue</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
+        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="wed"><div class="avail-day-name">Wed</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
+        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="thu"><div class="avail-day-name">Thu</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
+        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="fri"><div class="avail-day-name">Fri</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
+        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="sat"><div class="avail-day-name">Sat</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
+        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="sun"><div class="avail-day-name">Sun</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
+      </div>
+      <p class="field-hint" style="margin-bottom:28px;">Select days you're typically available to host sessions.</p>
+
+      <div class="field-group">
+        <div class="field">
+          <label class="field-label">Why do you want to host?</label>
+          <textarea id="bio" placeholder="Tell us a bit about your background and what excites you about hosting on Lyfe.fy..." rows="4" oninput="updateChar(this,300)"></textarea>
+          <div class="char-counter" id="bioCounter">0 / 300</div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-back" onclick="prevStep(2)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </button>
+        <button class="btn-next" onclick="nextStep(2)">Continue &rarr;</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Verification -->
+    <div class="form-step" id="step-3">
+      <div class="form-step-eyebrow">Step 4 of 4</div>
+      <h1 class="form-step-title">Verify your <em>identity</em></h1>
+      <div class="form-step-rule"></div>
+      <p class="form-step-sub">Upload a photo and agree to our host standards. This ensures trust and quality for all players on the platform.</p>
+
+      <div class="progress-wrap">
+        <div class="progress-label">
+          <span class="progress-text">Application Progress</span>
+          <span class="progress-pct">80%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" style="width:80%"></div></div>
+      </div>
+
+      <div class="field-group">
+        <div>
+          <div class="field-label" style="margin-bottom:10px;">Profile Photo <span class="field-required">*</span></div>
+          <label class="upload-area" for="photoUpload" id="photoUploadArea">
+            <div class="upload-icon">📸</div>
+            <div class="upload-text"><strong>Click to upload</strong> or drag and drop</div>
+            <div class="upload-hint">JPG, PNG or WEBP &middot; Max 5MB &middot; Clear face photo required</div>
+            <input type="file" id="photoUpload" accept="image/*" onchange="handlePhoto(this)">
+          </label>
+        </div>
+
+        <div>
+          <div class="field-label" style="margin-bottom:10px;">Proof of Credentials</div>
+          <label class="upload-area" for="credUpload" id="credUploadArea">
+            <div class="upload-icon">🎓</div>
+            <div class="upload-text"><strong>Click to upload</strong> credentials (optional)</div>
+            <div class="upload-hint">School ID, coaching cert, ranking screenshot &middot; PDF or image</div>
+            <input type="file" id="credUpload" accept="image/*,.pdf" onchange="handleCred(this)">
+          </label>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Instagram / LinkedIn (optional)</label>
+          <input type="text" id="social" placeholder="@your_handle or linkedin.com/in/yourname">
+          <span class="field-hint">Helps us verify your athletic background</span>
+        </div>
+      </div>
+
+      <!-- Agreement -->
+      <div style="background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-sm); padding:20px 22px; margin-bottom:28px;">
+        <div style="font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--ink-40);margin-bottom:14px;">Host Standards Agreement</div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
+            <input type="checkbox" id="agree1" style="margin-top:3px;accent-color:var(--ac-strong);">
+            <span style="font-size:13px;color:var(--ink-70);">I agree to maintain a minimum <strong>4.7 rating</strong> and commit to showing up for all confirmed sessions.</span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
+            <input type="checkbox" id="agree2" style="margin-top:3px;accent-color:var(--ac-strong);">
+            <span style="font-size:13px;color:var(--ink-70);">I confirm my credentials are accurate and I agree to Lyfe.fy's <a href="#" style="color:var(--ac-deep);">Host Terms of Service</a>.</span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
+            <input type="checkbox" id="agree3" style="margin-top:3px;accent-color:var(--ac-strong);">
+            <span style="font-size:13px;color:var(--ink-70);">I understand hosts must complete a 30-minute orientation call before hosting their first session.</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-back" onclick="prevStep(3)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+          Back
+        </button>
+        <button class="btn-submit" onclick="submitApplication()">Submit Application ✓</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: ONBOARDING -->
+    <div class="form-step" id="step-4">
+      <div class="onboard-header">
+        <div class="onboard-icon">🎉</div>
+        <h1 class="onboard-title">Application <em>received!</em></h1>
+        <p class="onboard-sub">While we review your application (usually 24-48 hours), get a head start by completing your onboarding checklist below.</p>
+      </div>
+
+      <div class="progress-wrap" style="max-width:560px;margin:0 auto 40px;">
+        <div class="progress-label">
+          <span class="progress-text">Onboarding Progress</span>
+          <span class="progress-pct" id="onboardPct">0%</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="onboardFill" style="width:0%"></div></div>
+      </div>
+
+      <div class="onboard-cards">
+        <div class="onboard-card">
+          <div class="onboard-card-num">01</div>
+          <div class="onboard-card-title">Get Certified</div>
+          <div class="onboard-card-desc">Complete the Lyfe Host Certification to unlock full hosting privileges.</div>
+        </div>
+        <div class="onboard-card">
+          <div class="onboard-card-num">02</div>
+          <div class="onboard-card-title">Build Profile</div>
+          <div class="onboard-card-desc">Set up your public host profile so players can find and follow you.</div>
+        </div>
+        <div class="onboard-card">
+          <div class="onboard-card-num">03</div>
+          <div class="onboard-card-title">First Session</div>
+          <div class="onboard-card-desc">Schedule your first hosted session and start earning income.</div>
+        </div>
+      </div>
+
+      <div class="checklist">
+        <div class="checklist-item" onclick="toggleCheck(this)" id="check-0">
+          <div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>
+          <span class="checklist-text">Application submitted ✓</span>
+          <span class="checklist-badge">Done</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)" id="check-1">
+          <div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>
+          <span class="checklist-text">Complete your public host bio</span>
+          <span class="checklist-badge">5 min</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)" id="check-2">
+          <div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>
+          <span class="checklist-text">Watch the Host Orientation video (18 min)</span>
+          <span class="checklist-badge">18 min</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)" id="check-3">
+          <div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>
+          <span class="checklist-text">Connect your Stripe payout account</span>
+          <span class="checklist-badge">3 min</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)" id="check-4">
+          <div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>
+          <span class="checklist-text">Book your orientation call with a Lyfe team member</span>
+          <span class="checklist-badge">30 min</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)" id="check-5">
+          <div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>
+          <span class="checklist-text">Set up your first session date and location</span>
+          <span class="checklist-badge">10 min</span>
+        </div>
+        <div class="checklist-item" onclick="toggleCheck(this)" id="check-6">
+          <div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>
+          <span class="checklist-text">Pass the Host Quality certification quiz</span>
+          <span class="checklist-badge">Quiz</span>
+        </div>
+      </div>
+
+      <div style="text-align:center; padding-bottom: 60px;">
+        <a href="index.html" class="btn-dashboard">Go to Dashboard &rarr;</a>
+      </div>
+    </div>
+
+    <!-- SUCCESS SCREEN (shown after application submit, before onboarding) -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-inner">
+        <div class="success-mark">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="var(--ac-strong)" stroke-width="2.5" stroke-linecap="round"><polyline points="6,16 12,22 26,8"/></svg>
+        </div>
+        <h2 class="success-title">You're <em>in!</em></h2>
+        <p class="success-sub">Your application has been submitted. Our team reviews applications within 24–48 hours — we'll email you with next steps.</p>
+        <div class="success-details" id="successDetails"></div>
+        <button class="btn-dashboard" onclick="startOnboarding()">Start Onboarding &rarr;</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  let currentStep = 0;
+  const TOTAL_APP_STEPS = 4;
+
+  // ── NAVIGATION ──────────────────────────────────────
+  function nextStep(from) {
+    if (!validateStep(from)) return;
+    document.getElementById('step-' + from).classList.remove('active');
+    document.getElementById('nav-' + from).classList.remove('active');
+    document.getElementById('nav-' + from).classList.add('done');
+
+    if (from === TOTAL_APP_STEPS - 1) {
+      // Show success screen
+      document.getElementById('successScreen').classList.add('active');
+      populateSuccess();
+      return;
+    }
+
+    currentStep = from + 1;
+    document.getElementById('step-' + currentStep).classList.add('active');
+    document.getElementById('nav-' + currentStep).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function prevStep(from) {
+    document.getElementById('step-' + from).classList.remove('active');
+    document.getElementById('nav-' + from).classList.remove('active');
+    currentStep = from - 1;
+    document.getElementById('step-' + currentStep).classList.add('active');
+    document.getElementById('nav-' + currentStep).classList.add('active');
+    document.getElementById('nav-' + currentStep).classList.remove('done');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── VALIDATION ──────────────────────────────────────
+  function validateStep(step) {
+    let valid = true;
+
+    if (step === 0) {
+      valid = checkRequired('f-first', 'firstName') & valid;
+      valid = checkRequired('f-last', 'lastName') & valid;
+      valid = checkEmail('f-email', 'email') & valid;
+      valid = checkRequired('f-phone', 'phone') & valid;
+      valid = checkSelect('f-city', 'city') & valid;
+    }
+
+    if (step === 1) {
+      const sport = document.querySelector('input[name="sport"]:checked');
+      const level = document.querySelector('input[name="level"]:checked');
+      if (!sport) { alert('Please select a sport.'); valid = false; }
+      else if (!level) { alert('Please select your competitive level.'); valid = false; }
+    }
+
+    if (step === 2) {
+      const sess = document.getElementById('sessionType').value;
+      if (!sess) { alert('Please select your preferred session type.'); valid = false; }
+    }
+
+    if (step === 3) {
+      const a1 = document.getElementById('agree1').checked;
+      const a2 = document.getElementById('agree2').checked;
+      const a3 = document.getElementById('agree3').checked;
+      if (!a1 || !a2 || !a3) { alert('Please agree to all host standards to continue.'); valid = false; }
+    }
+
+    return valid;
+  }
+
+  function checkRequired(fieldId, inputId) {
+    const el = document.getElementById(fieldId);
+    const val = document.getElementById(inputId).value.trim();
+    if (!val) { el.classList.add('has-error'); return false; }
+    el.classList.remove('has-error'); return true;
+  }
+
+  function checkEmail(fieldId, inputId) {
+    const el = document.getElementById(fieldId);
+    const val = document.getElementById(inputId).value.trim();
+    const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+    if (!ok) { el.classList.add('has-error'); return false; }
+    el.classList.remove('has-error'); return true;
+  }
+
+  function checkSelect(fieldId, inputId) {
+    const el = document.getElementById(fieldId);
+    const val = document.getElementById(inputId).value;
+    if (!val) { el.classList.add('has-error'); return false; }
+    el.classList.remove('has-error'); return true;
+  }
+
+  // Auto-clear errors on input
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('input', () => {
+      const field = el.closest('.field');
+      if (field) field.classList.remove('has-error');
+    });
+  });
+
+  // ── SPORT / LEVEL SELECTION ────────────────────────
+  function selectSport(card, val) {
+    document.querySelectorAll('.sport-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+  }
+
+  function selectLevel(card, val) {
+    document.querySelectorAll('.level-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+  }
+
+  // ── AVAILABILITY ──────────────────────────────────
+  function toggleDay(card) {
+    card.classList.toggle('selected');
+    const cb = card.querySelector('input[type="checkbox"]');
+    cb.checked = card.classList.contains('selected');
+  }
+
+  // ── FILE UPLOADS ──────────────────────────────────
+  function handlePhoto(input) {
+    if (input.files && input.files[0]) {
+      const area = document.getElementById('photoUploadArea');
+      area.querySelector('.upload-text').innerHTML = '<strong>' + input.files[0].name + '</strong>';
+      area.querySelector('.upload-hint').textContent = 'Photo selected — click to change';
+      area.style.background = 'var(--ac-light)';
+      area.style.borderColor = 'var(--ac-strong)';
+    }
+  }
+
+  function handleCred(input) {
+    if (input.files && input.files[0]) {
+      const area = document.getElementById('credUploadArea');
+      area.querySelector('.upload-text').innerHTML = '<strong>' + input.files[0].name + '</strong>';
+      area.querySelector('.upload-hint').textContent = 'File selected — click to change';
+      area.style.background = 'var(--ac-light)';
+      area.style.borderColor = 'var(--ac-strong)';
+    }
+  }
+
+  // ── CHAR COUNTER ──────────────────────────────────
+  function updateChar(el, max) {
+    const count = el.value.length;
+    const counter = document.getElementById('bioCounter');
+    counter.textContent = count + ' / ' + max;
+    counter.classList.toggle('warn', count > max * 0.9);
+    if (count > max) el.value = el.value.slice(0, max);
+  }
+
+  // ── SUBMIT → SUCCESS ──────────────────────────────
+  function submitApplication() {
+    if (!validateStep(3)) return;
+    nextStep(3);
+  }
+
+  function populateSuccess() {
+    const firstName = document.getElementById('firstName').value;
+    const lastName  = document.getElementById('lastName').value;
+    const city      = document.getElementById('city');
+    const sport     = document.querySelector('input[name="sport"]:checked');
+    const level     = document.querySelector('input[name="level"]:checked');
+
+    const cityText  = city.options[city.selectedIndex]?.text || '—';
+    const sportText = sport ? sport.value.charAt(0).toUpperCase() + sport.value.slice(1) : '—';
+    const levelMap  = { d1:'NCAA Division I', d2d3:'NCAA Division II/III', pro:'Professional', certified:'Certified Coach', competitive:'Competitive Club' };
+    const levelText = level ? (levelMap[level.value] || level.value) : '—';
+
+    document.getElementById('successDetails').innerHTML = `
+      <div class="success-detail-row"><span class="success-detail-label">Name</span><span class="success-detail-value">${firstName} ${lastName}</span></div>
+      <div class="success-detail-row"><span class="success-detail-label">City</span><span class="success-detail-value">${cityText}</span></div>
+      <div class="success-detail-row"><span class="success-detail-label">Sport</span><span class="success-detail-value">${sportText}</span></div>
+      <div class="success-detail-row"><span class="success-detail-label">Level</span><span class="success-detail-value">${levelText}</span></div>
+      <div class="success-detail-row"><span class="success-detail-label">Status</span><span class="success-detail-value" style="color:var(--ac-strong)">Under Review</span></div>
+    `;
+  }
+
+  // ── ONBOARDING ────────────────────────────────────
+  function startOnboarding() {
+    document.getElementById('successScreen').classList.remove('active');
+    document.getElementById('step-4').classList.add('active');
+    document.getElementById('nav-4').classList.add('active');
+    // auto-check first item
+    const first = document.getElementById('check-0');
+    first.classList.add('done');
+    updateOnboardProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleCheck(item) {
+    item.classList.toggle('done');
+    updateOnboardProgress();
+  }
+
+  function updateOnboardProgress() {
+    const total = document.querySelectorAll('.checklist-item').length;
+    const done  = document.querySelectorAll('.checklist-item.done').length;
+    const pct   = Math.round((done / total) * 100);
+    document.getElementById('onboardPct').textContent = pct + '%';
+    document.getElementById('onboardFill').style.width = pct + '%';
+  }
+</script>
+
+</body>
+</html>
