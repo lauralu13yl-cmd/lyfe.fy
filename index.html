@@ -484,9 +484,10 @@ footer { background: var(--ink); border-top: 0.5px solid rgba(111,168,130,0.15);
     <div class="hero-rule"></div>
     <p class="hero-sub">Premium, hosted golf and tennis experiences matched by skill, personality, and vibe. Games that actually happen — every time.</p>
     <div class="hero-actions">
-      <a href="games.html" class="btn-forest">Find a Game</a>
-    </div>
-
+  <a href="games.html" class="btn-forest">Find a Game</a>
+  <a href="onboarding.html" class="btn-outline" id="hero-get-started">Get Started</a>
+</div>
+    
   </div>
 </section>
 
@@ -790,8 +791,10 @@ footer { background: var(--ink); border-top: 0.5px solid rgba(111,168,130,0.15);
       document.addEventListener('click', () => accountDrop.classList.remove('open'));
       signInBtn.addEventListener('click', () => { accountDrop.classList.remove('open'); Clerk.openSignIn(); });
       signUpBtn.addEventListener('click', () => { accountDrop.classList.remove('open'); Clerk.openSignUp(); });
-      if (ctaSignUpBtn) ctaSignUpBtn.addEventListener('click', () => Clerk.openSignUp());
-
+     if (ctaSignUpBtn) ctaSignUpBtn.addEventListener('click', () => {
+  window.location.href = 'onboarding.html';
+});
+      
       async function updateAuthUI() {
         const user = Clerk.user;
         if (user) {
@@ -806,6 +809,11 @@ footer { background: var(--ink); border-top: 0.5px solid rgba(111,168,130,0.15);
           // Fetch role from Supabase and adapt UI
           const role = await getUserRole(user.id);
           applyRoleUI(role);
+          // Hero get started — hide for logged-in users
+const heroGetStarted = document.getElementById('hero-get-started');
+if (heroGetStarted) {
+  heroGetStarted.style.display = (role && role !== 'guest') ? 'none' : '';
+}
         } else {
           // Guest
           accountWrap.style.display    = '';
