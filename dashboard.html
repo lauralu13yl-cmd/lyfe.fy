@@ -649,7 +649,118 @@
     .hns-booked-num { font-family: var(--serif); font-size: 16px; font-weight: 600; color: var(--ac-deep); }
     .hns-booked-lbl { font-size: 10px; color: var(--ink-40); }
 
-    /* ── RESPONSIVE ── */
+    /* ── SPORT FILTER CHIPS ── */
+    .sport-chip {
+      font-family: var(--sans); font-size: 11.5px; font-weight: 600;
+      letter-spacing: 0.3px; color: var(--ink-40);
+      background: var(--surface); border: 0.5px solid var(--border);
+      border-radius: 100px; padding: 6px 14px; cursor: pointer; transition: all 0.15s;
+    }
+    .sport-chip:hover { border-color: var(--ac-strong); color: var(--ac-deep); background: var(--ac-light); }
+    .sport-chip.active { background: var(--ink); color: var(--base); border-color: var(--ink); }
+
+    /* ── GAME CARDS (mirrors games.html) ── */
+    .game-card {
+      background: var(--surface); border: 0.5px solid var(--border);
+      border-radius: var(--radius); padding: 20px 22px;
+      display: grid; grid-template-columns: 56px 1fr auto;
+      gap: 16px; align-items: center;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+      margin-bottom: 10px;
+    }
+    .game-card:hover { background: var(--ac-light); border-color: var(--ac-border); box-shadow: 0 2px 12px rgba(61,122,86,0.08); }
+    .game-card-date { text-align: center; }
+    .game-card-day { font-family: var(--serif); font-size: 28px; font-weight: 700; color: var(--ink); line-height: 1; }
+    .game-card-mon { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-40); }
+    .game-card-title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+    .game-card-meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .game-card-pill {
+      font-size: 10.5px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+      color: var(--ink-40); background: var(--base-dk); border-radius: 100px; padding: 3px 9px;
+    }
+    .game-card-pill.green { color: var(--ac-deep); background: var(--ac-light); }
+    .game-card-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    .game-card-price { font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--ink); }
+    .game-card-spots { font-size: 11px; color: var(--ink-40); }
+    .game-card-full { font-size: 11px; font-weight: 600; color: var(--ink-40); letter-spacing: 0.5px; text-transform: uppercase; }
+
+    /* ── CONNECT ── */
+    .player-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 0; border-bottom: 0.5px solid var(--border-lt);
+    }
+    .player-card:last-child { border-bottom: none; padding-bottom: 0; }
+    .player-card:first-child { padding-top: 0; }
+    .player-av {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      background: var(--ac-light); border: 0.5px solid var(--ac-border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-size: 14px; font-weight: 600;
+      color: var(--ac-deep); overflow: hidden; cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .player-av:hover { border-color: var(--ac-strong); }
+    .player-av img { width: 100%; height: 100%; object-fit: cover; }
+    .player-info { flex: 1; min-width: 0; cursor: pointer; }
+    .player-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+    .player-name:hover { color: var(--ac-deep); }
+    .player-meta { font-size: 11.5px; color: var(--ink-40); margin-top: 2px; font-weight: 300; }
+    .player-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+    .btn-connect {
+      font-family: var(--sans); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.5px; padding: 6px 14px; border-radius: 100px;
+      cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    }
+    .btn-connect-primary { background: var(--ink); color: var(--base); border: 0.5px solid var(--ink); }
+    .btn-connect-primary:hover { background: var(--ac-deep); border-color: var(--ac-deep); }
+    .btn-connect-outline { background: transparent; color: var(--ink-40); border: 0.5px solid var(--border); }
+    .btn-connect-outline:hover { border-color: var(--ac-strong); color: var(--ac-deep); background: var(--ac-light); }
+    .btn-connect-sent { background: var(--base-dk); color: var(--ink-40); border: 0.5px solid var(--border); cursor: default; }
+    .btn-connect-accept { background: var(--ac-strong); color: white; border: 0.5px solid var(--ac-strong); }
+    .btn-connect-accept:hover { background: var(--ac-deep); border-color: var(--ac-deep); }
+    .btn-connect-decline { background: transparent; color: var(--ink-40); border: 0.5px solid var(--border); }
+    .btn-connect-decline:hover { color: var(--err); border-color: var(--err); }
+
+    /* Player profile mini-modal */
+    .player-modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(44,44,42,0.4); z-index: 200;
+      align-items: center; justify-content: center;
+    }
+    .player-modal-overlay.open { display: flex; }
+    .player-modal {
+      background: var(--surface); border-radius: var(--radius);
+      border: 0.5px solid var(--border); width: 340px;
+      max-width: calc(100vw - 32px);
+      box-shadow: 0 12px 40px rgba(44,44,42,0.12);
+      overflow: hidden;
+    }
+    .player-modal-header {
+      background: var(--ink); padding: 28px 24px; text-align: center;
+      position: relative;
+    }
+    .player-modal-header::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 80% 30%, rgba(61,122,86,0.15) 0%, transparent 65%);
+    }
+    .player-modal-av {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--ac-strong); border: 2px solid var(--ac-border);
+      margin: 0 auto 12px; display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-size: 22px; font-weight: 600; color: var(--base);
+      overflow: hidden; position: relative; z-index: 1;
+    }
+    .player-modal-av img { width: 100%; height: 100%; object-fit: cover; }
+    .player-modal-name { font-family: var(--serif); font-size: 20px; font-weight: 600; color: var(--base); position: relative; z-index: 1; }
+    .player-modal-sport { font-size: 12px; color: rgba(245,242,237,0.5); margin-top: 4px; position: relative; z-index: 1; }
+    .player-modal-body { padding: 20px 24px; }
+    .player-modal-bio { font-size: 13px; color: var(--ink-70); line-height: 1.65; margin-bottom: 16px; font-style: italic; }
+    .player-modal-stats { display: flex; gap: 8px; margin-bottom: 20px; }
+    .player-modal-stat { flex: 1; background: var(--base-dk); border-radius: var(--radius-xs); padding: 8px; text-align: center; }
+    .player-modal-stat-num { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--ink); }
+    .player-modal-stat-lbl { font-size: 10px; color: var(--ink-40); text-transform: uppercase; letter-spacing: 0.5px; }
+    .player-modal-foot { padding: 0 24px 20px; display: flex; gap: 8px; }
     @media (max-width: 520px) {
       .snap-grid { grid-template-columns: repeat(2, 1fr); }
       .two-col   { grid-template-columns: 1fr; }
@@ -888,9 +999,24 @@
           <button class="sub-tab" onclick="sTab(this,'s-mine')">My Bookings</button>
           <button class="sub-tab" id="hostCreateTab" style="display:none" onclick="sTab(this,'s-create')">+ Host Session</button>
         </div>
+
+        <!-- BROWSE TAB — mirrors games.html -->
         <div id="s-browse">
-          <div class="card" style="margin-bottom:12px">
-            <input class="f-input" type="text" id="sessionSearch" placeholder="Search by sport, city, or host..." oninput="filterSessions()">
+          <!-- Search + filter bar -->
+          <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input class="f-input" type="text" id="sessionSearch" placeholder="Search by sport, city, or host..." oninput="filterSessions()" style="flex:1">
+              <a href="games.html" style="font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--ac-deep);text-decoration:none;white-space:nowrap;padding:10px 4px;flex-shrink:0;">Full Page ↗</a>
+            </div>
+            <!-- Sport filter chips -->
+            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="sportFilterRow">
+              <button class="sport-chip active" onclick="setSportFilter('all',this)">All</button>
+              <button class="sport-chip" onclick="setSportFilter('Golf',this)">⛳ Golf</button>
+              <button class="sport-chip" onclick="setSportFilter('Tennis',this)">🎾 Tennis</button>
+              <button class="sport-chip" onclick="setSportFilter('Basketball',this)">🏀 Basketball</button>
+              <button class="sport-chip" onclick="setSportFilter('Soccer',this)">⚽ Soccer</button>
+              <button class="sport-chip" onclick="setSportFilter('Pickleball',this)">🏓 Pickleball</button>
+            </div>
           </div>
           <div id="sessionsList"><div class="loading">Loading sessions...</div></div>
         </div>
@@ -986,11 +1112,41 @@
 
       <!-- CONNECT -->
       <div class="panel" id="panel-connect">
-        <div class="card"><div class="card-title">Find teammates</div><input class="f-input" type="text" placeholder="Search by name, sport, or city..."></div>
-        <div class="two-col">
-          <div class="card"><div class="card-title">Requests (0)</div><div class="empty" style="padding:14px 0">No pending requests</div></div>
-          <div class="card"><div class="card-title">Your connections</div><div class="empty" style="padding:14px 0">No connections yet<br><button class="empty-cta" onclick="goTab('sessions')">Join a session to meet players</button></div></div>
+
+        <!-- Search bar -->
+        <div class="card">
+          <div class="card-title" style="margin-bottom:10px">Find Players</div>
+          <div style="display:flex;gap:8px">
+            <input class="f-input" type="text" id="connectSearch"
+              placeholder="Search by name, sport, or city..."
+              oninput="debounceSearch()"
+              style="flex:1">
+            <button class="btn-primary" onclick="searchPlayers()" style="flex-shrink:0;padding:9px 18px">Search</button>
+          </div>
         </div>
+
+        <!-- Search results -->
+        <div id="searchResults" style="display:none">
+          <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-40);margin-bottom:8px;padding:0 2px" id="searchResultsLabel"></div>
+          <div id="searchResultsList"></div>
+        </div>
+
+        <!-- Pending requests received -->
+        <div class="card" id="requestsCard">
+          <div class="card-header">
+            <div class="card-title">Connection Requests <span id="requestsBadge" style="display:none;background:var(--ac-strong);color:white;font-size:9px;padding:2px 7px;border-radius:100px;font-family:var(--sans);font-weight:700;letter-spacing:0;text-transform:none;margin-left:4px"></span></div>
+          </div>
+          <div id="requestsList"><div class="loading">Loading...</div></div>
+        </div>
+
+        <!-- My connections -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">My Connections <span id="connectionsCount" style="color:var(--ink-40);font-family:var(--sans);font-weight:400;text-transform:none;letter-spacing:0;font-size:12px"></span></div>
+          </div>
+          <div id="connectionsList"><div class="loading">Loading...</div></div>
+        </div>
+
       </div>
 
       <!-- PROFILE -->
@@ -1070,6 +1226,28 @@
       </div>
 
     </main>
+  </div>
+</div>
+
+<!-- PLAYER PROFILE MODAL -->
+<div class="player-modal-overlay" id="playerModal" onclick="if(event.target===this)closePlayerModal()">
+  <div class="player-modal">
+    <div class="player-modal-header">
+      <div class="player-modal-av" id="pmAv"></div>
+      <div class="player-modal-name" id="pmName"></div>
+      <div class="player-modal-sport" id="pmSport"></div>
+    </div>
+    <div class="player-modal-body">
+      <div class="player-modal-bio" id="pmBio"></div>
+      <div class="player-modal-stats">
+        <div class="player-modal-stat"><div class="player-modal-stat-num" id="pmSessions">0</div><div class="player-modal-stat-lbl">Sessions</div></div>
+        <div class="player-modal-stat"><div class="player-modal-stat-num" id="pmCity">—</div><div class="player-modal-stat-lbl">City</div></div>
+      </div>
+    </div>
+    <div class="player-modal-foot">
+      <button class="btn-connect btn-connect-primary" id="pmConnectBtn" style="flex:1" onclick="connectFromModal()"></button>
+      <button class="btn-connect btn-connect-outline" onclick="closePlayerModal()" style="flex:1">Close</button>
+    </div>
   </div>
 </div>
 
@@ -1178,6 +1356,7 @@
     if (name === 'sessions') loadSessions();
     if (name === 'revenue')  loadRevenue();
     if (name === 'home')     loadHomeData();
+    if (name === 'connect')  loadConnect();
   }
 
   function sTab(btn, targetId) {
@@ -1310,45 +1489,84 @@
     }
   }
 
+  let activeSportFilter = 'all';
+
   async function loadSessions() {
     const today = new Date().toISOString().split('T')[0];
     const data  = await sb(`sessions?status=eq.active&date=gte.${today}&order=date.asc,time.asc&select=*`);
     allSessions = data || [];
-    renderSessions(allSessions);
+    renderSessions();
   }
 
-  function renderSessions(sessions) {
+  function setSportFilter(sport, btn) {
+    activeSportFilter = sport;
+    document.querySelectorAll('.sport-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderSessions();
+  }
+
+  function renderSessions() {
     const el = document.getElementById('sessionsList');
+    const q  = (document.getElementById('sessionSearch')?.value || '').toLowerCase();
+    let sessions = allSessions;
+
+    // Sport filter
+    if (activeSportFilter !== 'all') {
+      sessions = sessions.filter(s => (s.sport || '').toLowerCase() === activeSportFilter.toLowerCase());
+    }
+    // Text search
+    if (q) {
+      sessions = sessions.filter(s =>
+        (s.title    || '').toLowerCase().includes(q) ||
+        (s.sport    || '').toLowerCase().includes(q) ||
+        (s.location || '').toLowerCase().includes(q) ||
+        (s.host_name|| '').toLowerCase().includes(q)
+      );
+    }
+
     if (!sessions || sessions.length === 0) {
-      el.innerHTML = '<div class="empty">No sessions near you yet.<br><button class="empty-cta" onclick="sTab(null,\'s-create\')">Be the first to host one</button></div>';
+      el.innerHTML = `<div class="empty">No sessions found${activeSportFilter !== 'all' ? ' for ' + activeSportFilter : ''}.<br>
+        <button class="empty-cta" onclick="setSportFilter('all',document.querySelector('.sport-chip'))">Show all sports</button>
+      </div>`;
       return;
     }
+
     el.innerHTML = sessions.map(s => {
-      const d = new Date(s.date + 'T00:00:00');
-      const left = s.spots_left;
-      return `<div class="session-card">
-        <div class="session-date"><div class="session-day">${d.getDate()}</div><div class="session-mon">${d.toLocaleString('en-US',{month:'short'})}</div></div>
-        <div class="session-info">
-          <div class="session-title">${s.title}</div>
-          <div class="session-sub">${s.sport} · ${s.skill_level} · ${fmtTime(s.time)} · ${s.location}</div>
+      const d    = new Date(s.date + 'T00:00:00');
+      const left = s.spots_left || 0;
+      const isFull = left === 0;
+      const price  = parseFloat(s.price) === 0 ? 'Free' : '$' + parseFloat(s.price).toFixed(0);
+      const certBadge = s.host_certified ? '<span class="game-card-pill green">✓ Certified</span>' : '';
+      const dataStr = JSON.stringify(s).replace(/'/g,"&#39;");
+      return `<div class="game-card" onclick='openBook(${dataStr})' style="cursor:pointer">
+        <div class="game-card-date">
+          <div class="game-card-day">${d.getDate()}</div>
+          <div class="game-card-mon">${d.toLocaleString('en-US',{month:'short'})}</div>
         </div>
-        <div class="session-meta">
-          <div><div class="session-price">${fmtMoney(s.price)}</div><div class="session-spots">${left} spot${left!==1?'s':''} left</div></div>
-          ${left > 0 ? `<button class="btn-primary" onclick='openBook(${JSON.stringify(s).replace(/'/g,"&#39;")})'>Book</button>` : '<span style="font-size:11px;color:var(--ink-40)">Full</span>'}
+        <div>
+          <div class="game-card-title">${s.title}</div>
+          <div class="game-card-meta">
+            <span class="game-card-pill">${s.sport}</span>
+            <span class="game-card-pill">${fmtTime(s.time)}</span>
+            <span class="game-card-pill">${s.skill_level || 'All levels'}</span>
+            ${certBadge}
+          </div>
+          <div style="font-size:12px;color:var(--ink-40);margin-top:5px;">📍 ${s.location}</div>
+          ${s.host_name ? `<div style="font-size:11.5px;color:var(--ink-40);margin-top:2px;">Hosted by ${s.host_name}</div>` : ''}
+        </div>
+        <div class="game-card-right">
+          <div class="game-card-price">${price}</div>
+          ${isFull
+            ? '<span class="game-card-full">Full</span>'
+            : `<div class="game-card-spots">${left} spot${left!==1?'s':''} left</div>
+               <button class="btn-primary" style="font-size:11px;padding:7px 16px" onclick='event.stopPropagation();openBook(${dataStr})'>Book</button>`
+          }
         </div>
       </div>`;
     }).join('');
   }
 
-  function filterSessions() {
-    const q = document.getElementById('sessionSearch').value.toLowerCase();
-    if (!q) { renderSessions(allSessions); return; }
-    renderSessions(allSessions.filter(s =>
-      s.title.toLowerCase().includes(q) ||
-      s.sport.toLowerCase().includes(q) ||
-      s.location.toLowerCase().includes(q)
-    ));
-  }
+  function filterSessions() { renderSessions(); }
 
   async function loadMyBookings() {
     if (!currentUser) return;
@@ -1562,10 +1780,12 @@
           </div>`;
         }).join('');
       }
+      // Connection count for snap card
+      const conns = await sb(`connections?or=(requester_id.eq.${currentUser.id},addressee_id.eq.${currentUser.id})&status=eq.accepted&select=id`);
+      const connSnap = document.querySelector('#member-snap-grid .snap-card:nth-child(3) .snap-num');
+      if (connSnap) connSnap.textContent = (conns || []).length;
     }
-  }
-
-  async function submitCertRequest() {
+  } {
     const sport  = document.getElementById('certSport').value.trim();
     const exp    = document.getElementById('certExp').value.trim();
     const reason = document.getElementById('certReason').value.trim();
@@ -1596,7 +1816,305 @@
     toast('Profile saved!'); goTab('profile');
   }
 
-  // Scroll topbar shadow
+  // ─────────────────────────────────────────────────────
+  // CONNECT SYSTEM
+  // ─────────────────────────────────────────────────────
+  let searchDebounceTimer = null;
+  let playerModalData = null; // profile currently open in modal
+
+  // Load connect panel when tab opens
+  async function loadConnect() {
+    await loadConnectionRequests();
+    await loadMyConnections();
+  }
+
+  // ── Search players ────────────────────────────────────
+  function debounceSearch() {
+    clearTimeout(searchDebounceTimer);
+    const q = document.getElementById('connectSearch').value.trim();
+    if (!q) {
+      document.getElementById('searchResults').style.display = 'none';
+      return;
+    }
+    searchDebounceTimer = setTimeout(searchPlayers, 400);
+  }
+
+  async function searchPlayers() {
+    const q = document.getElementById('connectSearch').value.trim().toLowerCase();
+    if (!q) return;
+
+    document.getElementById('searchResults').style.display = '';
+    document.getElementById('searchResultsLabel').textContent = 'Searching...';
+    document.getElementById('searchResultsList').innerHTML = '<div class="loading">Searching...</div>';
+
+    // Search profiles by name, sport, or city — Supabase ilike
+    const results = await sb(
+      `profiles?or=(name.ilike.*${encodeURIComponent(q)}*,sport.ilike.*${encodeURIComponent(q)}*,city.ilike.*${encodeURIComponent(q)}*)&select=*&limit=20`
+    );
+
+    // Filter out self
+    const filtered = (results || []).filter(p => p.id !== currentUser.id);
+
+    document.getElementById('searchResultsLabel').textContent =
+      filtered.length ? `${filtered.length} result${filtered.length !== 1 ? 's' : ''} for "${q}"` : `No results for "${q}"`;
+
+    if (!filtered.length) {
+      document.getElementById('searchResultsList').innerHTML = '<div class="empty" style="padding:16px 0">No players found. Try a different name, sport, or city.</div>';
+      return;
+    }
+
+    // Get current connection statuses so we can show right button
+    const statuses = await getConnectionStatuses(filtered.map(p => p.id));
+
+    document.getElementById('searchResultsList').innerHTML =
+      filtered.map(p => renderPlayerCard(p, statuses[p.id] || 'none')).join('');
+  }
+
+  // ── Get connection status for a list of user IDs ──────
+  async function getConnectionStatuses(ids) {
+    if (!ids.length) return {};
+    // Fetch all connections involving current user and any of these IDs
+    const rows = await sb(
+      `connections?or=(and(requester_id.eq.${currentUser.id},addressee_id.in.(${ids.join(',')})),and(addressee_id.eq.${currentUser.id},requester_id.in.(${ids.join(',')})))&select=*`
+    );
+    const map = {};
+    (rows || []).forEach(r => {
+      const otherId = r.requester_id === currentUser.id ? r.addressee_id : r.requester_id;
+      if (r.status === 'accepted') map[otherId] = 'connected';
+      else if (r.status === 'pending' && r.requester_id === currentUser.id) map[otherId] = 'sent';
+      else if (r.status === 'pending' && r.addressee_id === currentUser.id) map[otherId] = 'received';
+    });
+    return map;
+  }
+
+  // ── Render a single player card ───────────────────────
+  function renderPlayerCard(profile, status) {
+    const av = initials(profile.name || '?');
+    const meta = [profile.sport, profile.city, profile.skill_level].filter(Boolean).join(' · ');
+    const badge = profile.role === 'host' ? '<span class="badge badge-host" style="font-size:9px;padding:2px 8px">Host</span>' :
+                  profile.role === 'certified' ? '<span class="badge badge-cert" style="font-size:9px;padding:2px 8px">✓ Certified</span>' : '';
+
+    let actionBtn = '';
+    if (status === 'connected') {
+      actionBtn = `<button class="btn-connect btn-connect-sent" disabled>Connected</button>`;
+    } else if (status === 'sent') {
+      actionBtn = `<button class="btn-connect btn-connect-sent" disabled>Request Sent</button>`;
+    } else if (status === 'received') {
+      actionBtn = `
+        <button class="btn-connect btn-connect-accept" onclick="acceptRequest('${profile.id}',this)">Accept</button>
+        <button class="btn-connect btn-connect-decline" onclick="declineRequest('${profile.id}',this)">Decline</button>`;
+    } else {
+      actionBtn = `<button class="btn-connect btn-connect-primary" onclick="sendRequest('${profile.id}',this)">Connect</button>`;
+    }
+
+    return `<div class="player-card" id="pcard-${profile.id}">
+      <div class="player-av" onclick='openPlayerModal(${JSON.stringify(profile).replace(/'/g,"&#39;")})'>${av}</div>
+      <div class="player-info" onclick='openPlayerModal(${JSON.stringify(profile).replace(/'/g,"&#39;")})'>
+        <div class="player-name">${profile.name || 'Anonymous'} ${badge}</div>
+        <div class="player-meta">${meta || 'No details yet'}</div>
+      </div>
+      <div class="player-actions">${actionBtn}</div>
+    </div>`;
+  }
+
+  // ── Send connection request ───────────────────────────
+  async function sendRequest(addresseeId, btn) {
+    btn.textContent = '...'; btn.disabled = true;
+    const result = await sb('connections', {
+      method: 'POST',
+      body: { requester_id: currentUser.id, addressee_id: addresseeId, status: 'pending' }
+    });
+    if (result) {
+      btn.className = 'btn-connect btn-connect-sent';
+      btn.textContent = 'Request Sent';
+      toast('Connection request sent!');
+      // Also update in playerModal if open
+      const pmBtn = document.getElementById('pmConnectBtn');
+      if (pmBtn && playerModalData?.id === addresseeId) {
+        pmBtn.className = 'btn-connect btn-connect-sent';
+        pmBtn.textContent = 'Request Sent';
+        pmBtn.disabled = true;
+      }
+    } else {
+      btn.textContent = 'Connect'; btn.disabled = false;
+      toast('Could not send request — try again.');
+    }
+  }
+
+  // ── Accept request ────────────────────────────────────
+  async function acceptRequest(requesterId, btn) {
+    btn.textContent = '...'; btn.disabled = true;
+    // Find the pending connection row
+    const rows = await sb(`connections?requester_id=eq.${requesterId}&addressee_id=eq.${currentUser.id}&status=eq.pending&select=id`);
+    if (!rows || !rows.length) { toast('Request not found.'); btn.disabled = false; return; }
+    await sb(`connections?id=eq.${rows[0].id}`, {
+      method: 'PATCH', prefer: 'return=minimal',
+      body: { status: 'accepted' }
+    });
+    toast('Connection accepted!');
+    await loadConnectionRequests();
+    await loadMyConnections();
+    // Refresh search results to show updated status
+    const q = document.getElementById('connectSearch').value.trim();
+    if (q) searchPlayers();
+  }
+
+  // ── Decline request ───────────────────────────────────
+  async function declineRequest(requesterId, btn) {
+    btn.textContent = '...'; btn.disabled = true;
+    const rows = await sb(`connections?requester_id=eq.${requesterId}&addressee_id=eq.${currentUser.id}&status=eq.pending&select=id`);
+    if (!rows || !rows.length) { btn.disabled = false; return; }
+    await sb(`connections?id=eq.${rows[0].id}`, {
+      method: 'DELETE', prefer: 'return=minimal'
+    });
+    toast('Request declined.');
+    await loadConnectionRequests();
+  }
+
+  // ── Remove connection ─────────────────────────────────
+  async function removeConnection(otherId, btn) {
+    if (!confirm('Remove this connection?')) return;
+    btn.textContent = '...'; btn.disabled = true;
+    // Delete in either direction
+    await sb(`connections?or=(and(requester_id.eq.${currentUser.id},addressee_id.eq.${otherId}),and(addressee_id.eq.${currentUser.id},requester_id.eq.${otherId}))`, {
+      method: 'DELETE', prefer: 'return=minimal'
+    });
+    toast('Connection removed.');
+    await loadMyConnections();
+    const q = document.getElementById('connectSearch').value.trim();
+    if (q) searchPlayers();
+  }
+
+  // ── Load incoming pending requests ───────────────────
+  async function loadConnectionRequests() {
+    const rows = await sb(`connections?addressee_id=eq.${currentUser.id}&status=eq.pending&select=*`);
+    const el   = document.getElementById('requestsList');
+    const badge = document.getElementById('requestsBadge');
+
+    if (!rows || !rows.length) {
+      el.innerHTML = '<div class="empty" style="padding:12px 0">No pending requests</div>';
+      badge.style.display = 'none';
+      return;
+    }
+
+    badge.style.display = '';
+    badge.textContent   = rows.length;
+
+    // Fetch requester profiles
+    const ids = rows.map(r => r.requester_id);
+    const profiles = await sb(`profiles?id=in.(${ids.join(',')})&select=*`);
+    const profMap  = {};
+    (profiles || []).forEach(p => { profMap[p.id] = p; });
+
+    el.innerHTML = rows.map(r => {
+      const p = profMap[r.requester_id] || { id: r.requester_id, name: 'Unknown Player' };
+      const meta = [p.sport, p.city].filter(Boolean).join(' · ');
+      const av = initials(p.name || '?');
+      return `<div class="player-card" id="pcard-req-${p.id}">
+        <div class="player-av" onclick='openPlayerModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>${av}</div>
+        <div class="player-info" onclick='openPlayerModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
+          <div class="player-name">${p.name || 'Anonymous'}</div>
+          <div class="player-meta">${meta || 'No details yet'} · wants to connect</div>
+        </div>
+        <div class="player-actions">
+          <button class="btn-connect btn-connect-accept" onclick="acceptRequest('${p.id}',this)">Accept</button>
+          <button class="btn-connect btn-connect-decline" onclick="declineRequest('${p.id}',this)">✕</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Load accepted connections list ────────────────────
+  async function loadMyConnections() {
+    const rows = await sb(`connections?or=(requester_id.eq.${currentUser.id},addressee_id.eq.${currentUser.id})&status=eq.accepted&select=*`);
+    const el   = document.getElementById('connectionsList');
+    const count = document.getElementById('connectionsCount');
+
+    if (!rows || !rows.length) {
+      el.innerHTML = '<div class="empty" style="padding:12px 0">No connections yet.<br><button class="empty-cta" onclick="goTab(\'sessions\')">Join a session to meet players</button></div>';
+      count.textContent = '';
+      // Also update snap card
+      document.querySelector('#member-snap-grid .snap-card:nth-child(3) .snap-num').textContent = '0';
+      return;
+    }
+
+    count.textContent = rows.length;
+    document.querySelector('#member-snap-grid .snap-card:nth-child(3) .snap-num').textContent = rows.length;
+
+    // Get the other person's ID for each connection
+    const otherIds = rows.map(r => r.requester_id === currentUser.id ? r.addressee_id : r.requester_id);
+    const profiles = await sb(`profiles?id=in.(${otherIds.join(',')})&select=*`);
+    const profMap  = {};
+    (profiles || []).forEach(p => { profMap[p.id] = p; });
+
+    el.innerHTML = otherIds.map(id => {
+      const p = profMap[id] || { id, name: 'Unknown Player' };
+      const meta = [p.sport, p.city, p.skill_level].filter(Boolean).join(' · ');
+      const av = initials(p.name || '?');
+      const badge = p.role === 'host' ? '<span class="badge badge-host" style="font-size:9px;padding:2px 8px">Host</span>' :
+                    p.role === 'certified' ? '<span class="badge badge-cert" style="font-size:9px;padding:2px 8px">✓</span>' : '';
+      return `<div class="player-card">
+        <div class="player-av" onclick='openPlayerModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>${av}</div>
+        <div class="player-info" onclick='openPlayerModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'>
+          <div class="player-name">${p.name || 'Anonymous'} ${badge}</div>
+          <div class="player-meta">${meta || 'No details yet'}</div>
+        </div>
+        <div class="player-actions">
+          <button class="btn-connect btn-connect-outline" onclick="removeConnection('${id}',this)">Remove</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Player profile mini-modal ─────────────────────────
+  async function openPlayerModal(profile) {
+    playerModalData = profile;
+    document.getElementById('playerModal').classList.add('open');
+
+    // Avatar
+    const avEl = document.getElementById('pmAv');
+    avEl.textContent = initials(profile.name || '?');
+    if (profile.image_url) avEl.innerHTML = `<img src="${profile.image_url}" alt="">`;
+
+    document.getElementById('pmName').textContent  = profile.name || 'Player';
+    document.getElementById('pmSport').textContent = [profile.sport, profile.city, profile.skill_level].filter(Boolean).join(' · ') || 'No details';
+    document.getElementById('pmBio').textContent   = profile.bio || 'No bio yet.';
+    document.getElementById('pmCity').textContent  = profile.city || '—';
+
+    // Session count
+    const sessions = await sb(`bookings?player_id=eq.${profile.id}&select=id&limit=100`);
+    document.getElementById('pmSessions').textContent = (sessions || []).length;
+
+    // Connection status → set button
+    const statuses = await getConnectionStatuses([profile.id]);
+    const status   = statuses[profile.id] || 'none';
+    const btn = document.getElementById('pmConnectBtn');
+    if (status === 'connected') {
+      btn.className = 'btn-connect btn-connect-sent'; btn.textContent = 'Connected'; btn.disabled = true;
+    } else if (status === 'sent') {
+      btn.className = 'btn-connect btn-connect-sent'; btn.textContent = 'Request Sent'; btn.disabled = true;
+    } else if (status === 'received') {
+      btn.className = 'btn-connect btn-connect-accept'; btn.textContent = 'Accept Request'; btn.disabled = false;
+    } else {
+      btn.className = 'btn-connect btn-connect-primary'; btn.textContent = 'Connect'; btn.disabled = false;
+    }
+  }
+
+  function closePlayerModal() {
+    document.getElementById('playerModal').classList.remove('open');
+    playerModalData = null;
+  }
+
+  async function connectFromModal() {
+    if (!playerModalData) return;
+    const btn = document.getElementById('pmConnectBtn');
+    const status = btn.textContent.trim();
+    if (status === 'Accept Request') {
+      await acceptRequest(playerModalData.id, btn);
+    } else {
+      await sendRequest(playerModalData.id, btn);
+    }
+  }
   window.addEventListener('scroll', () => {
     document.getElementById('topbar').classList.toggle('scrolled', window.scrollY > 10);
   });
