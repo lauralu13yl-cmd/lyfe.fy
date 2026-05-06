@@ -6,60 +6,29 @@
 <title>Become a Host — Lyfe.fy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
-
-<!-- Clerk — loads async, we wait for it before using -->
-<script
-  async
-  crossorigin="anonymous"
+<script async crossorigin="anonymous"
   data-clerk-publishable-key="pk_live_Y2xlcmsubHlmZWZ5LmNvbSQ"
   src="https://unpkg.com/@clerk/clerk-js@5.56.0/dist/clerk.browser.js"
-  type="text/javascript"
-></script>
-
+  type="text/javascript"></script>
 <style>
 :root {
-  --base:      #F5F2ED;
-  --base-dk:   #EDE9E1;
-  --base-dkr:  #E2DDD3;
-  --surface:   #FBF9F5;
-  --border:    #D3D1C7;
-  --border-lt: rgba(180,178,169,0.4);
-  --ink:       #2C2C2A;
-  --ink-70:    rgba(44,44,42,0.7);
-  --ink-40:    rgba(44,44,42,0.4);
-  --ink-15:    rgba(44,44,42,0.15);
-  --ac-light:  #E4F0E8;
-  --ac-mid:    #6FA882;
-  --ac-strong: #3D7A56;
-  --ac-deep:   #2A5C3F;
-  --ac-border: #B6D4BF;
-  --ac-soft:   rgba(61,122,86,0.08);
-  --radius:    16px;
-  --radius-sm: 10px;
-  --radius-xs: 6px;
-  --err:       #C05A2A;
-  --err-light: #FBF0E8;
+  --base:      #F5F2ED; --base-dk: #EDE9E1; --base-dkr: #E2DDD3;
+  --surface:   #FBF9F5; --border: #D3D1C7; --border-lt: rgba(180,178,169,0.4);
+  --ink:       #2C2C2A; --ink-70: rgba(44,44,42,0.7); --ink-40: rgba(44,44,42,0.4);
+  --ink-15:    rgba(44,44,42,0.15); --ac-light: #E4F0E8; --ac-mid: #6FA882;
+  --ac-strong: #3D7A56; --ac-deep: #2A5C3F; --ac-border: #B6D4BF;
+  --ac-soft:   rgba(61,122,86,0.08); --radius: 16px; --radius-sm: 10px; --radius-xs: 6px;
+  --err: #C05A2A; --err-light: #FBF0E8;
 }
-
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-
 body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--base);
-  color: var(--ink);
-  overflow-x: hidden;
-  font-size: 16px;
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
+  font-family: 'DM Sans', sans-serif; background: var(--base); color: var(--ink);
+  overflow-x: hidden; font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased; min-height: 100vh;
 }
-
 body::before {
-  content: '';
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 70% 55% at 8% 6%,  rgba(228,240,232,0.45) 0%, transparent 55%),
+  content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 70% 55% at 8% 6%, rgba(228,240,232,0.45) 0%, transparent 55%),
     radial-gradient(ellipse 55% 50% at 90% 90%, rgba(182,212,191,0.28) 0%, transparent 55%),
     linear-gradient(168deg, #F5F2ED 0%, #EDE9E1 50%, #F0EDE7 100%);
 }
@@ -68,82 +37,60 @@ body::before {
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 52px; height: 68px;
-  background: rgba(245,242,237,0.92);
-  backdrop-filter: blur(24px);
-  border-bottom: 0.5px solid var(--border-lt);
+  padding: 0 52px; height: 68px; background: rgba(245,242,237,0.92);
+  backdrop-filter: blur(24px); border-bottom: 0.5px solid var(--border-lt);
 }
-.nav-logo {
-  font-family: 'Fraunces', serif;
-  font-size: 22px; font-weight: 700; letter-spacing: -0.3px;
-  color: var(--ink); text-decoration: none;
-  display: inline-flex; align-items: baseline; gap: 1px;
-}
+.nav-logo { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; letter-spacing: -0.3px; color: var(--ink); text-decoration: none; display: inline-flex; align-items: baseline; gap: 1px; }
 .nav-logo-dot { color: var(--ac-mid); }
 .nav-logo-fy  { font-size: 13px; font-weight: 400; font-style: italic; color: var(--ink-40); }
-.nav-back {
-  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--ink-40); text-decoration: none; transition: color 0.2s;
-  display: flex; align-items: center; gap: 6px;
-}
+.nav-back { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-40); text-decoration: none; transition: color 0.2s; display: flex; align-items: center; gap: 6px; }
 .nav-back:hover { color: var(--ac-deep); }
-.nav-back svg { transition: transform 0.2s; }
-.nav-back:hover svg { transform: translateX(-3px); }
 
 /* LAYOUT */
-.app-shell {
-  display: grid;
-  grid-template-columns: 340px 1fr;
-  min-height: 100vh;
-  padding-top: 68px;
-  position: relative; z-index: 1;
-}
+.app-shell { display: block; min-height: 100vh; padding-top: 68px; position: relative; z-index: 1; }
 
-/* SIDEBAR */
-.sidebar {
-  background: var(--ink);
-  position: sticky; top: 68px; height: calc(100vh - 68px);
-  overflow-y: auto;
-  display: flex; flex-direction: column;
-  padding: 52px 40px;
+/* ── HORIZONTAL STEP BAR ── */
+.step-bar {
+  position: sticky; top: 68px; z-index: 50;
+  background: rgba(44,44,42,0.97); backdrop-filter: blur(16px);
+  border-bottom: 0.5px solid rgba(180,178,169,0.12);
+  padding: 0 48px;
 }
-.sidebar::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 60% 50% at 90% 10%, rgba(61,122,86,0.15) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 60% at 10% 90%, rgba(0,0,0,0.2) 0%, transparent 55%);
+.step-bar-inner {
+  max-width: 860px; margin: 0 auto;
+  display: flex; align-items: center;
 }
-.sidebar-content { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; }
-.sidebar-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ac-mid); margin-bottom: 14px; }
-.sidebar-title { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.1; color: var(--base); margin-bottom: 8px; }
-.sidebar-title em { font-style: italic; color: var(--ac-mid); }
-.sidebar-rule { width: 24px; height: 1px; background: var(--ac-mid); margin-bottom: 18px; opacity: 0.6; }
-.sidebar-sub { font-size: 13px; font-weight: 300; color: rgba(245,242,237,0.5); line-height: 1.75; margin-bottom: 40px; }
-
-/* STEP NAV */
-.step-nav { display: flex; flex-direction: column; gap: 4px; margin-bottom: 48px; }
-.step-item { display: flex; align-items: flex-start; gap: 14px; padding: 12px 14px; border-radius: var(--radius-sm); cursor: default; transition: background 0.2s; position: relative; }
-.step-item.active { background: rgba(61,122,86,0.12); }
-.step-connector { position: absolute; left: 24px; top: 100%; width: 1px; height: 4px; background: rgba(245,242,237,0.08); }
-.step-circle { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; border: 1px solid rgba(245,242,237,0.15); color: rgba(245,242,237,0.3); transition: all 0.3s; margin-top: 1px; }
-.step-item.active .step-circle { background: var(--ac-strong); border-color: var(--ac-strong); color: var(--base); }
-.step-item.done .step-circle { background: var(--ac-mid); border-color: var(--ac-mid); color: var(--base); }
-.step-text { flex: 1; }
-.step-label { font-size: 11.5px; font-weight: 600; letter-spacing: 0.3px; color: rgba(245,242,237,0.3); transition: color 0.3s; line-height: 1.3; }
-.step-item.active .step-label { color: var(--base); }
-.step-item.done .step-label { color: rgba(245,242,237,0.6); }
-.step-desc { font-size: 11px; font-weight: 300; color: rgba(245,242,237,0.2); margin-top: 2px; transition: color 0.3s; }
-.step-item.active .step-desc { color: rgba(245,242,237,0.45); }
-.step-item.done .step-desc { color: rgba(245,242,237,0.25); }
-
-/* EARNINGS CARD */
-.earnings-card { margin-top: auto; background: rgba(61,122,86,0.12); border: 0.5px solid rgba(111,168,130,0.2); border-radius: var(--radius-sm); padding: 20px; }
-.earnings-label { font-size: 9.5px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--ac-mid); margin-bottom: 10px; opacity: 0.8; }
-.earnings-range { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--base); letter-spacing: -0.5px; line-height: 1; margin-bottom: 6px; }
-.earnings-sub { font-size: 11.5px; font-weight: 300; color: rgba(245,242,237,0.4); }
+.step-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 16px; cursor: default; flex-shrink: 0; position: relative;
+}
+.step-pill:not(:last-child)::after {
+  content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: 12px; height: 1px; background: rgba(245,242,237,0.1);
+}
+.step-circle {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  border: 1px solid rgba(245,242,237,0.15); color: rgba(245,242,237,0.3);
+  transition: all 0.3s;
+}
+.step-pill.active .step-circle { background: var(--ac-strong); border-color: var(--ac-strong); color: var(--base); }
+.step-pill.done   .step-circle { background: var(--ac-mid);    border-color: var(--ac-mid);    color: var(--base); }
+.step-pill-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+  color: rgba(245,242,237,0.25); transition: color 0.3s; white-space: nowrap;
+}
+.step-pill.active .step-pill-label { color: var(--base); }
+.step-pill.done   .step-pill-label { color: rgba(245,242,237,0.5); }
+@media (max-width: 700px) {
+  .step-bar { padding: 0 16px; }
+  .step-pill-label { display: none; }
+  .step-pill { padding: 13px 10px; }
+}
 
 /* MAIN FORM AREA */
-.form-area { padding: 52px 64px; display: flex; flex-direction: column; }
+.form-area { padding: 52px 64px; display: flex; flex-direction: column; max-width: 860px; margin: 0 auto; width: 100%; }
 
 /* STEPS */
 .form-step { display: none; animation: stepIn 0.4s ease both; }
@@ -203,50 +150,23 @@ nav {
 .level-desc { font-size: 12px; font-weight: 300; color: var(--ink-40); }
 .level-card.selected .level-name { color: var(--ac-deep); }
 
-/* AVAILABILITY PICKER */
-.avail-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 12px; }
-.avail-day { border: 0.5px solid var(--border); border-radius: var(--radius-xs); padding: 10px 4px; cursor: pointer; transition: all 0.2s; background: var(--surface); text-align: center; position: relative; }
-.avail-day:hover { border-color: var(--ac-strong); background: var(--ac-light); }
-.avail-day.selected { border-color: var(--ac-strong); background: var(--ac-light); box-shadow: 0 0 0 1px var(--ac-strong); }
-.avail-day input { position: absolute; opacity: 0; pointer-events: none; }
-.avail-day-name { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink-40); margin-bottom: 4px; }
-.avail-day.selected .avail-day-name { color: var(--ac-deep); }
-.avail-day-check { width: 14px; height: 14px; border-radius: 50%; background: var(--base-dk); margin: 0 auto; display: flex; align-items: center; justify-content: center; }
-.avail-day.selected .avail-day-check { background: var(--ac-strong); }
 
-/* UPLOAD AREA */
-.upload-area { border: 1px dashed var(--ac-border); border-radius: var(--radius-sm); padding: 36px 24px; text-align: center; cursor: pointer; background: var(--ac-light); transition: all 0.2s; margin-bottom: 36px; }
-.upload-area:hover { border-color: var(--ac-strong); background: #D8EBE0; }
-.upload-icon { font-size: 28px; margin-bottom: 10px; opacity: 0.6; }
-.upload-text { font-size: 14px; font-weight: 300; color: var(--ink-70); margin-bottom: 4px; }
-.upload-text strong { font-weight: 600; color: var(--ac-deep); }
-.upload-hint { font-size: 11.5px; color: var(--ink-40); }
-.upload-area input { display: none; }
-
-/* ONBOARDING */
+/* PENDING APPROVAL SCREEN */
 .onboard-header { text-align: center; padding: 60px 24px 48px; }
 .onboard-icon { width: 72px; height: 72px; border-radius: 50%; background: var(--ac-light); border: 0.5px solid var(--ac-border); margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
 .onboard-title { font-family: 'Fraunces', serif; font-size: clamp(24px, 4vw, 36px); font-weight: 700; letter-spacing: -0.8px; color: var(--ink); margin-bottom: 12px; }
 .onboard-title em { font-style: italic; color: var(--ac-strong); }
 .onboard-sub { font-size: 15px; font-weight: 300; color: var(--ink-70); max-width: 440px; margin: 0 auto; line-height: 1.75; }
-.onboard-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 700px; margin: 0 auto 48px; }
-.onboard-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 28px 22px; text-align: center; transition: all 0.2s; }
-.onboard-card:hover { background: var(--ac-light); border-color: var(--ac-border); transform: translateY(-2px); }
-.onboard-card-num { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 300; font-style: italic; color: var(--ink-15); line-height: 1; margin-bottom: 12px; }
-.onboard-card-title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
-.onboard-card-desc { font-size: 12.5px; font-weight: 300; color: var(--ink-70); line-height: 1.65; }
 
-/* CHECKLIST */
-.checklist { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 8px; max-width: 560px; margin: 0 auto 40px; }
-.checklist-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-sm); transition: background 0.2s; cursor: pointer; }
-.checklist-item:hover { background: var(--ac-light); }
-.checklist-item.done .check-box { background: var(--ac-strong); border-color: var(--ac-strong); }
-.checklist-item.done .check-box svg { opacity: 1; }
-.checklist-item.done .checklist-text { text-decoration: line-through; color: var(--ink-40); }
-.check-box { width: 22px; height: 22px; border-radius: 6px; flex-shrink: 0; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-.check-box svg { opacity: 0; transition: opacity 0.2s; }
-.checklist-text { font-size: 13.5px; color: var(--ink); transition: all 0.2s; }
-.checklist-badge { margin-left: auto; font-size: 10px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--ac-deep); background: var(--ac-light); border: 0.5px solid var(--ac-border); padding: 3px 10px; border-radius: 100px; }
+/* UPLOAD AREA */
+.upload-area { border: 1.5px dashed var(--ac-border); border-radius: var(--radius-sm); padding: 32px 24px; text-align: center; cursor: pointer; background: var(--ac-light); transition: all 0.2s; display: block; }
+.upload-area:hover { border-color: var(--ac-strong); background: #D8EBE0; }
+.upload-area.has-file { border-color: var(--ac-strong); background: #D8EBE0; border-style: solid; }
+.upload-area.uploading { opacity: 0.7; cursor: wait; }
+.upload-icon { font-size: 28px; margin-bottom: 10px; }
+.upload-text { font-size: 14px; font-weight: 300; color: var(--ink-70); margin-bottom: 4px; }
+.upload-text strong { font-weight: 600; color: var(--ac-deep); }
+.upload-hint { font-size: 11.5px; color: var(--ink-40); }
 
 /* FORM ACTIONS */
 .form-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 8px; }
@@ -254,10 +174,9 @@ nav {
 .btn-back:hover { color: var(--ink); }
 .btn-next { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--surface); background: var(--ink); border: 0.5px solid var(--ink); padding: 14px 40px; border-radius: 100px; cursor: pointer; transition: all 0.25s; }
 .btn-next:hover { background: var(--ac-deep); border-color: var(--ac-deep); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(42,92,63,0.2); }
-.btn-next:disabled { background: var(--border); border-color: var(--border); color: var(--ink-40); cursor: not-allowed; transform: none; box-shadow: none; }
 .btn-submit { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--surface); background: var(--ac-strong); border: 0.5px solid var(--ac-strong); padding: 14px 40px; border-radius: 100px; cursor: pointer; transition: all 0.25s; }
 .btn-submit:hover { background: var(--ac-deep); border-color: var(--ac-deep); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(42,92,63,0.25); }
-.btn-submit:disabled { background: var(--border); border-color: var(--border); color: var(--ink-40); cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-submit:disabled, .btn-next:disabled { background: var(--border); border-color: var(--border); color: var(--ink-40); cursor: not-allowed; transform: none; box-shadow: none; }
 
 /* SUCCESS SCREEN */
 .success-screen { display: none; }
@@ -285,20 +204,8 @@ nav {
 .toast.show { opacity: 1; }
 
 /* RESPONSIVE */
-@media (max-width: 960px) {
-  .app-shell { grid-template-columns: 1fr; }
-  .sidebar { position: static; height: auto; }
-  .form-area { padding: 36px 28px; }
-  .sport-grid { grid-template-columns: repeat(3, 1fr); }
-  .onboard-cards { grid-template-columns: 1fr; }
-  nav { padding: 0 24px; }
-}
-@media (max-width: 600px) {
-  .field-row { grid-template-columns: 1fr; }
-  .sport-grid { grid-template-columns: repeat(2, 1fr); }
-  .avail-grid { grid-template-columns: repeat(4, 1fr); }
-  .form-area { padding: 24px 20px; }
-}
+@media (max-width: 960px) { .form-area { padding: 36px 28px; } .sport-grid { grid-template-columns: repeat(3, 1fr); } nav { padding: 0 24px; } }
+@media (max-width: 600px) { .field-row { grid-template-columns: 1fr; } .sport-grid { grid-template-columns: repeat(2, 1fr); } .form-area { padding: 24px 20px; } }
 </style>
 </head>
 <body>
@@ -315,50 +222,28 @@ nav {
 
 <div class="app-shell">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sidebar-content">
-      <div class="sidebar-eyebrow">Host Application</div>
-      <h2 class="sidebar-title">Lead the<br>premium <em>field</em></h2>
-      <div class="sidebar-rule"></div>
-      <p class="sidebar-sub">Join our certified host network and turn your athletic skills into consistent income — on your schedule.</p>
-
-      <nav class="step-nav" id="stepNav">
-        <div class="step-item active" id="nav-0">
-          <div class="step-circle">1</div>
-          <div class="step-text"><div class="step-label">Your Profile</div><div class="step-desc">Name, contact & background</div></div>
-          <div class="step-connector"></div>
-        </div>
-        <div class="step-item" id="nav-1">
-          <div class="step-circle">2</div>
-          <div class="step-text"><div class="step-label">Sport & Credentials</div><div class="step-desc">Sport, level & certifications</div></div>
-          <div class="step-connector"></div>
-        </div>
-        <div class="step-item" id="nav-2">
-          <div class="step-circle">3</div>
-          <div class="step-text"><div class="step-label">Hosting Style</div><div class="step-desc">Session type & availability</div></div>
-          <div class="step-connector"></div>
-        </div>
-        <div class="step-item" id="nav-3">
-          <div class="step-circle">4</div>
-          <div class="step-text"><div class="step-label">Verification</div><div class="step-desc">Photo & agreement</div></div>
-          <div class="step-connector"></div>
-        </div>
-        <div class="step-item" id="nav-4">
-          <div class="step-circle">5</div>
-          <div class="step-text"><div class="step-label">Onboarding</div><div class="step-desc">Setup your host profile</div></div>
-        </div>
-      </nav>
-
-      <div class="earnings-card">
-        <div class="earnings-label">Top hosts earn</div>
-        <div class="earnings-range">$1,200 – $3,500</div>
-        <div class="earnings-sub">per month on your schedule</div>
+  <!-- FIX 1: HORIZONTAL STEP BAR — replaces overlapping sidebar -->
+  <div class="step-bar">
+    <div class="step-bar-inner">
+      <div class="step-pill active" id="nav-0">
+        <div class="step-circle">1</div>
+        <span class="step-pill-label">Your Profile</span>
+      </div>
+      <div class="step-pill" id="nav-1">
+        <div class="step-circle">2</div>
+        <span class="step-pill-label">Sport & Credentials</span>
+      </div>
+      <div class="step-pill" id="nav-2">
+        <div class="step-circle">3</div>
+        <span class="step-pill-label">Hosting Style</span>
+      </div>
+      <div class="step-pill" id="nav-3">
+        <div class="step-circle">4</div>
+        <span class="step-pill-label">Verification</span>
       </div>
     </div>
-  </aside>
+  </div>
 
-  <!-- MAIN -->
   <main class="form-area">
 
     <!-- STEP 1: Profile -->
@@ -424,7 +309,7 @@ nav {
       <div class="form-step-eyebrow">Step 2 of 4</div>
       <h1 class="form-step-title">Your sport &amp; <em>credentials</em></h1>
       <div class="form-step-rule"></div>
-      <p class="form-step-sub">Select the sport you'll host and your competitive level. Verified credentials help us match you with the right players.</p>
+      <p class="form-step-sub">Select the sport you'll host and your competitive level.</p>
       <div class="progress-wrap">
         <div class="progress-label"><span class="progress-text">Application Progress</span><span class="progress-pct">40%</span></div>
         <div class="progress-track"><div class="progress-fill" style="width:40%"></div></div>
@@ -450,7 +335,6 @@ nav {
         <div class="field">
           <label class="field-label">Skill Rating / Credential</label>
           <input type="text" id="rating" placeholder="e.g. Handicap 4, UTR 5.2, USTA 4.5">
-          <span class="field-hint">Any relevant ranking, handicap, or rating system</span>
         </div>
         <div class="field">
           <label class="field-label">Years of Experience</label>
@@ -474,7 +358,7 @@ nav {
       <div class="form-step-eyebrow">Step 3 of 4</div>
       <h1 class="form-step-title">Your hosting <em>style</em></h1>
       <div class="form-step-rule"></div>
-      <p class="form-step-sub">Tell us how you'd like to run sessions and when you're available. We use this to match you with compatible players.</p>
+      <p class="form-step-sub">Tell us how you'd like to run sessions and when you're available.</p>
       <div class="progress-wrap">
         <div class="progress-label"><span class="progress-text">Application Progress</span><span class="progress-pct">60%</span></div>
         <div class="progress-track"><div class="progress-fill" style="width:60%"></div></div>
@@ -512,21 +396,11 @@ nav {
           </select>
         </div>
       </div>
-      <div class="form-step-eyebrow" style="margin-bottom:14px; margin-top: 8px;">Weekly Availability</div>
-      <div class="avail-grid" id="availGrid">
-        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="mon"><div class="avail-day-name">Mon</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
-        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="tue"><div class="avail-day-name">Tue</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
-        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="wed"><div class="avail-day-name">Wed</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
-        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="thu"><div class="avail-day-name">Thu</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
-        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="fri"><div class="avail-day-name">Fri</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
-        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="sat"><div class="avail-day-name">Sat</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
-        <label class="avail-day" onclick="toggleDay(this)"><input type="checkbox" value="sun"><div class="avail-day-name">Sun</div><div class="avail-day-check"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div></label>
-      </div>
-      <p class="field-hint" style="margin-bottom:28px;">Select days you're typically available to host sessions.</p>
+
       <div class="field-group">
         <div class="field">
           <label class="field-label">Why do you want to host?</label>
-          <textarea id="bio" placeholder="Tell us a bit about your background and what excites you about hosting on Lyfe.fy..." rows="4" oninput="updateChar(this,300)"></textarea>
+          <textarea id="bio" placeholder="Tell us about your background and what excites you about hosting on Lyfe.fy..." rows="4" oninput="updateChar(this,300)"></textarea>
           <div class="char-counter" id="bioCounter">0 / 300</div>
         </div>
       </div>
@@ -541,30 +415,35 @@ nav {
       <div class="form-step-eyebrow">Step 4 of 4</div>
       <h1 class="form-step-title">Verify your <em>identity</em></h1>
       <div class="form-step-rule"></div>
-      <p class="form-step-sub">Upload a photo and agree to our host standards. This ensures trust and quality for all players on the platform.</p>
+      <p class="form-step-sub">Upload proof of your credentials and agree to our host standards. This builds trust with players on the platform.</p>
       <div class="progress-wrap">
         <div class="progress-label"><span class="progress-text">Application Progress</span><span class="progress-pct">80%</span></div>
         <div class="progress-track"><div class="progress-fill" style="width:80%"></div></div>
       </div>
       <div class="field-group">
+
+        <!-- CREDENTIAL UPLOAD — uploads to Supabase Storage -->
         <div>
-          <div class="field-label" style="margin-bottom:10px;">Profile Photo <span class="field-required">*</span></div>
-          <label class="upload-area" for="photoUpload" id="photoUploadArea">
-            <div class="upload-icon">📸</div>
-            <div class="upload-text"><strong>Click to upload</strong> or drag and drop</div>
-            <div class="upload-hint">JPG, PNG or WEBP &middot; Max 5MB &middot; Clear face photo required</div>
-            <input type="file" id="photoUpload" accept="image/*" onchange="handlePhoto(this)">
-          </label>
-        </div>
-        <div>
-          <div class="field-label" style="margin-bottom:10px;">Proof of Credentials</div>
+          <div class="field-label" style="margin-bottom:6px;">Proof of Credentials <span class="field-required">*</span></div>
+          <div class="field-hint" style="margin-bottom:12px;">School ID, coaching cert, ranking screenshot, or athlete profile — JPG, PNG, PDF · Max 8MB</div>
           <label class="upload-area" for="credUpload" id="credUploadArea">
-            <div class="upload-icon">🎓</div>
-            <div class="upload-text"><strong>Click to upload</strong> credentials (optional)</div>
-            <div class="upload-hint">School ID, coaching cert, ranking screenshot &middot; PDF or image</div>
-            <input type="file" id="credUpload" accept="image/*,.pdf" onchange="handleCred(this)">
+            <div class="upload-icon" id="credIcon">🎓</div>
+            <div class="upload-text" id="credText"><strong>Click to upload</strong> your credential</div>
+            <div class="upload-hint" id="credHint">School ID · Coaching cert · Ranking screenshot</div>
+            <input type="file" id="credUpload" accept="image/*,.pdf" onchange="handleCredSelect(this)" style="display:none">
           </label>
+          <!-- Upload progress bar — hidden until upload starts -->
+          <div id="credProgressWrap" style="display:none;margin-top:10px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="font-size:11px;color:var(--ink-40);" id="credProgressLabel">Uploading...</span>
+              <span style="font-size:11px;color:var(--ac-strong);" id="credProgressPct">0%</span>
+            </div>
+            <div style="height:3px;background:var(--border);border-radius:100px;overflow:hidden;">
+              <div id="credProgressBar" style="height:100%;background:var(--ac-strong);width:0%;transition:width 0.3s;border-radius:100px;"></div>
+            </div>
+          </div>
         </div>
+
         <div class="field">
           <label class="field-label">Instagram / LinkedIn (optional)</label>
           <input type="text" id="social" placeholder="@your_handle or linkedin.com/in/yourname">
@@ -572,8 +451,8 @@ nav {
         </div>
       </div>
 
-      <!-- Agreement -->
-      <div style="background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius-sm); padding:20px 22px; margin-bottom:28px;">
+      <!-- FIX 2: Removed "30-min orientation call" checkbox -->
+      <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-sm);padding:20px 22px;margin-bottom:28px;">
         <div style="font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--ink-40);margin-bottom:14px;">Host Standards Agreement</div>
         <div style="display:flex;flex-direction:column;gap:10px;">
           <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
@@ -584,64 +463,51 @@ nav {
             <input type="checkbox" id="agree2" style="margin-top:3px;accent-color:var(--ac-strong);">
             <span style="font-size:13px;color:var(--ink-70);">I confirm my credentials are accurate and I agree to Lyfe.fy's <a href="#" style="color:var(--ac-deep);">Host Terms of Service</a>.</span>
           </label>
-          <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;">
-            <input type="checkbox" id="agree3" style="margin-top:3px;accent-color:var(--ac-strong);">
-            <span style="font-size:13px;color:var(--ink-70);">I understand hosts must complete a 30-minute orientation call before hosting their first session.</span>
-          </label>
         </div>
       </div>
 
       <div class="form-actions">
-        <button class="btn-back" onclick="prevStep(3)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-          Back
-        </button>
-        <button class="btn-submit" id="submitBtn" onclick="submitApplication()">
-          Submit Application ✓
-        </button>
+        <button class="btn-back" onclick="prevStep(3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+        <button class="btn-submit" id="submitBtn" onclick="submitApplication()">Submit Application ✓</button>
       </div>
     </div>
 
-    <!-- STEP 5: ONBOARDING — only shown after confirmed submission -->
-    <div class="form-step" id="step-4">
-      <div class="onboard-header">
-        <div class="onboard-icon">🎉</div>
-        <h1 class="onboard-title">Application <em>received!</em></h1>
-        <p class="onboard-sub">While we review your application (usually 24-48 hours), get a head start by completing your onboarding checklist below.</p>
-      </div>
-      <div class="progress-wrap" style="max-width:560px;margin:0 auto 40px;">
-        <div class="progress-label"><span class="progress-text">Onboarding Progress</span><span class="progress-pct" id="onboardPct">0%</span></div>
-        <div class="progress-track"><div class="progress-fill" id="onboardFill" style="width:0%"></div></div>
-      </div>
-      <div class="onboard-cards">
-        <div class="onboard-card"><div class="onboard-card-num">01</div><div class="onboard-card-title">Get Certified</div><div class="onboard-card-desc">Complete the Lyfe Host Certification to unlock full hosting privileges.</div></div>
-        <div class="onboard-card"><div class="onboard-card-num">02</div><div class="onboard-card-title">Build Profile</div><div class="onboard-card-desc">Set up your public host profile so players can find and follow you.</div></div>
-        <div class="onboard-card"><div class="onboard-card-num">03</div><div class="onboard-card-title">First Session</div><div class="onboard-card-desc">Schedule your first hosted session and start earning income.</div></div>
-      </div>
-      <div class="checklist">
-        <div class="checklist-item" onclick="toggleCheck(this)" id="check-0"><div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div><span class="checklist-text">Application submitted ✓</span><span class="checklist-badge">Done</span></div>
-        <div class="checklist-item" onclick="toggleCheck(this)" id="check-1"><div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div><span class="checklist-text">Complete your public host bio</span><span class="checklist-badge">5 min</span></div>
-        <div class="checklist-item" onclick="toggleCheck(this)" id="check-2"><div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div><span class="checklist-text">Watch the Host Orientation video (18 min)</span><span class="checklist-badge">18 min</span></div>
-        <div class="checklist-item" onclick="toggleCheck(this)" id="check-3"><div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div><span class="checklist-text">Connect your Stripe payout account</span><span class="checklist-badge">3 min</span></div>
-        <div class="checklist-item" onclick="toggleCheck(this)" id="check-4"><div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div><span class="checklist-text">Book your orientation call with a Lyfe team member</span><span class="checklist-badge">30 min</span></div>
-        <div class="checklist-item" onclick="toggleCheck(this)" id="check-5"><div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div><span class="checklist-text">Set up your first session date and location</span><span class="checklist-badge">10 min</span></div>
-        <div class="checklist-item" onclick="toggleCheck(this)" id="check-6"><div class="check-box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div><span class="checklist-text">Pass the Host Quality certification quiz</span><span class="checklist-badge">Quiz</span></div>
-      </div>
-      <div style="text-align:center; padding-bottom: 60px;">
-        <a href="dashboard.html" class="btn-dashboard">Go to Dashboard &rarr;</a>
-      </div>
-    </div>
-
-    <!-- SUCCESS SCREEN — shown immediately after submit, before onboarding -->
+    <!-- SUCCESS SCREEN — shown after submit, Go to Dashboard only -->
+    <!-- FIX 3: No onboarding here — only approved users see onboarding in dashboard -->
     <div class="success-screen" id="successScreen">
       <div class="success-inner">
         <div class="success-mark">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="var(--ac-strong)" stroke-width="2.5" stroke-linecap="round"><polyline points="6,16 12,22 26,8"/></svg>
         </div>
-        <h2 class="success-title">You're <em>in!</em></h2>
-        <p class="success-sub">Your application has been submitted. Our team reviews applications within 24–48 hours — we'll email you with next steps.</p>
+        <h2 class="success-title">Application <em>submitted!</em></h2>
+        <p class="success-sub">Our team reviews every application within 24–48 hours. Once approved, you'll get an email and your host dashboard will unlock.</p>
         <div class="success-details" id="successDetails"></div>
-        <button class="btn-dashboard" onclick="startOnboarding()">Start Onboarding &rarr;</button>
+
+        <!-- What happens next pipeline -->
+        <div style="background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:36px;text-align:left;">
+          <div style="padding:14px 20px;border-bottom:0.5px solid var(--border-lt);background:var(--base-dk);">
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ac-mid);">What happens next</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:0.5px solid var(--border-lt);">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--ac-strong);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-size:12px;font-weight:700;">✓</div>
+            <div><div style="font-size:13px;font-weight:600;color:var(--ink);">Application submitted</div><div style="font-size:11.5px;color:var(--ink-40);margin-top:1px;">Under review now</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:0.5px solid var(--border-lt);">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--ac-light);border:1px solid var(--ac-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--ac-deep);font-size:12px;font-weight:700;">2</div>
+            <div><div style="font-size:13px;font-weight:600;color:var(--ink);">Team reviews your credentials</div><div style="font-size:11.5px;color:var(--ink-40);margin-top:1px;">Usually within 24–48 hours</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:0.5px solid var(--border-lt);">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--base-dkr);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--ink-40);font-size:12px;font-weight:700;">3</div>
+            <div><div style="font-size:13px;font-weight:600;color:var(--ink-40);">Approval email with next steps</div><div style="font-size:11.5px;color:var(--ink-40);margin-top:1px;">Host dashboard + onboarding unlocks</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 20px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--base-dkr);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--ink-40);font-size:12px;font-weight:700;">4</div>
+            <div><div style="font-size:13px;font-weight:600;color:var(--ink-40);">Host your first session</div><div style="font-size:11.5px;color:var(--ink-40);margin-top:1px;">Start earning on your schedule</div></div>
+          </div>
+        </div>
+
+        <a href="dashboard.html" class="btn-dashboard">Go to Dashboard &rarr;</a>
+        <div style="font-size:12px;color:var(--ink-40);margin-top:16px;">Questions? <a href="mailto:hosts@lyfefy.com" style="color:var(--ac-deep);">hosts@lyfefy.com</a></div>
       </div>
     </div>
 
@@ -649,31 +515,19 @@ nav {
 </div>
 
 <script>
-  // ─────────────────────────────────────────────────────
-  // CONFIG
-  // ─────────────────────────────────────────────────────
   const SUPABASE_URL  = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
   const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
   const SB_HEADERS    = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' };
   const STORAGE_KEY   = 'lyfe_pending_app';
+  let currentStep = 0;
 
-  let currentStep      = 0;
-  const TOTAL_APP_STEPS = 4;
-
-  // ─────────────────────────────────────────────────────
-  // TOAST
-  // ─────────────────────────────────────────────────────
   function showToast(msg, duration) {
     duration = duration || 3500;
     var t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
+    t.textContent = msg; t.classList.add('show');
     setTimeout(function() { t.classList.remove('show'); }, duration);
   }
 
-  // ─────────────────────────────────────────────────────
-  // STEP NAVIGATION
-  // ─────────────────────────────────────────────────────
   function nextStep(from) {
     if (!validateStep(from)) return;
     document.getElementById('step-' + from).classList.remove('active');
@@ -695,23 +549,20 @@ nav {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ─────────────────────────────────────────────────────
-  // VALIDATION
-  // ─────────────────────────────────────────────────────
   function validateStep(step) {
     var valid = true;
     if (step === 0) {
-      valid = checkRequired('f-first', 'firstName') & valid;
-      valid = checkRequired('f-last',  'lastName')  & valid;
-      valid = checkEmail(   'f-email', 'email')     & valid;
-      valid = checkRequired('f-phone', 'phone')     & valid;
-      valid = checkSelect(  'f-city',  'city')      & valid;
+      valid = checkRequired('f-first','firstName') & valid;
+      valid = checkRequired('f-last','lastName')   & valid;
+      valid = checkEmail('f-email','email')         & valid;
+      valid = checkRequired('f-phone','phone')      & valid;
+      valid = checkSelect('f-city','city')          & valid;
     }
     if (step === 1) {
       var sport = document.querySelector('input[name="sport"]:checked');
       var level = document.querySelector('input[name="level"]:checked');
-      if (!sport)       { alert('Please select a sport.');             valid = false; }
-      else if (!level)  { alert('Please select your competitive level.'); valid = false; }
+      if (!sport)      { alert('Please select a sport.');                  valid = false; }
+      else if (!level) { alert('Please select your competitive level.');   valid = false; }
     }
     if (step === 2) {
       if (!document.getElementById('sessionType').value) {
@@ -719,352 +570,222 @@ nav {
       }
     }
     if (step === 3) {
-      var a1 = document.getElementById('agree1').checked;
-      var a2 = document.getElementById('agree2').checked;
-      var a3 = document.getElementById('agree3').checked;
-      if (!a1 || !a2 || !a3) { alert('Please agree to all host standards to continue.'); valid = false; }
+      if (!document.getElementById('agree1').checked || !document.getElementById('agree2').checked) {
+        alert('Please agree to all host standards to continue.'); valid = false;
+      }
     }
     return valid;
   }
 
-  function checkRequired(fieldId, inputId) {
-    var el  = document.getElementById(fieldId);
-    var val = document.getElementById(inputId).value.trim();
-    if (!val) { el.classList.add('has-error'); return false; }
-    el.classList.remove('has-error'); return true;
-  }
-  function checkEmail(fieldId, inputId) {
-    var el  = document.getElementById(fieldId);
-    var val = document.getElementById(inputId).value.trim();
-    var ok  = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-    if (!ok) { el.classList.add('has-error'); return false; }
-    el.classList.remove('has-error'); return true;
-  }
-  function checkSelect(fieldId, inputId) {
-    var el  = document.getElementById(fieldId);
-    var val = document.getElementById(inputId).value;
-    if (!val) { el.classList.add('has-error'); return false; }
-    el.classList.remove('has-error'); return true;
-  }
+  function checkRequired(fid, iid) { var el=document.getElementById(fid),val=document.getElementById(iid).value.trim(); if(!val){el.classList.add('has-error');return false;} el.classList.remove('has-error');return true; }
+  function checkEmail(fid,iid) { var el=document.getElementById(fid),val=document.getElementById(iid).value.trim(),ok=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val); if(!ok){el.classList.add('has-error');return false;} el.classList.remove('has-error');return true; }
+  function checkSelect(fid,iid) { var el=document.getElementById(fid),val=document.getElementById(iid).value; if(!val){el.classList.add('has-error');return false;} el.classList.remove('has-error');return true; }
 
-  document.querySelectorAll('input, select, textarea').forEach(function(el) {
-    el.addEventListener('input', function() {
-      var field = el.closest('.field');
-      if (field) field.classList.remove('has-error');
-    });
+  document.querySelectorAll('input,select,textarea').forEach(function(el) {
+    el.addEventListener('input', function() { var f=el.closest('.field'); if(f) f.classList.remove('has-error'); });
   });
 
-  // ─────────────────────────────────────────────────────
-  // PICKERS
-  // ─────────────────────────────────────────────────────
-  function selectSport(card) {
-    document.querySelectorAll('.sport-card').forEach(function(c) { c.classList.remove('selected'); });
-    card.classList.add('selected');
-    var radio = card.querySelector('input[type="radio"]');
-    if (radio) radio.checked = true;
-  }
-  function selectLevel(card) {
-    document.querySelectorAll('.level-card').forEach(function(c) { c.classList.remove('selected'); });
-    card.classList.add('selected');
-    var radio = card.querySelector('input[type="radio"]');
-    if (radio) radio.checked = true;
-  }
-  function toggleDay(card) {
-    card.classList.toggle('selected');
-    var cb = card.querySelector('input[type="checkbox"]');
-    if (cb) cb.checked = card.classList.contains('selected');
-  }
+  // ── CREDENTIAL UPLOAD ──────────────────────────────
+  var selectedCredFile = null;
+  var uploadedCredUrl  = null;
 
-  // ─────────────────────────────────────────────────────
-  // FILE UPLOADS
-  // ─────────────────────────────────────────────────────
-  function handlePhoto(input) {
+  function handleCredSelect(input) {
     if (!input.files || !input.files[0]) return;
-    var area = document.getElementById('photoUploadArea');
-    area.querySelector('.upload-text').innerHTML = '<strong>' + input.files[0].name + '</strong>';
-    area.querySelector('.upload-hint').textContent = 'Photo selected — click to change';
-    area.style.borderColor = 'var(--ac-strong)';
-  }
-  function handleCred(input) {
-    if (!input.files || !input.files[0]) return;
+    selectedCredFile = input.files[0];
     var area = document.getElementById('credUploadArea');
-    area.querySelector('.upload-text').innerHTML = '<strong>' + input.files[0].name + '</strong>';
-    area.querySelector('.upload-hint').textContent = 'File selected — click to change';
-    area.style.borderColor = 'var(--ac-strong)';
+    document.getElementById('credIcon').textContent = selectedCredFile.type.includes('pdf') ? '📄' : '🖼';
+    document.getElementById('credText').innerHTML = '<strong>' + selectedCredFile.name + '</strong>';
+    document.getElementById('credHint').textContent = (selectedCredFile.size / 1024 / 1024).toFixed(1) + ' MB · Click to change';
+    area.classList.add('has-file');
   }
 
-  // ─────────────────────────────────────────────────────
-  // CHAR COUNTER
-  // ─────────────────────────────────────────────────────
-  function updateChar(el, max) {
-    var count   = el.value.length;
-    var counter = document.getElementById('bioCounter');
-    counter.textContent = count + ' / ' + max;
-    counter.classList.toggle('warn', count > max * 0.9);
-    if (count > max) el.value = el.value.slice(0, max);
+  async function uploadCredential(firstName, lastName) {
+    if (!selectedCredFile) return null;
+    var ext  = selectedCredFile.name.split('.').pop();
+    var path = 'credentials/' + firstName.toLowerCase() + '-' + lastName.toLowerCase() + '-' + Date.now() + '.' + ext;
+
+    // Show progress UI
+    document.getElementById('credProgressWrap').style.display = '';
+    document.getElementById('credUploadArea').classList.add('uploading');
+    setProgress(10, 'Uploading...');
+
+    var uploadRes = await fetch(
+      SUPABASE_URL + '/storage/v1/object/host-credentials/' + path,
+      {
+        method: 'POST',
+        headers: {
+          'apikey':        SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type':  selectedCredFile.type || 'application/octet-stream',
+          'x-upsert':      'true'
+        },
+        body: selectedCredFile
+      }
+    );
+
+    setProgress(90, 'Processing...');
+
+    if (!uploadRes.ok) {
+      var err = await uploadRes.text();
+      console.error('Storage upload failed:', uploadRes.status, err);
+      setProgress(0, 'Upload failed');
+      document.getElementById('credUploadArea').classList.remove('uploading');
+      throw new Error('Credential upload failed: ' + uploadRes.status);
+    }
+
+    // Build the public URL
+    var publicUrl = SUPABASE_URL + '/storage/v1/object/public/host-credentials/' + path;
+    setProgress(100, 'Uploaded ✓');
+    document.getElementById('credUploadArea').classList.remove('uploading');
+    document.getElementById('credProgressLabel').textContent = 'Upload complete ✓';
+    return publicUrl;
   }
 
-  // ─────────────────────────────────────────────────────
-  // COLLECT ALL FORM DATA
-  // ─────────────────────────────────────────────────────
+  function setProgress(pct, label) {
+    document.getElementById('credProgressBar').style.width = pct + '%';
+    document.getElementById('credProgressPct').textContent = pct + '%';
+    if (label) document.getElementById('credProgressLabel').textContent = label;
+  }
+
+  function selectSport(card) { document.querySelectorAll('.sport-card').forEach(function(c){c.classList.remove('selected');}); card.classList.add('selected'); var r=card.querySelector('input[type="radio"]'); if(r) r.checked=true; }
+  function selectLevel(card) { document.querySelectorAll('.level-card').forEach(function(c){c.classList.remove('selected');}); card.classList.add('selected'); var r=card.querySelector('input[type="radio"]'); if(r) r.checked=true; }
+
+  function updateChar(el, max) { var c=el.value.length,counter=document.getElementById('bioCounter'); counter.textContent=c+' / '+max; counter.classList.toggle('warn',c>max*0.9); if(c>max) el.value=el.value.slice(0,max); }
+
   function collectFormData() {
-    var sport = document.querySelector('input[name="sport"]:checked');
-    var level = document.querySelector('input[name="level"]:checked');
-    var days  = Array.from(document.querySelectorAll('.avail-day.selected'))
-                     .map(function(d) { return d.querySelector('input').value; });
+    var sport=document.querySelector('input[name="sport"]:checked');
+    var level=document.querySelector('input[name="level"]:checked');
     return {
-      first_name:   document.getElementById('firstName').value.trim(),
-      last_name:    document.getElementById('lastName').value.trim(),
-      email:        document.getElementById('email').value.trim(),
-      phone:        document.getElementById('phone').value.trim(),
-      city:         document.getElementById('city').value,
-      school:       document.getElementById('school').value.trim(),
-      sport:        sport ? sport.value : '',
-      level:        level ? level.value : '',
-      rating:       document.getElementById('rating').value.trim(),
-      experience:   document.getElementById('experience').value,
+      first_name: document.getElementById('firstName').value.trim(),
+      last_name:  document.getElementById('lastName').value.trim(),
+      email:      document.getElementById('email').value.trim(),
+      phone:      document.getElementById('phone').value.trim(),
+      city:       document.getElementById('city').value,
+      school:     document.getElementById('school').value.trim(),
+      sport:      sport ? sport.value : '',
+      level:      level ? level.value : '',
+      rating:     document.getElementById('rating').value.trim(),
+      experience: document.getElementById('experience').value,
       session_type: document.getElementById('sessionType').value,
       group_size:   document.getElementById('groupSize').value,
       target_level: document.getElementById('targetLevel').value,
-      availability: days,
-      bio:          document.getElementById('bio').value.trim(),
-      social:       document.getElementById('social').value.trim(),
-      status:       'pending'
+      bio:    document.getElementById('bio').value.trim(),
+      social: document.getElementById('social').value.trim(),
+      credential_url: uploadedCredUrl || null,
+      status: 'pending'
     };
   }
 
-  // ─────────────────────────────────────────────────────
-  // SAVE TO SUPABASE
-  // ─────────────────────────────────────────────────────
   async function saveApplicationToSupabase(data, clerkUserId) {
-    // 1. Insert into host_applications
     var payload = Object.assign({}, data, { clerk_user_id: clerkUserId || null });
     var res = await fetch(SUPABASE_URL + '/rest/v1/host_applications', {
       method: 'POST',
       headers: Object.assign({}, SB_HEADERS, { 'Prefer': 'return=representation' }),
       body: JSON.stringify(payload)
     });
-    if (!res.ok) {
-      var err = await res.text();
-      console.error('Supabase host_applications insert failed:', res.status, err);
-      throw new Error('Database insert failed: ' + res.status);
-    }
-
-    // 2. If user is signed in, upsert their profile with role=pending_host
+    if (!res.ok) { var err=await res.text(); console.error('Supabase insert failed:',res.status,err); throw new Error('Database insert failed: '+res.status); }
     if (clerkUserId) {
-      var profileRes = await fetch(SUPABASE_URL + '/rest/v1/profiles?id=eq.' + clerkUserId, {
-        method: 'PATCH',
-        headers: Object.assign({}, SB_HEADERS, { 'Prefer': 'return=minimal' }),
-        body: JSON.stringify({
-          name:  data.first_name + ' ' + data.last_name,
-          email: data.email,
-          sport: data.sport,
-          city:  data.city,
-          bio:   data.bio,
-          role:  'pending_host'
-        })
+      var pr = await fetch(SUPABASE_URL+'/rest/v1/profiles?id=eq.'+clerkUserId, {
+        method: 'PATCH', headers: Object.assign({},SB_HEADERS,{'Prefer':'return=minimal'}),
+        body: JSON.stringify({ name: data.first_name+' '+data.last_name, email: data.email, sport: data.sport, city: data.city, bio: data.bio, role: 'pending_host' })
       });
-      // If no row existed yet, insert instead
-      if (profileRes.status === 404 || profileRes.status === 406) {
-        await fetch(SUPABASE_URL + '/rest/v1/profiles', {
-          method: 'POST',
-          headers: Object.assign({}, SB_HEADERS, { 'Prefer': 'return=minimal' }),
-          body: JSON.stringify({
-            id:    clerkUserId,
-            name:  data.first_name + ' ' + data.last_name,
-            email: data.email,
-            sport: data.sport,
-            city:  data.city,
-            bio:   data.bio,
-            role:  'pending_host'
-          })
+      if (pr.status === 404 || pr.status === 406) {
+        await fetch(SUPABASE_URL+'/rest/v1/profiles', {
+          method: 'POST', headers: Object.assign({},SB_HEADERS,{'Prefer':'return=minimal'}),
+          body: JSON.stringify({ id: clerkUserId, name: data.first_name+' '+data.last_name, email: data.email, sport: data.sport, city: data.city, bio: data.bio, role: 'pending_host' })
         });
       }
     }
     return true;
   }
 
-  // ─────────────────────────────────────────────────────
-  // SHOW SUCCESS SCREEN
-  // ─────────────────────────────────────────────────────
   function showSuccess(formData) {
-    // Hide step 4 form
     document.getElementById('step-3').classList.remove('active');
     document.getElementById('nav-3').classList.remove('active');
     document.getElementById('nav-3').classList.add('done');
-
-    // Show success screen
     document.getElementById('successScreen').classList.add('active');
-
-    // Populate summary card
-    var cityEl    = document.getElementById('city');
-    var cityText  = cityEl.options[cityEl.selectedIndex] ? cityEl.options[cityEl.selectedIndex].text : '—';
-    var levelMap  = {
-      d1:'NCAA Division I', d2d3:'NCAA Division II/III',
-      pro:'Professional', certified:'Certified Coach', competitive:'Competitive Club'
-    };
-    var sportText = formData.sport ? (formData.sport.charAt(0).toUpperCase() + formData.sport.slice(1)) : '—';
-    var levelText = formData.level ? (levelMap[formData.level] || formData.level) : '—';
-
-    document.getElementById('successDetails').innerHTML =
-      '<div class="success-detail-row"><span class="success-detail-label">Name</span><span class="success-detail-value">' + formData.first_name + ' ' + formData.last_name + '</span></div>' +
-      '<div class="success-detail-row"><span class="success-detail-label">City</span><span class="success-detail-value">' + cityText + '</span></div>' +
-      '<div class="success-detail-row"><span class="success-detail-label">Sport</span><span class="success-detail-value">' + sportText + '</span></div>' +
-      '<div class="success-detail-row"><span class="success-detail-label">Level</span><span class="success-detail-value">' + levelText + '</span></div>' +
+    var cityEl=document.getElementById('city');
+    var cityText=cityEl.options[cityEl.selectedIndex]?cityEl.options[cityEl.selectedIndex].text:'—';
+    var lvlMap={d1:'NCAA Division I',d2d3:'NCAA D2/D3',pro:'Professional',certified:'Certified Coach',competitive:'Competitive Club'};
+    document.getElementById('successDetails').innerHTML=
+      '<div class="success-detail-row"><span class="success-detail-label">Name</span><span class="success-detail-value">'+formData.first_name+' '+formData.last_name+'</span></div>'+
+      '<div class="success-detail-row"><span class="success-detail-label">City</span><span class="success-detail-value">'+cityText+'</span></div>'+
+      '<div class="success-detail-row"><span class="success-detail-label">Sport</span><span class="success-detail-value">'+(formData.sport.charAt(0).toUpperCase()+formData.sport.slice(1))+'</span></div>'+
       '<div class="success-detail-row"><span class="success-detail-label">Status</span><span class="success-detail-value" style="color:var(--ac-strong)">Under Review</span></div>';
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ─────────────────────────────────────────────────────
-  // MAIN SUBMIT HANDLER
-  // Called when user clicks "Submit Application"
-  // ─────────────────────────────────────────────────────
   async function submitApplication() {
     if (!validateStep(3)) return;
+    var btn=document.getElementById('submitBtn'); btn.textContent='Submitting...'; btn.disabled=true;
 
-    var btn = document.getElementById('submitBtn');
-    btn.textContent = 'Submitting...';
-    btn.disabled    = true;
-
-    var formData = collectFormData();
-
-    // Persist to localStorage so we can resume if Clerk redirects the page
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(formData)); } catch(e) {}
-
-    try {
-      // Wait for Clerk to be ready (it loads async)
-      if (window.Clerk) {
-        try { await Clerk.load(); } catch(e) {}
+    // Upload credential file to Supabase Storage first
+    var firstName = document.getElementById('firstName').value.trim();
+    var lastName  = document.getElementById('lastName').value.trim();
+    if (selectedCredFile) {
+      try {
+        showToast('Uploading credential file...', 8000);
+        uploadedCredUrl = await uploadCredential(firstName, lastName);
+      } catch(err) {
+        showToast('Credential upload failed — please try again.');
+        btn.textContent='Submit Application ✓'; btn.disabled=false;
+        return;
       }
+    }
 
-      var clerkUserId = (window.Clerk && Clerk.user) ? Clerk.user.id : null;
-
+    var formData=collectFormData();
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(formData)); } catch(e) {}
+    try {
+      if (window.Clerk) { try { await Clerk.load(); } catch(e) {} }
+      var clerkUserId=(window.Clerk && Clerk.user)?Clerk.user.id:null;
       if (clerkUserId) {
-        // ── Path A: already signed in ──────────────────
         await saveApplicationToSupabase(formData, clerkUserId);
         try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
         showSuccess(formData);
-
       } else if (window.Clerk) {
-        // ── Path B: not signed in — open Clerk sign-up ─
-        // formData is already in localStorage
-        // After sign-up Clerk redirects back to this page
-        // and the window.load listener below picks it up
         showToast('Creating your account — please complete sign-up to submit ✓', 5000);
-        Clerk.openSignUp({
-          afterSignUpUrl: window.location.href,
-          afterSignInUrl: window.location.href
-        });
-        // Don't re-enable button here — page will reload after sign-up
+        Clerk.openSignUp({ afterSignUpUrl: window.location.href, afterSignInUrl: window.location.href });
         return;
-
       } else {
-        // ── Path C: Clerk completely unavailable ───────
-        // Submit without user ID — you can match by email later in Supabase
         await saveApplicationToSupabase(formData, null);
         try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
         showSuccess(formData);
       }
-
-    } catch (err) {
+    } catch(err) {
       console.error('Submission error:', err);
       showToast('Something went wrong — please try again.');
-      btn.textContent = 'Submit Application ✓';
-      btn.disabled    = false;
+      btn.textContent='Submit Application ✓'; btn.disabled=false;
     }
   }
 
-  // ─────────────────────────────────────────────────────
-  // ONBOARDING (step 5)
-  // Only reachable after successful submission
-  // ─────────────────────────────────────────────────────
-  function startOnboarding() {
-    document.getElementById('successScreen').classList.remove('active');
-    document.getElementById('step-4').classList.add('active');
-    document.getElementById('nav-4').classList.add('active');
-    // Auto-mark first checklist item done
-    document.getElementById('check-0').classList.add('done');
-    updateOnboardProgress();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function toggleCheck(item) {
-    item.classList.toggle('done');
-    updateOnboardProgress();
-  }
-
-  function updateOnboardProgress() {
-    var total = document.querySelectorAll('.checklist-item').length;
-    var done  = document.querySelectorAll('.checklist-item.done').length;
-    var pct   = Math.round((done / total) * 100);
-    document.getElementById('onboardPct').textContent  = pct + '%';
-    document.getElementById('onboardFill').style.width = pct + '%';
-  }
-
-  // ── GUARD: redirect if already a host ─────────────────
-  // Runs on page load — if user is already certified or host
-  // there is no reason to be on this page, send them to dashboard
+  // Page load — resume pending submission after Clerk redirect + host guard
   window.addEventListener('load', async function() {
-
-    // First handle any pending application from a Clerk redirect
-    var pending = null;
-    try { pending = localStorage.getItem(STORAGE_KEY); } catch(e) {}
-
-    var clerkReady = await new Promise(function(resolve) {
-      if (window.Clerk) { resolve(true); return; }
-      var attempts = 0;
-      var interval = setInterval(function() {
-        attempts++;
-        if (window.Clerk) { clearInterval(interval); resolve(true); }
-        else if (attempts > 50) { clearInterval(interval); resolve(false); }
-      }, 100);
+    var pending=null;
+    try { pending=localStorage.getItem(STORAGE_KEY); } catch(e) {}
+    var clerkReady=await new Promise(function(resolve) {
+      if(window.Clerk){resolve(true);return;}
+      var attempts=0,interval=setInterval(function(){attempts++;if(window.Clerk){clearInterval(interval);resolve(true);}else if(attempts>50){clearInterval(interval);resolve(false);}},100);
     });
-
-    if (!clerkReady) return;
+    if(!clerkReady) return;
     try { await Clerk.load(); } catch(e) {}
-
-    // If returning from Clerk sign-up with a pending application, finish it
     if (pending && Clerk.user) {
-      var formData = null;
-      try { formData = JSON.parse(pending); } catch(e) {}
+      var formData=null; try{formData=JSON.parse(pending);}catch(e){}
       if (formData) {
         showToast('Completing your application...');
-        try {
-          await saveApplicationToSupabase(formData, Clerk.user.id);
-          try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
-          showSuccess(formData);
-        } catch(err) {
-          console.error('Resume submission error:', err);
-          showToast('Could not complete submission — please try again.');
-        }
-        return; // don't run guard after resuming
+        try { await saveApplicationToSupabase(formData,Clerk.user.id); try{localStorage.removeItem(STORAGE_KEY);}catch(e){} showSuccess(formData); }
+        catch(err) { console.error('Resume error:',err); showToast('Could not complete — please try again.'); }
+        return;
       }
     }
-
-    // Guard: if user is already a certified host, redirect to dashboard
     if (Clerk.user) {
       try {
-        var r = await fetch(SUPABASE_URL + '/rest/v1/profiles?id=eq.' + Clerk.user.id + '&select=role', {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
-        var d = await r.json();
-        var role = (d && d[0]) ? d[0].role : 'member';
-        if (role === 'host' || role === 'certified') {
-          // Already a host — no need to apply again
-          window.location.href = 'dashboard.html';
-          return;
-        }
-        if (role === 'pending_host') {
-          // Application already submitted — show a message and redirect
-          showToast('Your application is already under review. Redirecting to dashboard...', 3000);
-          setTimeout(function() { window.location.href = 'dashboard.html'; }, 3000);
-          return;
-        }
-      } catch(e) { /* network error — let them proceed */ }
+        var r=await fetch(SUPABASE_URL+'/rest/v1/profiles?id=eq.'+Clerk.user.id+'&select=role',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});
+        var d=await r.json(); var role=(d&&d[0])?d[0].role:'member';
+        if (role==='host'||role==='certified') { window.location.href='dashboard.html'; return; }
+        if (role==='pending_host') { showToast('Your application is already under review. Redirecting...', 3000); setTimeout(function(){window.location.href='dashboard.html';},3000); return; }
+      } catch(e) {}
     }
   });
 </script>
-
 </body>
 </html>
