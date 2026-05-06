@@ -526,7 +526,7 @@ body::before {
 <script>
   // ── CONFIG ─────────────────────────────────────────
   // Change this password to something secure before deploying
-  const ADMIN_PASSWORD = 'lyfefy2026';
+  const ADMIN_PASSWORD = 'lyfefy2025';
   const SUPABASE_URL   = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
   const SUPABASE_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
   const SB = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' };
@@ -679,7 +679,7 @@ body::before {
       <div class="td"><div>${cap(a.sport)}</div><div class="td-sub">${level}</div></div>
       <div class="td">${city}</div>
       <div class="td">${date}</div>
-      <div class="td">${statusHtml}</div>
+      <div class="td">${statusHtml} ${a.credential_url ? '<span title="Credential uploaded" style="margin-left:4px;font-size:11px;color:var(--ac-strong);">📎</span>' : ''}</div>
       <div class="td" onclick="event.stopPropagation()">${actions}</div>
     </div>`;
   }
@@ -766,6 +766,16 @@ body::before {
         <div class="avail-pills">${days.length ? days.map(d => '<span class="avail-pill">' + d + '</span>').join('') : '<span style="color:var(--ink-40);font-size:13px;">Not specified</span>'}</div>
       </div>
       <div class="detail-field full"><div class="detail-label">Why they want to host</div><div class="detail-value" style="white-space:pre-wrap;line-height:1.7;">${a.bio || '—'}</div></div>
+      <div class="detail-field full">
+        <div class="detail-label">Credential File</div>
+        <div class="detail-value" style="margin-top:6px;">
+          ${a.credential_url
+            ? (a.credential_url.toLowerCase().endsWith('.pdf')
+              ? `<a href="${a.credential_url}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--ac-light);border:0.5px solid var(--ac-border);border-radius:8px;padding:10px 16px;text-decoration:none;color:var(--ac-deep);font-size:13px;font-weight:600;">📄 View PDF Credential <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`
+              : `<a href="${a.credential_url}" target="_blank"><img src="${a.credential_url}" alt="Credential" style="max-width:100%;max-height:280px;border-radius:10px;border:0.5px solid var(--border);display:block;cursor:zoom-in;" onerror="this.style.display='none';this.nextSibling.style.display='inline-flex'"><span style="display:none;align-items:center;gap:8px;background:var(--ac-light);border:0.5px solid var(--ac-border);border-radius:8px;padding:10px 16px;text-decoration:none;color:var(--ac-deep);font-size:13px;font-weight:600;">🖼 View Credential File</span></a>`)
+            : '<span style="color:var(--ink-40);font-size:13px;font-style:italic;">No credential file uploaded</span>'}
+        </div>
+      </div>
     `;
 
     const actions = document.getElementById('modal-app-actions');
