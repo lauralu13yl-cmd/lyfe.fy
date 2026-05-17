@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lyfe.fy — Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── RESET & BASE ─── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --ivory:      #F9F7F2;
+      --cream:      #F0EBE0;
+      --sand:       #DDD3C0;
+      --navy:       #111827;
+      --forest:     #1E2D20;
+      --gold:       #9A8455;
+      --warm:       #6B4F35;
+      --mid:        #5A5A5A;
+      --soft-black: #141414;
+      --off-white:  #FAFAF8;
+      --border:     rgba(20,20,20,0.1);
+      --border-light: rgba(20,20,20,0.06);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ivory);
+      font-family: 'Inter', sans-serif;
+      color: var(--soft-black);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+    button { cursor: pointer; font-family: inherit; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── NAVIGATION ─── */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 68px;
+      background: var(--ivory);
+      border-bottom: 1px solid var(--border-light);
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      transition: box-shadow 0.3s;
+    }
+    .nav.scrolled { box-shadow: 0 1px 20px rgba(0,0,0,0.06); }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      letter-spacing: 0.12em;
+      color: var(--soft-black);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .nav-center {
+      display: flex;
+      gap: 36px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .nav-link {
+      font-size: 10.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid);
+      cursor: pointer;
+      padding: 4px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+    .nav-link:hover { color: var(--soft-black); }
+    .nav-link.active {
+      color: var(--soft-black);
+      border-bottom-color: var(--gold);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-shrink: 0;
+    }
+
+    .nav-icon-btn {
+      background: none;
+      border: none;
+      color: var(--mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-icon-btn:hover { color: var(--soft-black); }
+    .nav-icon-btn svg { width: 18px; height: 18px; stroke-width: 1.5; }
+
+    .bag-count {
+      position: absolute;
+      top: 4px; right: 4px;
+      width: 14px; height: 14px;
+      background: var(--gold);
+      border-radius: 50%;
+      font-size: 8px;
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 500;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .bag-count.visible { opacity: 1; }
+
+    .nav-cta {
+      font-size: 9.5px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 10px 24px;
+      background: var(--soft-black);
+      color: var(--ivory);
+      border: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--forest); }
+
+    /* ─── PAGE SYSTEM ─── */
+    .page { display: none; animation: fadeUp 0.45s ease both; }
+    .page.active { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ══════════════════════════════════════
+       BRAND / STORY PAGE
+    ══════════════════════════════════════ */
+
+    .brand-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: calc(100vh - 68px);
+    }
+
+    /* Left — visual panel */
+    .bh-visual {
+      background: var(--forest);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 580px;
+    }
+
+    .bh-rings {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .bh-monogram {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .bh-outer-ring {
+      width: 180px;
+      height: 180px;
+      border: 1px solid rgba(154,132,85,0.18);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      position: relative;
+      animation: rotateRing 30s linear infinite;
+    }
+    @keyframes rotateRing {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    .bh-outer-ring::before {
+      content: '';
+      position: absolute;
+      inset: 18px;
+      border: 0.5px solid rgba(154,132,85,0.1);
+      border-radius: 50%;
+      animation: rotateRing 20s linear infinite reverse;
+    }
+    .bh-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 80px;
+      color: rgba(249,247,242,0.1);
+      font-style: italic;
+      line-height: 1;
+      animation: rotateRing 30s linear infinite reverse; /* counter-rotate to keep upright */
+    }
+
+    .bh-brand-mark {
+      font-size: 9px;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: rgba(154,132,85,0.45);
+    }
+
+    /* Right — content panel */
+    .bh-content {
+      background: var(--cream);
+      padding: 80px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .eyebrow {
+      font-size: 9px;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .eyebrow::before {
+      content: '';
+      width: 24px;
+      height: 0.5px;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    .brand-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 400;
+      line-height: 1.05;
+      margin-bottom: 32px;
+      color: var(--soft-black);
+    }
+    .brand-headline em {
+      font-style: italic;
+      color: var(--warm);
+    }
+
+    .brand-body {
+      font-size: 13.5px;
+      line-height: 2;
+      color: rgba(20,20,20,0.52);
+      letter-spacing: 0.01em;
+      margin-bottom: 14px;
+    }
+
+    .bh-divider {
+      width: 48px;
+      height: 0.5px;
+      background: var(--sand);
+      margin: 32px 0;
+    }
+
+    .bh-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 0.5px solid var(--sand);
+    }
+    .bh-stat {
+      padding: 20px 14px;
+      border-right: 0.5px solid var(--sand);
+      transition: background 0.2s;
+    }
+    .bh-stat:last-child { border-right: none; }
+    .bh-stat:hover { background: rgba(154,132,85,0.04); }
+    .bh-stat-n {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: var(--soft-black);
+      margin-bottom: 4px;
+    }
+    .bh-stat-l {
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(20,20,20,0.32);
+    }
+
+    /* ─── Life Pillars Band ─── */
+    .life-band {
+      background: var(--soft-black);
+      padding: 88px 48px;
+    }
+
+    .life-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+    .life-header-title {
+      font-size: 9px;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: rgba(249,247,242,0.28);
+      white-space: nowrap;
+    }
+    .life-header-line {
+      flex: 1;
+      height: 0.5px;
+      background: rgba(249,247,242,0.07);
+    }
+
+    .life-pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(249,247,242,0.05);
+    }
+
+    .life-pillar {
+      background: var(--soft-black);
+      padding: 48px 40px;
+      transition: background 0.3s;
+    }
+    .life-pillar:hover { background: #1c1c1c; }
+
+    .lp-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      color: rgba(154,132,85,0.35);
+      margin-bottom: 36px;
+    }
+    .lp-rule {
+      width: 22px;
+      height: 0.5px;
+      background: var(--gold);
+      opacity: 0.35;
+      margin-bottom: 28px;
+    }
+    .lp-icon {
+      margin-bottom: 20px;
+    }
+    .lp-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: rgba(154,132,85,0.55);
+      stroke-width: 1.5;
+      fill: none;
+    }
+    .lp-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 400;
+      color: rgba(249,247,242,0.85);
+      margin-bottom: 12px;
+    }
+    .lp-body {
+      font-size: 12px;
+      line-height: 2;
+      color: rgba(249,247,242,0.3);
+      letter-spacing: 0.02em;
+    }
+
+    /* ─── Shop CTA ─── */
+    .shop-cta-section {
+      background: var(--cream);
+      padding: 96px 48px;
+      text-align: center;
+    }
+    .sc-eyebrow {
+      font-size: 9px;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .sc-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      font-weight: 400;
+      color: var(--soft-black);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+    .sc-title em { font-style: italic; color: var(--warm); }
+    .sc-sub {
+      font-size: 13px;
+      color: rgba(20,20,20,0.42);
+      margin-bottom: 44px;
+      letter-spacing: 0.02em;
+    }
+    .sc-btn {
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      padding: 15px 48px;
+      background: var(--soft-black);
+      color: var(--ivory);
+      border: none;
+      transition: background 0.2s, letter-spacing 0.2s;
+    }
+    .sc-btn:hover {
+      background: var(--forest);
+      letter-spacing: 0.28em;
+    }
+
+    /* ══════════════════════════════════════
+       SHOP PAGE
+    ══════════════════════════════════════ */
+
+    .shop-header {
+      padding: 40px 48px 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .shop-title-block {}
+    .shop-page-eyebrow {
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .shop-page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 400;
+      color: var(--soft-black);
+      line-height: 1;
+    }
+    .shop-page-title span {
+      font-style: italic;
+      opacity: 0.3;
+      font-size: 24px;
+      margin-left: 10px;
+    }
+
+    .shop-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .filter-tabs {
+      display: flex;
+    }
+    .filter-tab {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 9px 18px;
+      border: 0.5px solid var(--sand);
+      background: transparent;
+      color: var(--mid);
+      transition: all 0.18s;
+      margin-right: -0.5px;
+    }
+    .filter-tab:hover { color: var(--soft-black); border-color: rgba(20,20,20,0.25); }
+    .filter-tab.on {
+      background: var(--soft-black);
+      color: var(--ivory);
+      border-color: var(--soft-black);
+      position: relative;
+      z-index: 1;
+    }
+
+    .shop-sort {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sort-label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    .sort-select {
+      border: 0.5px solid var(--sand);
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      color: var(--soft-black);
+      padding: 8px 12px;
+      cursor: pointer;
+      outline: none;
+      letter-spacing: 0.06em;
+    }
+
+    .shop-count {
+      padding: 20px 48px 0;
+      font-size: 11px;
+      color: rgba(20,20,20,0.35);
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── Product Grid ─── */
+    .prod-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: rgba(20,20,20,0.06);
+      margin: 24px 0 0;
+    }
+
+    .prod-card {
+      background: var(--ivory);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .prod-card:hover { background: var(--off-white); }
+
+    .prod-img-area {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .prod-swatch {
+      width: 100%;
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.65s cubic-bezier(0.16,1,0.3,1);
+    }
+    .prod-card:hover .prod-swatch { transform: scale(1.05); }
+
+    .prod-swatch svg {
+      opacity: 0.75;
+      transition: opacity 0.3s;
+    }
+    .prod-card:hover .prod-swatch svg { opacity: 0.9; }
+
+    .prod-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      background: var(--soft-black);
+      color: var(--ivory);
+      pointer-events: none;
+    }
+    .prod-badge.gold { background: var(--gold); }
+
+    .prod-actions {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      opacity: 0;
+      transform: translateX(6px);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .prod-card:hover .prod-actions {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .prod-action-btn {
+      width: 34px;
+      height: 34px;
+      background: rgba(249,247,242,0.92);
+      border: 0.5px solid rgba(20,20,20,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .prod-action-btn:hover { background: white; transform: scale(1.08); }
+    .prod-action-btn svg { width: 14px; height: 14px; stroke: var(--mid); stroke-width: 1.5; fill: none; }
+
+    .prod-info {
+      padding: 16px 18px 22px;
+    }
+    .prod-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+    .prod-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--soft-black);
+    }
+    .prod-price {
+      font-size: 12px;
+      color: var(--mid);
+      letter-spacing: 0.04em;
+    }
+    .prod-meta {
+      font-size: 10.5px;
+      color: rgba(20,20,20,0.35);
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+    .prod-colors {
+      display: flex;
+      gap: 6px;
+    }
+    .color-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      border: 0.5px solid rgba(20,20,20,0.15);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .color-dot:hover {
+      transform: scale(1.25);
+      box-shadow: 0 0 0 2px var(--ivory), 0 0 0 3px rgba(20,20,20,0.2);
+    }
+
+    /* ══════════════════════════════════════
+       PRODUCT DETAIL OVERLAY
+    ══════════════════════════════════════ */
+    .detail-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,10,0.6);
+      z-index: 600;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+    .detail-overlay.open { display: flex; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .detail-modal {
+      background: var(--ivory);
+      max-width: 900px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      max-height: 88vh;
+      overflow: hidden;
+      position: relative;
+      animation: slideUp 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(24px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    .detail-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 10;
+      width: 36px;
+      height: 36px;
+      background: rgba(249,247,242,0.9);
+      border: 0.5px solid rgba(20,20,20,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .detail-close:hover { background: white; }
+    .detail-close svg { width: 16px; height: 16px; stroke: var(--mid); stroke-width: 1.5; fill: none; }
+
+    .detail-img-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 480px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.4s;
+    }
+    .detail-img-panel svg {
+      opacity: 0.7;
+      transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .detail-img-panel:hover svg { transform: scale(1.04); }
+
+    .detail-content {
+      padding: 52px 48px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    /* Scrollbar styling */
+    .detail-content::-webkit-scrollbar { width: 3px; }
+    .detail-content::-webkit-scrollbar-track { background: transparent; }
+    .detail-content::-webkit-scrollbar-thumb { background: var(--sand); }
+
+    .d-cat {
+      font-size: 9px;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .d-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 1.08;
+      margin-bottom: 8px;
+      color: var(--soft-black);
+    }
+    .d-sub {
+      font-size: 11.5px;
+      color: rgba(20,20,20,0.38);
+      letter-spacing: 0.06em;
+      margin-bottom: 22px;
+    }
+    .d-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--soft-black);
+      margin-bottom: 28px;
+    }
+
+    .d-divider {
+      height: 0.5px;
+      background: var(--sand);
+      margin: 0 0 24px;
+    }
+
+    .d-label {
+      font-size: 9px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(20,20,20,0.38);
+      margin-bottom: 12px;
+    }
+
+    .d-sizes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .size-btn {
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0.5px solid var(--sand);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--mid);
+      background: transparent;
+      transition: all 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .size-btn:hover:not(.sold) {
+      border-color: var(--soft-black);
+      color: var(--soft-black);
+    }
+    .size-btn.picked {
+      background: var(--soft-black);
+      color: var(--ivory);
+      border-color: var(--soft-black);
+    }
+    .size-btn.sold {
+      opacity: 0.22;
+      cursor: not-allowed;
+      text-decoration: line-through;
+    }
+
+    .d-colors {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .d-color-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 0.5px solid rgba(20,20,20,0.15);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .d-color-swatch:hover, .d-color-swatch.active {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 2px var(--ivory), 0 0 0 3.5px rgba(20,20,20,0.3);
+    }
+
+    .d-add {
+      width: 100%;
+      padding: 16px;
+      background: var(--soft-black);
+      color: var(--ivory);
+      border: none;
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      font-family: 'Inter', sans-serif;
+      transition: background 0.2s, letter-spacing 0.2s;
+      margin-bottom: 12px;
+    }
+    .d-add:hover { background: var(--forest); letter-spacing: 0.28em; }
+    .d-add.added { background: var(--gold); }
+
+    .d-wishlist {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 10.5px;
+      color: var(--mid);
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.06em;
+      margin-bottom: 28px;
+      padding: 6px;
+      transition: color 0.2s;
+    }
+    .d-wishlist:hover { color: var(--soft-black); }
+    .d-wishlist svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.5; fill: none; }
+
+    .d-desc {
+      font-size: 12.5px;
+      line-height: 1.95;
+      color: rgba(20,20,20,0.48);
+      letter-spacing: 0.01em;
+      margin-bottom: 24px;
+    }
+
+    .d-material-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 0.5px solid rgba(20,20,20,0.06);
+      font-size: 11px;
+    }
+    .d-material-key {
+      color: rgba(20,20,20,0.35);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 9.5px;
+    }
+    .d-material-val { color: var(--soft-black); }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      background: var(--soft-black);
+      padding: 64px 48px 32px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 56px;
+      margin-bottom: 56px;
+    }
+    .f-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: rgba(249,247,242,0.82);
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+    .f-tagline {
+      font-size: 12px;
+      line-height: 1.85;
+      color: rgba(249,247,242,0.26);
+      max-width: 200px;
+    }
+    .f-col-title {
+      font-size: 9px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(249,247,242,0.36);
+      margin-bottom: 18px;
+    }
+    .f-col a {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 10px;
+      color: rgba(249,247,242,0.22);
+      transition: color 0.2s;
+    }
+    .f-col a:hover { color: var(--gold); }
+    .f-bottom {
+      border-top: 0.5px solid rgba(249,247,242,0.06);
+      padding-top: 22px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: rgba(249,247,242,0.18);
+    }
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--soft-black);
+      color: var(--ivory);
+      padding: 13px 28px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      opacity: 0;
+      transition: opacity 0.25s, transform 0.25s;
+      z-index: 700;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 960px) {
+      .nav { padding: 0 24px; }
+      .nav-center { display: none; }
+      .brand-hero { grid-template-columns: 1fr; }
+      .bh-visual { min-height: 320px; }
+      .bh-content { padding: 56px 32px; }
+      .brand-headline { font-size: 38px; }
+      .bh-stats { grid-template-columns: repeat(2, 1fr); }
+      .bh-stat:nth-child(2) { border-right: none; }
+      .bh-stat:nth-child(3) { border-top: 0.5px solid var(--sand); }
+      .bh-stat:nth-child(4) { border-top: 0.5px solid var(--sand); }
+      .life-band { padding: 56px 24px; }
+      .life-pillars { grid-template-columns: 1fr; }
+      .prod-grid { grid-template-columns: repeat(2, 1fr); }
+      .detail-modal { grid-template-columns: 1fr; }
+      .detail-img-panel { min-height: 260px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .shop-header { padding: 28px 24px 0; flex-direction: column; align-items: flex-start; }
+      .shop-count { padding: 12px 24px 0; }
+    }
+
+    @media (max-width: 600px) {
+      .bh-content { padding: 40px 24px; }
+      .brand-headline { font-size: 30px; }
+      .prod-grid { grid-template-columns: 1fr; }
+      .shop-controls { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .detail-content { padding: 32px 24px; }
+      .d-name { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════
+       NAVIGATION
+  ════════════════════════════════ -->
+  <nav class="nav" id="main-nav">
+    <div class="nav-logo" onclick="showPage('brand')" role="button" tabindex="0">Lyfe.fy</div>
+
+    <div class="nav-center">
+      <button class="nav-link active" id="nav-brand" onclick="showPage('brand')">Our Story</button>
+      <button class="nav-link" id="nav-shop" onclick="showPage('shop')">Shop</button>
+      <button class="nav-link">Collections</button>
+      <button class="nav-link">Lookbook</button>
+      <button class="nav-link">Find a Game</button>
+    </div>
+
+    <div class="nav-right">
+      <button class="nav-icon-btn" aria-label="Search" onclick="showPage('shop')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
+      <button class="nav-icon-btn" aria-label="Wishlist">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+      <button class="nav-icon-btn" aria-label="Shopping bag" id="bag-btn" onclick="showPage('shop')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="bag-count" id="bag-count">0</span>
+      </button>
+      <button class="nav-cta" onclick="showPage('shop')">Shop Now</button>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════
+       PAGE: BRAND / STORY
+  ════════════════════════════════ -->
+  <div class="page active" id="page-brand">
+
+    <!-- Split Hero -->
+    <section class="brand-hero">
+      <div class="bh-visual">
+        <svg class="bh-rings" viewBox="0 0 500 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <circle cx="250" cy="350" r="160" fill="none" stroke="rgba(154,132,85,0.07)" stroke-width="1"/>
+          <circle cx="250" cy="350" r="240" fill="none" stroke="rgba(154,132,85,0.04)" stroke-width="1"/>
+          <circle cx="250" cy="350" r="330" fill="none" stroke="rgba(154,132,85,0.025)" stroke-width="1"/>
+          <line x1="0" y1="350" x2="500" y2="350" stroke="rgba(154,132,85,0.05)" stroke-width="0.5"/>
+          <line x1="250" y1="0" x2="250" y2="700" stroke="rgba(154,132,85,0.05)" stroke-width="0.5"/>
+          <circle cx="250" cy="350" r="4" fill="rgba(154,132,85,0.2)"/>
+        </svg>
+        <div class="bh-monogram">
+          <div class="bh-outer-ring">
+            <span class="bh-letter">L</span>
+          </div>
+          <div class="bh-brand-mark">Lyfe.fy &nbsp;·&nbsp; Est. MMXXIV</div>
+        </div>
+      </div>
+
+      <div class="bh-content">
+        <div class="eyebrow">The Lyfefy Story</div>
+        <h1 class="brand-headline">
+          Where Sport<br>Meets <em>Identity</em>
+        </h1>
+        <p class="brand-body">
+          We built Lyfefy for those who understand that sport is more than performance — it's culture, community, and character. Our apparel is the natural extension of that belief.
+        </p>
+        <p class="brand-body">
+          From the fairway to the clubhouse, every piece is made for lives lived with intention — designed for the modern athlete who moves between worlds without missing a beat.
+        </p>
+        <div class="bh-divider"></div>
+        <div class="bh-stats">
+          <div class="bh-stat">
+            <div class="bh-stat-n">73+</div>
+            <div class="bh-stat-l">Pieces</div>
+          </div>
+          <div class="bh-stat">
+            <div class="bh-stat-n">12</div>
+            <div class="bh-stat-l">Collections</div>
+          </div>
+          <div class="bh-stat">
+            <div class="bh-stat-n">4</div>
+            <div class="bh-stat-l">Drops</div>
+          </div>
+          <div class="bh-stat">
+            <div class="bh-stat-n">∞</div>
+            <div class="bh-stat-l">Community</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Life Pillars -->
+    <section class="life-band">
+      <div class="life-header">
+        <span class="life-header-title">The Lyfefy Life</span>
+        <div class="life-header-line"></div>
+      </div>
+      <div class="life-pillars">
+        <div class="life-pillar reveal">
+          <div class="lp-num">01</div>
+          <div class="lp-rule"></div>
+          <div class="lp-icon">
+            <!-- Trophy icon -->
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8m-4-4v4m-7-17H3a2 2 0 000 4h2m14-4h2a2 2 0 010 4h-2"/><path d="M5 4h14v8a7 7 0 01-14 0V4z"/></svg>
+          </div>
+          <div class="lp-title">Sport is Culture</div>
+          <div class="lp-body">From the fairway to the clubhouse, our pieces transition seamlessly through your most defining moments on and off the field.</div>
+        </div>
+        <div class="life-pillar reveal" style="transition-delay:0.1s">
+          <div class="lp-num">02</div>
+          <div class="lp-rule"></div>
+          <div class="lp-icon">
+            <!-- Users icon -->
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="lp-title">Community First</div>
+          <div class="lp-body">Every purchase deepens your connection to the Lyfefy network — modern athletes, tastemakers, and the people you'll actually want to play with.</div>
+        </div>
+        <div class="life-pillar reveal" style="transition-delay:0.2s">
+          <div class="lp-num">03</div>
+          <div class="lp-rule"></div>
+          <div class="lp-icon">
+            <!-- Leaf icon -->
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 22c1.25-1.25 2.5-2.5 3.5-4C7 16 8 13.5 8 11c0-4.42 3.58-8 8-8 0 4.42-3.58 8-8 8a8 8 0 01-3-.58"/><path d="M2 22s4-1 6-3 3-4.5 3-7"/></svg>
+          </div>
+          <div class="lp-title">Crafted with Intent</div>
+          <div class="lp-body">Sustainable premium materials. Responsible production. Timeless design. Each piece is made to last, and made to matter well beyond the season.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shop CTA -->
+    <section class="shop-cta-section">
+      <div class="sc-eyebrow">Summer Collection '26</div>
+      <h2 class="sc-title">Ready to <em>wear</em> the lifestyle?</h2>
+      <p class="sc-sub">73 pieces. Thoughtfully made. Exclusively Lyfefy.</p>
+      <button class="sc-btn" onclick="showPage('shop')">Explore the Collection &rarr;</button>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-grid">
+        <div>
+          <div class="f-brand">Lyfe.fy</div>
+          <p class="f-tagline">The social sports platform. Sport, identity, and modern culture — unified.</p>
+        </div>
+        <div class="f-col">
+          <div class="f-col-title">Shop</div>
+          <a href="#">New Arrivals</a>
+          <a href="#">Golf</a>
+          <a href="#">Tennis</a>
+          <a href="#">Resort</a>
+          <a href="#">Accessories</a>
+        </div>
+        <div class="f-col">
+          <div class="f-col-title">Platform</div>
+          <a href="https://www.lyfefy.com/games.html">Find a Game</a>
+          <a href="https://www.lyfefy.com/hostapplication.html">Become a Host</a>
+          <a href="#">Community</a>
+          <a href="#">Lookbook</a>
+        </div>
+        <div class="f-col">
+          <div class="f-col-title">Info</div>
+          <a href="#">About</a>
+          <a href="#">Sizing Guide</a>
+          <a href="#">Materials</a>
+          <a href="#">Contact</a>
+          <a href="#">Privacy</a>
+        </div>
+      </div>
+      <div class="f-bottom">
+        <span>© 2026 Lyfe, Inc.</span>
+        <span>Privacy &nbsp;·&nbsp; Terms &nbsp;·&nbsp; Accessibility</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ════════════════════════════════
+       PAGE: SHOP
+  ════════════════════════════════ -->
+  <div class="page" id="page-shop">
+
+    <div class="shop-header">
+      <div class="shop-title-block">
+        <div class="shop-page-eyebrow">Lyfefy Apparel</div>
+        <div class="shop-page-title">Shop <span>Summer '26</span></div>
+      </div>
+      <div class="shop-controls">
+        <div class="filter-tabs" role="tablist">
+          <button class="filter-tab on" onclick="setFilter(this,'all')" role="tab">All</button>
+          <button class="filter-tab" onclick="setFilter(this,'golf')" role="tab">Golf</button>
+          <button class="filter-tab" onclick="setFilter(this,'tennis')" role="tab">Tennis</button>
+          <button class="filter-tab" onclick="setFilter(this,'resort')" role="tab">Resort</button>
+          <button class="filter-tab" onclick="setFilter(this,'club')" role="tab">Club</button>
+        </div>
+        <div class="shop-sort">
+          <span class="sort-label">Sort</span>
+          <select class="sort-select" onchange="sortProducts(this.value)">
+            <option value="featured">Featured</option>
+            <option value="low">Price: Low – High</option>
+            <option value="high">Price: High – Low</option>
+            <option value="new">Newest</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="shop-count" id="shop-count">8 pieces</div>
+
+    <div class="prod-grid" id="prod-grid">
+
+      <!-- CARD 1 — Merino Polo -->
+      <div class="prod-card reveal" data-cat="golf club" data-price="285" data-new="false" onclick="openDetail('merino')">
+        <div class="prod-img-area">
+          <div class="prod-swatch" style="background:#E8E0D0;">
+            <svg width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="#9A8455" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="25" y="12" width="50" height="66" rx="3" stroke-width="1.5"/>
+              <line x1="25" y1="32" x2="75" y2="32" stroke-width="0.8"/>
+              <circle cx="50" cy="23" r="6" stroke-width="1"/>
+              <line x1="40" y1="48" x2="60" y2="48" stroke-width="0.7"/>
+              <line x1="40" y1="58" x2="60" y2="58" stroke-width="0.7"/>
+            </svg>
+          </div>
+          <span class="prod-badge">New</span>
+          <div class="prod-actions">
+            <button class="prod-action-btn" aria-label="Add to wishlist" onclick="event.stopPropagation();toggleWish(this)">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </button>
+            <button class="prod-action-btn" aria-label="Quick view" onclick="event.stopPropagation();openDetail('merino')">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-info-row">
+            <div class="prod-name">Merino Polo</div>
+            <div class="prod-price">$285</div>
+          </div>
+          <div class="prod-meta">Clubhouse Collection</div>
+          <div class="prod-colors">
+            <div class="color-dot" style="background:#E8E0D0;" title="Ivory"></div>
+            <div class="color-dot" style="background:#1A2235;" title="Navy"></div>
+            <div class="color-dot" style="background:#2C3D2E;" title="Forest"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2 — Fairway Jacket -->
+      <div class="prod-card reveal" data-cat="golf sport" data-price="420" data-new="false" onclick="openDetail('jacket')" style="transition-delay:0.05s">
+        <div class="prod-img-area">
+          <div class="prod-swatch" style="background:#D5DDD6;">
+            <svg width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="#2C3D2E" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 24 Q50 8 85 24 L76 84 Q50 94 24 84 Z" stroke-width="1.5"/>
+              <line x1="28" y1="44" x2="72" y2="44" stroke-width="0.8"/>
+              <path d="M38 24 Q50 32 62 24" stroke-width="0.7"/>
+              <circle cx="50" cy="35" r="3.5" stroke-width="0.8"/>
+            </svg>
+          </div>
+          <div class="prod-actions">
+            <button class="prod-action-btn" aria-label="Add to wishlist" onclick="event.stopPropagation();toggleWish(this)">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </button>
+            <button class="prod-action-btn" aria-label="Quick view" onclick="event.stopPropagation();openDetail('jacket')">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-info-row">
+            <div class="prod-name">Fairway Jacket</div>
+            <div class="prod-price">$420</div>
+          </div>
+          <div class="prod-meta">Sport Collection</div>
+          <div class="prod-colors">
+            <div class="color-dot" style="background:#2C3D2E;" title="Forest"></div>
+            <div class="color-dot" style="background:#1A2235;" title="Navy"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3 — Navy Chino -->
+      <div class="prod-card reveal" data-cat="club resort all" data-price="195" data-new="false" onclick="openDetail('chino')" style="transition-delay:0.1s">
+        <div class="prod-img-area">
+          <div class="prod-swatch" style="background:#D8DCE6;">
+            <svg width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="#1A2235" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 22 L78 22 L72 82 L50 74 L28 82 Z" stroke-width="1.5"/>
+              <line x1="22" y1="38" x2="78" y2="38" stroke-width="0.8"/>
+              <line x1="50" y1="38" x2="50" y2="74" stroke-width="0.6"/>
+              <rect x="36" y="16" width="28" height="8" rx="1" stroke-width="0.8"/>
+            </svg>
+          </div>
+          <span class="prod-badge gold">Bestseller</span>
+          <div class="prod-actions">
+            <button class="prod-action-btn" aria-label="Add to wishlist" onclick="event.stopPropagation();toggleWish(this)">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </button>
+            <button class="prod-action-btn" aria-label="Quick view" onclick="event.stopPropagation();openDetail('chino')">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-info-row">
+            <div class="prod-name">Navy Chino</div>
+            <div class="prod-price">$195</div>
+          </div>
+          <div class="prod-meta">Essentials</div>
+          <div class="prod-colors">
+            <div class="color-dot" style="background:#1A2235;" title="Navy"></div>
+            <div class="color-dot" style="background:#2E2E2E;" title="Charcoal"></div>
+            <div class="color-dot" style="background:#DDD3C0;" title="Sand"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4 — Sand Linen Short -->
+      <div class="prod-card reveal" data-cat="resort tennis" data-price="165" data-new="true" onclick="openDetail('linen')" style="transition-delay:0.15s">
+        <div class="prod-img-area">
+          <div class="prod-swatch" style="background:#EAE2D3;">
+            <svg width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="#9A8455" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 30 L80 30 L75 72 Q50 80 25 72 Z" stroke-width="1.5"/>
+              <line x1="20" y1="44" x2="80" y2="44" stroke-width="0.8"/>
+              <rect x="36" y="22" width="28" height="10" rx="1" stroke-width="0.8"/>
+              <line x1="50" y1="44" x2="50" y2="72" stroke-width="0.5"/>
+            </svg>
+          </div>
+          <span class="prod-badge">Limited</span>
+          <div class="prod-actions">
+            <button class="prod-action-btn" aria-label="Add to wishlist" onclick="event.stopPropagation();toggleWish(this)">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </button>
+            <button class="prod-action-btn" aria-label="Quick view" onclick="event.stopPropagation();openDetail('linen')">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-info-row">
+            <div class="prod-name">Sand Linen Short</div>
+            <div class="prod-price">$165</div>
+          </div>
+          <div class="prod-meta">Resort Collection</div>
+          <div class="prod-colors">
+            <div class="color-dot" style="background:#DDD3C0;" title="Sand"></div>
+            <div class="color-dot" style="background:#E8E0D0;" title="Ivory"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 5 — Forest Vest -->
+      <div class="prod-card reveal" data-cat="club golf" data-price="340" data-new="true" onclick="openDetail('vest')" style="transition-delay:0.0s">
+        <div class="prod-img-area">
+          <div class="prod-swatch" style="background:#2C3D2E;">
+            <svg width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="rgba(221,211,192,0.5)" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M32 14 L68 14 L76 82 L50 90 L24 82 Z" stroke-width="1.5"/>
+              <path d="M32 14 Q50 28 68 14" stroke-width="0.8"/>
+              <line x1="40" y1="42" x2="60" y2="42" stroke-width="0.6"/>
+              <line x1="40" y1="54" x2="60" y2="54" stroke-width="0.6"/>
+            </svg>
+          </div>
+          <span class="prod-badge">New</span>
+          <div class="prod-actions">
+            <button class="prod-action-btn" aria-label="Add to wishlist" onclick="event.stopPropagation();toggleWish(this)">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </button>
+            <button class="prod-action-btn" aria-label="Quick view" onclick="event.stopPropagation();openDetail('vest')">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-info-row">
+            <div class="prod-name">Forest Vest</div>
+            <div class="prod-price">$340</div>
+          </div>
+          <div class="prod-meta">Clubhouse Collection</div>
+          <div class="prod-colors">
+            <div class="color-dot" style="background:#2C3D2E;" title="Forest"></div>
+            <div class="color-dot" style="background:#1A2235;" title="Navy"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 6 — Lyfefy Cap -->
+      <div class="prod-card reveal" data-cat="golf tennis resort club" data-price="85" data-new="true" onclick="openDetail('cap')" style="transition-delay:0.05s">
+        <div class="prod-img-area">
+          <div class="prod-swatch" style="background:#F0EBE0;">
+            <svg width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="#9A8455" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 58 Q50 20 82 58" stroke-width="1.5"/>
+              <line x1="18" y1="58" x2="82" y2="58" stroke-width="1.2"/>
+              <line x1="10" y1="58" x2="18" y2="58" stroke-width="1.5"/>
+              <line x1="44" y1="34" x2="56" y2="34" stroke-width="0.8"/>
+              <circle cx="50" cy="44" r="4" stroke-width="0.8"/>
+            </svg>
+          </div>
+          <span class="prod-badge">New</span>
+          <div class="prod-actions">
+            <button class="prod-action-btn" aria-label="Add to wishlist" onclick="event.stopPropagation();toggleWish(this)">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </button>
+            <button class="prod-action-btn" aria-label="Quick view" onclick="event.stopPropagation();openDetail('cap')">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-info-row">
+            <div class="prod-name">Lyfefy Cap</div>
+            <div class="prod-price">$85</div>
+          </div>
+          <div class="prod-meta">Accessories</div>
+          <div class="prod-colors">
+            <div class="color-dot" style="background:#E8E0D0;" title="Ivory"></div>
+            <div class="color-dot" style="background:#1A2235;" title="Navy"></div>
+            <div class="color-dot" style="background:#141414;" title="Black"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 7 — Quarter-Zip -->
+      <div class="prod-card reveal" data-cat="golf sport" data-price="265" data-new="false" onclick="openDetail('quarter')" style="transition-delay:0.1s">
+        <div class="prod-img-area">
+          <div class="prod-swatch" style="background:#E2D8C8;">
+            <svg width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="#7A5C3A" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 20 Q50 8 78 20 L82 80 L50 88 L18 80 Z" stroke-width="1.5"/>
+              <line x1="22" y1="36" x2="78" y2="36" stroke-width="0.8"/>
+              <path d="M38 20 L38 32 L62 32 L62 20" stroke-width="0.8"/>
+              <line x1="50" y1="20" x2="50" y2="32" stroke-width="0.8"/>
+            </svg>
+          </div>
+          <div class="prod-actions">
+            <button class="prod-action-btn" aria-label="Add to wishlist" onclick="event.stopPropagation();toggleWish(this)">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </button>
+            <button class="prod-action-btn" aria-label="Quick view" onclick="event.stopPropagation();openDetail('quarter')">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-info-row">
+            <div class="prod-name">Quarter-Zip Pullover</div>
+            <div class="prod-price">$265</div>
+          </div>
+          <div class="prod-meta">Sport Collection</div>
+          <div class="prod-colors">
+            <div class="color-dot" style="background:#E2D8C8;" title="Warm Sand"></div>
+            <div class="color-dot" style="background:#2C3D2E;" title="Forest"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 8 — Navy Shorts -->
+      <div class="prod-card reveal" data-cat="sport tennis" data-price="145" data-new="false" onclick="openDetail('shorts')" style="transition-delay:0.15s">
+        <div class="prod-img-area">
+          <div class="prod-swatch" style="background:#1A2235;">
+            <svg width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="rgba(221,211,192,0.45)" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 22 L78 22 L72 72 L50 64 L28 72 Z" stroke-width="1.5"/>
+              <line x1="22" y1="38" x2="78" y2="38" stroke-width="0.8"/>
+              <line x1="50" y1="38" x2="50" y2="64" stroke-width="0.6"/>
+              <rect x="36" y="14" width="28" height="10" rx="1" stroke-width="0.8"/>
+            </svg>
+          </div>
+          <span class="prod-badge gold">Bestseller</span>
+          <div class="prod-actions">
+            <button class="prod-action-btn" aria-label="Add to wishlist" onclick="event.stopPropagation();toggleWish(this)">
+              <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </button>
+            <button class="prod-action-btn" aria-label="Quick view" onclick="event.stopPropagation();openDetail('shorts')">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-info-row">
+            <div class="prod-name">Navy Shorts</div>
+            <div class="prod-price">$145</div>
+          </div>
+          <div class="prod-meta">Sport Collection</div>
+          <div class="prod-colors">
+            <div class="color-dot" style="background:#1A2235;" title="Navy"></div>
+            <div class="color-dot" style="background:#141414;" title="Black"></div>
+            <div class="color-dot" style="background:#DDD3C0;" title="Sand"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /prod-grid -->
+
+    <!-- Shop Footer -->
+    <footer class="footer" style="margin-top:1px;">
+      <div class="footer-grid">
+        <div>
+          <div class="f-brand">Lyfe.fy</div>
+          <p class="f-tagline">The social sports platform. Sport, identity, and modern culture — unified.</p>
+        </div>
+        <div class="f-col">
+          <div class="f-col-title">Shop</div>
+          <a href="#">New Arrivals</a><a href="#">Golf</a><a href="#">Tennis</a><a href="#">Resort</a>
+        </div>
+        <div class="f-col">
+          <div class="f-col-title">Platform</div>
+          <a href="https://www.lyfefy.com/games.html">Find a Game</a>
+          <a href="https://www.lyfefy.com/hostapplication.html">Become a Host</a>
+          <a href="#">Community</a>
+        </div>
+        <div class="f-col">
+          <div class="f-col-title">Info</div>
+          <a href="#">About</a><a href="#">Sizing Guide</a><a href="#">Materials</a><a href="#">Contact</a>
+        </div>
+      </div>
+      <div class="f-bottom">
+        <span>© 2026 Lyfe, Inc.</span>
+        <span>Privacy &nbsp;·&nbsp; Terms &nbsp;·&nbsp; Accessibility</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ════════════════════════════════
+       PRODUCT DETAIL OVERLAY
+  ════════════════════════════════ -->
+  <div class="detail-overlay" id="detail-overlay" role="dialog" aria-modal="true" aria-label="Product detail">
+    <div class="detail-modal" id="detail-modal">
+
+      <button class="detail-close" onclick="closeOverlay()" aria-label="Close product detail">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <div class="detail-img-panel" id="detail-img-panel">
+        <svg id="detail-svg" width="130" height="130" viewBox="0 0 100 100" fill="none" stroke-linecap="round" stroke-linejoin="round"></svg>
+      </div>
+
+      <div class="detail-content">
+        <div class="d-cat" id="d-cat">Collection</div>
+        <div class="d-name" id="d-name">Product Name</div>
+        <div class="d-sub" id="d-sub">Material · Color</div>
+        <div class="d-price" id="d-price">$000</div>
+
+        <div class="d-divider"></div>
+
+        <div class="d-label">Color</div>
+        <div class="d-colors" id="d-colors"></div>
+
+        <div class="d-label">Select Size</div>
+        <div class="d-sizes" id="d-sizes">
+          <button class="size-btn" onclick="pickSize(this)">XS</button>
+          <button class="size-btn" onclick="pickSize(this)">S</button>
+          <button class="size-btn picked" onclick="pickSize(this)">M</button>
+          <button class="size-btn" onclick="pickSize(this)">L</button>
+          <button class="size-btn" onclick="pickSize(this)">XL</button>
+          <button class="size-btn sold">XXL</button>
+        </div>
+
+        <button class="d-add" id="d-add-btn" onclick="addToBag()">Add to Bag</button>
+        <button class="d-wishlist" onclick="toggleWishDetail(this)">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          Add to Wishlist
+        </button>
+
+        <div class="d-divider"></div>
+
+        <div class="d-desc" id="d-desc"></div>
+
+        <div style="margin-top:24px;">
+          <div class="d-label" style="margin-bottom:12px;">Details</div>
+          <div class="d-material-row" id="d-mat-1">
+            <span class="d-material-key">Material</span>
+            <span class="d-material-val" id="d-material">—</span>
+          </div>
+          <div class="d-material-row">
+            <span class="d-material-key">Fit</span>
+            <span class="d-material-val" id="d-fit">—</span>
+          </div>
+          <div class="d-material-row">
+            <span class="d-material-key">Care</span>
+            <span class="d-material-val" id="d-care">Cold wash, lay flat to dry</span>
+          </div>
+          <div class="d-material-row" style="border-bottom:none;">
+            <span class="d-material-key">Origin</span>
+            <span class="d-material-val">Made in Portugal</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast" aria-live="polite"></div>
+
+  <script>
+    /* ── PRODUCT DATA ── */
+    const products = {
+      merino: {
+        cat: 'Clubhouse Collection',
+        name: 'Merino Polo',
+        sub: '100% Merino Wool · Three colorways',
+        price: '$285',
+        material: '100% Extra-Fine Merino Wool',
+        fit: 'Tailored · True to size',
+        desc: 'A refined polo in ultra-fine merino wool. Moisture-wicking, temperature-regulating, and crafted to move as well on the course as it does at dinner. Understated tonal branding. A silhouette built for decades, not seasons.',
+        bg: '#E8E0D0',
+        colors: ['#E8E0D0','#1A2235','#2C3D2E'],
+        svgStroke: '#9A8455',
+        svg: `<rect x="25" y="12" width="50" height="66" rx="3" stroke-width="1.5"/>
+              <line x1="25" y1="32" x2="75" y2="32" stroke-width="0.8"/>
+              <circle cx="50" cy="23" r="6" stroke-width="1"/>
+              <line x1="40" y1="48" x2="60" y2="48" stroke-width="0.7"/>
+              <line x1="40" y1="58" x2="60" y2="58" stroke-width="0.7"/>`
+      },
+      jacket: {
+        cat: 'Sport Collection',
+        name: 'Fairway Jacket',
+        sub: 'Recycled Nylon Shell · Two colorways',
+        price: '$420',
+        material: 'Recycled Nylon · DWR finish',
+        fit: 'Regular · Slightly oversized',
+        desc: 'A lightweight technical jacket built for the fairway and beyond. Wind-resistant, packable, and finished with Lyfefy\'s signature minimal hardware. The layering piece every wardrobe needs, from the first tee to the last train home.',
+        bg: '#D5DDD6',
+        colors: ['#2C3D2E','#1A2235'],
+        svgStroke: '#2C3D2E',
+        svg: `<path d="M15 24 Q50 8 85 24 L76 84 Q50 94 24 84 Z" stroke-width="1.5"/>
+              <line x1="28" y1="44" x2="72" y2="44" stroke-width="0.8"/>
+              <path d="M38 24 Q50 32 62 24" stroke-width="0.7"/>
+              <circle cx="50" cy="35" r="3.5" stroke-width="0.8"/>`
+      },
+      chino: {
+        cat: 'Essentials',
+        name: 'Navy Chino',
+        sub: 'Italian Cotton Twill · Three colorways',
+        price: '$195',
+        material: 'Italian Cotton Twill · 4-way stretch',
+        fit: 'Slim-straight · True to size',
+        desc: 'Cut from a rich Italian cotton twill, our chino strikes the balance between performance and polish. A four-way stretch construction keeps up with everything your day demands — from the morning round to a dinner across town.',
+        bg: '#D8DCE6',
+        colors: ['#1A2235','#2E2E2E','#DDD3C0'],
+        svgStroke: '#1A2235',
+        svg: `<path d="M22 22 L78 22 L72 82 L50 74 L28 82 Z" stroke-width="1.5"/>
+              <line x1="22" y1="38" x2="78" y2="38" stroke-width="0.8"/>
+              <line x1="50" y1="38" x2="50" y2="74" stroke-width="0.6"/>
+              <rect x="36" y="16" width="28" height="8" rx="1" stroke-width="0.8"/>`
+      },
+      linen: {
+        cat: 'Resort Collection',
+        name: 'Sand Linen Short',
+        sub: 'Belgian Linen · Two colorways',
+        price: '$165',
+        material: 'Stone-washed Belgian Linen',
+        fit: 'Relaxed · True to size',
+        desc: 'The definitive warm-weather short. Crafted from stone-washed Belgian linen for instant ease and a relaxed, worn-in feel from the very first wear. A 7" inseam, clean hem, and hidden drawstring make it as versatile as your day allows.',
+        bg: '#EAE2D3',
+        colors: ['#DDD3C0','#E8E0D0'],
+        svgStroke: '#9A8455',
+        svg: `<path d="M20 30 L80 30 L75 72 Q50 80 25 72 Z" stroke-width="1.5"/>
+              <line x1="20" y1="44" x2="80" y2="44" stroke-width="0.8"/>
+              <rect x="36" y="22" width="28" height="10" rx="1" stroke-width="0.8"/>
+              <line x1="50" y1="44" x2="50" y2="72" stroke-width="0.5"/>`
+      },
+      vest: {
+        cat: 'Clubhouse Collection',
+        name: 'Forest Vest',
+        sub: 'Recycled Down · Two colorways',
+        price: '$340',
+        material: '90/10 Recycled Down Fill · Nylon Shell',
+        fit: 'Slim · Size down for a tailored fit',
+        desc: 'A sleek down vest in a refined silhouette. Designed for the course, the club, and every moment in between. Subtle tonal Lyfefy branding, an exceptional warmth-to-weight ratio, and a profile that layers seamlessly over any polo or shirt.',
+        bg: '#2C3D2E',
+        colors: ['#2C3D2E','#1A2235'],
+        svgStroke: 'rgba(221,211,192,0.55)',
+        svg: `<path d="M32 14 L68 14 L76 82 L50 90 L24 82 Z" stroke-width="1.5"/>
+              <path d="M32 14 Q50 28 68 14" stroke-width="0.8"/>
+              <line x1="40" y1="42" x2="60" y2="42" stroke-width="0.6"/>
+              <line x1="40" y1="54" x2="60" y2="54" stroke-width="0.6"/>`
+      },
+      cap: {
+        cat: 'Accessories',
+        name: 'Lyfefy Cap',
+        sub: 'Cotton Twill · Three colorways',
+        price: '$85',
+        material: 'Premium Cotton Twill',
+        fit: 'One size · Adjustable brass closure',
+        desc: 'A structured six-panel cap in premium cotton twill. Low-profile embroidered Lyfefy mark. Adjustable brass closure with custom hardware. The finishing touch to any outfit, on or off the course.',
+        bg: '#F0EBE0',
+        colors: ['#E8E0D0','#1A2235','#141414'],
+        svgStroke: '#9A8455',
+        svg: `<path d="M18 58 Q50 20 82 58" stroke-width="1.5"/>
+              <line x1="18" y1="58" x2="82" y2="58" stroke-width="1.2"/>
+              <line x1="10" y1="58" x2="18" y2="58" stroke-width="1.5"/>
+              <circle cx="50" cy="44" r="4" stroke-width="0.8"/>`
+      },
+      quarter: {
+        cat: 'Sport Collection',
+        name: 'Quarter-Zip Pullover',
+        sub: 'Pima Cotton Fleece · Two colorways',
+        price: '$265',
+        material: '100% Pima Cotton Fleece',
+        fit: 'Regular · True to size',
+        desc: 'The perfect midlayer. A quarter-zip in our softest pima cotton fleece, with a clean raglan sleeve construction and refined zip hardware in tonal brass. Wear it over a polo on the back nine, or on its own through the weekend.',
+        bg: '#E2D8C8',
+        colors: ['#E2D8C8','#2C3D2E'],
+        svgStroke: '#7A5C3A',
+        svg: `<path d="M22 20 Q50 8 78 20 L82 80 L50 88 L18 80 Z" stroke-width="1.5"/>
+              <line x1="22" y1="36" x2="78" y2="36" stroke-width="0.8"/>
+              <path d="M38 20 L38 32 L62 32 L62 20" stroke-width="0.8"/>
+              <line x1="50" y1="20" x2="50" y2="32" stroke-width="0.8"/>`
+      },
+      shorts: {
+        cat: 'Sport Collection',
+        name: 'Navy Shorts',
+        sub: 'Performance Linen Blend · Three colorways',
+        price: '$145',
+        material: 'Linen-Cotton Performance Blend',
+        fit: 'Regular · True to size · 7" inseam',
+        desc: 'Our most versatile short. A linen-blend construction delivers breathability and structure in equal measure. Inseam pocket, moisture-wicking internal liner, and a clean tailored hem. From the court to the city, without compromise.',
+        bg: '#1A2235',
+        colors: ['#1A2235','#141414','#DDD3C0'],
+        svgStroke: 'rgba(221,211,192,0.45)',
+        svg: `<path d="M22 22 L78 22 L72 72 L50 64 L28 72 Z" stroke-width="1.5"/>
+              <line x1="22" y1="38" x2="78" y2="38" stroke-width="0.8"/>
+              <line x1="50" y1="38" x2="50" y2="64" stroke-width="0.6"/>
+              <rect x="36" y="14" width="28" height="10" rx="1" stroke-width="0.8"/>`
+      }
+    };
+
+    let bagCount = 0;
+    let currentFilter = 'all';
+
+    /* ── PAGE NAVIGATION ── */
+    function showPage(p) {
+      document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+      document.getElementById('page-' + p).classList.add('active');
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      const navEl = document.getElementById('nav-' + p);
+      if (navEl) navEl.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(initReveal, 100);
+    }
+
+    /* ── PRODUCT DETAIL ── */
+    function openDetail(id) {
+      const p = products[id];
+      if (!p) return;
+
+      document.getElementById('d-cat').textContent = p.cat;
+      document.getElementById('d-name').textContent = p.name;
+      document.getElementById('d-sub').textContent = p.sub;
+      document.getElementById('d-price').textContent = p.price;
+      document.getElementById('d-desc').textContent = p.desc;
+      document.getElementById('d-material').textContent = p.material;
+      document.getElementById('d-fit').textContent = p.fit;
+
+      const panel = document.getElementById('detail-img-panel');
+      panel.style.background = p.bg;
+
+      const svg = document.getElementById('detail-svg');
+      svg.setAttribute('stroke', p.svgStroke);
+      svg.innerHTML = p.svg;
+
+      const colorsEl = document.getElementById('d-colors');
+      colorsEl.innerHTML = p.colors.map((c, i) =>
+        `<div class="d-color-swatch${i === 0 ? ' active' : ''}" style="background:${c}" title="${c}" onclick="switchColor(this,'${p.bg}')"></div>`
+      ).join('');
+
+      const addBtn = document.getElementById('d-add-btn');
+      addBtn.textContent = 'Add to Bag';
+      addBtn.classList.remove('added');
+      addBtn.dataset.product = p.name;
+      addBtn.dataset.price = p.price;
+
+      document.querySelectorAll('.size-btn:not(.sold)').forEach(b => b.classList.remove('picked'));
+      const mBtn = document.querySelector('#d-sizes .size-btn:nth-child(3)');
+      if (mBtn) mBtn.classList.add('picked');
+
+      const overlay = document.getElementById('detail-overlay');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function switchColor(el, fallbackBg) {
+      document.querySelectorAll('.d-color-swatch').forEach(s => s.classList.remove('active'));
+      el.classList.add('active');
+      const panel = document.getElementById('detail-img-panel');
+      panel.style.background = el.style.background || fallbackBg;
+    }
+
+    function closeOverlay() {
+      document.getElementById('detail-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('detail-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeOverlay();
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeOverlay();
+    });
+
+    function pickSize(el) {
+      if (el.classList.contains('sold')) return;
+      document.querySelectorAll('.size-btn:not(.sold)').forEach(b => b.classList.remove('picked'));
+      el.classList.add('picked');
+    }
+
+    function addToBag() {
+      const btn = document.getElementById('d-add-btn');
+      const name = btn.dataset.product || 'Item';
+      btn.textContent = 'Added ✓';
+      btn.classList.add('added');
+      bagCount++;
+      const countEl = document.getElementById('bag-count');
+      countEl.textContent = bagCount;
+      countEl.classList.add('visible');
+      showToast(name + ' added to your bag');
+      setTimeout(() => {
+        btn.textContent = 'Add to Bag';
+        btn.classList.remove('added');
+      }, 2200);
+    }
+
+    /* ── WISHLIST ── */
+    function toggleWish(btn) {
+      const svg = btn.querySelector('svg');
+      const isWished = svg.style.fill === 'currentColor';
+      svg.style.fill = isWished ? 'none' : 'currentColor';
+      svg.style.stroke = isWished ? 'currentColor' : '#9A8455';
+      if (!isWished) showToast('Added to wishlist');
+    }
+    function toggleWishDetail(btn) {
+      const svg = btn.querySelector('svg');
+      const isWished = svg.style.fill === 'currentColor';
+      svg.style.fill = isWished ? 'none' : 'currentColor';
+      svg.style.stroke = isWished ? 'currentColor' : '#9A8455';
+      btn.style.color = isWished ? '' : '#9A8455';
+      if (!isWished) showToast('Added to wishlist');
+    }
+
+    /* ── TOAST ── */
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    /* ── FILTER ── */
+    function setFilter(el, cat) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('on'));
+      el.classList.add('on');
+      currentFilter = cat;
+      const cards = document.querySelectorAll('.prod-card');
+      let visible = 0;
+      cards.forEach(card => {
+        const cardCat = card.dataset.cat || '';
+        const show = cat === 'all' || cardCat.includes(cat);
+        card.style.display = show ? 'block' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('shop-count').textContent = visible + ' piece' + (visible === 1 ? '' : 's');
+    }
+
+    /* ── SORT ── */
+    function sortProducts(val) {
+      const grid = document.getElementById('prod-grid');
+      const cards = Array.from(grid.querySelectorAll('.prod-card'));
+      cards.sort((a, b) => {
+        const pa = parseInt(a.dataset.price);
+        const pb = parseInt(b.dataset.price);
+        const na = a.dataset.new === 'true';
+        const nb = b.dataset.new === 'true';
+        if (val === 'low') return pa - pb;
+        if (val === 'high') return pb - pa;
+        if (val === 'new') return (nb ? 1 : 0) - (na ? 1 : 0);
+        return 0;
+      });
+      cards.forEach(c => grid.appendChild(c));
+    }
+
+    /* ── SCROLL REVEAL ── */
+    function initReveal() {
+      const els = document.querySelectorAll('.reveal');
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      els.forEach(el => {
+        if (!el.classList.contains('visible')) obs.observe(el);
+      });
+    }
+
+    /* ── NAV SCROLL SHADOW ── */
+    window.addEventListener('scroll', () => {
+      document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 8);
+    }, { passive: true });
+
+    /* ── INIT ── */
+    initReveal();
+  </script>
+</body>
+</html>
