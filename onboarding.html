@@ -368,9 +368,10 @@ input[type=range] {
 
   <!-- S0: WELCOME -->
   <div class="screen active" id="s0">
-    <div class="eyebrow">Golf · Tennis  · More</div>
+    <div class="eyebrow">Golf · Tennis · Basketball · More</div>
     <h1 class="headline">Find your people.<br><em>On and off the course.</em></h1>
     <div class="welcome-rule"></div>
+    <p class="sub">Powered by AI. Built for athletes who take their game — and their social life — seriously.</p>
     <div class="welcome-cta-group">
       <button class="btn-next green" style="font-size:14px;padding:16px 52px" onclick="go(1)">Get Started →</button>
       <div class="completion-hint">Under 60 seconds · 9 questions</div>
@@ -426,7 +427,7 @@ input[type=range] {
     <div class="eyebrow">Step 3 of 9</div>
     <h2 class="headline" style="font-size:clamp(30px,4.5vw,52px)">What do <em>you play?</em></h2>
     <p class="sub" style="margin-bottom:8px">Select all that apply.</p>
-    <div class="microcopy">Golf is pre-selected — add more to your profile.</div>
+   
     <div class="chips" id="sports-chips">
       <div class="chip selected" onclick="this.classList.toggle('selected')">⛳ Golf</div>
       <div class="chip" onclick="this.classList.toggle('selected')">🎾 Tennis</div>
@@ -738,14 +739,24 @@ input[type=range] {
       const t = setInterval(() => { if (window.Clerk) { clearInterval(t); resolve(); } }, 100);
       setTimeout(() => { clearInterval(t); resolve(); }, 5000);
     });
+
     waitForClerk().then(() => {
-      if (window.Clerk) {
-        Clerk.load().then(() => {
-          Clerk.openSignUp({ afterSignUpUrl: '/dashboard.html', afterSignInUrl: '/dashboard.html' });
-        });
-      } else {
-        window.location.href = 'dashboard.html';
+      if (!window.Clerk) {
+        window.location.href = 'https://www.lyfefy.com/dashboard.html';
+        return;
       }
+      Clerk.load().then(() => {
+        // Already signed in — go straight to dashboard
+        if (Clerk.user) {
+          window.location.href = 'https://www.lyfefy.com/dashboard.html';
+          return;
+        }
+        // Open sign-up with full absolute URLs (required by Clerk)
+        Clerk.openSignUp({
+          afterSignUpUrl: 'https://www.lyfefy.com/dashboard.html',
+          afterSignInUrl: 'https://www.lyfefy.com/dashboard.html',
+        });
+      });
     });
   }
 
