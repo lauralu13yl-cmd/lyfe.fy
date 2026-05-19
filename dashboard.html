@@ -855,18 +855,22 @@
 
     <main class="main">
 
-      <!-- HOME -->
+      <!-- ══════════════════════════════════════
+           HOME — Overview only, no full lists
+           ══════════════════════════════════════ -->
       <div class="panel active" id="panel-home">
+
+        <!-- Greeting bar -->
         <div class="greet">
           <div class="greet-av" id="greetAv"></div>
           <div style="flex:1;position:relative;z-index:1">
             <div class="greet-title" id="greetTitle">Welcome to Lyfe.fy</div>
-            <div class="greet-sub" id="greetSub">Complete your profile — games and teammates are waiting</div>
+            <div class="greet-sub" id="greetSub">Find a game, connect with players, and build your profile.</div>
           </div>
-          <span class="badge badge-dark" id="roleBadge" style="position:relative;z-index:1">New Member</span>
+          <span class="badge badge-dark" id="roleBadge" style="position:relative;z-index:1">Member</span>
         </div>
 
-        <!-- ── PENDING HOST BANNER (hidden until role=pending_host) ── -->
+        <!-- Pending host application banner -->
         <div id="pending-banner" style="display:none">
           <div class="pending-banner">
             <div class="pending-icon">
@@ -874,61 +878,64 @@
             </div>
             <div style="flex:1">
               <div class="pending-title">Application under review</div>
-              <div class="pending-sub">We'll email you within 24–48 hours. In the meantime, complete your onboarding below.</div>
-              <div class="pending-steps">
-                <div class="pending-step"><div class="pending-step-dot done">✓</div>Application submitted</div>
+              <div class="pending-sub">We'll email you within 24–48 hours.</div>
+              <div class="pending-steps" style="margin-top:10px;">
+                <div class="pending-step"><div class="pending-step-dot done">✓</div>Submitted</div>
                 <div class="pending-step"><div class="pending-step-dot active">2</div>Under review</div>
-                <div class="pending-step"><div class="pending-step-dot todo">3</div>Get approved</div>
+                <div class="pending-step"><div class="pending-step-dot todo">3</div>Approved</div>
                 <div class="pending-step"><div class="pending-step-dot todo">4</div>Host sessions</div>
               </div>
             </div>
-            <a href="hostapplication.html#onboarding" style="font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--ac-deep);text-decoration:none;white-space:nowrap;flex-shrink:0;">Continue Onboarding →</a>
           </div>
         </div>
 
-        <!-- ── MEMBER: snap grid (no earnings card) ── -->
+        <!-- ── MEMBER: 4 stat tiles ── -->
         <div id="member-snap-grid" class="snap-grid">
-          <div class="snap-card" onclick="goTab('sessions')" title="Upcoming sessions">
+          <!-- Tile: My bookings (confirmed upcoming) -->
+          <div class="snap-card" onclick="sTab(document.querySelectorAll('.sub-tab')[1],'s-mine');goTab('sessions')" title="My confirmed bookings">
             <div class="snap-icon" style="background:var(--ac-light)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ac-strong)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
             </div>
             <div class="snap-num" id="snapUpcoming">0</div>
-            <div class="snap-label">Upcoming</div>
+            <div class="snap-label">My Bookings</div>
           </div>
-          <div class="snap-card" onclick="sTab(document.querySelector('.sub-tab'),\'s-mine\');goTab('sessions')" title="My bookings">
+          <!-- Tile: Sessions played -->
+          <div class="snap-card" onclick="goTab('sessions')" title="Browse all sessions">
             <div class="snap-icon" style="background:var(--ac-light)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ac-strong)" stroke-width="2" stroke-linecap="round"><polyline points="9,11 12,14 22,4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ac-strong)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
             </div>
             <div class="snap-num" id="snapPlayed">0</div>
             <div class="snap-label">Played</div>
           </div>
-          <div class="snap-card" onclick="goTab('connect')" title="Connections">
+          <!-- Tile: Connections -->
+          <div class="snap-card" onclick="goTab('connect')" title="Your connections">
             <div class="snap-icon" style="background:var(--base-dk)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-40)" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-40)" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.87"/></svg>
             </div>
-            <div class="snap-num">0</div>
+            <div class="snap-num" id="snapConnections">0</div>
             <div class="snap-label">Connections</div>
           </div>
+          <!-- Tile: Rating -->
           <div class="snap-card" onclick="goTab('profile')" title="My profile">
             <div class="snap-icon" style="background:var(--base-dk)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-40)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink-40)" stroke-width="2" stroke-linecap="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
             </div>
             <div class="snap-num" id="snapRating">—</div>
-            <div class="snap-label">My Rating</div>
+            <div class="snap-label">Rating</div>
           </div>
         </div>
 
-        <!-- ── HOST: stats bar (replaces snap grid) ── -->
+        <!-- ── HOST: 3-stat dark bar ── -->
         <div id="host-stats-bar" class="host-stats-bar" style="display:none">
           <div class="host-stat-cell" onclick="goTab('revenue')" title="View Revenue">
             <div class="host-stat-num" id="hostStatEarnings">$0</div>
             <div class="host-stat-lbl">This Month</div>
             <div class="host-stat-arrow">Revenue →</div>
           </div>
-          <div class="host-stat-cell" onclick="sTab(document.getElementById('hostCreateTab'),'s-create');goTab('sessions')" title="Manage Sessions">
+          <div class="host-stat-cell" onclick="goTab('sessions')" title="Manage Sessions">
             <div class="host-stat-num" id="hostStatSessions">0</div>
             <div class="host-stat-lbl">Sessions Hosted</div>
-            <div class="host-stat-arrow">Manage →</div>
+            <div class="host-stat-arrow">Sessions →</div>
           </div>
           <div class="host-stat-cell" onclick="goTab('profile')" title="View Profile">
             <div class="host-stat-num" id="hostStatRating">—</div>
@@ -937,61 +944,46 @@
           </div>
         </div>
 
-        <!-- rank card — same for all, click to browse sessions -->
-        <div class="rank-card" onclick="goTab('sessions')" style="cursor:pointer" title="Find sessions to earn points">
-          <div class="rank-left">
-            <div class="rank-ey">Your Ranking</div>
-            <div class="rank-num">—</div>
-            <div class="rank-sub">Play sessions to earn your rank</div>
-            <div class="rank-tier"><div class="rank-tier-dot"></div><div class="rank-tier-lbl">Unranked</div></div>
-          </div>
-          <div class="rank-div"></div>
-          <div class="rank-right">
-            <div class="rank-pts-lbl">Points</div>
-            <div class="rank-pts">0</div>
-            <div class="rank-pts-sub">pts earned</div>
-            <div class="rank-prog">
-              <div class="rank-prog-lbls"><span>0 pts</span><span>100 pts</span></div>
-              <div class="rank-prog-bg"><div class="rank-prog-fill" style="width:0%"></div></div>
-              <div class="rank-prog-next">to Bronze tier</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── MEMBER home cards ── -->
-        <div class="two-col" id="member-home-cards">
-          <div class="card">
+        <!-- ── Quick Actions row — replaces rank card (rank is future feature) ── -->
+        <div class="two-col">
+          <!-- Next session preview: compact, no book button — full booking in Sessions tab -->
+          <div class="card" id="member-home-cards">
             <div class="card-header">
-              <div class="card-title">Upcoming Sessions</div>
-              <button class="card-link" onclick="goTab('sessions')">Browse →</button>
+              <div class="card-title">Next Up</div>
+              <button class="card-link" onclick="goTab('sessions')">Find more →</button>
             </div>
             <div id="homeUpcomingSessions"><div class="loading">Loading...</div></div>
           </div>
+
+          <!-- My bookings preview: status only -->
           <div class="card">
-            <div class="card-title">Recent Bookings</div>
+            <div class="card-header">
+              <div class="card-title">My Bookings</div>
+              <button class="card-link" onclick="sTab(document.querySelectorAll('.sub-tab')[1],'s-mine');goTab('sessions')">All →</button>
+            </div>
             <div id="homeRecentBookings"><div class="loading">Loading...</div></div>
           </div>
         </div>
 
-        <!-- ── HOST home cards (replaces member cards) ── -->
+        <!-- ── HOST: upcoming sessions + recent bookings (summary only) ── -->
         <div class="two-col" id="host-home-cards" style="display:none">
-          <div class="card" style="cursor:pointer" onclick="goTab('sessions')">
+          <div class="card">
             <div class="card-header">
-              <div class="card-title">Your Upcoming Sessions</div>
-              <span class="card-link">+ New →</span>
+              <div class="card-title">Your Sessions</div>
+              <button class="card-link" onclick="goTab('sessions')">Manage →</button>
             </div>
             <div id="hostUpcomingSessions"><div class="loading">Loading...</div></div>
           </div>
-          <div class="card" style="cursor:pointer" onclick="goTab('revenue')">
+          <div class="card">
             <div class="card-header">
-              <div class="card-title">Recent Bookings Received</div>
-              <span class="card-link">All →</span>
+              <div class="card-title">Recent Bookings</div>
+              <button class="card-link" onclick="goTab('revenue')">Revenue →</button>
             </div>
             <div id="hostRecentBookings"><div class="loading">Loading...</div></div>
           </div>
         </div>
 
-        <!-- ── MEMBER CTA: become a host nudge (hidden for hosts/pending) ── -->
+        <!-- ── Become a Host nudge (members only) ── -->
         <div id="member-host-nudge">
           <div class="locked-card" style="display:flex;align-items:center;gap:18px;text-align:left;padding:20px 22px;">
             <div class="locked-icon" style="margin-bottom:0;font-size:20px;flex-shrink:0">🏅</div>
@@ -1002,6 +994,7 @@
             <a href="hostapplication.html" class="locked-cta" style="white-space:nowrap;flex-shrink:0">Apply to Host</a>
           </div>
         </div>
+
       </div>
 
       <!-- SESSIONS -->
@@ -1115,19 +1108,13 @@
 
       <!-- PHOTOS -->
       <div class="panel" id="panel-photos">
-        <div class="upload-zone">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ac-mid)" stroke-width="1.8" stroke-linecap="round" style="margin-bottom:8px"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
-          <div style="font-size:13px;font-weight:500;color:var(--ink-70)">Drop photos and videos here</div>
-          <div style="font-size:11px;color:var(--ink-40);margin-top:3px">AI auto-tags teammates, events, and locations</div>
-        </div>
-        <div class="card"><div class="card-title">Your gallery — 0 photos</div><div class="empty">Game moments, lifestyle shots, and highlights live here</div></div>
-        <div class="two-col">
-          <div class="card-flat"><div style="font-family:var(--serif);font-size:13px;font-weight:600;color:var(--ink-70);margin-bottom:4px">Game Moments</div><div style="font-size:11px;color:var(--ink-40)">0 photos</div></div>
-          <div class="card-flat"><div style="font-family:var(--serif);font-size:13px;font-weight:600;color:var(--ink-70);margin-bottom:4px">Lifestyle</div><div style="font-size:11px;color:var(--ink-40)">0 photos</div></div>
-          <div class="card-flat"><div style="font-family:var(--serif);font-size:13px;font-weight:600;color:var(--ink-70);margin-bottom:4px">Highlights</div><div style="font-size:11px;color:var(--ink-40)">0 photos</div></div>
-          <div class="card-flat" style="border:1px dashed var(--ac-border);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ac-mid)" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            <div style="font-size:11px;color:var(--ac-mid);font-weight:600">New album</div>
+        <div class="card" style="text-align:center;padding:44px 28px;">
+          <div style="font-size:32px;margin-bottom:14px;opacity:0.4;">📸</div>
+          <div style="font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink-70);margin-bottom:8px;">Photos &amp; Highlights</div>
+          <div style="font-size:13px;color:var(--ink-40);max-width:340px;margin:0 auto;line-height:1.7;">Upload game moments, lifestyle shots, and highlights from your sessions. AI will auto-tag teammates and locations.</div>
+          <div style="display:inline-flex;align-items:center;gap:6px;margin-top:20px;background:var(--ac-light);border:0.5px solid var(--ac-border);border-radius:100px;padding:6px 14px;">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--ac-mid);"></div>
+            <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ac-deep);">Coming Soon</span>
           </div>
         </div>
       </div>
@@ -1135,38 +1122,33 @@
       <!-- CONNECT -->
       <div class="panel" id="panel-connect">
 
-        <!-- Search bar -->
         <div class="card">
-          <div class="card-title" style="margin-bottom:10px">Find Players</div>
-          <div style="display:flex;gap:8px">
-            <input class="f-input" type="text" id="connectSearch"
-              placeholder="Search by name, sport, or city..."
-              oninput="debounceSearch()"
-              style="flex:1">
-            <button class="btn-primary" onclick="searchPlayers()" style="flex-shrink:0;padding:9px 18px">Search</button>
-          </div>
+          <div class="card-title" style="margin-bottom:8px">Find Players</div>
+          <input class="f-input" type="text" id="connectSearch"
+            placeholder="Search by name, sport, or city..."
+            oninput="debounceSearch()">
+          <div style="font-size:11px;color:var(--ink-40);margin-top:6px;">Type to search — results appear instantly</div>
         </div>
 
-        <!-- Search results -->
         <div id="searchResults" style="display:none">
           <div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-40);margin-bottom:8px;padding:0 2px" id="searchResultsLabel"></div>
           <div id="searchResultsList"></div>
         </div>
 
-        <!-- Pending requests received -->
-        <div class="card" id="requestsCard">
-          <div class="card-header">
-            <div class="card-title">Connection Requests <span id="requestsBadge" style="display:none;background:var(--ac-strong);color:white;font-size:9px;padding:2px 7px;border-radius:100px;font-family:var(--sans);font-weight:700;letter-spacing:0;text-transform:none;margin-left:4px"></span></div>
+        <div class="two-col">
+          <div class="card" id="requestsCard">
+            <div class="card-header">
+              <div class="card-title">Requests <span id="requestsBadge" style="display:none;background:var(--ac-strong);color:white;font-size:9px;padding:2px 7px;border-radius:100px;font-family:var(--sans);font-weight:700;letter-spacing:0;text-transform:none;margin-left:4px"></span></div>
+            </div>
+            <div id="requestsList"><div class="loading">Loading...</div></div>
           </div>
-          <div id="requestsList"><div class="loading">Loading...</div></div>
-        </div>
 
-        <!-- My connections -->
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">My Connections <span id="connectionsCount" style="color:var(--ink-40);font-family:var(--sans);font-weight:400;text-transform:none;letter-spacing:0;font-size:12px"></span></div>
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Connections <span id="connectionsCount" style="color:var(--ink-40);font-family:var(--sans);font-weight:400;text-transform:none;letter-spacing:0;font-size:12px"></span></div>
+            </div>
+            <div id="connectionsList"><div class="loading">Loading...</div></div>
           </div>
-          <div id="connectionsList"><div class="loading">Loading...</div></div>
         </div>
 
       </div>
@@ -1181,29 +1163,32 @@
           <div class="prof-bio" id="profBio">Add a bio to tell teammates who you are and what you play</div>
           <div class="stats-row">
             <div class="stat-pill"><div class="stat-num" id="statGames">0</div><div class="stat-lbl">Sessions</div></div>
-            <div class="stat-pill"><div class="stat-num">—</div><div class="stat-lbl">Win rate</div></div>
-            <div class="stat-pill"><div class="stat-num">0</div><div class="stat-lbl">Followers</div></div>
+            <div class="stat-pill"><div class="stat-num" id="statConnections">0</div><div class="stat-lbl">Connections</div></div>
+            <div class="stat-pill"><div class="stat-num" id="snapRating2">—</div><div class="stat-lbl">Rating</div></div>
             <div class="stat-pill"><div class="stat-num">0</div><div class="stat-lbl">Pts</div></div>
           </div>
           <button class="btn-primary" style="margin-top:14px;padding:10px 24px" onclick="goTab('edit')">Edit Profile</button>
         </div>
+        <!-- Certification prompt (members only) -->
         <div id="lockedCertSection">
           <div class="locked-card">
             <div class="locked-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
             <div class="locked-title">Certified Athlete Badge</div>
-            <div class="locked-sub">Get verified to unlock your certified badge, host sessions, and access the revenue dashboard</div>
+            <div class="locked-sub">Get verified to unlock your certified badge, host sessions, and access the revenue dashboard.</div>
             <button class="locked-cta" onclick="openCert()">Apply for Certification</button>
           </div>
         </div>
-        <div class="card"><div class="card-title">Highlight reels</div><div class="empty">Play sessions and upload photos to build your reels</div></div>
       </div>
 
       <!-- EDIT PROFILE -->
       <div class="panel" id="panel-edit">
         <div class="card">
-          <div class="card-title" style="margin-bottom:14px">Edit Profile</div>
+          <div class="card-header" style="margin-bottom:14px">
+            <div class="card-title" style="margin-bottom:0">Edit Profile</div>
+            <button class="card-link" onclick="goTab('profile')">← Back to Profile</button>
+          </div>
           <div class="f-group"><label class="f-label">Full name</label><input class="f-input" id="editName" type="text" placeholder="Your name"></div>
           <div class="f-row">
             <div class="f-group"><label class="f-label">Primary sport</label>
@@ -1848,21 +1833,25 @@
     const isHost = (userRole === 'host' || userRole === 'certified');
 
     if (isHost) {
-      // ── HOST HOME ──────────────────────────────────────
+      // HOST HOME — compact summaries only, full data lives in Sessions/Revenue tabs
 
-      // Host's own upcoming sessions
-      const hostSessions = await sb(`sessions?host_id=eq.${currentUser.id}&date=gte.${today}&order=date.asc&select=*&limit=5`);
+      const hostSessions = await sb(`sessions?host_id=eq.${currentUser.id}&date=gte.${today}&order=date.asc&select=*&limit=3`);
       const hsEl = document.getElementById('hostUpcomingSessions');
       if (!hostSessions || hostSessions.length === 0) {
-        hsEl.innerHTML = '<div class="empty">No upcoming sessions.<br><button class="empty-cta" onclick="sTab(document.getElementById(\'hostCreateTab\'),\'s-create\');goTab(\'sessions\')">Create your first session</button></div>';
+        hsEl.innerHTML = `<div class="empty" style="padding:14px 0">No upcoming sessions.<br><button class="empty-cta" onclick="goTab('sessions')">Create one →</button></div>`;
       } else {
         hsEl.innerHTML = hostSessions.map(s => {
-          const d = new Date(s.date + 'T00:00:00');
           const booked = (s.spots_total || 0) - (s.spots_left || 0);
-          return `<div class="host-next-session">
-            <div class="hns-date"><div class="hns-day">${d.getDate()}</div><div class="hns-mon">${d.toLocaleString('en-US',{month:'short'})}</div></div>
-            <div class="hns-info"><div class="hns-title">${s.title}</div><div class="hns-sub">${s.sport} · ${fmtTime(s.time)} · ${s.location}</div></div>
-            <div class="hns-booked"><div class="hns-booked-num">${booked}/${s.spots_total}</div><div class="hns-booked-lbl">booked</div></div>
+          return `<div class="game-row">
+            <div class="g-date">
+              <div class="g-day">${new Date(s.date+'T00:00:00').getDate()}</div>
+              <div class="g-mon">${new Date(s.date+'T00:00:00').toLocaleString('en-US',{month:'short'})}</div>
+            </div>
+            <div class="g-info">
+              <div class="g-title">${s.title}</div>
+              <div class="g-sub">${fmtTime(s.time)} · ${s.location}</div>
+            </div>
+            <span style="font-size:11px;font-weight:600;color:var(--ac-deep);white-space:nowrap;">${booked}/${s.spots_total}</span>
           </div>`;
         }).join('');
       }
@@ -1905,40 +1894,55 @@
       if (hostStatSessions) hostStatSessions.textContent = (allHostSessions || []).length;
 
     } else {
-      // ── MEMBER HOME ────────────────────────────────────
+      // MEMBER HOME — compact previews, no book buttons (booking is in Sessions tab)
 
-      // Upcoming available sessions to browse
-      const upcoming = await sb(`sessions?status=eq.active&date=gte.${today}&order=date.asc&select=*&limit=3`);
+      // Next Up: 2 available sessions, title + date + spots only
+      const upcoming = await sb(`sessions?status=eq.active&date=gte.${today}&order=date.asc&select=*&limit=2`);
       const uEl = document.getElementById('homeUpcomingSessions');
       if (!upcoming || upcoming.length === 0) {
-        uEl.innerHTML = '<div class="empty">No sessions yet.<br><button class="empty-cta" onclick="goTab(\'sessions\')">Browse sessions</button></div>';
+        uEl.innerHTML = `<div class="empty" style="padding:14px 0">No sessions yet.<br><button class="empty-cta" onclick="goTab('sessions')">Browse all →</button></div>`;
       } else {
         uEl.innerHTML = upcoming.map(s => `<div class="game-row">
-          <div class="g-date"><div class="g-day">${new Date(s.date+'T00:00:00').getDate()}</div><div class="g-mon">${new Date(s.date+'T00:00:00').toLocaleString('en-US',{month:'short'})}</div></div>
-          <div class="g-info"><div class="g-title">${s.title}</div><div class="g-sub">${s.sport} · ${fmtTime(s.time)}</div></div>
-          <button class="btn-primary" onclick='openBook(${JSON.stringify(s).replace(/'/g,"&#39;")})'>Book</button>
-        </div>`).join('');
+          <div class="g-date">
+            <div class="g-day">${new Date(s.date+'T00:00:00').getDate()}</div>
+            <div class="g-mon">${new Date(s.date+'T00:00:00').toLocaleString('en-US',{month:'short'})}</div>
+          </div>
+          <div class="g-info">
+            <div class="g-title">${s.title}</div>
+            <div class="g-sub">${s.sport} · ${fmtTime(s.time)} · ${s.spots_left} spot${s.spots_left!==1?'s':''} left</div>
+          </div>
+        </div>`).join('') + `<div style="padding:10px 0 2px;border-top:0.5px solid var(--border-lt);margin-top:4px;"><button class="empty-cta" onclick="goTab('sessions')">Browse all sessions →</button></div>`;
       }
-      document.getElementById('snapUpcoming').textContent = (upcoming || []).length;
 
-      // My recent bookings
-      const myB = await sb(`bookings?player_id=eq.${currentUser.id}&order=created_at.desc&select=*,sessions(title,date,time)&limit=3`);
+      // My Bookings: status summary only
+      const myB = await sb(`bookings?player_id=eq.${currentUser.id}&order=created_at.desc&select=*,sessions(title,date,sport)&limit=3`);
       const bEl = document.getElementById('homeRecentBookings');
       if (!myB || myB.length === 0) {
-        bEl.innerHTML = '<div class="empty">No bookings yet.<br><button class="empty-cta" onclick="goTab(\'sessions\')">Find a session</button></div>';
+        bEl.innerHTML = `<div class="empty" style="padding:14px 0">No bookings yet.<br><button class="empty-cta" onclick="goTab('sessions')">Find a session →</button></div>`;
       } else {
         bEl.innerHTML = myB.map(b => {
           const s = b.sessions;
           return `<div class="booking-row">
-            <div class="booking-info"><div class="booking-name">${s ? s.title : 'Session'}</div><div class="booking-detail">${s ? fmtDate(s.date) : ''}</div></div>
-            <span class="badge badge-green">${b.status}</span>
+            <div class="booking-info">
+              <div class="booking-name">${s ? s.title : 'Session'}</div>
+              <div class="booking-detail">${s ? fmtDate(s.date) : ''}</div>
+            </div>
+            <span class="badge badge-green" style="font-size:9px;">${b.status}</span>
           </div>`;
         }).join('');
       }
-      // Connection count for snap card
+
+      // Snap tile counts from real data
+      const myConfirmed = await sb(`bookings?player_id=eq.${currentUser.id}&status=eq.confirmed&select=id`);
+      document.getElementById('snapUpcoming').textContent = (myConfirmed || []).length;
+      const allBookings = await sb(`bookings?player_id=eq.${currentUser.id}&select=id`);
+      document.getElementById('snapPlayed').textContent = (allBookings || []).length;
       const conns = await sb(`connections?or=(requester_id.eq.${currentUser.id},addressee_id.eq.${currentUser.id})&status=eq.accepted&select=id`);
-      const connSnap = document.querySelector('#member-snap-grid .snap-card:nth-child(3) .snap-num');
-      if (connSnap) connSnap.textContent = (conns || []).length;
+      const connCount = (conns || []).length;
+      const snapConn = document.getElementById('snapConnections');
+      if (snapConn) snapConn.textContent = connCount;
+      const statConn = document.getElementById('statConnections');
+      if (statConn) statConn.textContent = connCount;
     }
   }
 
