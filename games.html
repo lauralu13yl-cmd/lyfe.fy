@@ -5,381 +5,175 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Find a Game — Lyfe.fy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
-<script
-  async crossorigin="anonymous"
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+<script async crossorigin="anonymous"
   data-clerk-publishable-key="pk_live_Y2xlcmsubHlmZWZ5LmNvbSQ"
   src="https://unpkg.com/@clerk/clerk-js@5.56.0/dist/clerk.browser.js"
-  type="text/javascript"
-></script>
+  type="text/javascript"></script>
 <style>
 :root {
-  --base:      #F5F2ED;
-  --base-dk:   #EDE9E1;
-  --base-dkr:  #E2DDD3;
-  --surface:   #FBF9F5;
-  --border:    #D3D1C7;
-  --border-lt: rgba(180,178,169,0.4);
-  --ink:       #2C2C2A;
-  --ink-70:    rgba(44,44,42,0.7);
-  --ink-40:    rgba(44,44,42,0.4);
-  --ink-15:    rgba(44,44,42,0.15);
-  --ac-light:  #E4F0E8;
-  --ac-mid:    #6FA882;
-  --ac-strong: #3D7A56;
-  --ac-deep:   #2A5C3F;
-  --ac-border: #B6D4BF;
-  --ac-soft:   rgba(61,122,86,0.08);
-  --radius:    16px;
-  --radius-sm: 10px;
-  --radius-xs: 6px;
+  --base:#F5F2ED; --base-dk:#EDE9E1; --base-dkr:#E2DDD3; --surface:#FBF9F5;
+  --border:#D3D1C7; --border-lt:rgba(180,178,169,0.4); --ink:#2C2C2A;
+  --ink-70:rgba(44,44,42,0.7); --ink-40:rgba(44,44,42,0.4); --ink-15:rgba(44,44,42,0.15);
+  --ac-light:#E4F0E8; --ac-mid:#6FA882; --ac-strong:#3D7A56; --ac-deep:#2A5C3F;
+  --ac-border:#B6D4BF; --radius:16px; --radius-sm:10px; --radius-xs:6px;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--base);color:var(--ink);overflow-x:hidden;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 55% at 8% 6%,rgba(228,240,232,0.45) 0%,transparent 55%),radial-gradient(ellipse 55% 50% at 90% 90%,rgba(182,212,191,0.28) 0%,transparent 55%),linear-gradient(168deg,#F5F2ED 0%,#EDE9E1 50%,#F0EDE7 100%);}
 
-*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:68px;background:rgba(245,242,237,0.92);backdrop-filter:blur(24px) saturate(1.1);border-bottom:0.5px solid var(--border-lt);transition:border-color 0.3s,box-shadow 0.3s;}
+nav.scrolled{border-bottom-color:var(--border);box-shadow:0 1px 24px rgba(44,44,42,0.06);}
+.nav-logo{font-family:'Fraunces',serif;font-size:22px;font-weight:700;letter-spacing:-0.3px;color:var(--ink);text-decoration:none;display:inline-flex;align-items:baseline;gap:1px;}
+.nav-logo-dot{color:var(--ac-mid);}
+.nav-logo-fy{font-size:13px;font-weight:400;font-style:italic;color:var(--ink-40);}
+.nav-links{display:flex;gap:36px;list-style:none;}
+.nav-links a{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--ink-40);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--ac-deep);}
+.nav-cta{display:flex;gap:10px;align-items:center;}
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--base);
-  color: var(--ink);
-  overflow-x: hidden;
-  font-size: 16px;
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
-}
+/* ── BUTTONS ── */
+.btn-ghost{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--ink);background:transparent;border:0.5px solid var(--border);padding:9px 20px;border-radius:100px;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.btn-ghost:hover{border-color:var(--ac-strong);color:var(--ac-deep);background:var(--ac-light);}
+.btn-primary{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--surface);background:var(--ink);border:0.5px solid var(--ink);padding:10px 22px;border-radius:100px;cursor:pointer;text-decoration:none;transition:all 0.2s;}
+.btn-primary:hover{background:var(--ac-deep);border-color:var(--ac-deep);transform:translateY(-1px);box-shadow:0 6px 20px rgba(42,92,63,0.2);}
+.btn-forest{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--surface);background:var(--ink);border:0.5px solid var(--ink);padding:10px 28px;border-radius:100px;cursor:pointer;text-decoration:none;display:inline-block;transition:all 0.25s;}
+.btn-forest:hover{background:var(--ac-deep);border-color:var(--ac-deep);transform:translateY(-1px);box-shadow:0 8px 24px rgba(42,92,63,0.2);}
 
-body::before {
-  content: '';
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 70% 55% at 8% 6%,  rgba(228,240,232,0.45) 0%, transparent 55%),
-    radial-gradient(ellipse 55% 50% at 90% 90%, rgba(182,212,191,0.28) 0%, transparent 55%),
-    linear-gradient(168deg, #F5F2ED 0%, #EDE9E1 50%, #F0EDE7 100%);
-}
+/* ── ACCOUNT DROPDOWN ── */
+.account-wrap{position:relative;}
+#account-btn{font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--surface);background:var(--ac-strong);border:0.5px solid var(--ac-strong);padding:10px 22px;border-radius:100px;cursor:pointer;transition:all 0.2s;}
+#account-btn:hover{background:var(--ac-deep);border-color:var(--ac-deep);}
+.account-dropdown{display:none;position:absolute;top:calc(100% + 10px);right:0;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-sm);box-shadow:0 12px 40px rgba(44,44,42,0.1);overflow:hidden;min-width:160px;z-index:200;}
+.account-dropdown.open{display:block;}
+.account-dropdown button{display:block;width:100%;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--ink);background:transparent;border:none;border-bottom:0.5px solid var(--border-lt);padding:14px 18px;text-align:left;cursor:pointer;transition:background 0.2s;}
+.account-dropdown button:last-child{border-bottom:none;}
+.account-dropdown button:hover{background:var(--ac-light);color:var(--ac-deep);}
+#user-button-wrap{display:none;align-items:center;gap:10px;}
+#user-greeting{font-size:11px;font-weight:600;letter-spacing:0.5px;color:var(--ac-deep);}
 
-/* NAV */
-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 52px; height: 68px;
-  background: rgba(245,242,237,0.92);
-  backdrop-filter: blur(24px) saturate(1.1);
-  border-bottom: 0.5px solid var(--border-lt);
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-nav.scrolled { border-bottom-color: var(--border); box-shadow: 0 1px 24px rgba(44,44,42,0.06); }
+/* ── PAGE HEADER ── */
+.page-header{padding-top:68px;position:relative;z-index:1;background:var(--ink);overflow:hidden;}
+.page-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 88% 50%,rgba(61,122,86,0.12) 0%,transparent 60%),radial-gradient(ellipse 40% 40% at 4% 14%,rgba(0,0,0,0.3) 0%,transparent 55%);}
+.page-header-inner{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:72px 24px 64px;}
+.page-header-eyebrow{font-size:10px;font-weight:600;letter-spacing:2.8px;text-transform:uppercase;color:var(--ac-mid);margin-bottom:14px;}
+.page-header-title{font-family:'Fraunces',serif;font-size:clamp(36px,5.5vw,62px);font-weight:700;letter-spacing:-1.5px;line-height:1.05;color:var(--base);margin-bottom:18px;}
+.page-header-title em{font-style:italic;color:var(--ac-mid);font-weight:600;}
+.page-header-rule{width:28px;height:1px;background:var(--ac-mid);margin-bottom:20px;opacity:0.7;}
+.page-header-sub{font-size:16px;font-weight:300;color:rgba(245,242,237,0.55);max-width:460px;line-height:1.8;}
 
-.nav-logo {
-  font-family: 'Fraunces', serif;
-  font-size: 22px; font-weight: 700; letter-spacing: -0.3px;
-  color: var(--ink); text-decoration: none;
-  display: inline-flex; align-items: baseline; gap: 1px;
-}
-.nav-logo-dot { color: var(--ac-mid); }
-.nav-logo-fy  { font-size: 13px; font-weight: 400; font-style: italic; color: var(--ink-40); }
+/* ── LAUNCH BANNER ── */
+.launch-banner{position:relative;z-index:1;background:var(--ac-light);border-top:0.5px solid var(--ac-border);border-bottom:0.5px solid var(--ac-border);padding:16px 24px;}
+.launch-banner-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;}
+.launch-banner-text{font-size:13px;font-weight:300;color:var(--ac-deep);}
+.launch-banner-text strong{font-weight:600;color:var(--ink);}
 
-.nav-links { display: flex; gap: 36px; list-style: none; }
-.nav-links a {
-  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--ink-40); text-decoration: none; transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--ac-deep); }
+/* ── FILTERS BAR ── */
+.filters-bar{position:sticky;top:68px;z-index:50;border-bottom:0.5px solid var(--border);background:rgba(245,242,237,0.95);backdrop-filter:blur(16px);}
+.filters-inner{max-width:1100px;margin:0 auto;padding:14px 24px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.filter-group{display:flex;align-items:center;gap:6px;}
+.filter-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ink-40);white-space:nowrap;margin-right:2px;}
+.filter-btn{font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--ink-40);background:transparent;border:0.5px solid var(--border);padding:6px 16px;border-radius:100px;cursor:pointer;transition:all 0.18s;white-space:nowrap;}
+.filter-btn:hover{color:var(--ac-deep);border-color:var(--ac-strong);background:var(--ac-light);}
+.filter-btn.active{color:var(--surface);background:var(--ink);border-color:var(--ink);}
+.filter-sep{width:0.5px;height:18px;background:var(--border);margin:0 6px;flex-shrink:0;}
 
-.nav-cta { display: flex; gap: 10px; align-items: center; }
+/* ── GAMES GRID ── */
+.games-section{position:relative;z-index:1;padding:48px 24px 104px;}
+.games-container{max-width:1100px;margin:0 auto;}
+.games-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
 
-.btn-ghost {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--ink); background: transparent;
-  border: 0.5px solid var(--border); padding: 9px 20px;
-  border-radius: 100px; cursor: pointer; text-decoration: none; transition: all 0.2s;
-}
-.btn-ghost:hover { border-color: var(--ac-strong); color: var(--ac-deep); background: var(--ac-light); }
+/* ── EMPTY / LOADING ── */
+.loading-state{grid-column:1/-1;text-align:center;padding:60px 0;color:var(--ink-40);}
+.loading-state p{font-size:13px;margin-top:10px;}
+.loading-spinner{width:28px;height:28px;border:1.5px solid var(--border);border-top-color:var(--ac-strong);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty-state{grid-column:1/-1;text-align:center;padding:80px 24px;}
+.empty-state-icon{font-size:36px;margin-bottom:16px;opacity:0.5;}
+.empty-state-title{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--ink-70);margin-bottom:8px;}
+.empty-state-sub{font-size:14px;color:var(--ink-40);font-weight:300;}
 
-.btn-primary {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--surface); background: var(--ink);
-  border: 0.5px solid var(--ink); padding: 10px 22px;
-  border-radius: 100px; cursor: pointer; text-decoration: none; transition: all 0.2s;
-}
-.btn-primary:hover { background: var(--ac-deep); border-color: var(--ac-deep); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(42,92,63,0.2); }
+/* ── GAME CARD ── */
+.live-badge{display:inline-flex;align-items:center;gap:5px;background:var(--ac-light);border:0.5px solid var(--ac-border);border-radius:100px;padding:4px 10px;font-size:9.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--ac-deep);margin-bottom:12px;}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--ac-strong);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
 
-.btn-forest {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
-  color: var(--surface); background: var(--ink);
-  border: 0.5px solid var(--ink); padding: 10px 28px;
-  border-radius: 100px; cursor: pointer; text-decoration: none; display: inline-block; transition: all 0.25s;
-}
-.btn-forest:hover { background: var(--ac-deep); border-color: var(--ac-deep); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(42,92,63,0.2); }
+.game-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow 0.3s,transform 0.3s;}
+.game-card:hover{box-shadow:0 8px 36px rgba(44,44,42,0.1);transform:translateY(-2px);}
+.card-tier-bar{height:2px;width:100%;}
+.tier-athlete{background:var(--ac-strong);}
+.tier-social{background:var(--ac-border);}
+.tier-training{background:var(--ac-mid);}
+.tier-tournament{background:var(--ink);}
+.card-body{padding:28px 28px 22px;flex:1;}
+.card-tier-label{font-size:9.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--ac-mid);margin-bottom:14px;}
+.card-title{font-family:'Fraunces',serif;font-size:19px;font-weight:600;line-height:1.22;color:var(--ink);margin-bottom:8px;letter-spacing:-0.3px;}
+.card-rule{width:20px;height:1px;background:var(--ac-mid);margin-bottom:14px;opacity:0.6;}
+.card-host{font-size:13px;font-weight:500;color:var(--ac-deep);margin-bottom:2px;display:flex;align-items:center;gap:5px;}
+.card-host-cert{width:14px;height:14px;background:var(--ac-strong);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+.card-host-sub{font-size:12px;font-weight:300;color:var(--ink-40);margin-bottom:20px;}
+.card-meta{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
+.card-meta-row{display:flex;gap:28px;flex-wrap:wrap;}
+.card-meta-item{display:flex;flex-direction:column;gap:2px;}
+.card-meta-label{font-size:9.5px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:var(--ink-40);}
+.card-meta-value{font-size:13.5px;font-weight:400;color:var(--ink);}
+.card-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.card-tag{font-size:9.5px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--ac-deep);background:var(--ac-light);border:0.5px solid var(--ac-border);border-radius:100px;padding:3px 10px;}
+.card-footer{border-top:0.5px solid var(--border);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--base-dk);}
+.card-price-block{font-size:12px;font-weight:300;color:var(--ink-70);line-height:1.55;}
+.card-price-block strong{font-weight:600;color:var(--ink);display:block;font-size:13px;margin-bottom:1px;}
+.card-spots{font-size:10.5px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--ac-strong);margin-top:4px;}
+.card-spots.urgent{color:#C05A2A;}
+.btn-card{font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--surface);background:var(--ink);border:0.5px solid var(--ink);padding:11px 22px;border-radius:100px;cursor:pointer;text-decoration:none;white-space:nowrap;transition:all 0.2s;display:inline-block;border:none;}
+.btn-card:hover{background:var(--ac-deep);transform:translateY(-1px);box-shadow:0 6px 18px rgba(42,92,63,0.2);}
+.btn-card.full{background:var(--ink-15);color:var(--ink-40);cursor:not-allowed;}
+.btn-card.full:hover{transform:none;box-shadow:none;background:var(--ink-15);}
 
-/* PAGE HEADER */
-.page-header {
-  padding-top: 68px; position: relative; z-index: 1;
-  background: var(--ink); overflow: hidden;
-}
-.page-header::before {
-  content: ''; position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 55% 55% at 88% 50%, rgba(61,122,86,0.12) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 4% 14%, rgba(0,0,0,0.3) 0%, transparent 55%);
-}
-.page-header-inner {
-  position: relative; z-index: 2;
-  max-width: 1100px; margin: 0 auto; padding: 72px 24px 64px;
-}
-.page-header-eyebrow {
-  font-size: 10px; font-weight: 600; letter-spacing: 2.8px; text-transform: uppercase;
-  color: var(--ac-mid); margin-bottom: 14px;
-}
-.page-header-title {
-  font-family: 'Fraunces', serif;
-  font-size: clamp(36px, 5.5vw, 62px); font-weight: 700;
-  letter-spacing: -1.5px; line-height: 1.05; color: var(--base); margin-bottom: 18px;
-}
-.page-header-title em { font-style: italic; color: var(--ac-mid); font-weight: 600; }
-.page-header-rule { width: 28px; height: 1px; background: var(--ac-mid); margin-bottom: 20px; opacity: 0.7; }
-.page-header-sub { font-size: 16px; font-weight: 300; color: rgba(245,242,237,0.55); max-width: 460px; line-height: 1.8; }
+/* ── SECTION DIVIDER ── */
+.section-divider{grid-column:1/-1;display:flex;align-items:center;gap:14px;margin:14px 0 6px;}
+.section-divider-line{flex:1;height:0.5px;background:var(--border);}
+.section-divider-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--ink-40);white-space:nowrap;}
 
-/* LAUNCH BANNER */
-.launch-banner {
-  position: relative; z-index: 1;
-  background: var(--ac-light);
-  border-top: 0.5px solid var(--ac-border);
-  border-bottom: 0.5px solid var(--ac-border);
-  padding: 16px 24px;
-}
-.launch-banner-inner {
-  max-width: 1100px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap;
-}
-.launch-banner-text { font-size: 13px; font-weight: 300; color: var(--ac-deep); }
-.launch-banner-text strong { font-weight: 600; color: var(--ink); }
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.visible{opacity:1;transform:none;}
+.reveal-delay-1{transition-delay:0.07s;}
+.reveal-delay-2{transition-delay:0.14s;}
+.reveal-delay-3{transition-delay:0.21s;}
 
-/* FILTERS BAR */
-.filters-bar {
-  position: relative; z-index: 1;
-  border-bottom: 0.5px solid var(--border);
-  background: rgba(245,242,237,0.88);
-  backdrop-filter: blur(14px);
-}
-.filters-inner {
-  max-width: 1100px; margin: 0 auto; padding: 18px 24px;
-  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-}
-.filter-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--ink-40); margin-right: 4px; white-space: nowrap;
-}
-.filter-btn {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10.5px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
-  color: var(--ink-40); background: transparent;
-  border: 0.5px solid var(--border); padding: 6px 16px;
-  border-radius: 100px; cursor: pointer; transition: all 0.2s;
-}
-.filter-btn:hover { color: var(--ac-deep); border-color: var(--ac-strong); background: var(--ac-light); }
-.filter-btn.active { color: var(--surface); background: var(--ink); border-color: var(--ink); }
+/* ── FOOTER ── */
+footer{background:var(--ink);border-top:0.5px solid rgba(111,168,130,0.15);padding:44px 24px;position:relative;z-index:1;}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:24px;}
+.footer-logo{font-family:'Fraunces',serif;font-size:19px;font-weight:700;color:var(--base);text-decoration:none;display:inline-flex;align-items:baseline;gap:1px;}
+.footer-logo-dot{color:var(--ac-mid);}
+.footer-logo-fy{font-size:11px;font-weight:400;font-style:italic;color:rgba(245,242,237,0.35);}
+.footer-links{display:flex;gap:32px;flex-wrap:wrap;}
+.footer-links a{font-size:10.5px;font-weight:600;letter-spacing:0.9px;text-transform:uppercase;color:rgba(245,242,237,0.28);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--ac-mid);}
+.footer-copy{font-size:11px;color:rgba(245,242,237,0.18);font-weight:300;}
 
-.filter-sep { width: 0.5px; height: 20px; background: var(--border); margin: 0 4px; flex-shrink: 0; }
+/* ── HAMBURGER ── */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+.hamburger span{display:block;width:20px;height:1.5px;background:var(--ink);}
 
-.format-wrap { position: relative; display: flex; align-items: center; }
-.format-select {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10.5px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
-  color: var(--ink-40); background: transparent;
-  border: 0.5px solid var(--border); padding: 6px 30px 6px 14px;
-  border-radius: 100px; cursor: pointer; transition: all 0.2s;
-  appearance: none; -webkit-appearance: none; min-width: 120px;
-}
-.format-select:hover, .format-select:focus { color: var(--ac-deep); border-color: var(--ac-strong); background: var(--ac-light); outline: none; }
-.format-chevron { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--ink-40); }
-
-/* GAMES GRID */
-.games-section { position: relative; z-index: 1; padding: 56px 24px 104px; }
-.games-container { max-width: 1100px; margin: 0 auto; }
-.games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-
-/* LOADING */
-.loading-state { grid-column: 1/-1; text-align: center; padding: 60px 0; color: var(--ink-40); }
-.loading-state p { font-size: 13px; margin-top: 10px; }
-.loading-spinner {
-  width: 28px; height: 28px;
-  border: 1.5px solid var(--border); border-top-color: var(--ac-strong);
-  border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* LIVE BADGE */
-.live-badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  background: var(--ac-light); border: 0.5px solid var(--ac-border);
-  border-radius: 100px; padding: 4px 10px;
-  font-size: 9.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--ac-deep); margin-bottom: 12px;
-}
-.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ac-strong); animation: pulse 2s ease-in-out infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
-/* GAME CARD */
-.game-card {
-  background: var(--surface);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  display: flex; flex-direction: column;
-  transition: box-shadow 0.3s, transform 0.3s;
-}
-.game-card:hover { box-shadow: 0 8px 36px rgba(44,44,42,0.1); transform: translateY(-2px); }
-
-/* tier accent bars */
-.card-tier-bar { height: 2px; width: 100%; }
-.tier-athlete  { background: var(--ac-strong); }
-.tier-ai       { background: var(--ac-mid); }
-.tier-social   { background: var(--ac-border); }
-.tier-coached  { background: var(--ac-strong); }
-.tier-training { background: var(--ac-mid); }
-.tier-tournament { background: var(--ink); }
-
-.card-body { padding: 30px 30px 24px; flex: 1; }
-
-.card-tier-label {
-  font-size: 9.5px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--ac-mid); margin-bottom: 16px;
-}
-.card-title {
-  font-family: 'Fraunces', serif;
-  font-size: 20px; font-weight: 600; line-height: 1.22;
-  color: var(--ink); margin-bottom: 8px; letter-spacing: -0.3px;
-}
-.card-rule { width: 20px; height: 1px; background: var(--ac-mid); margin-bottom: 16px; opacity: 0.6; }
-
-.card-host { font-size: 13px; font-weight: 500; color: var(--ac-deep); margin-bottom: 3px; display: flex; align-items: center; gap: 5px; }
-.card-host-cert {
-  width: 14px; height: 14px; background: var(--ac-strong); border-radius: 50%;
-  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.card-host-sub { font-size: 12px; font-weight: 300; color: var(--ink-40); margin-bottom: 24px; }
-
-.card-meta { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
-.card-meta-row { display: flex; gap: 28px; flex-wrap: wrap; }
-.card-meta-item { display: flex; flex-direction: column; gap: 2px; }
-.card-meta-label { font-size: 9.5px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--ink-40); }
-.card-meta-value { font-size: 13.5px; font-weight: 400; color: var(--ink); }
-
-.card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-.card-tag {
-  font-size: 9.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--ac-deep); background: var(--ac-light);
-  border: 0.5px solid var(--ac-border); border-radius: 100px; padding: 3px 10px;
-}
-
-.card-footer {
-  border-top: 0.5px solid var(--border);
-  padding: 20px 30px;
-  display: flex; align-items: center; justify-content: space-between; gap: 14px;
-  background: var(--base-dk);
-}
-.card-deposit { font-size: 12px; font-weight: 300; color: var(--ink-70); line-height: 1.55; }
-.card-deposit strong { font-weight: 600; color: var(--ink); display: block; font-size: 13px; margin-bottom: 1px; }
-.card-spots { font-size: 10.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--ac-strong); margin-top: 4px; }
-.card-spots.urgent { color: #C05A2A; }
-
-.btn-card {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10.5px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
-  color: var(--surface); background: var(--ink);
-  border: 0.5px solid var(--ink); padding: 11px 24px;
-  border-radius: 100px; cursor: pointer; text-decoration: none;
-  white-space: nowrap; transition: all 0.2s; display: inline-block;
-}
-.btn-card:hover { background: var(--ac-deep); border-color: var(--ac-deep); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(42,92,63,0.2); }
-.btn-card.full { background: var(--ink-15); border-color: var(--ink-15); color: var(--ink-40); cursor: not-allowed; }
-.btn-card.full:hover { transform: none; box-shadow: none; background: var(--ink-15); border-color: var(--ink-15); }
-
-/* DIVIDERS */
-.section-divider {
-  grid-column: 1/-1; display: flex; align-items: center; gap: 14px; margin: 14px 0 6px;
-}
-.section-divider-line { flex: 1; height: 0.5px; background: var(--border); }
-.section-divider-label {
-  font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--ink-40); white-space: nowrap;
-}
-
-/* SCROLL REVEAL */
-.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
-.reveal.visible { opacity: 1; transform: none; }
-.reveal-delay-1 { transition-delay: 0.08s; }
-.reveal-delay-2 { transition-delay: 0.16s; }
-.reveal-delay-3 { transition-delay: 0.24s; }
-.reveal-delay-4 { transition-delay: 0.32s; }
-
-/* FOOTER */
-footer {
-  background: var(--ink); border-top: 0.5px solid rgba(111,168,130,0.15);
-  padding: 44px 24px; position: relative; z-index: 1;
-}
-.footer-inner {
-  max-width: 1100px; margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px;
-}
-.footer-logo {
-  font-family: 'Fraunces', serif; font-size: 19px; font-weight: 700;
-  color: var(--base); text-decoration: none;
-  display: inline-flex; align-items: baseline; gap: 1px;
-}
-.footer-logo-dot { color: var(--ac-mid); }
-.footer-logo-fy  { font-size: 11px; font-weight: 400; font-style: italic; color: rgba(245,242,237,0.35); }
-.footer-links { display: flex; gap: 32px; flex-wrap: wrap; }
-.footer-links a {
-  font-size: 10.5px; font-weight: 600; letter-spacing: 0.9px; text-transform: uppercase;
-  color: rgba(245,242,237,0.28); text-decoration: none; transition: color 0.2s;
-}
-.footer-links a:hover { color: var(--ac-mid); }
-.footer-copy { font-size: 11px; color: rgba(245,242,237,0.18); font-weight: 300; }
-
-/* ACCOUNT DROPDOWN */
-.account-wrap { position: relative; }
-#account-btn { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--surface); background: var(--ac-strong); border: 0.5px solid var(--ac-strong); padding: 10px 22px; border-radius: 100px; cursor: pointer; transition: all 0.2s; }
-#account-btn:hover { background: var(--ac-deep); border-color: var(--ac-deep); }
-.account-dropdown { display: none; position: absolute; top: calc(100% + 10px); right: 0; background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-sm); box-shadow: 0 12px 40px rgba(44,44,42,0.1); overflow: hidden; min-width: 160px; z-index: 200; }
-.account-dropdown.open { display: block; }
-.account-dropdown button { display: block; width: 100%; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--ink); background: transparent; border: none; border-bottom: 0.5px solid var(--border-lt); padding: 14px 18px; text-align: left; cursor: pointer; transition: background 0.2s; }
-.account-dropdown button:last-child { border-bottom: none; }
-.account-dropdown button:hover { background: var(--ac-light); color: var(--ac-deep); }
-#user-button-wrap { display: none; align-items: center; gap: 10px; }
-#user-greeting { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; color: var(--ac-deep); }
-
-/* HAMBURGER */
-.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-.hamburger span { display: block; width: 20px; height: 1.5px; background: var(--ink); }
-
-@media (max-width: 960px) {
-  nav { padding: 0 24px; }
-  .nav-links { display: none; }
-  .hamburger { display: flex; }
-  .games-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 600px) {
-  nav .nav-cta { display: none; }
-  .card-footer { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .card-body { padding: 22px; }
-  .card-footer { padding: 16px 22px; }
-}
+@media(max-width:960px){nav{padding:0 24px;}.nav-links{display:none;}.hamburger{display:flex;}.games-grid{grid-template-columns:1fr;}}
+@media(max-width:600px){nav .nav-cta{display:none;}.card-footer{flex-direction:column;align-items:flex-start;gap:12px;}.card-body{padding:20px;}.card-footer{padding:16px 20px;}}
 </style>
 </head>
 <body>
 
+<!-- NAV -->
 <nav id="navbar">
   <a href="index.html" class="nav-logo">Lyfe<span class="nav-logo-dot">.</span><span class="nav-logo-fy">fy</span></a>
   <ul class="nav-links">
+    <!-- All links point to index.html sections — correct anchors matching index.html IDs -->
     <li><a href="index.html#how">How It Works</a></li>
-    <li><a href="index.html#players">For Players</a></li>
     <li><a href="index.html#hosts">For Hosts</a></li>
-    <li><a href="index.html#partners">Partners</a></li>
-    <li><a href="index.html#app">Download App</a></li>
+    <li><a href="index.html#partners">Partner with us</a></li>
+    <li><a href="index.html#contact">Contact us</a></li>
+    <li><a href="shop.html">Shop Lyfefy</a></li>
   </ul>
   <div class="nav-cta">
     <a href="hostapplication.html" class="btn-ghost" id="nav-become-host">Become a Host</a>
@@ -400,63 +194,57 @@ footer {
   <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
 
+<!-- PAGE HEADER -->
 <div class="page-header">
   <div class="page-header-inner">
-    <div class="page-header-eyebrow">Available Now</div>
+    <div class="page-header-eyebrow">Golf · Boston, NYC &amp; D.C.</div>
     <h1 class="page-header-title">Find a <em>Game</em></h1>
     <div class="page-header-rule"></div>
-    <p class="page-header-sub">Upcoming sessions hosted by certified athletes. Commit your spot &mdash; group fills, then you play.</p>
+    <p class="page-header-sub">Upcoming sessions hosted by certified athletes. Reserve your spot — group fills, then you play.</p>
   </div>
 </div>
 
+<!-- LAUNCH BANNER -->
 <div class="launch-banner">
   <div class="launch-banner-inner">
-    <p class="launch-banner-text">Launching in <strong>Boston, New York &amp; Washington D.C.</strong> this spring &mdash;</p>
-
+    <p class="launch-banner-text">Launching in <strong>Boston, New York &amp; Washington D.C.</strong> this spring —</p>
+    <a href="https://tally.so/r/MeO4Mg" target="_blank" rel="noopener" class="btn-forest">Join the Waitlist</a>
   </div>
 </div>
 
-<div class="filters-bar">
+<!-- FILTERS — Golf only, simplified tags -->
+<div class="filters-bar" id="filtersBar">
   <div class="filters-inner">
-    <span class="filter-label">Sport</span>
-    <button class="filter-btn active" data-filter="all" onclick="applyFilter('all',this)">All</button>
-    <button class="filter-btn" data-filter="golf" onclick="applyFilter('golf',this)">Golf</button>
-    <button class="filter-btn" data-filter="tennis" onclick="applyFilter('tennis',this)">Tennis</button>
-    <button class="filter-btn" data-filter="basketball" onclick="applyFilter('basketball',this)">Basketball</button>
-    <button class="filter-btn" data-filter="soccer" onclick="applyFilter('soccer',this)">Soccer</button>
-    <button class="filter-btn" data-filter="volleyball" onclick="applyFilter('volleyball',this)">Volleyball</button>
+    <!-- Session type filter -->
+    <div class="filter-group">
+      <span class="filter-label">Type</span>
+      <button class="filter-btn active" data-filter="all"         onclick="applyFilter('all',this)">All Sessions</button>
+      <button class="filter-btn"        data-filter="athlete-led" onclick="applyFilter('athlete-led',this)">Athlete-Led</button>
+      <button class="filter-btn"        data-filter="social"      onclick="applyFilter('social',this)">Social Play</button>
+      <button class="filter-btn"        data-filter="coached"     onclick="applyFilter('coached',this)">Coached</button>
+    </div>
 
     <div class="filter-sep"></div>
-    <span class="filter-label">Tier</span>
-    <button class="filter-btn" data-filter="athlete-led" onclick="applyFilter('athlete-led',this)">Athlete-Led</button>
-    <button class="filter-btn" data-filter="ai-matched" onclick="applyFilter('ai-matched',this)">AI-Matched</button>
-    <button class="filter-btn" data-filter="social" onclick="applyFilter('social',this)">Social Play</button>
-    <button class="filter-btn" data-filter="tournament" onclick="applyFilter('tournament',this)">Tournament</button>
-    <button class="filter-btn" data-filter="coached" onclick="applyFilter('coached',this)">Coached</button>
+
+    <!-- Level filter -->
+    <div class="filter-group">
+      <span class="filter-label">Level</span>
+      <button class="filter-btn" data-filter="fun"    onclick="applyFilter('fun','social',this)">fun</button>
+      <button class="filter-btn" data-filter="competitive" onclick="applyFilter('competitive',this)">Competitive</button>
+    </div>
 
     <div class="filter-sep"></div>
-    <span class="filter-label">Tags</span>
-    <button class="filter-btn" data-filter="beginner" onclick="applyFilter('beginner',this)">Beginner Friendly</button>
-    <button class="filter-btn" data-filter="competitive" onclick="applyFilter('competitive',this)">Competitive</button>
-    <button class="filter-btn" data-filter="networking" onclick="applyFilter('networking',this)">Networking</button>
-    <button class="filter-btn" data-filter="weekend" onclick="applyFilter('weekend',this)">This Weekend</button>
-    <button class="filter-btn" data-filter="free" onclick="applyFilter('free',this)">Free</button>
 
-    <div class="filter-sep"></div>
-    <span class="filter-label">Format</span>
-    <div class="format-wrap">
-      <select class="format-select" id="formatSelect" onchange="applyFormat(this.value)">
-        <option value="all">All Formats</option>
-        <option value="1v1">1v1</option>
-        <option value="small group">Small Group (2-4)</option>
-        <option value="group">Group (5-10)</option>
-        <option value="open">Open</option>
-      </select>
-      <svg class="format-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+    <!-- Quick filters -->
+    <div class="filter-group">
+      <span class="filter-label">Quick</span>
+      <button class="filter-btn" data-filter="weekend" onclick="applyFilter('weekend',this)">This Weekend</button>
+      <button class="filter-btn" data-filter="free"    onclick="applyFilter('free',this)">Free</button>
     </div>
   </div>
 </div>
 
+<!-- SESSIONS GRID -->
 <section class="games-section">
   <div class="games-container">
     <div class="games-grid" id="gamesGrid">
@@ -468,15 +256,16 @@ footer {
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
   <div class="footer-inner">
     <a href="index.html" class="footer-logo">Lyfe<span class="footer-logo-dot">.</span><span class="footer-logo-fy">fy</span></a>
     <div class="footer-links">
       <a href="index.html#how">How It Works</a>
-      <a href="index.html#players">For Players</a>
       <a href="index.html#hosts">For Hosts</a>
       <a href="index.html#partners">Partners</a>
-      <a href="#">Careers</a>
+      <a href="index.html#contact">Contact</a>
+      <a href="shop.html">Shop</a>
       <a href="#">Privacy</a>
     </div>
     <div class="footer-copy">&copy; 2025 Lyfe, Inc.</div>
@@ -484,246 +273,425 @@ footer {
 </footer>
 
 <script>
-  const SUPABASE_URL  = "https://bcvhlkncezqzzzrrbkum.supabase.co";
-  const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4";
-  const STRIPE_LINK   = "https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK";
+  /* ── CONFIG ── */
+  const SUPABASE_URL  = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
+  const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
 
-  let allLive = [];
+  /* ── STATE ── */
+  let activeFilter = 'all';
+  let currentUser  = null;
 
+  /* ── SUPABASE FETCH ── */
   async function fetchSessions() {
     try {
       const res = await fetch(
-        SUPABASE_URL + "/rest/v1/sessions?status=eq.active&order=date.asc,time.asc&select=*",
-        { headers: { "apikey": SUPABASE_ANON, "Authorization": "Bearer " + SUPABASE_ANON } }
+        SUPABASE_URL + '/rest/v1/sessions?status=eq.active&order=date.asc,time.asc&select=*',
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
       );
-      if (!res.ok) { console.error("Supabase error:", res.status, await res.text()); return []; }
+      if (!res.ok) throw new Error('HTTP ' + res.status);
       const d = await res.json();
-      console.log("Lyfefy: fetched", d.length, "sessions from Supabase", d);
       return Array.isArray(d) ? d : [];
-    } catch(e) { console.error("Lyfefy fetch failed:", e); return []; }
-  }
-
-  function fmtDate(d) { const dt = new Date(d+"T00:00:00"); return dt.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}); }
-  function fmtTime(t) { const [h,m]=t.split(":").map(Number); return (h%12||12)+":"+String(m).padStart(2,"0")+" "+(h>=12?"PM":"AM"); }
-  function fmtMoney(n) { return parseFloat(n)<=0 ? "Free" : "$"+parseFloat(n).toFixed(2); }
-  function isWeekend(ds) { const d=new Date(ds+"T00:00:00"),now=new Date(),dy=d.getDay(),diff=d-now; return (dy===0||dy===6)&&diff>=0&&diff<7*24*3600*1000; }
-
-  function tierInfo(t) {
-    return {
-      coached:    { label:"Athlete-Led Experience", cls:"tier-athlete" },
-      tournament: { label:"Tournament",             cls:"tier-tournament" },
-      training:   { label:"Training Session",       cls:"tier-training" },
-      casual:     { label:"Social Play",            cls:"tier-social" }
-    }[t] || { label:"Social Play", cls:"tier-social" };
-  }
-
-  function buildCard(s) {
-    var tier     = tierInfo(s.type);
-    var tags     = Array.isArray(s.tags) ? s.tags : [];
-    var left     = s.spots_left || 0;
-    var isFree   = parseFloat(s.price) === 0;
-    var isUrgent = left <= 2;
-
-    var certMark = s.host_certified
-      ? '<span class="card-host-cert"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="rgba(245,242,237,0.9)" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></span>'
-      : "";
-
-    var filterTags = [
-      s.sport ? s.sport.toLowerCase() : "",
-      s.type  ? s.type.toLowerCase()  : "",
-      isWeekend(s.date) ? "weekend" : "",
-      isFree ? "free" : ""
-    ].concat(tags.map(function(t){ return t.toLowerCase(); })).filter(Boolean).join(" ");
-
-    var tagsHtml = [s.sport, s.skill_level].concat(tags)
-      .filter(function(t,i,a){ return t && a.indexOf(t)===i; })
-      .slice(0,5)
-      .map(function(t){ return '<span class="card-tag">' + t + '</span>'; })
-      .join("");
-
-    var priceBlock = isFree
-      ? "<strong>Free Session</strong>Reserve your spot now"
-      : "<strong>" + fmtMoney(s.price) + " per spot</strong>Secure checkout via Stripe";
-
-    var bookBtn = left > 0
-      ? '<a href="' + (isFree ? "dashboard.html" : STRIPE_LINK) + '" class="btn-card">' + (isFree ? "Reserve Spot" : "Request Spot") + "</a>"
-      : '<span class="btn-card full">Session Full</span>';
-
-    var spotsClass = "card-spots" + (isUrgent ? " urgent" : "");
-    var hostName   = s.host_name || "Lyfe.fy Host";
-    var hostSub    = s.description || (s.sport + " &middot; " + (s.skill_level || "All levels"));
-    var skillVal   = s.skill_level || "All levels welcome";
-    var groupVal   = (s.spots_total || "?") + " players max";
-    var dataType   = s.type   || "casual";
-    var dataFmt    = (s.format || "open").toLowerCase();
-    var dataPrice  = isFree ? "free" : s.price;
-
-    return [
-      '<div class="game-card reveal"',
-        ' data-tags="'   + filterTags + '"',
-        ' data-id="'     + s.id       + '"',
-        ' data-type="'   + dataType   + '"',
-        ' data-format="' + dataFmt    + '"',
-        ' data-price="'  + dataPrice  + '">',
-      '<div class="card-tier-bar ' + tier.cls + '"></div>',
-      '<div class="card-body">',
-        '<span class="live-badge"><span class="live-dot"></span>Live Session</span>',
-        '<div class="card-tier-label">' + tier.label.toUpperCase() + '</div>',
-        '<h2 class="card-title">' + s.title + '</h2>',
-        '<div class="card-rule"></div>',
-        '<div class="card-host">' + hostName + certMark + '</div>',
-        '<div class="card-host-sub">' + hostSub + '</div>',
-        '<div class="card-meta">',
-          '<div class="card-meta-row">',
-            '<div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">' + fmtDate(s.date) + " &middot; " + fmtTime(s.time) + '</span></div>',
-            '<div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">' + s.location + '</span></div>',
-          '</div>',
-          '<div class="card-meta-row">',
-            '<div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">' + skillVal + '</span></div>',
-            '<div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">' + groupVal + '</span></div>',
-          '</div>',
-        '</div>',
-        '<div class="card-tags">' + tagsHtml + '</div>',
-      '</div>',
-      '<div class="card-footer">',
-        '<div>',
-          '<div class="card-deposit">' + priceBlock + '</div>',
-          '<div class="' + spotsClass + '">' + left + ' SPOT' + (left !== 1 ? "S" : "") + ' REMAINING</div>',
-        '</div>',
-        bookBtn,
-      '</div>',
-      '</div>'
-    ].join("");
-  }
-
-  function getStaticCards() {
-    return document.getElementById("staticCards").innerHTML;
-  }
-
-  function renderGrid(live) {
-    var grid = document.getElementById("gamesGrid");
-    var html = "";
-    if (live.length > 0) {
-      var label = "Live Now &middot; " + live.length + " Session" + (live.length !== 1 ? "s" : "");
-      html += "<div class='section-divider'><div class='section-divider-line'></div><div class='section-divider-label'>" + label + "</div><div class='section-divider-line'></div></div>";
-      html += live.map(function(s){ return buildCard(s); }).join("");
+    } catch(e) {
+      console.warn('Supabase fetch failed, using static cards:', e);
+      return [];
     }
-    html += getStaticCards();
+  }
+
+  /* ── FORMATTERS ── */
+  function fmtDate(d) {
+    const dt = new Date(d + 'T00:00:00');
+    return dt.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+  }
+  function fmtTime(t) {
+    const [h,m] = t.split(':').map(Number);
+    return (h % 12 || 12) + ':' + String(m).padStart(2,'0') + ' ' + (h >= 12 ? 'PM' : 'AM');
+  }
+  function fmtMoney(n) { return parseFloat(n) <= 0 ? 'Free' : '$' + parseFloat(n).toFixed(0); }
+  function isThisWeekend(ds) {
+    const d = new Date(ds + 'T00:00:00'), now = new Date(), dy = d.getDay(), diff = d - now;
+    return (dy === 0 || dy === 6) && diff >= 0 && diff < 7 * 86400000;
+  }
+
+  function tierInfo(type) {
+    return {
+      coached:    { label: 'Athlete-Led Experience', cls: 'tier-athlete' },
+      tournament: { label: 'Tournament',             cls: 'tier-tournament' },
+      training:   { label: 'Training Session',       cls: 'tier-training' },
+      casual:     { label: 'Social Play',            cls: 'tier-social' }
+    }[type] || { label: 'Social Play', cls: 'tier-social' };
+  }
+
+  /* ── BOOK BUTTON ── */
+  // Behaviour depends on auth state:
+  // - Signed in  → go to dashboard (booking handled there)
+  // - Signed out → prompt to sign in first
+  function bookBtnHtml(session) {
+    if (session.spots_left <= 0) {
+      return '<span class="btn-card full">Session Full</span>';
+    }
+    if (currentUser) {
+      // Logged-in: go to dashboard which handles booking
+      return '<a href="dashboard.html?book=' + session.id + '" class="btn-card">Reserve Spot</a>';
+    }
+    // Guest: prompt sign-in
+    return '<button class="btn-card" onclick="promptSignIn()">Sign In to Book</button>';
+  }
+
+  function promptSignIn() {
+    if (window.Clerk) Clerk.openSignIn({ afterSignInUrl: window.location.href });
+  }
+
+  /* ── BUILD CARD HTML ── */
+  function buildCard(s, delay) {
+    const tier    = tierInfo(s.type);
+    const tags    = Array.isArray(s.tags) ? s.tags : [];
+    const left    = s.spots_left || 0;
+    const isFree  = parseFloat(s.price) === 0;
+    const urgent  = left > 0 && left <= 2;
+
+    // Build data-tags string for filtering
+    const filterData = [
+      s.sport   ? s.sport.toLowerCase()  : '',
+      s.type    ? s.type.toLowerCase()   : '',
+      s.skill_level ? s.skill_level.toLowerCase() : '',
+      isThisWeekend(s.date) ? 'weekend' : '',
+      isFree ? 'free' : '',
+      'golf' // all sessions are golf-first for now
+    ].concat(tags.map(t => t.toLowerCase())).filter(Boolean).join(' ');
+
+    const certMark = s.host_certified
+      ? '<span class="card-host-cert"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="rgba(245,242,237,0.9)" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></span>'
+      : '';
+
+    // Show max 3 clean tags: sport + level + one descriptor
+    const displayTags = [s.sport, s.skill_level]
+      .concat(tags)
+      .filter((t, i, a) => t && a.indexOf(t) === i)
+      .slice(0, 3)
+      .map(t => '<span class="card-tag">' + t + '</span>')
+      .join('');
+
+    const priceBlock = isFree
+      ? '<strong>Free Session</strong>Reserve your spot now'
+      : '<strong>' + fmtMoney(s.price) + ' per spot</strong>Secure checkout · Full refund if unfilled';
+
+    const spotsText = left <= 0
+      ? 'Session Full'
+      : left === 1 ? '1 Spot Remaining'
+      : left + ' Spots Remaining';
+
+    const delayClass = delay ? ' reveal-delay-' + delay : '';
+
+    return `<div class="game-card reveal${delayClass}"
+      data-tags="${filterData}"
+      data-id="${s.id}"
+      data-type="${s.type || 'casual'}"
+      data-price="${isFree ? 'free' : s.price}">
+      <div class="card-tier-bar ${tier.cls}"></div>
+      <div class="card-body">
+        <span class="live-badge"><span class="live-dot"></span>Live Session</span>
+        <div class="card-tier-label">${tier.label.toUpperCase()}</div>
+        <h2 class="card-title">${s.title}</h2>
+        <div class="card-rule"></div>
+        <div class="card-host">${s.host_name || 'Lyfe.fy Host'} ${certMark}</div>
+        <div class="card-host-sub">${s.description || (s.sport + ' &middot; ' + (s.skill_level || 'All levels'))}</div>
+        <div class="card-meta">
+          <div class="card-meta-row">
+            <div class="card-meta-item">
+              <span class="card-meta-label">Date &amp; Time</span>
+              <span class="card-meta-value">${fmtDate(s.date)} &middot; ${fmtTime(s.time)}</span>
+            </div>
+            <div class="card-meta-item">
+              <span class="card-meta-label">Location</span>
+              <span class="card-meta-value">${s.location}</span>
+            </div>
+          </div>
+          <div class="card-meta-row">
+            <div class="card-meta-item">
+              <span class="card-meta-label">Skill Level</span>
+              <span class="card-meta-value">${s.skill_level || 'All levels welcome'}</span>
+            </div>
+            <div class="card-meta-item">
+              <span class="card-meta-label">Group Size</span>
+              <span class="card-meta-value">${s.spots_total || '?'} players max</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-tags">${displayTags}</div>
+      </div>
+      <div class="card-footer">
+        <div>
+          <div class="card-price-block">${priceBlock}</div>
+          <div class="card-spots${urgent ? ' urgent' : ''}">${spotsText}</div>
+        </div>
+        ${bookBtnHtml(s)}
+      </div>
+    </div>`;
+  }
+
+  /* ── STATIC FALLBACK CARDS (Golf only) ── */
+  function staticCardsHtml() {
+    return `
+    <div class="section-divider">
+      <div class="section-divider-line"></div>
+      <div class="section-divider-label">Featured Sessions</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <div class="game-card reveal" data-tags="golf coached weekend athlete-led competitive" data-type="coached" data-price="10">
+      <div class="card-tier-bar tier-athlete"></div>
+      <div class="card-body">
+        <span class="live-badge"><span class="live-dot"></span>Live Session</span>
+        <div class="card-tier-label">ATHLETE-LED EXPERIENCE</div>
+        <h2 class="card-title">Saturday Morning Golf — Back Bay</h2>
+        <div class="card-rule"></div>
+        <div class="card-host">Sofia R. <span class="card-host-cert"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="rgba(245,242,237,0.9)" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></span></div>
+        <div class="card-host-sub">Stanford Golf &middot; D1 Athlete &middot; 4.98 rated</div>
+        <div class="card-meta">
+          <div class="card-meta-row">
+            <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, May 3 &middot; 9:00 AM</span></div>
+            <div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Boston, MA</span></div>
+          </div>
+          <div class="card-meta-row">
+            <div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">Handicap 8–18</span></div>
+            <div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div>
+          </div>
+        </div>
+        <div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Coached</span><span class="card-tag">Networking</span></div>
+      </div>
+      <div class="card-footer">
+        <div><div class="card-price-block"><strong>$10 deposit</strong>Full refund if group doesn't fill</div><div class="card-spots urgent">2 Spots Remaining</div></div>
+        <button class="btn-card" onclick="promptSignIn()">Sign In to Book</button>
+      </div>
+    </div>
+
+    <div class="game-card reveal reveal-delay-1" data-tags="golf social weekend beginner free" data-type="casual" data-price="free">
+      <div class="card-tier-bar tier-social"></div>
+      <div class="card-body">
+        <span class="live-badge"><span class="live-dot"></span>Live Session</span>
+        <div class="card-tier-label">SOCIAL PLAY</div>
+        <h2 class="card-title">Sunday Beginner Golf — All Levels Welcome</h2>
+        <div class="card-rule"></div>
+        <div class="card-host">Marcus T. <span class="card-host-cert"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="rgba(245,242,237,0.9)" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></span></div>
+        <div class="card-host-sub">Duke Golf &middot; NCAA Athlete &middot; 4.95 rated</div>
+        <div class="card-meta">
+          <div class="card-meta-row">
+            <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sun, May 4 &middot; 8:00 AM</span></div>
+            <div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Boston, MA</span></div>
+          </div>
+          <div class="card-meta-row">
+            <div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">All levels welcome</span></div>
+            <div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div>
+          </div>
+        </div>
+        <div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Beginner</span><span class="card-tag">Free</span></div>
+      </div>
+      <div class="card-footer">
+        <div><div class="card-price-block"><strong>Free Session</strong>Reserve your spot now</div><div class="card-spots">3 Spots Remaining</div></div>
+        <button class="btn-card" onclick="promptSignIn()">Sign In to Book</button>
+      </div>
+    </div>
+
+    <div class="game-card reveal reveal-delay-2" data-tags="golf coached competitive athlete-led" data-type="coached" data-price="10">
+      <div class="card-tier-bar tier-athlete"></div>
+      <div class="card-body">
+        <span class="live-badge"><span class="live-dot"></span>Live Session</span>
+        <div class="card-tier-label">ATHLETE-LED EXPERIENCE</div>
+        <h2 class="card-title">Friday Evening Golf — Intermediate</h2>
+        <div class="card-rule"></div>
+        <div class="card-host">Alex L. <span class="card-host-cert"><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="rgba(245,242,237,0.9)" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></span></div>
+        <div class="card-host-sub">Georgetown Golf &middot; Club Competitive &middot; 4.91 rated</div>
+        <div class="card-meta">
+          <div class="card-meta-row">
+            <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Fri, May 2 &middot; 5:30 PM</span></div>
+            <div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Washington D.C.</span></div>
+          </div>
+          <div class="card-meta-row">
+            <div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">Handicap 10–20</span></div>
+            <div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div>
+          </div>
+        </div>
+        <div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Coached</span><span class="card-tag">Social After</span></div>
+      </div>
+      <div class="card-footer">
+        <div><div class="card-price-block"><strong>$10 deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">4 Spots Remaining</div></div>
+        <button class="btn-card" onclick="promptSignIn()">Sign In to Book</button>
+      </div>
+    </div>
+
+    <div class="game-card reveal reveal-delay-3" data-tags="golf social beginner" data-type="casual" data-price="10">
+      <div class="card-tier-bar tier-social"></div>
+      <div class="card-body">
+        <span class="live-badge"><span class="live-dot"></span>Live Session</span>
+        <div class="card-tier-label">SOCIAL PLAY</div>
+        <h2 class="card-title">Casual Golf Social — No Pressure Round</h2>
+        <div class="card-rule"></div>
+        <div class="card-host">Jordan M.</div>
+        <div class="card-host-sub">Boston Golf Club &middot; 4.88 rated</div>
+        <div class="card-meta">
+          <div class="card-meta-row">
+            <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Thu, May 1 &middot; 6:00 PM</span></div>
+            <div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">New York, NY</span></div>
+          </div>
+          <div class="card-meta-row">
+            <div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">Handicap 15–30</span></div>
+            <div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div>
+          </div>
+        </div>
+        <div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Casual</span><span class="card-tag">Beginner</span></div>
+      </div>
+      <div class="card-footer">
+        <div><div class="card-price-block"><strong>$10 deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">4 Spots Remaining</div></div>
+        <button class="btn-card" onclick="promptSignIn()">Sign In to Book</button>
+      </div>
+    </div>`;
+  }
+
+  /* ── RENDER GRID ── */
+  function renderGrid(live) {
+    const grid = document.getElementById('gamesGrid');
+    let html = '';
+
+    if (live.length > 0) {
+      const label = 'Live Now &middot; ' + live.length + ' Session' + (live.length !== 1 ? 's' : '');
+      html += `<div class="section-divider"><div class="section-divider-line"></div><div class="section-divider-label">${label}</div><div class="section-divider-line"></div></div>`;
+      html += live.map((s, i) => buildCard(s, i > 0 ? Math.min(i, 3) : 0)).join('');
+    }
+
+    html += staticCardsHtml();
     grid.innerHTML = html;
-    requestAnimationFrame(function() {
-      var io = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add("visible"); });
-      }, { threshold: 0.08 });
-      document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+
+    // Wire up reveal observer
+    requestAnimationFrame(() => {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.06 });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     });
   }
 
-  var activeTag    = "all";
-  var activeFormat = "all";
-
+  /* ── FILTER ── */
   function applyFilter(tag, btn) {
-    activeTag = tag;
-    document.querySelectorAll(".filter-btn").forEach(function(b){ b.classList.remove("active"); });
-    btn.classList.add("active");
+    activeFilter = tag;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
     filterCards();
-  }
-
-  function applyFormat(val) {
-    activeFormat = val.toLowerCase();
-    filterCards();
-  }
-
-  function cardMatchesTag(card, tag) {
-    if (tag === "all") return true;
-    var dtags = (card.dataset.tags || "").toLowerCase();
-    var dtype = (card.dataset.type || "").toLowerCase();
-    if (["golf","tennis","basketball","soccer","volleyball"].includes(tag)) return dtags.includes(tag);
-    if (tag === "athlete-led")  return dtags.includes("athlete") || dtype === "coached";
-    if (tag === "ai-matched")   return dtags.includes("ai-matched") || dtags.includes("ai matched");
-    if (tag === "social")       return dtype === "casual" || dtags.includes("social");
-    if (tag === "tournament")   return dtype === "tournament";
-    if (tag === "coached")      return dtype === "coached" || dtags.includes("coached");
-    if (tag === "beginner")     return dtags.includes("beginner");
-    if (tag === "competitive")  return dtags.includes("competitive");
-    if (tag === "networking")   return dtags.includes("networking");
-    if (tag === "weekend")      return dtags.includes("weekend");
-    if (tag === "free")         return card.dataset.price === "0" || card.dataset.price === "free";
-    return dtags.includes(tag);
-  }
-
-  function cardMatchesFormat(card, fmt) {
-    if (fmt === "all") return true;
-    var dfmt = (card.dataset.format || "").toLowerCase();
-    return dfmt.includes(fmt);
   }
 
   function filterCards() {
-    document.querySelectorAll(".game-card").forEach(function(card){
-      var tagOk = cardMatchesTag(card, activeTag);
-      var fmtOk = cardMatchesFormat(card, activeFormat);
-      card.style.display = (tagOk && fmtOk) ? "" : "none";
+    let visibleCount = 0;
+    document.querySelectorAll('.game-card').forEach(card => {
+      const tags = (card.dataset.tags || '').toLowerCase();
+      const type = (card.dataset.type || '').toLowerCase();
+      let match = false;
+      switch(activeFilter) {
+        case 'all':         match = true; break;
+        case 'athlete-led': match = type === 'coached' || tags.includes('athlete'); break;
+        case 'social':      match = type === 'casual' || tags.includes('social'); break;
+        case 'coached':     match = type === 'coached' || tags.includes('coached'); break;
+        case 'beginner':    match = tags.includes('beginner'); break;
+        case 'competitive': match = tags.includes('competitive'); break;
+        case 'weekend':     match = tags.includes('weekend'); break;
+        case 'free':        match = card.dataset.price === 'free' || card.dataset.price === '0'; break;
+        default:            match = tags.includes(activeFilter);
+      }
+      card.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
     });
-    document.querySelectorAll(".section-divider").forEach(function(div){
-      var next=div.nextElementSibling, anyVisible=false;
-      while(next && !next.classList.contains("section-divider")){ if(next.style.display!=="none") anyVisible=true; next=next.nextElementSibling; }
-      div.style.display = anyVisible ? "" : "none";
+
+    // Hide section dividers if their section is empty
+    document.querySelectorAll('.section-divider').forEach(div => {
+      let next = div.nextElementSibling;
+      let anyVisible = false;
+      while (next && !next.classList.contains('section-divider')) {
+        if (next.style.display !== 'none') anyVisible = true;
+        next = next.nextElementSibling;
+      }
+      div.style.display = anyVisible ? '' : 'none';
     });
+
+    // Show empty state if nothing matches
+    const grid = document.getElementById('gamesGrid');
+    let emptyMsg = grid.querySelector('.empty-state');
+    if (visibleCount === 0 && !emptyMsg) {
+      emptyMsg = document.createElement('div');
+      emptyMsg.className = 'empty-state';
+      emptyMsg.innerHTML = '<div class="empty-state-icon">⛳</div><div class="empty-state-title">No sessions match this filter</div><div class="empty-state-sub">Try a different filter, or check back soon for new sessions.</div>';
+      grid.appendChild(emptyMsg);
+    } else if (visibleCount > 0 && emptyMsg) {
+      emptyMsg.remove();
+    }
   }
 
+  /* ── INIT ── */
   async function init() {
-    var sessions = await fetchSessions();
-    allLive = sessions;
-    renderGrid(sessions);
+    const live = await fetchSessions();
+    renderGrid(live);
   }
   init();
 
-  var navbar = document.getElementById("navbar");
-  window.addEventListener("scroll", function(){ navbar.classList.toggle("scrolled", window.scrollY > 20); });
+  /* ── SCROLL SHADOW ── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
+  });
 
-  // ── Clerk auth + role-aware nav ──
-  const SUPABASE_URL_G = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
-  const SUPABASE_KEY_G = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
-
-  async function getGameUserRole(uid) {
+  /* ── CLERK AUTH ── */
+  async function getRole(uid) {
     try {
-      var r = await fetch(SUPABASE_URL_G + '/rest/v1/profiles?id=eq.' + uid + '&select=role', {
-        headers: { 'apikey': SUPABASE_KEY_G, 'Authorization': 'Bearer ' + SUPABASE_KEY_G }
+      const r = await fetch(SUPABASE_URL + '/rest/v1/profiles?id=eq.' + uid + '&select=role', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
       });
-      var d = await r.json();
+      const d = await r.json();
       return (d && d[0]) ? d[0].role : 'member';
     } catch(e) { return 'member'; }
   }
 
-  function initGamesClerk() {
-    if (!window.Clerk) { setTimeout(initGamesClerk, 50); return; }
-    Clerk.load().then(async function() {
-      var accountBtn     = document.getElementById('account-btn');
-      var accountWrap    = document.getElementById('account-wrap');
-      var accountDrop    = document.getElementById('account-dropdown');
-      var signInBtn      = document.getElementById('sign-in-btn');
-      var signUpBtn      = document.getElementById('sign-up-btn');
-      var userButtonWrap = document.getElementById('user-button-wrap');
-      var userGreeting   = document.getElementById('user-greeting');
+  function initClerk() {
+    if (!window.Clerk) { setTimeout(initClerk, 50); return; }
+    Clerk.load().then(async () => {
+      const accountBtn     = document.getElementById('account-btn');
+      const accountWrap    = document.getElementById('account-wrap');
+      const accountDrop    = document.getElementById('account-dropdown');
+      const signUpBtn      = document.getElementById('sign-up-btn');
+      const signInBtn      = document.getElementById('sign-in-btn');
+      const userButtonWrap = document.getElementById('user-button-wrap');
+      const userGreeting   = document.getElementById('user-greeting');
+      const becomeHost     = document.getElementById('nav-become-host');
+      const hostDashNav    = document.getElementById('nav-host-dashboard');
 
       if (accountBtn) {
-        accountBtn.addEventListener('click', function(e) { e.stopPropagation(); accountDrop.classList.toggle('open'); });
-        document.addEventListener('click', function() { accountDrop.classList.remove('open'); });
-        signInBtn.addEventListener('click', function() { accountDrop.classList.remove('open'); Clerk.openSignIn(); });
-        signUpBtn.addEventListener('click', function() { accountDrop.classList.remove('open'); Clerk.openSignUp(); });
+        accountBtn.addEventListener('click', e => { e.stopPropagation(); accountDrop.classList.toggle('open'); });
       }
+      document.addEventListener('click', () => { if(accountDrop) accountDrop.classList.remove('open'); });
+      if (signUpBtn) signUpBtn.addEventListener('click', () => { accountDrop.classList.remove('open'); window.location.href = 'onboarding.html'; });
+      if (signInBtn) signInBtn.addEventListener('click', () => { accountDrop.classList.remove('open'); Clerk.openSignIn({ afterSignInUrl: window.location.href }); });
 
-      async function updateGamesAuthUI() {
-        var user = Clerk.user;
-        var becomeHost  = document.getElementById('nav-become-host');
-        var hostDashNav = document.getElementById('nav-host-dashboard');
+      async function updateAuthUI() {
+        const user = Clerk.user;
         if (user) {
+          currentUser = user;
           if (accountWrap)    accountWrap.style.display    = 'none';
           if (userButtonWrap) userButtonWrap.style.display = 'flex';
-          var name = user.firstName || user.emailAddresses[0].emailAddress || 'there';
-          if (userGreeting) userGreeting.innerHTML = '<a href="dashboard.html" style="color:var(--ac-deep);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Hi, ' + name + '</a>';
-          var userButtonEl = document.getElementById('user-button');
+          const name = user.firstName || user.emailAddresses?.[0]?.emailAddress || 'there';
+          if (userGreeting) userGreeting.innerHTML = `<a href="dashboard.html" style="color:var(--ac-deep);text-decoration:none;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;">Hi, ${name}</a>`;
+          const userButtonEl = document.getElementById('user-button');
           if (userButtonEl && !userButtonEl.hasChildNodes()) Clerk.mountUserButton(userButtonEl);
-          var role = await getGameUserRole(user.id);
+
+          // Update book buttons now that we know the user is signed in
+          document.querySelectorAll('.btn-card[onclick="promptSignIn()"]').forEach(btn => {
+            const card = btn.closest('.game-card');
+            if (!card) return;
+            const sid = card.dataset.id;
+            if (sid) {
+              btn.outerHTML = `<a href="dashboard.html?book=${sid}" class="btn-card">Reserve Spot</a>`;
+            } else {
+              // Static card with no ID — link to dashboard
+              btn.outerHTML = `<a href="dashboard.html" class="btn-card">Reserve Spot</a>`;
+            }
+          });
+
+          const role = await getRole(user.id);
           if (role === 'host' || role === 'certified') {
             if (becomeHost)  becomeHost.style.display  = 'none';
             if (hostDashNav) hostDashNav.style.display = '';
@@ -732,144 +700,33 @@ footer {
             if (hostDashNav) hostDashNav.style.display = 'none';
           }
         } else {
+          currentUser = null;
           if (accountWrap)    accountWrap.style.display    = '';
           if (userButtonWrap) userButtonWrap.style.display = 'none';
           if (becomeHost)     becomeHost.style.display     = '';
           if (hostDashNav)    hostDashNav.style.display    = 'none';
         }
       }
-      Clerk.addListener(function() { updateGamesAuthUI(); });
-      await updateGamesAuthUI();
+
+      Clerk.addListener(() => updateAuthUI());
+      await updateAuthUI();
     });
   }
-  initGamesClerk();
+  initClerk();
 
+  /* ── HAMBURGER ── */
   function toggleMenu() {
-    var links = document.querySelector(".nav-links");
+    const links = document.querySelector('.nav-links');
     if (!links) return;
-    if (links.style.display === "flex") { links.style.display = ""; return; }
+    if (links.style.display === 'flex') { links.style.display = ''; return; }
     Object.assign(links.style, {
-      display: "flex", flexDirection: "column", position: "absolute",
-      top: "68px", left: "0", right: "0",
-      background: "rgba(245,242,237,0.97)", backdropFilter: "blur(20px)",
-      padding: "24px 28px", gap: "18px",
-      borderBottom: "0.5px solid rgba(180,178,169,0.4)"
+      display:'flex', flexDirection:'column', position:'absolute',
+      top:'68px', left:'0', right:'0',
+      background:'rgba(245,242,237,0.97)', backdropFilter:'blur(20px)',
+      padding:'24px 28px', gap:'18px',
+      borderBottom:'0.5px solid rgba(180,178,169,0.4)'
     });
   }
 </script>
-
-<!-- Static fallback cards — read by getStaticCards() -->
-<div id="staticCards" style="display:none">
-  <div class="section-divider">
-    <div class="section-divider-line"></div>
-    <div class="section-divider-label">Featured Sessions</div>
-    <div class="section-divider-line"></div>
-  </div>
-
-  <div class="game-card reveal" data-tags="golf athlete weekend" data-type="coached" data-format="small group" data-price="10">
-    <div class="card-tier-bar tier-athlete"></div>
-    <div class="card-body">
-      <div class="card-tier-label">ATHLETE-LED EXPERIENCE</div>
-      <h2 class="card-title">Saturday Morning Golf &mdash; Back Bay</h2>
-      <div class="card-rule"></div>
-      <div class="card-host">Sofia R.</div>
-      <div class="card-host-sub">Stanford Golf &middot; D1 Athlete &middot; 4.98 rated</div>
-      <div class="card-meta">
-        <div class="card-meta-row">
-          <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, May 3 &middot; 9:00 &ndash; 11:30 AM</span></div>
-          <div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Boston, MA</span></div>
-        </div>
-        <div class="card-meta-row">
-          <div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">Handicap 8 &ndash; 18</span></div>
-          <div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div>
-        </div>
-      </div>
-      <div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Skill-Focused</span><span class="card-tag">Coached Elements</span><span class="card-tag">Networking</span></div>
-    </div>
-    <div class="card-footer">
-      <div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">2 spots remaining</div></div>
-      <a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a>
-    </div>
-  </div>
-
-  <div class="game-card reveal reveal-delay-1" data-tags="golf beginner weekend ai-matched" data-type="casual" data-format="small group" data-price="10">
-    <div class="card-tier-bar tier-ai"></div>
-    <div class="card-body">
-      <div class="card-tier-label">AI INTEREST-MATCHED PLAY</div>
-      <h2 class="card-title">Sunday Beginner Golf &mdash; All Levels Welcome</h2>
-      <div class="card-rule"></div>
-      <div class="card-host">Marcus T.</div>
-      <div class="card-host-sub">Duke Golf &middot; NCAA Athlete &middot; 4.95 rated</div>
-      <div class="card-meta">
-        <div class="card-meta-row">
-          <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sun, May 4 &middot; 8:00 &ndash; 10:00 AM</span></div>
-          <div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Boston, MA</span></div>
-        </div>
-        <div class="card-meta-row">
-          <div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">All levels welcome</span></div>
-          <div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div>
-        </div>
-      </div>
-      <div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Beginner Friendly</span><span class="card-tag">Social</span><span class="card-tag">AI-Matched</span></div>
-    </div>
-    <div class="card-footer">
-      <div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">3 spots remaining</div></div>
-      <a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a>
-    </div>
-  </div>
-
-  <div class="game-card reveal reveal-delay-2" data-tags="tennis athlete weekend" data-type="coached" data-format="small group" data-price="10">
-    <div class="card-tier-bar tier-athlete"></div>
-    <div class="card-body">
-      <div class="card-tier-label">ATHLETE-LED EXPERIENCE</div>
-      <h2 class="card-title">Pro Tennis Social &mdash; Intermediate to Advanced</h2>
-      <div class="card-rule"></div>
-      <div class="card-host">James K.</div>
-      <div class="card-host-sub">Pro Tennis &middot; 4.5 UTR &middot; 4.97 rated</div>
-      <div class="card-meta">
-        <div class="card-meta-row">
-          <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Sat, May 3 &middot; 10:00 AM &ndash; 12:00 PM</span></div>
-          <div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">New York, NY</span></div>
-        </div>
-        <div class="card-meta-row">
-          <div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">UTR 3.5 &ndash; 5.0</span></div>
-          <div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div>
-        </div>
-      </div>
-      <div class="card-tags"><span class="card-tag">Tennis</span><span class="card-tag">Competitive</span><span class="card-tag">Skill Drills</span><span class="card-tag">Social After</span></div>
-    </div>
-    <div class="card-footer">
-      <div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots urgent">1 spot remaining</div></div>
-      <a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a>
-    </div>
-  </div>
-
-  <div class="game-card reveal reveal-delay-3" data-tags="golf social weekend" data-type="casual" data-format="small group" data-price="10">
-    <div class="card-tier-bar tier-social"></div>
-    <div class="card-body">
-      <div class="card-tier-label">PURE SOCIAL PLAY</div>
-      <h2 class="card-title">Casual Friday Evening Golf &mdash; Pure Social</h2>
-      <div class="card-rule"></div>
-      <div class="card-host">Alex L.</div>
-      <div class="card-host-sub">Georgetown Golf &middot; Club Competitive &middot; 4.91 rated</div>
-      <div class="card-meta">
-        <div class="card-meta-row">
-          <div class="card-meta-item"><span class="card-meta-label">Date &amp; Time</span><span class="card-meta-value">Fri, May 2 &middot; 5:30 &ndash; 7:30 PM</span></div>
-          <div class="card-meta-item"><span class="card-meta-label">Location</span><span class="card-meta-value">Washington D.C.</span></div>
-        </div>
-        <div class="card-meta-row">
-          <div class="card-meta-item"><span class="card-meta-label">Skill Level</span><span class="card-meta-value">Handicap 15 &ndash; 30</span></div>
-          <div class="card-meta-item"><span class="card-meta-label">Group Size</span><span class="card-meta-value">4 players max</span></div>
-        </div>
-      </div>
-      <div class="card-tags"><span class="card-tag">Golf</span><span class="card-tag">Casual</span><span class="card-tag">After-Work</span><span class="card-tag">No Pressure</span></div>
-    </div>
-    <div class="card-footer">
-      <div><div class="card-deposit"><strong>$10 refundable deposit</strong>Full refund if group doesn't fill</div><div class="card-spots">4 spots remaining</div></div>
-      <a href="https://buy.stripe.com/REPLACE" class="btn-card">Request Spot</a>
-    </div>
-  </div>
-
-</div>
 </body>
 </html>
