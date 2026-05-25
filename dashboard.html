@@ -798,14 +798,13 @@
     <header class="topbar" id="topbar">
       <a href="index.html" class="logo">Lyfe<span class="logo-dot">.</span><span class="logo-fy">fy</span></a>
 
-      <!-- Inline nav — all tabs here, no bottom bar -->
+      <!-- Nav — 4 clear tabs, Revenue only for hosts -->
       <nav class="topnav">
-        <button class="topnav-btn active" id="tnav-home" onclick="goTab('home')">Home</button>
-        <button class="topnav-btn" id="tnav-sessions" onclick="goTab('sessions')">Sessions</button>
-        <button class="topnav-btn" id="tnav-revenue" onclick="goTab('revenue')">Revenue</button>
-        <button class="topnav-btn" id="tnav-photos" onclick="goTab('photos')">Photos</button>
-        <button class="topnav-btn" id="tnav-connect" onclick="goTab('connect')">Connect</button>
-        <button class="topnav-btn" id="tnav-profile" onclick="goTab('profile')">Profile</button>
+        <button class="topnav-btn active" id="tnav-home"    onclick="goTab('home')">Home</button>
+        <button class="topnav-btn"        id="tnav-sessions" onclick="goTab('sessions')">Sessions</button>
+        <button class="topnav-btn"        id="tnav-connect"  onclick="goTab('connect')">Community</button>
+        <button class="topnav-btn"        id="tnav-revenue"  onclick="goTab('revenue')" style="display:none">Revenue</button>
+        <button class="topnav-btn"        id="tnav-profile"  onclick="goTab('profile')">Profile</button>
       </nav>
 
       <div class="topbar-right">
@@ -860,10 +859,11 @@
            ══════════════════════════════════════ -->
       <div class="panel active" id="panel-home">
 
-        <!-- Greeting bar -->
+        <!-- ── HERO GREETING ── -->
         <div class="greet">
           <div class="greet-av" id="greetAv"></div>
           <div style="flex:1;position:relative;z-index:1">
+            <div style="font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--ac-mid);margin-bottom:4px;" id="greetTimeLabel">Good morning</div>
             <div class="greet-title" id="greetTitle">Welcome to Lyfe.fy</div>
             <div class="greet-sub" id="greetSub">Find a game, connect with players, and build your profile.</div>
           </div>
@@ -1348,7 +1348,7 @@
     setTimeout(() => t.classList.remove('show'), duration);
   }
 
-  const TABS = ['home','sessions','revenue','photos','connect','profile','edit','notifs'];
+  const TABS = ['home','sessions','revenue','connect','profile','edit','notifs'];
 
   function goTab(name) {
     TABS.forEach(id => {
@@ -1484,6 +1484,14 @@
     if (hostHomeCards)   hostHomeCards.style.display   = isHost ? '' : 'none';
     // Hide "become a host" nudge for hosts and pending users
     if (memberNudge)     memberNudge.style.display     = (isHost || isPending) ? 'none' : '';
+  }
+
+  // Time-aware greeting
+  function setTimeGreeting() {
+    const h = new Date().getHours();
+    const el = document.getElementById('greetTimeLabel');
+    if (!el) return;
+    el.textContent = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
   }
 
   function fillAv(el) {
@@ -2195,12 +2203,12 @@
       el.innerHTML = '<div class="empty" style="padding:12px 0">No connections yet.<br><button class="empty-cta" onclick="goTab(\'sessions\')">Join a session to meet players</button></div>';
       count.textContent = '';
       // Also update snap card
-      document.querySelector('#member-snap-grid .snap-card:nth-child(3) .snap-num').textContent = '0';
+      document.getElementById('snapConnections').textContent = '0';
       return;
     }
 
     count.textContent = rows.length;
-    document.querySelector('#member-snap-grid .snap-card:nth-child(3) .snap-num').textContent = rows.length;
+    document.getElementById('snapConnections').textContent = rows.length;
 
     // Get the other person's ID for each connection
     const otherIds = rows.map(r => r.requester_id === currentUser.id ? r.addressee_id : r.requester_id);
@@ -2309,6 +2317,7 @@
     const name  = [first, last].filter(Boolean).join(' ') || 'Athlete';
     const email = currentUser.primaryEmailAddress?.emailAddress || '';
 
+    setTimeGreeting();
     ['topAv','dropAv','greetAv','profAvLg'].forEach(id => fillAv(document.getElementById(id)));
     document.getElementById('greetTitle').textContent = first ? `Welcome back, ${first}` : 'Welcome to Lyfe.fy';
     document.getElementById('dropName').textContent   = name;
