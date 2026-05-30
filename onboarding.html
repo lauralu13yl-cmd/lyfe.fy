@@ -679,34 +679,94 @@ input,select { font-family:var(--sans); }
     <h2 class="sh">Create your <em>account.</em></h2>
     <p class="ss">Your profile is built. One step to unlock your full match list.</p>
 
+    <!-- OAuth buttons -->
     <div class="soc-grid">
-      <button class="soc-btn" onclick="finish()">&#63743; Apple</button>
-      <button class="soc-btn" onclick="finish()">G &nbsp;Google</button>
+      <button class="soc-btn" id="btn-apple"  onclick="oauthSignIn('apple')">
+        <svg width="16" height="16" viewBox="0 0 814 1000" fill="currentColor"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-42.3-150.3-113.4C80 382.1 34 264.1 34 199.3 34 81 114.5 19.3 193.5 19.3c65.4 0 120 42.3 158.4 42.3 36.8 0 99.4-46.2 174.4-46.2 28.1 0 130.3 2.6 198.3 99.2zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 135.5 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-71.3z"/></svg>
+        Continue with Apple
+      </button>
+      <button class="soc-btn" id="btn-google" onclick="oauthSignIn('google')">
+        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.615 24 12.255 24z"/><path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09z"/><path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.64 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+        Continue with Google
+      </button>
     </div>
+
     <div class="or-row"><div class="or-line"></div><span class="or-txt">or sign up with email</span><div class="or-line"></div></div>
 
+    <!-- Email form -->
     <div class="a2" style="margin-bottom:14px">
-      <div class="ag"><label class="al">First name</label><input class="ai" type="text" placeholder="Alex"></div>
-      <div class="ag"><label class="al">Last name</label><input class="ai" type="text" placeholder="Johnson"></div>
+      <div class="ag"><label class="al">First name</label><input class="ai" id="inp-fname" type="text" placeholder="Alex" autocomplete="given-name"></div>
+      <div class="ag"><label class="al">Last name</label><input class="ai" id="inp-lname" type="text" placeholder="Johnson" autocomplete="family-name"></div>
     </div>
-    <div class="ag"><label class="al">Email</label><input class="ai" type="email" placeholder="alex@example.com"></div>
+    <div class="ag"><label class="al">Email</label><input class="ai" id="inp-email" type="email" placeholder="alex@example.com" autocomplete="email"></div>
     <div class="ag">
       <label class="al">City</label>
-      <select class="ai" style="cursor:pointer">
+      <select class="ai" id="inp-city" style="cursor:pointer">
         <option value="">Select your city</option>
-        <option>Boston, MA</option>
-        <option>New York, NY</option>
-        <option>Washington, D.C.</option>
-        <option>Other (join waitlist)</option>
+        <option value="Boston, MA">Boston, MA</option>
+        <option value="New York, NY">New York, NY</option>
+        <option value="Washington, D.C.">Washington, D.C.</option>
+        <option value="Other">Other (join waitlist)</option>
       </select>
     </div>
-    <div class="ag"><label class="al">Password</label><input class="ai" type="password" placeholder="Create a password"></div>
+    <div class="ag" style="position:relative">
+      <label class="al">Password</label>
+      <input class="ai" id="inp-pass" type="password" placeholder="At least 8 characters" autocomplete="new-password">
+      <button onclick="togglePw()" style="position:absolute;right:12px;top:30px;font-size:12px;color:var(--ink3);padding:2px 6px;border-radius:4px;background:var(--c2);border:1px solid var(--c3)" id="pw-eye">Show</button>
+    </div>
+
+    <!-- Error message -->
+    <div id="auth-error" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:var(--r);padding:10px 14px;font-size:13px;color:#b91c1c;margin-bottom:4px"></div>
 
     <div class="s-nav">
       <button class="btn b-out" onclick="goBack6()">&larr; Back</button>
-      <button class="btn b-grn b-lg" onclick="finish()">See my matches &rarr;</button>
+      <button class="btn b-grn b-lg" id="btn-submit" onclick="emailSignUp()">
+        <span id="btn-txt">See my matches &rarr;</span>
+        <span id="btn-spin" style="display:none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 1s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        </span>
+      </button>
     </div>
-    <p style="font-size:11px;color:var(--ink3);text-align:center;margin-top:14px">Already have an account? <a href="dashboard.html" style="color:var(--green);font-weight:500">Log in &rarr;</a></p>
+
+    <p style="font-size:11px;color:var(--ink3);text-align:center;margin-top:14px">
+      Already have an account?
+      <a href="#" onclick="showLogin();return false" style="color:var(--green);font-weight:500">Log in &rarr;</a>
+    </p>
+  </div>
+
+  <!-- ── LOGIN MODAL (for returning users) ── -->
+  <div id="login-overlay" style="display:none;position:fixed;inset:0;background:rgba(14,14,12,.6);z-index:400;align-items:center;justify-content:center;padding:20px">
+    <div style="background:var(--cream);border-radius:var(--rxl);padding:36px;max-width:400px;width:100%;position:relative">
+      <button onclick="hideLogin()" style="position:absolute;top:16px;right:16px;font-size:18px;color:var(--ink3);line-height:1;padding:4px 8px;border-radius:6px;background:var(--c2)">&times;</button>
+      <span style="font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--green);display:block;margin-bottom:10px">Welcome back</span>
+      <h3 style="font-family:var(--serif);font-size:24px;font-weight:900;letter-spacing:-.02em;color:var(--ink);margin-bottom:6px">Log <em style="font-style:italic;color:var(--green)">in.</em></h3>
+      <p style="font-size:13px;color:var(--ink3);margin-bottom:20px;font-weight:300">Good to have you back.</p>
+
+      <div class="soc-grid" style="margin-bottom:16px">
+        <button class="soc-btn" onclick="oauthSignIn('apple')">
+          <svg width="14" height="14" viewBox="0 0 814 1000" fill="currentColor"><path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-42.3-150.3-113.4C80 382.1 34 264.1 34 199.3 34 81 114.5 19.3 193.5 19.3c65.4 0 120 42.3 158.4 42.3 36.8 0 99.4-46.2 174.4-46.2 28.1 0 130.3 2.6 198.3 99.2zm-234-181.5c31.1-36.9 53.1-88.1 53.1-139.3 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 135.5 0 7.8 1.3 15.6 1.9 18.1 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-71.3z"/></svg>
+          Apple
+        </button>
+        <button class="soc-btn" onclick="oauthSignIn('google')">
+          <svg width="14" height="14" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.79-.07-1.54-.19-2.27h-11.3v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12.255 24c3.24 0 5.95-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96h-3.98v3.09C3.515 21.3 7.615 24 12.255 24z"/><path fill="#FBBC05" d="M5.525 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62h-3.98a11.86 11.86 0 000 10.76l3.98-3.09z"/><path fill="#EA4335" d="M12.255 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C18.205 1.19 15.495 0 12.255 0c-4.64 0-8.74 2.7-10.71 6.62l3.98 3.09c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+          Google
+        </button>
+      </div>
+
+      <div class="or-row"><div class="or-line"></div><span class="or-txt">or email</span><div class="or-line"></div></div>
+
+      <div class="ag"><label class="al">Email</label><input class="ai" id="login-email" type="email" placeholder="alex@example.com"></div>
+      <div class="ag"><label class="al">Password</label><input class="ai" id="login-pass" type="password" placeholder="Your password"></div>
+      <div id="login-error" style="display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:var(--r);padding:10px 14px;font-size:13px;color:#b91c1c;margin-bottom:8px"></div>
+
+      <button onclick="emailLogin()" id="btn-login" class="btn b-ink b-fw b-lg" style="margin-top:4px">
+        <span id="login-txt">Log in</span>
+        <span id="login-spin" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 1s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span>
+      </button>
+      <p style="font-size:11px;color:var(--ink3);text-align:center;margin-top:12px">
+        <a href="#" onclick="forgotPw();return false" style="color:var(--green);font-weight:500">Forgot password?</a>
+      </p>
+    </div>
   </div>
 
   <!-- ── MATCH REVEAL ── -->
@@ -746,26 +806,300 @@ input,select { font-family:var(--sans); }
 </div><!-- /form-panel -->
 </div><!-- /shell -->
 
+<!-- Supabase JS client (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  @keyframes spin { to { transform:rotate(360deg); } }
+  #login-overlay { display:none; }
+  #login-overlay.open { display:flex; }
+</style>
 <script>
 /* ════════════════════════════════════════════════
-   STATE
+   ⚙️  CONFIG — replace with your real values
+   Find these in: Supabase Dashboard → Settings → API
 ════════════════════════════════════════════════ */
-let intent = null;   // 'play' | 'host' | 'both'
-let gender = null;   // 'man'  | 'woman'
-let cur    = 0;
-const TOTAL_STEPS = 5; // s1–s5 are the shared questions
+const SUPA_URL  = 'https://bcvhlkncezqzzzrrbkum.supabase.co';   // ← paste your Project URL
+const SUPA_KEY  = 'sb_publishable_rfM5630kfWC8SpXhXtj2Lg_n_OJkFdI';                    // ← paste your anon/public key
+const REDIRECT  = window.location.origin + '/onboarding.html'; // OAuth redirect back here
+
+/* ─── init client ─── */
+const { createClient } = supabase;
+const db = createClient(SUPA_URL, SUPA_KEY);
 
 /* ════════════════════════════════════════════════
-   INTENT GATE
+   STATE — everything the AI will receive
+════════════════════════════════════════════════ */
+let intent      = null;   // 'play' | 'host' | 'both'
+let gender      = null;   // 'man'  | 'woman'
+let cur         = 0;
+const TOTAL_STEPS = 5;
+
+/* Collect all answers into one object for Supabase */
+function getProfile() {
+  const style    = document.querySelector('#s3 .rcrd.sel')?.querySelector('.rt')?.textContent  || null;
+  const energy   = Array.from(document.querySelectorAll('#s3-pills .opill.sel')).map(e => e.textContent.trim());
+  const industry = document.querySelector('#s2 .ocrd.sel')?.querySelector('.ot')?.textContent  || null;
+  const skill    = document.querySelector('#s4 .skbtn.sel')?.querySelector('.sk-t')?.textContent || null;
+  const schedule = Array.from(document.querySelectorAll('#s5 .scbtn.sel')).map(e => e.querySelector('.sc-t').textContent.trim());
+  const travel   = document.getElementById('travel').classList.contains('on');
+  const city     = document.getElementById('inp-city')?.value || null;
+  return { intent, gender, industry, golf_style: style, energy, skill_level: skill, schedule, willing_to_travel: travel, city };
+}
+
+/* ════════════════════════════════════════════════
+   SUPABASE: save profile rows
+════════════════════════════════════════════════ */
+async function saveProfile(userId) {
+  const profile = getProfile();
+  const { error } = await db.from('profiles').upsert({
+    id: userId,
+    ...profile,
+    updated_at: new Date().toISOString()
+  });
+  if (error) console.error('Profile save error:', error.message);
+}
+
+/* ════════════════════════════════════════════════
+   SUPABASE: OAuth (Google / Apple)
+════════════════════════════════════════════════ */
+async function oauthSignIn(provider) {
+  setLoading(true);
+  // Stash onboarding answers in sessionStorage so we can save them after the OAuth redirect
+  sessionStorage.setItem('lyfe_profile', JSON.stringify(getProfile()));
+
+  const { error } = await db.auth.signInWithOAuth({
+    provider,
+    options: {
+      redirectTo: REDIRECT,
+      queryParams: provider === 'google'
+        ? { access_type: 'offline', prompt: 'consent' }
+        : {}
+    }
+  });
+
+  if (error) {
+    showError('auth-error', error.message);
+    setLoading(false);
+  }
+  // On success Supabase redirects the browser — page will reload to REDIRECT
+}
+
+/* ════════════════════════════════════════════════
+   SUPABASE: Email sign-up
+════════════════════════════════════════════════ */
+async function emailSignUp() {
+  const fname = document.getElementById('inp-fname').value.trim();
+  const lname = document.getElementById('inp-lname').value.trim();
+  const email = document.getElementById('inp-email').value.trim();
+  const pass  = document.getElementById('inp-pass').value;
+  const city  = document.getElementById('inp-city').value;
+
+  /* ── client-side validation ── */
+  if (!fname || !lname) return showError('auth-error', 'Please enter your first and last name.');
+  if (!email || !email.includes('@')) return showError('auth-error', 'Please enter a valid email address.');
+  if (pass.length < 8) return showError('auth-error', 'Password must be at least 8 characters.');
+  if (!city) return showError('auth-error', 'Please select your city.');
+
+  hideError('auth-error');
+  setLoading(true, 'btn-submit', 'btn-txt', 'btn-spin');
+
+  /* ── create auth user ── */
+  const { data, error } = await db.auth.signUp({
+    email,
+    password: pass,
+    options: {
+      data: {
+        first_name: fname,
+        last_name:  lname,
+        full_name:  `${fname} ${lname}`,
+        city
+      }
+    }
+  });
+
+  if (error) {
+    showError('auth-error', friendlyError(error.message));
+    setLoading(false, 'btn-submit', 'btn-txt', 'btn-spin');
+    return;
+  }
+
+  /* ── save onboarding profile ── */
+  if (data?.user) {
+    await saveProfile(data.user.id);
+  }
+
+  setLoading(false, 'btn-submit', 'btn-txt', 'btn-spin');
+
+  /* ── email confirmation required? ── */
+  if (data?.user?.identities?.length === 0 || !data?.session) {
+    // Supabase has "confirm email" on — show a friendly message
+    showConfirmMsg(email);
+  } else {
+    finishOnboarding();
+  }
+}
+
+/* ════════════════════════════════════════════════
+   SUPABASE: Email login (returning users)
+════════════════════════════════════════════════ */
+async function emailLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+
+  if (!email || !pass) return showError('login-error', 'Please enter your email and password.');
+  hideError('login-error');
+  setLoading(true, 'btn-login', 'login-txt', 'login-spin');
+
+  const { data, error } = await db.auth.signInWithPassword({ email, password: pass });
+
+  if (error) {
+    showError('login-error', friendlyError(error.message));
+    setLoading(false, 'btn-login', 'login-txt', 'login-spin');
+    return;
+  }
+
+  hideLogin();
+  window.location.href = 'dashboard.html';
+}
+
+/* ════════════════════════════════════════════════
+   SUPABASE: Forgot password
+════════════════════════════════════════════════ */
+async function forgotPw() {
+  const email = document.getElementById('login-email').value.trim();
+  if (!email) return showError('login-error', 'Enter your email above first.');
+  const { error } = await db.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + '/reset-password.html'
+  });
+  if (error) showError('login-error', error.message);
+  else       showError('login-error', '✓ Reset link sent — check your inbox.', '#065f46', '#d1fae5', '#a7f3d0');
+}
+
+/* ════════════════════════════════════════════════
+   OAUTH REDIRECT HANDLER
+   Runs on page load after Google/Apple redirects back.
+   The URL will contain a session fragment from Supabase.
+════════════════════════════════════════════════ */
+async function handleOAuthReturn() {
+  const hash = window.location.hash;
+  if (!hash.includes('access_token') && !hash.includes('error')) return;
+
+  if (hash.includes('error')) {
+    const params = new URLSearchParams(hash.slice(1));
+    showError('auth-error', decodeURIComponent(params.get('error_description') || 'Sign in failed.'));
+    go(6);
+    return;
+  }
+
+  // Let Supabase parse the fragment
+  const { data: { session }, error } = await db.auth.getSession();
+  if (error || !session) { go(6); return; }
+
+  // Restore the profile answers saved before OAuth redirect
+  try {
+    const saved = sessionStorage.getItem('lyfe_profile');
+    if (saved) {
+      const profile = JSON.parse(saved);
+      // Merge city from the form if it was filled
+      await db.from('profiles').upsert({ id: session.user.id, ...profile, updated_at: new Date().toISOString() });
+      sessionStorage.removeItem('lyfe_profile');
+    }
+  } catch(e) { console.warn('Profile restore failed', e); }
+
+  // Clean the URL, then show the reveal
+  history.replaceState(null, '', window.location.pathname);
+  finishOnboarding();
+}
+
+/* ════════════════════════════════════════════════
+   ALREADY LOGGED IN CHECK
+════════════════════════════════════════════════ */
+async function checkExistingSession() {
+  const { data: { session } } = await db.auth.getSession();
+  if (session) {
+    // User is already signed in — send them to dashboard
+    window.location.href = 'dashboard.html';
+  }
+}
+
+/* ════════════════════════════════════════════════
+   UI HELPERS
+════════════════════════════════════════════════ */
+function showError(id, msg, color='#b91c1c', bg='#fef2f2', border='#fecaca') {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = msg;
+  el.style.color = color;
+  el.style.background = bg;
+  el.style.borderColor = border;
+  el.style.display = 'block';
+}
+function hideError(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
+function setLoading(on, btnId='btn-submit', txtId='btn-txt', spinId='btn-spin') {
+  const btn  = document.getElementById(btnId);
+  const txt  = document.getElementById(txtId);
+  const spin = document.getElementById(spinId);
+  if (!btn) return;
+  btn.disabled = on;
+  if (txt)  txt.style.display  = on ? 'none'  : 'inline';
+  if (spin) spin.style.display = on ? 'inline' : 'none';
+}
+
+function togglePw() {
+  const inp = document.getElementById('inp-pass');
+  const btn = document.getElementById('pw-eye');
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  btn.textContent = show ? 'Hide' : 'Show';
+}
+
+function showLogin() {
+  document.getElementById('login-overlay').classList.add('open');
+}
+function hideLogin() {
+  document.getElementById('login-overlay').classList.remove('open');
+}
+
+function showConfirmMsg(email) {
+  // Replace S6 content with a confirm email message
+  const s6 = document.getElementById('s6');
+  s6.innerHTML = `
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:48px;margin-bottom:16px">📬</div>
+      <span style="font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--green);display:block;margin-bottom:10px">Check your inbox</span>
+      <h2 style="font-family:var(--serif);font-size:26px;font-weight:900;letter-spacing:-.025em;color:var(--ink);margin-bottom:8px">Confirm your <em style="font-style:italic;color:var(--green)">email.</em></h2>
+      <p style="font-size:13px;color:var(--ink3);font-weight:300;line-height:1.65;margin-bottom:24px">We sent a confirmation link to <strong style="color:var(--ink);font-weight:500">${email}</strong>. Click it to activate your account and unlock your matches.</p>
+      <p style="font-size:12px;color:var(--ink3)">Didn't get it? Check spam, or <button onclick="resendConfirm('${email}')" style="color:var(--green);font-weight:500;font-family:var(--sans);font-size:12px;text-decoration:underline;cursor:pointer">resend the email</button>.</p>
+    </div>`;
+}
+
+async function resendConfirm(email) {
+  await db.auth.resend({ type: 'signup', email });
+  alert('Confirmation email resent!');
+}
+
+function friendlyError(msg) {
+  if (msg.includes('already registered'))     return 'An account with this email already exists. Try logging in instead.';
+  if (msg.includes('Invalid login'))          return 'Incorrect email or password.';
+  if (msg.includes('Email not confirmed'))    return 'Please confirm your email first — check your inbox.';
+  if (msg.includes('Password should be'))     return 'Password must be at least 8 characters.';
+  if (msg.includes('rate limit'))             return 'Too many attempts. Please wait a minute and try again.';
+  if (msg.includes('invalid email'))          return 'Please enter a valid email address.';
+  return msg;
+}
+
+/* ════════════════════════════════════════════════
+   ONBOARDING NAV (preserved from original)
 ════════════════════════════════════════════════ */
 function setIntent(val) {
   intent = val;
-  ['play','host','both'].forEach(v => {
-    document.getElementById('ic-'+v).classList.toggle('sel', v === val);
-  });
+  ['play','host','both'].forEach(v => document.getElementById('ic-'+v).classList.toggle('sel', v === val));
   document.getElementById('s0-next').disabled = false;
 
-  // Update brand rail
   const rail  = document.getElementById('brand-rail');
   const bh    = document.getElementById('brand-h');
   const bs    = document.getElementById('brand-sub');
@@ -775,27 +1109,21 @@ function setIntent(val) {
   if (val === 'host') {
     bh.innerHTML   = 'Lead the field.<br><em>Get paid for it.</em>';
     bs.textContent = 'Turn your athletic credentials into real income. Top hosts earn $1,200–$3,500 per month.';
-    cplay.style.display = 'none';
-    chost.style.display = 'block';
+    cplay.style.display = 'none'; chost.style.display = 'block';
     rail.classList.remove('pink-mode');
   } else if (val === 'both') {
     bh.innerHTML   = 'Play. Host.<br><em>Own your game.</em>';
     bs.textContent = 'Compete on the course and earn off it. The full Lyfe.fy experience.';
-    cplay.style.display = 'none';
-    chost.style.display = 'block';
+    cplay.style.display = 'none'; chost.style.display = 'block';
     rail.classList.remove('pink-mode');
   } else {
     bh.innerHTML   = 'Find your people.<br><em>On and off the course.</em>';
     bs.textContent = 'Powered by AI matching. Built for players who take their game — and their social life — seriously.';
-    cplay.style.display = 'block';
-    chost.style.display = 'none';
+    cplay.style.display = 'block'; chost.style.display = 'none';
     rail.classList.remove('pink-mode');
   }
 }
 
-/* ════════════════════════════════════════════════
-   IDENTITY
-════════════════════════════════════════════════ */
 function selId(val) {
   gender = val;
   const cards = document.querySelectorAll('.idcrd');
@@ -803,34 +1131,22 @@ function selId(val) {
   cards[0].classList.toggle('sel-w', false);
   cards[1].classList.toggle('sel-w', val === 'woman');
   cards[1].classList.toggle('sel-m', false);
-
   const note = document.getElementById('womens-note');
   const rail = document.getElementById('brand-rail');
   note.classList.toggle('show', val === 'woman');
   rail.classList.toggle('pink-mode', val === 'woman');
-
   document.getElementById('s1-next').disabled = false;
   updateProg();
 }
 
-/* ════════════════════════════════════════════════
-   SELECTION HELPERS
-════════════════════════════════════════════════ */
-// single-select within a group key (ocrd / rcrd / skbtn)
 function sngl(el, key) {
-  // key can be step id or a custom group like 's3-style'
-  const stepEl = key.startsWith('s') && !key.includes('-')
-    ? document.getElementById(key)
-    : null;
-
+  const stepEl = key.startsWith('s') && !key.includes('-') ? document.getElementById(key) : null;
   if (stepEl) {
-    // normal step — clear all selectable in step
     stepEl.querySelectorAll('.ocrd,.rcrd,.skbtn').forEach(c => c.classList.remove('sel'));
     el.classList.add('sel');
     const btn = document.getElementById(key + '-next');
     if (btn) btn.disabled = false;
   } else {
-    // group key like 's3-style' — only clear siblings
     const parent = el.closest('.g2, .g3, .sk-strip');
     if (parent) parent.querySelectorAll('.rcrd,.ocrd,.skbtn').forEach(c => c.classList.remove('sel'));
     el.classList.add('sel');
@@ -839,17 +1155,6 @@ function sngl(el, key) {
   updateProg();
 }
 
-// multi no cap
-function mult(el, sid) {
-  el.classList.toggle('sel');
-  const step = document.getElementById(sid);
-  const any  = step.querySelectorAll('.sel').length > 0;
-  const btn  = document.getElementById(sid + '-next');
-  if (btn) btn.disabled = !any;
-  updateProg();
-}
-
-// multi with max cap (used for energy pills in s3)
 function mmx(el, sid, max) {
   const pills = document.querySelectorAll('#s3-pills .opill');
   const selCount = Array.from(pills).filter(p => p.classList.contains('sel')).length;
@@ -859,14 +1164,12 @@ function mmx(el, sid, max) {
   updateProg();
 }
 
-// s3 needs both a style card AND ≥ 1 energy pill
 function checkS3() {
-  const hasStyle  = document.querySelector('#s3 .rcrd.sel') !== null;
-  const hasPills  = document.querySelectorAll('#s3-pills .opill.sel').length >= 1;
+  const hasStyle = document.querySelector('#s3 .rcrd.sel') !== null;
+  const hasPills = document.querySelectorAll('#s3-pills .opill.sel').length >= 1;
   document.getElementById('s3-next').disabled = !(hasStyle && hasPills);
 }
 
-// schedule multi
 function msc(el) {
   el.classList.toggle('sel');
   const any = document.querySelectorAll('#s5 .scbtn.sel').length > 0;
@@ -874,9 +1177,6 @@ function msc(el) {
   updateProg();
 }
 
-/* ════════════════════════════════════════════════
-   NAVIGATION
-════════════════════════════════════════════════ */
 function go(n) {
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
   const id = typeof n === 'string' ? n : 's' + n;
@@ -886,52 +1186,54 @@ function go(n) {
   document.querySelector('.form-panel').scrollTo({ top:0, behavior:'smooth' });
 }
 
-// "Continue" from each shared step: after s5, branch on intent
 function goNext(stepNum) {
   if (stepNum < 5) {
     go(stepNum + 1);
   } else {
-    // s5 done — branch
-    if (intent === 'host' || intent === 'both') {
-      go('s-bridge');
-    } else {
-      go(6);
-    }
+    if (intent === 'host' || intent === 'both') go('s-bridge');
+    else go(6);
   }
 }
 
 function goBack6() {
-  // going back from account step
-  if (intent === 'host' || intent === 'both') {
-    go('s-bridge');
-  } else {
-    go(5);
-  }
+  if (intent === 'host' || intent === 'both') go('s-bridge');
+  else go(5);
 }
 
-function finish() {
+function finishOnboarding() {
   go('s-reveal');
-  document.getElementById('prog-bar').style.width = '100%';
-  document.getElementById('prog-pct').textContent = '100%';
+  document.getElementById('prog-bar').style.width  = '100%';
+  document.getElementById('prog-pct').textContent  = '100%';
   document.getElementById('prog-note').textContent = 'Profile complete';
 }
 
-/* ════════════════════════════════════════════════
-   PROGRESS BAR
-════════════════════════════════════════════════ */
+// legacy alias
+function finish() { finishOnboarding(); }
+
 function updateProg() {
-  // progress only reflects s1–s5 (shared questions)
   const stepNum = Math.max(0, Math.min(cur, TOTAL_STEPS));
   const pct = Math.round((stepNum / TOTAL_STEPS) * 100);
   document.getElementById('prog-bar').style.width  = pct + '%';
   document.getElementById('prog-pct').textContent  = pct + '%';
   document.getElementById('prog-note').textContent =
-    cur >= 1 && cur <= TOTAL_STEPS
-      ? 'Step ' + cur + ' of ' + TOTAL_STEPS
-      : 'Under 60 seconds';
+    cur >= 1 && cur <= TOTAL_STEPS ? 'Step ' + cur + ' of ' + TOTAL_STEPS : 'Under 60 seconds';
 }
 
-updateProg();
+/* ════════════════════════════════════════════════
+   BOOT — run on every page load
+════════════════════════════════════════════════ */
+(async function boot() {
+  // 1. Handle OAuth return (page has #access_token in URL)
+  await handleOAuthReturn();
+
+  // 2. If user already has a valid session, skip to dashboard
+  // (only check if we're still on the onboarding questions, not post-OAuth)
+  if (!window.location.hash.includes('access_token')) {
+    await checkExistingSession();
+  }
+
+  updateProg();
+})();
 </script>
 </body>
 </html>
