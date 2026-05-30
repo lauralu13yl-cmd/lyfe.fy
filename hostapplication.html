@@ -159,13 +159,13 @@ textarea.finp{resize:vertical;min-height:90px}
       <p class="sdesc">We use this to verify your identity and match you with the right players.</p>
       <div class="prog-wrap"><div class="prog-lbl"><span>Progress</span><span>25%</span></div><div class="pbar"><div class="pbarfill" style="width:25%"></div></div></div>
       <div class="two-col">
-        <div class="fgrp"><label class="flbl">First name *</label><input class="finp" type="text" placeholder="Alex"></div>
-        <div class="fgrp"><label class="flbl">Last name *</label><input class="finp" type="text" placeholder="Johnson"></div>
+        <div class="fgrp"><label class="flbl">First name *</label><input id="h-fname" class="finp" type="text" placeholder="Alex"></div>
+        <div class="fgrp"><label class="flbl">Last name *</label><input id="h-lname" class="finp" type="text" placeholder="Johnson"></div>
       </div>
-      <div class="fgrp"><label class="flbl">Email *</label><input class="finp" type="email" placeholder="alex@example.com"></div>
-      <div class="fgrp"><label class="flbl">Phone *</label><input class="finp" type="tel" placeholder="+1 (555) 000-0000"></div>
-      <div class="fgrp"><label class="flbl">City *</label><select class="finp"><option value="">Select city</option><option>Boston, MA</option><option>New York, NY</option><option>Washington, D.C.</option><option>Other (join waitlist)</option></select></div>
-      <div class="fgrp"><label class="flbl">School / organization</label><input class="finp" type="text" placeholder="Duke University, ATA, etc."></div>
+      <div class="fgrp"><label class="flbl">Email *</label><input id="h-email" class="finp" type="email" placeholder="alex@example.com"></div>
+      <div class="fgrp"><label class="flbl">Phone *</label><input id="h-phone" class="finp" type="tel" placeholder="+1 (555) 000-0000"></div>
+      <div class="fgrp"><label class="flbl">City *</label><select id="h-city" class="finp"><option value="">Select city</option><option value="boston">Boston, MA</option><option value="nyc">New York, NY</option><option value="dc">Washington, D.C.</option><option value="other">Other (join waitlist)</option></select></div>
+      <div class="fgrp"><label class="flbl">School / organization</label><input id="h-school" class="finp" type="text" placeholder="Duke University, ATA, etc."></div>
       <div class="fnav"><span></span><button class="btn bi" onclick="ns(1)">Continue &#8594;</button></div>
     </div>
     <!-- Step 2 -->
@@ -194,8 +194,8 @@ textarea.finp{resize:vertical;min-height:90px}
         </div>
       </div>
       <div class="two-col" style="margin-top:14px">
-        <div class="fgrp"><label class="flbl">Skill rating</label><input class="finp" type="text" placeholder="e.g. 4.5 UTR, 2 hdcp"></div>
-        <div class="fgrp"><label class="flbl">Experience</label><select class="finp"><option value="">Select</option><option>1&#8211;3 years</option><option>4&#8211;7 years</option><option>8&#8211;12 years</option><option>13+ years</option></select></div>
+        <div class="fgrp"><label class="flbl">Skill rating</label><input id="h-rating" class="finp" type="text" placeholder="e.g. 4.5 UTR, 2 hdcp"></div>
+        <div class="fgrp"><label class="flbl">Experience</label><select id="h-experience" class="finp"><option value="">Select</option><option>1&#8211;3 years</option><option>4&#8211;7 years</option><option>8&#8211;12 years</option><option>13+ years</option></select></div>
       </div>
       <div class="fnav"><button class="btn bo" onclick="ps(2)">&#8592; Back</button><button class="btn bi" onclick="ns(2)">Continue &#8594;</button></div>
     </div>
@@ -205,12 +205,12 @@ textarea.finp{resize:vertical;min-height:90px}
       <h2 class="sh2">Your hosting <em>style</em></h2>
       <p class="sdesc">Tell us how you&#39;d like to run sessions and when you&#39;re available.</p>
       <div class="prog-wrap"><div class="prog-lbl"><span>Progress</span><span>75%</span></div><div class="pbar"><div class="pbarfill" style="width:75%"></div></div></div>
-      <div class="fgrp"><label class="flbl">Session type *</label><select class="finp"><option value="">Select type</option><option>Athlete-led experience</option><option>Social play (casual)</option><option>Competitive match play</option><option>Training &amp; drills</option><option>Mixed (multiple types)</option></select></div>
+      <div class="fgrp"><label class="flbl">Session type *</label><select id="h-session-type" class="finp"><option value="">Select type</option><option value="athlete-led">Athlete-led experience</option><option value="social">Social play (casual)</option><option value="competitive">Competitive match play</option><option value="training">Training &amp; drills</option><option value="mixed">Mixed (multiple types)</option></select></div>
       <div class="two-col">
-        <div class="fgrp"><label class="flbl">Group size</label><select class="finp"><option>1-on-1</option><option>Small (2&#8211;4)</option><option>Medium (5&#8211;8)</option><option>Open / flexible</option></select></div>
-        <div class="fgrp"><label class="flbl">Player level</label><select class="finp"><option>All levels</option><option>Beginner</option><option>Intermediate</option><option>Advanced / competitive</option></select></div>
+        <div class="fgrp"><label class="flbl">Group size</label><select id="h-group-size" class="finp"><option>1-on-1</option><option>Small (2&#8211;4)</option><option>Medium (5&#8211;8)</option><option>Open / flexible</option></select></div>
+        <div class="fgrp"><label class="flbl">Player level</label><select id="h-target-level" class="finp"><option>All levels</option><option>Beginner</option><option>Intermediate</option><option>Advanced / competitive</option></select></div>
       </div>
-      <div class="fgrp"><label class="flbl">Why do you want to host?</label><textarea class="finp" placeholder="Tell us what excites you about hosting on Lyfe.fy..." rows="3"></textarea></div>
+      <div class="fgrp"><label class="flbl">Why do you want to host?</label><textarea id="h-bio" class="finp" placeholder="Tell us what excites you about hosting on Lyfe.fy..." rows="3"></textarea></div>
       <div class="fnav"><button class="btn bo" onclick="ps(3)">&#8592; Back</button><button class="btn bi" onclick="ns(3)">Continue &#8594;</button></div>
     </div>
     <!-- Step 4 -->
@@ -228,7 +228,7 @@ textarea.finp{resize:vertical;min-height:90px}
         </div>
         <div id="uconf" style="display:none;margin-top:10px;background:var(--gl);color:var(--green);font-size:12px;font-weight:500;padding:3px 10px;border-radius:20px;display:none;align-items:center;gap:5px">&#10003; File attached</div>
       </div>
-      <div class="fgrp"><label class="flbl">Instagram / LinkedIn (optional)</label><input class="finp" type="text" placeholder="@handle or linkedin.com/in/yourname"></div>
+      <div class="fgrp"><label class="flbl">Instagram / LinkedIn (optional)</label><input id="h-social" class="finp" type="text" placeholder="@handle or linkedin.com/in/yourname"></div>
       <div class="fgrp" style="margin-top:18px"><label class="flbl">Host standards agreement</label>
         <label class="chi"><input type="checkbox" id="c1"><div class="chb"></div><span class="chl">I agree to maintain a minimum <strong>4.7 rating</strong> and commit to showing up for all confirmed sessions.</span></label>
         <label class="chi"><input type="checkbox" id="c2"><div class="chb"></div><span class="chl">I confirm my credentials are accurate and agree to Lyfe.fy&#39;s <a href="#" style="color:var(--green)">Host Terms of Service</a>.</span></label>
@@ -260,35 +260,151 @@ textarea.finp{resize:vertical;min-height:90px}
     <div class="fcopy">Questions? <a href="mailto:hosts@lyfefy.com" style="color:rgba(245,242,235,.4)">hosts@lyfefy.com</a></div>
   </div>
 </footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-let cur=1;
-function updateTrail(n){
-  for(let i=1;i<=4;i++){
-    const num=document.getElementById('tr'+i);
-    const lbl=i===1?null:document.getElementById('tl'+i);
-    if(!num)continue;
-    if(i<n){num.className='tn done';num.textContent='✓';}
-    else if(i===n){num.className='tn cur';num.textContent=i;}
-    else{num.className='tn';num.textContent=i;}
-    if(lbl){lbl.className='tl'+(i===n?' cur':'');}
+/* ── SUPABASE ── */
+const SUPA_URL = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
+const { createClient } = supabase;
+const db = createClient(SUPA_URL, SUPA_KEY);
+
+/* ── STEP NAV ── */
+let cur = 1;
+function updateTrail(n) {
+  for (let i = 1; i <= 4; i++) {
+    const num = document.getElementById('tr' + i);
+    const lbl = i === 1 ? null : document.getElementById('tl' + i);
+    if (!num) continue;
+    if (i < n)      { num.className = 'tn done'; num.textContent = '✓'; }
+    else if (i === n){ num.className = 'tn cur';  num.textContent = i; }
+    else             { num.className = 'tn';       num.textContent = i; }
+    if (lbl) lbl.className = 'tl' + (i === n ? ' cur' : '');
   }
 }
-function showStep(n){
-  document.querySelectorAll('.step').forEach(s=>s.classList.remove('act'));
-  const el=document.getElementById(n==='succ'?'ssucc':'s'+n);
-  if(el)el.classList.add('act');
-  if(n!=='succ'){cur=n;updateTrail(n);}
-  window.scrollTo({top:0,behavior:'smooth'});
+function showStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('act'));
+  const el = document.getElementById(n === 'succ' ? 'ssucc' : 's' + n);
+  if (el) el.classList.add('act');
+  if (n !== 'succ') { cur = n; updateTrail(n); }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-function ns(from){showStep(from+1);}
-function ps(from){showStep(from-1);}
-function ss(el){document.querySelectorAll('.sbtn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
-function sl(el){document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');}
-function subApp(){
-  if(!document.getElementById('c1').checked||!document.getElementById('c2').checked){alert('Please agree to the host standards to continue.');return;}
-  showStep('succ');
+function ns(from) { showStep(from + 1); }
+function ps(from) { showStep(from - 1); }
+function ss(el) { document.querySelectorAll('.sbtn').forEach(b => b.classList.remove('sel')); el.classList.add('sel'); }
+function sl(el) { document.querySelectorAll('.lbtn').forEach(b => b.classList.remove('sel')); el.classList.add('sel'); }
+
+/* ── COLLECT ALL FORM DATA ── */
+function collectForm() {
+  const v = id => document.getElementById(id)?.value?.trim() || null;
+  return {
+    first_name:   v('h-fname'),
+    last_name:    v('h-lname'),
+    email:        v('h-email'),
+    phone:        v('h-phone'),
+    city:         v('h-city'),
+    school:       v('h-school'),
+    sport:        document.querySelector('.sbtn.sel .slbl')?.textContent?.toLowerCase() || null,
+    level:        document.querySelector('.lbtn.sel .lcode')?.textContent?.toLowerCase()?.replace('/','') || null,
+    rating:       v('h-rating'),
+    experience:   v('h-experience'),
+    session_type: v('h-session-type'),
+    group_size:   v('h-group-size'),
+    target_level: v('h-target-level'),
+    bio:          v('h-bio'),
+    social:       v('h-social'),
+    status:       'pending'
+  };
 }
-const _io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('on');_io.unobserve(x.target);}}),{threshold:.07});
-document.querySelectorAll('.rv').forEach(el=>_io.observe(el));
+
+/* ── UPLOAD CREDENTIAL FILE ── */
+async function uploadCredential(file) {
+  if (!file) return null;
+  try {
+    const ext  = file.name.split('.').pop();
+    const path = `credentials/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
+    const { data, error } = await db.storage.from('credentials').upload(path, file, {
+      cacheControl: '3600',
+      upsert: false
+    });
+    if (error) {
+      console.warn('Storage upload failed:', error.message);
+      return null;
+    }
+    const { data: urlData } = db.storage.from('credentials').getPublicUrl(path);
+    return urlData?.publicUrl || null;
+  } catch(e) {
+    console.warn('Upload error:', e);
+    return null;
+  }
+}
+
+/* ── SUBMIT APPLICATION ── */
+async function subApp() {
+  if (!document.getElementById('c1').checked || !document.getElementById('c2').checked) {
+    alert('Please agree to the host standards to continue.');
+    return;
+  }
+
+  /* disable button + show loading */
+  const btn = document.querySelector('#s4 .btn.bg');
+  const origText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  try {
+    /* 1. Get current user (if logged in) */
+    const { data: { session } } = await db.auth.getSession();
+    const userId = session?.user?.id || null;
+
+    /* 2. Upload credential file if one was attached */
+    const fileInput = document.getElementById('cup');
+    const file = fileInput?.files?.[0] || null;
+    const credentialUrl = await uploadCredential(file);
+
+    /* 3. Build application payload */
+    const payload = {
+      ...collectForm(),
+      user_id:        userId,
+      credential_url: credentialUrl,
+      created_at:     new Date().toISOString(),
+      updated_at:     new Date().toISOString()
+    };
+
+    /* 4. Insert into host_applications */
+    const { error } = await db.from('host_applications').insert(payload);
+
+    if (error) {
+      console.error('Insert error:', error);
+      btn.disabled = false;
+      btn.textContent = origText;
+      alert('Something went wrong: ' + error.message + '\n\nPlease try again.');
+      return;
+    }
+
+    /* 5. If logged in, update their profile role to pending_host */
+    if (userId) {
+      await db.from('profiles').upsert({
+        id:         userId,
+        role:       'pending_host',
+        updated_at: new Date().toISOString()
+      });
+    }
+
+    /* 6. Show success screen */
+    showStep('succ');
+
+  } catch(e) {
+    console.error('subApp error:', e);
+    btn.disabled = false;
+    btn.textContent = origText;
+    alert('Unexpected error. Please try again.');
+  }
+}
+
+/* ── SCROLL REVEAL ── */
+const _io = new IntersectionObserver(e => e.forEach(x => {
+  if (x.isIntersecting) { x.target.classList.add('on'); _io.unobserve(x.target); }
+}), { threshold: .07 });
+document.querySelectorAll('.rv').forEach(el => _io.observe(el));
 </script>
 </body></html>
