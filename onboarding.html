@@ -3,765 +3,935 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Find Your People — Lyfe.fy</title>
+<title>Join Lyfe.fy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
-<script
-  async crossorigin="anonymous"
-  data-clerk-publishable-key="pk_live_Y2xlcmsubHlmZWZ5LmNvbSQ"
-  src="https://unpkg.com/@clerk/clerk-js@5.56.0/dist/clerk.browser.js"
-  type="text/javascript"
-></script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ── TOKENS ── */
+/* ─── DESIGN TOKENS ─────────────────────────────── */
 :root {
-  --base:      #F5F2ED;
-  --surface:   #FBF9F5;
-  --border:    #D3D1C7;
-  --ink:       #2C2C2A;
-  --ink-70:    rgba(44,44,42,0.7);
-  --ink-40:    rgba(44,44,42,0.4);
-  --ac-light:  #E4F0E8;
-  --ac-mid:    #6FA882;
-  --ac-strong: #3D7A56;
-  --ac-deep:   #2A5C3F;
-  --ac-border: #B6D4BF;
-  --serif: 'Fraunces', Georgia, serif;
-  --sans:  'DM Sans', sans-serif;
+  --ink:#0e0e0c;  --ink2:#2a2a26;  --ink3:#5a5a52;
+  --cream:#f5f2eb; --c2:#ede9df;   --c3:#e2ddd2;
+  --green:#1a7a52; --gl:#d4ede2;   --gm:#2a9e6a;
+  --amber:#c8821a; --w:#fff;
+  /* pink palette */
+  --pink:#c2185b;  --pk2:#e91e8c;  --pl:#fce4ec;  --pm:#f8bbd0;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+  --r:10px; --rl:18px; --rxl:24px;
+  --ease:cubic-bezier(.25,.46,.45,.94);
 }
 
-*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-html,body { width: 100%; height: 100%; overflow: hidden; }
+/* ─── BASE ──────────────────────────────────────── */
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:var(--sans); background:var(--ink); min-height:100vh;
+       -webkit-font-smoothing:antialiased; overflow-x:hidden; color:var(--cream); }
+a { text-decoration:none; color:inherit; }
+button { font-family:var(--sans); cursor:pointer; border:none; background:none; }
+input,select { font-family:var(--sans); }
 
-body {
-  font-family: var(--sans);
-  background: var(--ink);
-  color: var(--base);
-  -webkit-font-smoothing: antialiased;
-  position: relative;
-}
+/* ─── SHELL ─────────────────────────────────────── */
+.shell { min-height:100vh; display:grid; grid-template-columns:1fr 504px; }
 
-/* ── CANVAS BACKGROUND ── */
-#bg-canvas {
-  position: fixed; inset: 0; z-index: 0;
-  pointer-events: none;
+/* ═══════════════════════════════════════════════════
+   LEFT — BRAND RAIL
+═══════════════════════════════════════════════════ */
+.brand {
+  background:var(--ink);
+  padding:44px 48px;
+  display:flex; flex-direction:column; justify-content:space-between;
+  position:relative; overflow:hidden;
 }
+.brand::before { content:''; position:absolute; width:500px; height:500px;
+  border-radius:50%; background:rgba(26,122,82,.09);
+  bottom:-130px; left:-110px; pointer-events:none; }
+.brand::after  { content:''; position:absolute; width:300px; height:300px;
+  border-radius:50%; background:rgba(200,130,26,.05);
+  top:30px; right:-80px; pointer-events:none; }
 
-/* ── PROGRESS BAR ── */
-#progress-bar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-  height: 2px; background: rgba(245,242,237,0.1);
-}
-#progress-fill {
-  height: 100%; background: var(--ac-mid);
-  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
-  width: 0%;
-}
+/* brand — pink state */
+.brand.pink-mode::before { background:rgba(194,24,91,.12); }
+.brand.pink-mode::after  { background:rgba(194,24,91,.07); }
 
-/* ── TOP NAV ── */
-#top-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 40;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 48px; pointer-events: none;
-}
-.nav-logo {
-  font-family: var(--serif); font-size: 20px; font-weight: 700;
-  color: var(--base); text-decoration: none; pointer-events: all;
-  display: inline-flex; align-items: baseline; gap: 1px; letter-spacing: -0.3px;
-  opacity: 0.9;
-}
-.nav-logo-dot { color: var(--ac-mid); }
-.nav-logo-fy  { font-size: 12px; font-weight: 400; font-style: italic; color: rgba(245,242,237,0.4); }
-#step-counter {
-  font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
-  color: rgba(245,242,237,0.35); pointer-events: none;
-}
+.b-top { position:relative; z-index:1; }
 
-/* ── MAIN SCREEN CONTAINER ── */
-#screens {
-  position: fixed; inset: 0; z-index: 10;
-  display: flex; align-items: center; justify-content: center;
-}
+.b-logo { font-family:var(--serif); font-size:21px; font-weight:700;
+          letter-spacing:-.02em; color:var(--cream); display:block; margin-bottom:52px; }
+.b-logo span { color:var(--gm); }
+.brand.pink-mode .b-logo span { color:var(--pk2); }
 
-/* ── SCREEN ── */
-.screen {
-  display: none; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 80px 48px 60px;
-  max-width: 680px; width: 100%;
-  animation: screenIn 0.5s cubic-bezier(0.4,0,0.2,1) both;
-}
-.screen.active { display: flex; }
-.screen.exit { animation: screenOut 0.3s cubic-bezier(0.4,0,0.2,1) both; }
+.b-headline { font-family:var(--serif); font-size:clamp(28px,3vw,42px);
+              font-weight:900; line-height:1.06; letter-spacing:-.03em;
+              color:var(--cream); margin-bottom:12px; }
+.b-headline em { font-style:italic; color:#6ecfa0; }
+.brand.pink-mode .b-headline em { color:var(--pm); }
 
-@keyframes screenIn  { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:none; } }
-@keyframes screenOut { from { opacity:1; transform:none; } to { opacity:0; transform:translateY(-20px); } }
+.b-sub { font-size:13px; font-weight:300; color:rgba(245,242,235,.42);
+         line-height:1.7; max-width:360px; margin-bottom:36px; }
 
-/* ── EYEBROW ── */
-.eyebrow {
-  font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase;
-  color: var(--ac-mid); margin-bottom: 18px; opacity: 0.9;
+/* ── context card (switches by intent) ── */
+.ctx-card {
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--rl); padding:20px 22px;
+  transition:all .5s var(--ease);
 }
+.ctx-label { font-size:10px; font-weight:500; letter-spacing:.1em;
+             text-transform:uppercase; color:rgba(245,242,235,.28); margin-bottom:14px; }
+/* match rows */
+.ctx-matches { display:flex; flex-direction:column; gap:12px; }
+.ctx-row { display:flex; align-items:center; gap:12px; }
+.ctx-av { width:34px; height:34px; border-radius:50%;
+          display:flex; align-items:center; justify-content:center;
+          font-size:11px; font-weight:500; color:#fff; flex-shrink:0; }
+.ctx-info { flex:1; }
+.ctx-name { font-size:13px; font-weight:500; color:var(--cream); }
+.ctx-meta { font-size:11px; color:rgba(245,242,235,.38); margin-top:1px; }
+.ctx-right { text-align:right; flex-shrink:0; }
+.ctx-pct { font-family:var(--mono); font-size:13px; font-weight:500; color:#6ecfa0; }
+.ctx-bar { height:3px; width:52px; background:rgba(255,255,255,.08); border-radius:2px; overflow:hidden; margin-top:4px; }
+.ctx-fill { height:100%; background:var(--gm); border-radius:2px; }
+/* host earnings view */
+.earn-rows { display:flex; flex-direction:column; gap:10px; }
+.earn-row  { display:flex; align-items:center; gap:12px; }
+.earn-av   { width:34px; height:34px; border-radius:50%;
+             display:flex; align-items:center; justify-content:center;
+             font-size:11px; font-weight:500; color:#fff; flex-shrink:0; }
+.earn-info { flex:1; }
+.earn-name { font-size:13px; font-weight:500; color:var(--cream); }
+.earn-role { font-size:11px; color:rgba(245,242,235,.38); margin-top:1px; }
+.earn-amt  { font-family:var(--mono); font-size:13px; font-weight:500; color:#a8dfc4; }
+/* tag chips */
+.ctx-tags { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px; }
+.ctx-chip { font-size:11px; font-weight:500; padding:4px 11px; border-radius:20px;
+            background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.06);
+            color:rgba(245,242,235,.5); transition:all .4s; }
+.ctx-chip.on { background:rgba(42,158,106,.18); border-color:rgba(110,207,160,.22); color:#6ecfa0; }
+.brand.pink-mode .ctx-chip.on { background:rgba(194,24,91,.22); border-color:rgba(248,187,208,.3); color:var(--pm); }
 
-/* ── HEADLINE ── */
-.headline {
-  font-family: var(--serif);
-  font-size: clamp(36px, 6vw, 68px);
-  font-weight: 700; line-height: 1.08; letter-spacing: -1px;
-  color: var(--base); margin-bottom: 16px;
-}
-.headline em { font-style: italic; color: var(--ac-mid); }
+/* ── progress ── */
+.b-bot { position:relative; z-index:1; }
+.prog-row { display:flex; justify-content:space-between;
+            font-size:11px; color:rgba(245,242,235,.28);
+            margin-bottom:7px; font-family:var(--mono); }
+.prog-track { height:2px; background:rgba(255,255,255,.08); border-radius:2px; overflow:hidden; }
+.prog-bar { height:100%; background:var(--gm); border-radius:2px; transition:width .5s var(--ease); width:0%; }
+.brand.pink-mode .prog-bar { background:var(--pk2); }
+.prog-note { font-size:11px; color:rgba(245,242,235,.22); margin-top:8px; font-family:var(--mono); }
 
-.sub {
-  font-size: 16px; font-weight: 300; color: rgba(245,242,237,0.55);
-  max-width: 420px; line-height: 1.75; margin-bottom: 40px;
-}
-.microcopy {
-  font-size: 12px; color: rgba(245,242,237,0.3); margin-top: -24px; margin-bottom: 32px;
-  font-style: italic;
-}
-
-/* ── CHOICE CARDS GRID ── */
-.cards {
-  display: flex; flex-wrap: wrap; gap: 10px;
-  justify-content: center; margin-bottom: 32px; width: 100%;
-}
-.card {
-  background: rgba(245,242,237,0.06);
-  border: 0.5px solid rgba(245,242,237,0.14);
-  border-radius: 14px; padding: 18px 20px;
-  cursor: pointer; transition: all 0.2s;
-  min-width: 120px; text-align: center;
-  backdrop-filter: blur(8px);
-}
-.card:hover { background: rgba(228,240,232,0.14); border-color: var(--ac-mid); }
-.card.selected {
-  background: rgba(61,122,86,0.2); border-color: var(--ac-mid);
-  box-shadow: 0 0 0 1px var(--ac-mid), 0 0 24px rgba(111,168,130,0.12);
-}
-.card .icon { font-size: 22px; margin-bottom: 7px; }
-.card .name { font-size: 13px; font-weight: 500; color: var(--base); }
-.card .hint { font-size: 11px; color: rgba(245,242,237,0.4); margin-top: 3px; }
-.card.selected .hint { color: rgba(245,242,237,0.6); }
-
-/* ── CHIP PILLS ── */
-.chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 32px; }
-.chip {
-  background: rgba(245,242,237,0.07); border: 0.5px solid rgba(245,242,237,0.15);
-  border-radius: 100px; padding: 10px 20px;
-  font-size: 13.5px; font-weight: 500; color: rgba(245,242,237,0.8);
-  cursor: pointer; transition: all 0.18s; backdrop-filter: blur(8px);
-}
-.chip:hover { background: rgba(228,240,232,0.14); border-color: var(--ac-mid); color: var(--base); }
-.chip.selected {
-  background: rgba(61,122,86,0.22); border-color: var(--ac-mid); color: var(--base);
-  box-shadow: 0 0 0 1px var(--ac-mid);
+/* ═══════════════════════════════════════════════════
+   RIGHT — FORM PANEL
+═══════════════════════════════════════════════════ */
+.form-panel {
+  background:var(--cream); padding:52px 48px;
+  display:flex; flex-direction:column; justify-content:center;
+  overflow-y:auto; min-height:100vh;
 }
 
-/* ── INTENT LIST ── */
-.intents { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 440px; margin-bottom: 32px; }
-.intent {
-  display: flex; align-items: center; gap: 14px;
-  background: rgba(245,242,237,0.06); border: 0.5px solid rgba(245,242,237,0.13);
-  border-radius: 14px; padding: 15px 18px; cursor: pointer; transition: all 0.18s;
-  backdrop-filter: blur(8px); text-align: left;
-}
-.intent:hover { background: rgba(228,240,232,0.12); border-color: var(--ac-mid); }
-.intent.selected {
-  background: rgba(61,122,86,0.18); border-color: var(--ac-mid);
-  box-shadow: 0 0 0 1px var(--ac-mid);
-}
-.intent-icon {
-  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
-  background: rgba(245,242,237,0.08); display: flex; align-items: center; justify-content: center;
-  font-size: 16px; transition: background 0.18s;
-}
-.intent.selected .intent-icon { background: rgba(111,168,130,0.2); }
-.intent-label { font-size: 14px; font-weight: 500; color: rgba(245,242,237,0.85); flex: 1; }
-.intent-check {
-  width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid rgba(245,242,237,0.2);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.18s;
-}
-.intent.selected .intent-check { background: var(--ac-mid); border-color: var(--ac-mid); }
+/* step */
+.step { display:none; flex-direction:column; }
+.step.active { display:flex; animation:up .32s var(--ease) both; }
+@keyframes up { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
 
-/* ── SKILL SLIDER ── */
-.slider-section { width: 100%; max-width: 440px; margin-bottom: 32px; }
-.skill-label {
-  font-family: var(--serif); font-size: 42px; font-weight: 700; letter-spacing: -1px;
-  color: var(--base); margin-bottom: 4px; transition: all 0.2s;
-}
-.skill-desc { font-size: 13px; color: rgba(245,242,237,0.45); margin-bottom: 20px; }
-input[type=range] {
-  width: 100%; accent-color: var(--ac-mid); height: 4px;
-  background: rgba(245,242,237,0.15); border-radius: 100px; cursor: pointer;
-}
-.slider-ticks { display: flex; justify-content: space-between; margin-top: 10px; }
-.slider-tick { font-size: 10.5px; color: rgba(245,242,237,0.3); font-weight: 500; }
+/* step header */
+.sey { font-size:10px; font-weight:500; letter-spacing:.12em; text-transform:uppercase;
+       color:var(--green); margin-bottom:10px; display:block; }
+.sh  { font-family:var(--serif); font-size:clamp(22px,2.8vw,30px); font-weight:900;
+       line-height:1.1; letter-spacing:-.025em; color:var(--ink); margin-bottom:7px; }
+.sh em { font-style:italic; color:var(--green); }
+.ss  { font-size:13px; color:var(--ink3); font-weight:300; line-height:1.65; margin-bottom:24px; }
 
-/* ── AVAIL TOGGLES ── */
-.avail-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; width: 100%; max-width: 440px; }
-.avail-btn {
-  flex: 1; background: rgba(245,242,237,0.06); border: 0.5px solid rgba(245,242,237,0.13);
-  border-radius: 14px; padding: 20px 10px; text-align: center; cursor: pointer;
-  transition: all 0.18s; backdrop-filter: blur(8px);
-}
-.avail-btn:hover { background: rgba(228,240,232,0.12); border-color: var(--ac-mid); }
-.avail-btn.selected { background: rgba(61,122,86,0.2); border-color: var(--ac-mid); box-shadow: 0 0 0 1px var(--ac-mid); }
-.avail-icon { font-size: 20px; margin-bottom: 8px; }
-.avail-lbl { font-size: 12.5px; font-weight: 500; color: rgba(245,242,237,0.8); }
+/* ── OPTION TYPES ── */
 
-/* ── TRAVEL TOGGLE ── */
-.toggle-row {
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(245,242,237,0.06); border: 0.5px solid rgba(245,242,237,0.13);
-  border-radius: 14px; padding: 16px 20px; width: 100%; max-width: 440px;
-  cursor: pointer; margin-bottom: 32px; backdrop-filter: blur(8px);
-  transition: border-color 0.18s;
+/* Intent cards — big, prominent, with description */
+.intent-grid { display:grid; grid-template-columns:1fr; gap:10px; margin-bottom:8px; }
+.icrd {
+  border:1.5px solid var(--c3); border-radius:var(--rl);
+  padding:18px 20px; cursor:pointer;
+  transition:all .15s var(--ease); background:var(--w);
+  display:flex; align-items:center; gap:16px; user-select:none;
 }
-.toggle-row:hover { border-color: rgba(245,242,237,0.25); }
-.toggle-lbl { font-size: 14px; font-weight: 500; color: rgba(245,242,237,0.8); text-align: left; }
-.toggle-sub { font-size: 11.5px; color: rgba(245,242,237,0.35); margin-top: 2px; }
-.toggle-switch {
-  width: 42px; height: 24px; border-radius: 100px;
-  background: rgba(245,242,237,0.15); position: relative; flex-shrink: 0; transition: background 0.2s;
+.icrd:hover { border-color:var(--ink3); background:var(--c2); transform:translateX(2px); }
+.icrd.sel  { border-color:var(--gm); background:var(--gl); }
+.icrd.sel .ic-title { color:var(--green); }
+.icrd.sel .ic-sub   { color:var(--green); opacity:.6; }
+.ic-dot {
+  width:10px; height:10px; border-radius:50%;
+  border:2px solid var(--c3); flex-shrink:0;
+  transition:all .15s; margin-top:2px;
 }
-.toggle-switch.on { background: var(--ac-strong); }
-.toggle-knob {
-  width: 20px; height: 20px; border-radius: 50%; background: white;
-  position: absolute; top: 2px; left: 2px; transition: left 0.2s;
-}
-.toggle-switch.on .toggle-knob { left: 20px; }
+.icrd.sel .ic-dot { background:var(--gm); border-color:var(--gm); }
+.ic-title { font-size:15px; font-weight:500; color:var(--ink); margin-bottom:3px; }
+.ic-sub   { font-size:12px; color:var(--ink3); font-weight:300; line-height:1.5; }
 
-/* ── MATCH PREVIEW ── */
-.match-box {
-  background: rgba(245,242,237,0.05); border: 0.5px solid rgba(245,242,237,0.13);
-  border-radius: 20px; padding: 24px 28px; width: 100%; max-width: 500px;
-  margin-bottom: 32px; backdrop-filter: blur(12px); text-align: left;
+/* Identity cards — 2 col */
+.id-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:8px; }
+.idcrd {
+  border:1.5px solid var(--c3); border-radius:var(--rl);
+  padding:22px 16px; text-align:center; cursor:pointer;
+  transition:all .15s var(--ease); background:var(--w); user-select:none;
 }
-.match-box-title { font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--ac-mid); margin-bottom: 14px; }
-.match-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 20px; }
-.match-tag {
-  background: rgba(61,122,86,0.2); border: 0.5px solid var(--ac-border);
-  border-radius: 100px; padding: 4px 12px; font-size: 11.5px; font-weight: 600;
-  color: var(--ac-mid);
-}
-.match-profiles-row { display: flex; gap: 10px; }
-.match-p {
-  flex: 1; background: rgba(245,242,237,0.05); border: 0.5px solid rgba(245,242,237,0.1);
-  border-radius: 14px; padding: 14px 10px; text-align: center;
-}
-.match-av {
-  width: 38px; height: 38px; border-radius: 50%; margin: 0 auto 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--serif); font-size: 13px; font-weight: 600;
-}
-.match-name { font-size: 12px; font-weight: 500; color: rgba(245,242,237,0.8); }
-.match-pct { font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--ac-mid); margin-top: 5px; }
-.match-pct-lbl { font-size: 10px; color: rgba(245,242,237,0.35); }
+.idcrd:hover { border-color:var(--ink3); background:var(--c2); }
+.idcrd.sel-m { border-color:var(--gm); background:var(--gl); }
+.idcrd.sel-m .id-t { color:var(--green); }
+.idcrd.sel-w { border-color:var(--pink); background:var(--pl); }
+.idcrd.sel-w .id-t { color:var(--pink); }
+.id-t { font-size:15px; font-weight:500; color:var(--ink); }
 
-/* ── TEXTAREA ── */
-.ob-input {
-  width: 100%; max-width: 440px;
-  background: rgba(245,242,237,0.07); border: 0.5px solid rgba(245,242,237,0.15);
-  border-radius: 14px; padding: 16px 18px; margin-bottom: 12px;
-  font-family: var(--sans); font-size: 14px; font-weight: 300; color: var(--base);
-  resize: none; outline: none; transition: border-color 0.2s;
-  backdrop-filter: blur(8px);
+/* Women's note — pink */
+.womens-note {
+  display:none; margin-top:14px;
+  background:var(--pl); border:1.5px solid var(--pm);
+  border-radius:var(--rl); padding:18px 20px;
 }
-.ob-input:focus { border-color: var(--ac-mid); }
-.ob-input::placeholder { color: rgba(245,242,237,0.25); }
+.womens-note.show { display:block; animation:up .3s var(--ease) both; }
+.wn-h { font-size:13px; font-weight:500; color:var(--pink); margin-bottom:6px; }
+.wn-h em { font-style:italic; }
+.wn-p { font-size:12px; color:#880e4f; font-weight:300; line-height:1.65; margin-bottom:10px; opacity:.8; }
+.wn-pills { display:flex; flex-wrap:wrap; gap:6px; }
+.wn-pill { font-size:11px; font-weight:500; color:var(--pink);
+           background:rgba(194,24,91,.1); border:1px solid rgba(194,24,91,.2);
+           padding:3px 10px; border-radius:20px; }
 
-/* ── WOMEN SECTION CARD ── */
-.women-card {
-  background: rgba(251,234,240,0.06); border: 0.5px solid rgba(212,83,126,0.3);
-  border-radius: 20px; padding: 24px; width: 100%; max-width: 500px;
-  margin-bottom: 32px; backdrop-filter: blur(12px); text-align: left;
-}
-.women-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(212,83,126,0.15); border: 0.5px solid rgba(212,83,126,0.3);
-  border-radius: 100px; padding: 4px 12px;
-  font-size: 10.5px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: #F0A0B8; margin-bottom: 12px;
-}
-.women-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--base); margin-bottom: 8px; }
-.women-title em { font-style: italic; color: #F0A0B8; }
-.women-desc { font-size: 13px; font-weight: 300; color: rgba(245,242,237,0.5); line-height: 1.7; margin-bottom: 16px; }
-.women-chips { display: flex; flex-wrap: wrap; gap: 7px; }
-.women-chip {
-  background: rgba(212,83,126,0.1); border: 0.5px solid rgba(212,83,126,0.25);
-  border-radius: 100px; padding: 5px 13px;
-  font-size: 11.5px; font-weight: 600; color: #F0A0B8; cursor: pointer;
-  transition: all 0.18s;
-}
-.women-chip:hover, .women-chip.selected {
-  background: rgba(212,83,126,0.22); border-color: rgba(212,83,126,0.5);
-}
+/* 3-col opt cards */
+.g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-bottom:8px; }
+/* 2-col opt cards */
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-bottom:8px; }
 
-/* ── GENDER SELECT ── */
-#gender-cards { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 14px; width: 100%; max-width: 460px; }
-.gender-card {
-  flex: 1; min-width: 100px; max-width: 140px;
-  background: rgba(245,242,237,0.06); border: 0.5px solid rgba(245,242,237,0.13);
-  border-radius: 14px; padding: 18px 14px; text-align: center; cursor: pointer;
-  transition: all 0.18s; backdrop-filter: blur(8px);
+.ocrd {
+  border:1.5px solid var(--c3); border-radius:var(--r);
+  padding:16px 12px; text-align:center; cursor:pointer;
+  transition:all .15s var(--ease); background:var(--w); user-select:none;
 }
-.gender-card:hover { background: rgba(228,240,232,0.12); border-color: var(--ac-mid); }
-.gender-card.selected { background: rgba(61,122,86,0.18); border-color: var(--ac-mid); box-shadow: 0 0 0 1px var(--ac-mid); }
-.gender-icon { font-size: 22px; margin-bottom: 8px; }
-.gender-lbl { font-size: 13px; font-weight: 500; color: rgba(245,242,237,0.85); }
+.ocrd:hover { border-color:var(--ink3); background:var(--c2); }
+.ocrd.sel { border-color:var(--gm); background:var(--gl); }
+.ocrd.sel .ot { color:var(--green); }
+.ocrd.sel .os { color:var(--green); opacity:.6; }
+.ot { font-size:13px; font-weight:500; color:var(--ink); margin-bottom:3px; line-height:1.3; }
+.os { font-size:11px; color:var(--ink3); font-weight:300; }
 
-/* ── ACTIONS ── */
-.actions {
-  display: flex; align-items: center; gap: 20px;
-  position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
-  z-index: 40;
+/* Row card */
+.rcrd {
+  border:1.5px solid var(--c3); border-radius:var(--r);
+  padding:13px 15px; cursor:pointer;
+  transition:all .15s var(--ease); background:var(--w); user-select:none;
 }
-.btn-back {
-  font-family: var(--sans); font-size: 11.5px; font-weight: 600; letter-spacing: 1px;
-  text-transform: uppercase; color: rgba(245,242,237,0.35);
-  background: none; border: none; cursor: pointer; transition: color 0.2s;
-  display: flex; align-items: center; gap: 5px;
-}
-.btn-back:hover { color: rgba(245,242,237,0.7); }
-.btn-next {
-  font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 1.2px;
-  text-transform: uppercase; color: var(--ink); background: var(--base);
-  border: none; border-radius: 100px; padding: 14px 36px; cursor: pointer;
-  transition: all 0.25s; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-}
-.btn-next:hover { background: var(--ac-mid); color: var(--base); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(111,168,130,0.35); }
-.btn-next.green { background: var(--ac-mid); color: var(--base); }
-.btn-next.green:hover { background: var(--ac-strong); }
+.rcrd:hover { border-color:var(--ink3); background:var(--c2); }
+.rcrd.sel { border-color:var(--gm); background:var(--gl); }
+.rcrd.sel .rt { color:var(--green); }
+.rcrd.sel .rs { color:var(--green); opacity:.6; }
+.rt { font-size:13px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+.rs { font-size:11px; color:var(--ink3); font-weight:300; }
 
-/* ── SKIP ── */
-.skip-link {
-  position: fixed; bottom: 44px; right: 48px; z-index: 40;
-  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-  color: rgba(245,242,237,0.22); cursor: pointer; transition: color 0.2s;
-  text-decoration: none;
+/* Pills */
+.pill-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:6px; }
+.opill {
+  display:inline-flex; align-items:center;
+  font-size:13px; font-weight:400; color:var(--ink2);
+  background:var(--w); padding:9px 18px;
+  border-radius:30px; border:1.5px solid var(--c3);
+  cursor:pointer; user-select:none; white-space:nowrap;
+  transition:all .15s var(--ease);
 }
-.skip-link:hover { color: rgba(245,242,237,0.5); }
+.opill:hover { border-color:var(--ink3); background:var(--c2); }
+.opill.sel  { border-color:var(--gm); background:var(--gl); color:var(--green); font-weight:500; }
 
-/* ── WELCOME SPECIFIC ── */
-.welcome-cta-group { display: flex; flex-direction: column; align-items: center; gap: 14px; }
-.welcome-rule { width: 40px; height: 1px; background: rgba(111,168,130,0.4); margin: 0 auto 28px; }
-
-/* ── COMPLETION BAR LINE ── */
-.completion-hint {
-  font-size: 10.5px; color: rgba(245,242,237,0.25); letter-spacing: 1.5px;
-  text-transform: uppercase; margin-top: 8px;
+/* Skill strip */
+.sk-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:8px; }
+.skbtn {
+  border:1.5px solid var(--c3); border-radius:var(--r);
+  padding:14px 8px; text-align:center; cursor:pointer;
+  background:var(--w); transition:all .15s var(--ease); user-select:none;
 }
+.skbtn:hover { border-color:var(--ink3); }
+.skbtn.sel { border-color:var(--ink); background:var(--ink); }
+.sk-t { font-size:12px; font-weight:500; color:var(--ink); margin-bottom:3px; }
+.skbtn.sel .sk-t { color:var(--cream); }
+.sk-s { font-size:11px; color:var(--ink3); font-weight:300; line-height:1.35; }
+.skbtn.sel .sk-s { color:rgba(245,242,235,.5); }
+
+/* Schedule strip */
+.sc-strip { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-bottom:14px; }
+.scbtn {
+  border:1.5px solid var(--c3); border-radius:var(--r);
+  padding:18px 10px; text-align:center; cursor:pointer;
+  background:var(--w); transition:all .15s var(--ease); user-select:none;
+}
+.scbtn:hover { border-color:var(--ink3); }
+.scbtn.sel { border-color:var(--gm); background:var(--gl); }
+.sc-t { font-size:13px; font-weight:500; color:var(--ink); }
+.scbtn.sel .sc-t { color:var(--green); }
+
+/* Travel toggle */
+.travel {
+  display:flex; align-items:center; justify-content:space-between;
+  border:1.5px solid var(--c3); border-radius:var(--r);
+  padding:14px 16px; cursor:pointer; background:var(--w);
+  transition:all .15s var(--ease); user-select:none;
+}
+.travel:hover { border-color:var(--ink3); }
+.travel.on { border-color:var(--gm); background:var(--gl); }
+.tr-txt .trt { font-size:13px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+.travel.on .trt { color:var(--green); }
+.tr-txt .trs { font-size:11px; color:var(--ink3); font-weight:300; }
+.knob {
+  width:32px; height:18px; border-radius:10px; background:var(--c3);
+  position:relative; flex-shrink:0; transition:background .2s;
+}
+.knob::after {
+  content:''; position:absolute; width:14px; height:14px; border-radius:50%;
+  background:var(--w); top:2px; left:2px;
+  transition:transform .2s var(--ease);
+  box-shadow:0 1px 3px rgba(0,0,0,.15);
+}
+.travel.on .knob { background:var(--gm); }
+.travel.on .knob::after { transform:translateX(14px); }
+
+/* Account form */
+.ag { margin-bottom:15px; }
+.al { display:block; font-size:11px; font-weight:500; color:var(--ink3);
+      margin-bottom:5px; letter-spacing:.04em; text-transform:uppercase; }
+.ai {
+  width:100%; padding:11px 14px; border:1.5px solid var(--c3);
+  border-radius:var(--r); background:var(--w); color:var(--ink);
+  font-size:14px; outline:none; font-family:var(--sans);
+  transition:border-color .2s;
+}
+.ai:focus { border-color:var(--gm); }
+.a2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.or-row { display:flex; align-items:center; gap:12px; margin:14px 0; }
+.or-line { flex:1; height:1px; background:var(--c3); }
+.or-txt  { font-size:12px; color:var(--ink3); }
+.soc-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.soc-btn {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  border:1.5px solid var(--c3); border-radius:var(--r);
+  padding:11px; font-size:13px; color:var(--ink2);
+  background:var(--w); cursor:pointer; font-family:var(--sans);
+  transition:background .15s, border-color .15s;
+}
+.soc-btn:hover { background:var(--c2); border-color:var(--ink3); }
+
+/* Host bridge card */
+.host-bridge {
+  background:var(--ink); border-radius:var(--rl);
+  padding:32px; text-align:center; color:var(--cream);
+  position:relative; overflow:hidden;
+}
+.host-bridge::before {
+  content:''; position:absolute; width:300px; height:300px; border-radius:50%;
+  background:rgba(26,122,82,.15); bottom:-80px; left:-60px; pointer-events:none;
+}
+.hb-eyebrow { font-size:10px; font-weight:500; letter-spacing:.12em;
+              text-transform:uppercase; color:#6ecfa0; margin-bottom:14px; display:block; }
+.hb-h { font-family:var(--serif); font-size:26px; font-weight:900;
+         letter-spacing:-.025em; color:var(--cream); margin-bottom:8px; line-height:1.1; }
+.hb-h em { font-style:italic; color:#6ecfa0; }
+.hb-sub { font-size:13px; color:rgba(245,242,235,.5); font-weight:300;
+           line-height:1.65; margin-bottom:24px; position:relative; z-index:1; }
+.earn-cards { display:flex; flex-direction:column; gap:8px; margin-bottom:22px; position:relative; z-index:1; }
+.earn-card {
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--r); padding:12px 16px;
+  display:flex; align-items:center; gap:12px;
+}
+.ec-av { width:34px; height:34px; border-radius:50%; display:flex;
+         align-items:center; justify-content:center; font-size:11px;
+         font-weight:500; color:#fff; flex-shrink:0; }
+.ec-info { flex:1; }
+.ec-name { font-size:13px; font-weight:500; color:var(--cream); margin-bottom:1px; }
+.ec-role { font-size:11px; color:rgba(245,242,235,.4); }
+.ec-amt  { font-family:var(--mono); font-size:13px; font-weight:500; color:#a8dfc4; }
+
+/* Match reveal */
+.rv-wrap { text-align:center; }
+.rv-ey { display:inline-block; font-size:10px; font-weight:500; letter-spacing:.12em;
+         text-transform:uppercase; color:var(--green); background:var(--gl);
+         padding:5px 14px; border-radius:20px; margin-bottom:18px; }
+.rv-h  { font-family:var(--serif); font-size:clamp(22px,3vw,30px); font-weight:900;
+         letter-spacing:-.025em; color:var(--ink); margin-bottom:8px; }
+.rv-h em { font-style:italic; color:var(--green); }
+.rv-sub { font-size:13px; color:var(--ink3); font-weight:300; line-height:1.65; margin-bottom:20px; }
+.rv-tags { display:flex; flex-wrap:wrap; justify-content:center; gap:7px; margin-bottom:22px; }
+.rv-tag { font-size:12px; font-weight:500; padding:5px 13px; border-radius:20px;
+          background:var(--c2); color:var(--ink2); }
+.rv-tag.g { background:var(--gl); color:var(--green); }
+.m-list { display:flex; flex-direction:column; gap:9px; margin-bottom:22px; text-align:left; }
+.m-row {
+  background:var(--c2); border:1px solid var(--c3); border-radius:var(--r);
+  padding:13px 16px; display:flex; align-items:center; gap:13px;
+}
+.m-av { width:38px; height:38px; border-radius:50%; display:flex;
+        align-items:center; justify-content:center; font-size:12px;
+        font-weight:500; color:#fff; flex-shrink:0; }
+.m-info { flex:1; }
+.m-name { font-size:14px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+.m-meta { font-size:12px; color:var(--ink3); }
+.m-pct  { font-family:var(--mono); font-size:14px; font-weight:500; color:var(--green); }
+
+/* ── BUTTONS ── */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  font-family:var(--sans); font-size:13px; font-weight:500;
+  padding:10px 20px; border-radius:var(--r);
+  border:1.5px solid transparent; cursor:pointer;
+  transition:all .15s var(--ease); text-decoration:none; white-space:nowrap;
+}
+.btn:disabled { opacity:.35; pointer-events:none; }
+.b-ink { background:var(--ink); color:var(--cream); border-color:var(--ink); }
+.b-ink:hover { background:var(--ink2); transform:translateY(-1px); }
+.b-grn { background:var(--gm); color:#fff; border-color:var(--gm); }
+.b-grn:hover { background:var(--green); transform:translateY(-1px); }
+.b-out { background:transparent; color:var(--ink2); border-color:var(--c3); }
+.b-out:hover { background:var(--c2); border-color:var(--ink3); }
+.b-lg { font-size:15px; padding:13px 28px; }
+.b-fw { width:100%; justify-content:center; }
+
+/* nav row */
+.s-nav { display:flex; align-items:center; justify-content:space-between;
+         margin-top:26px; padding-top:18px; border-top:1px solid var(--c3); }
+.hint { font-size:11px; color:var(--ink3); margin-top:7px; }
 </style>
 </head>
 <body>
+<div class="shell">
 
-<canvas id="bg-canvas"></canvas>
+<!-- ═══ LEFT BRAND RAIL ═══════════════════════════ -->
+<div class="brand" id="brand-rail">
+  <div class="b-top">
+    <a href="index.html" class="b-logo">Lyfe<span>.</span>fy</a>
 
-<div id="progress-bar"><div id="progress-fill"></div></div>
+    <h2 class="b-headline" id="brand-h">Find your people.<br><em>On and off the course.</em></h2>
+    <p class="b-sub" id="brand-sub">Powered by AI matching. Built for players who take their game — and their social life — seriously.</p>
 
-<div id="top-nav">
-  <a href="index.html" class="nav-logo">Lyfe<span class="nav-logo-dot">.</span><span class="nav-logo-fy">fy</span></a>
-  <span id="step-counter"></span>
+    <!-- context card — swaps based on intent -->
+    <div class="ctx-card" id="ctx-card">
+
+      <!-- DEFAULT: player match preview -->
+      <div id="ctx-player">
+        <div class="ctx-label">Your AI match profile</div>
+        <div class="ctx-tags" id="ctx-tags">
+          <span class="ctx-chip on">Golf-first</span>
+          <span class="ctx-chip">Weekend vibes</span>
+          <span class="ctx-chip">Social</span>
+          <span class="ctx-chip">Finance</span>
+        </div>
+        <div class="ctx-matches">
+          <div class="ctx-row">
+            <div class="ctx-av" style="background:#2a9e6a">MR</div>
+            <div class="ctx-info"><div class="ctx-name">Marcus R.</div><div class="ctx-meta">Finance · Boston</div></div>
+            <div class="ctx-right"><div class="ctx-pct">94%</div><div class="ctx-bar"><div class="ctx-fill" style="width:94%"></div></div></div>
+          </div>
+          <div class="ctx-row">
+            <div class="ctx-av" style="background:#7c5fa0">SK</div>
+            <div class="ctx-info"><div class="ctx-name">Sofia K.</div><div class="ctx-meta">Tech · NYC</div></div>
+            <div class="ctx-right"><div class="ctx-pct">91%</div><div class="ctx-bar"><div class="ctx-fill" style="width:91%"></div></div></div>
+          </div>
+          <div class="ctx-row">
+            <div class="ctx-av" style="background:#c8821a">JL</div>
+            <div class="ctx-info"><div class="ctx-name">James L.</div><div class="ctx-meta">Creative · D.C.</div></div>
+            <div class="ctx-right"><div class="ctx-pct">88%</div><div class="ctx-bar"><div class="ctx-fill" style="width:88%"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOST: earnings view — hidden by default -->
+      <div id="ctx-host" style="display:none">
+        <div class="ctx-label">Top hosts this month</div>
+        <div class="earn-rows">
+          <div class="earn-row">
+            <div class="earn-av" style="background:#c8821a">JK</div>
+            <div class="earn-info"><div class="earn-name">James K.</div><div class="earn-role">Pro · 4.5 UTR</div></div>
+            <div class="earn-amt">$3,210</div>
+          </div>
+          <div class="earn-row">
+            <div class="earn-av" style="background:#2a9e6a">MT</div>
+            <div class="earn-info"><div class="earn-name">Marcus T.</div><div class="earn-role">Duke Tennis · D1</div></div>
+            <div class="earn-amt">$2,840</div>
+          </div>
+          <div class="earn-row">
+            <div class="earn-av" style="background:#7c5fa0">SR</div>
+            <div class="earn-info"><div class="earn-name">Sofia R.</div><div class="earn-role">Stanford Golf · D1</div></div>
+            <div class="earn-amt">$1,960</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /ctx-card -->
+  </div>
+
+  <div class="b-bot">
+    <div class="prog-row">
+      <span id="prog-note">Under 60 seconds</span>
+      <span id="prog-pct">0%</span>
+    </div>
+    <div class="prog-track"><div class="prog-bar" id="prog-bar"></div></div>
+  </div>
 </div>
 
-<div id="screens">
+<!-- ═══ RIGHT FORM PANEL ═══════════════════════════ -->
+<div class="form-panel">
 
-  <!-- S0: WELCOME -->
-  <div class="screen active" id="s0">
-    <div class="eyebrow">Golf · Tennis · Basketball · More</div>
-    <h1 class="headline">Find your people.<br><em>On and off the course.</em></h1>
-    <div class="welcome-rule"></div>
-    <p class="sub">Powered by AI. Built for athletes who take their game — and their social life — seriously.</p>
-    <div class="welcome-cta-group">
-      <button class="btn-next green" style="font-size:14px;padding:16px 52px" onclick="go(1)">Get Started →</button>
-      <div class="completion-hint">Under 60 seconds · 9 questions</div>
-    </div>
-  </div>
+  <!-- ── S0: WHY ARE YOU JOINING? (intent gate) ── -->
+  <div class="step active" id="s0">
+    <span class="sey">Welcome to Lyfe.fy</span>
+    <h2 class="sh">What brings you <em>here?</em></h2>
+    <p class="ss">Tell us your goal and we'll build the perfect experience around you.</p>
 
-  <!-- S1: GENDER / IDENTITY -->
-  <div class="screen" id="s1">
-    <div class="eyebrow">Step 1 of 9</div>
-    <h2 class="headline" style="font-size:clamp(30px,4.5vw,52px)">How do you <em>identify?</em></h2>
-    <p class="sub" style="margin-bottom:28px">Helps us personalize your experience and community.</p>
-    <div id="gender-cards">
-      <div class="gender-card" onclick="genderSel(this,'man')"><div class="gender-icon">♂</div><div class="gender-lbl">Man</div></div>
-      <div class="gender-card" onclick="genderSel(this,'woman')"><div class="gender-icon">♀</div><div class="gender-lbl">Woman</div></div>
-      <div class="gender-card" onclick="genderSel(this,'nonbinary')"><div class="gender-icon">⬡</div><div class="gender-lbl">Non-binary</div></div>
-      <div class="gender-card" onclick="genderSel(this,'prefer-not')"><div class="gender-icon">—</div><div class="gender-lbl">Prefer not to say</div></div>
-    </div>
-
-    <!-- Women's space card — shown when woman is selected -->
-    <div class="women-card" id="women-card" style="display:none">
-      <div class="women-badge">◆ Women's Space</div>
-      <div class="women-title">Golf is for <em>everyone</em> — especially you.</div>
-      <div class="women-desc">Lyfe.fy has a dedicated women's community. Safe, welcoming, and curated — whether you're a scratch golfer or just starting out. You'll always have the option to play in women-only or mixed sessions.</div>
-      <div class="women-chips">
-        <div class="women-chip" onclick="this.classList.toggle('selected')">Women-only sessions</div>
-        <div class="women-chip" onclick="this.classList.toggle('selected')">Mixed groups welcome</div>
-        <div class="women-chip" onclick="this.classList.toggle('selected')">Beginner-friendly</div>
-        <div class="women-chip" onclick="this.classList.toggle('selected')">Mentor matching</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- S2: CAREER -->
-  <div class="screen" id="s2">
-    <div class="eyebrow">Step 2 of 9</div>
-    <h2 class="headline" style="font-size:clamp(30px,4.5vw,52px)">What's your world<br><em>off the course?</em></h2>
-    <p class="sub" style="margin-bottom:8px">We match based on lifestyle compatibility too.</p>
-    <div class="microcopy">Select one that fits best.</div>
-    <div class="cards" id="career-grid">
-      <div class="card" onclick="singleSel('career-grid',this)"><div class="icon">📈</div><div class="name">Finance</div><div class="hint">Banking · Consulting</div></div>
-      <div class="card" onclick="singleSel('career-grid',this)"><div class="icon">💻</div><div class="name">Tech</div><div class="hint">Startup · Product</div></div>
-      <div class="card" onclick="singleSel('career-grid',this)"><div class="icon">🎨</div><div class="name">Creative</div><div class="hint">Fashion · Media</div></div>
-      <div class="card" onclick="singleSel('career-grid',this)"><div class="icon">🎓</div><div class="name">Student</div><div class="hint">University · Grad</div></div>
-      <div class="card" onclick="singleSel('career-grid',this)"><div class="icon">🏅</div><div class="name">Athlete</div><div class="hint">Coach · Pro</div></div>
-      <div class="card" onclick="singleSel('career-grid',this)"><div class="icon">🏥</div><div class="name">Healthcare</div><div class="hint">Medicine · Research</div></div>
-      <div class="card" onclick="singleSel('career-grid',this)"><div class="icon">🏗</div><div class="name">Real Estate</div><div class="hint">Development · Sales</div></div>
-      <div class="card" onclick="singleSel('career-grid',this)"><div class="icon">✦</div><div class="name">Other</div><div class="hint">Something else</div></div>
-    </div>
-  </div>
-
-  <!-- S3: SPORTS -->
-  <div class="screen" id="s3">
-    <div class="eyebrow">Step 3 of 9</div>
-    <h2 class="headline" style="font-size:clamp(30px,4.5vw,52px)">What do <em>you play?</em></h2>
-    <p class="sub" style="margin-bottom:8px">Select all that apply.</p>
-   
-    <div class="chips" id="sports-chips">
-      <div class="chip selected" onclick="this.classList.toggle('selected')">⛳ Golf</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">🎾 Tennis</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">🏓 Pickleball</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">🏀 Basketball</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">⚽ Soccer</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">🏋 Gym / Fitness</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">🎿 Ski / Snowboard</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">🏃 Running</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">🏊 Swimming</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">+ Add your own</div>
-    </div>
-  </div>
-
-  <!-- S4: GOLF STYLE -->
-  <div class="screen" id="s4">
-    <div class="eyebrow">Step 4 of 9</div>
-    <h2 class="headline" style="font-size:clamp(30px,4.5vw,52px)">Your golf <em>style?</em></h2>
-    <p class="sub" style="margin-bottom:28px">Pick the one that feels most like you.</p>
-    <div class="cards" id="golf-grid">
-      <div class="card" onclick="singleSel('golf-grid',this)"><div class="icon">🏆</div><div class="name">Competitive grinder</div><div class="hint">Tracks handicap, plays to win</div></div>
-      <div class="card" onclick="singleSel('golf-grid',this)"><div class="icon">🌅</div><div class="name">Weekend vibes</div><div class="hint">Casual, social rounds</div></div>
-      <div class="card" onclick="singleSel('golf-grid',this)"><div class="icon">🥂</div><div class="name">Luxury golfer</div><div class="hint">Country clubs, destination golf</div></div>
-      <div class="card" onclick="singleSel('golf-grid',this)"><div class="icon">📸</div><div class="name">Content golfer</div><div class="hint">Films, posts, aesthetic</div></div>
-      <div class="card" onclick="singleSel('golf-grid',this)"><div class="icon">🌱</div><div class="name">Beginner energy</div><div class="hint">Learning, chill, no pressure</div></div>
-      <div class="card" onclick="singleSel('golf-grid',this)"><div class="icon">🎯</div><div class="name">Range rat</div><div class="hint">Always working the swing</div></div>
-    </div>
-  </div>
-
-  <!-- S5: VIBE -->
-  <div class="screen" id="s5">
-    <div class="eyebrow">Step 5 of 9</div>
-    <h2 class="headline" style="font-size:clamp(30px,4.5vw,52px)">Your energy<br><em>on the course?</em></h2>
-    <p class="sub" style="margin-bottom:28px">Pick 2–3 that feel like you.</p>
-    <div class="chips" id="vibe-chips">
-      <div class="chip" onclick="this.classList.toggle('selected')">😌 Chill</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">🔥 Competitive</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">😂 Funny / chaotic</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">🧠 Locked-in focus</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">🥂 Social butterfly</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">🎵 Vibes matter most</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">📊 Stat nerd</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">💬 Trash talker (friendly)</div>
-      <div class="chip" onclick="this.classList.toggle('selected')">🌺 Here for the sunsets</div>
-    </div>
-  </div>
-
-  <!-- S6: INTENT -->
-  <div class="screen" id="s6">
-    <div class="eyebrow">Step 6 of 9</div>
-    <h2 class="headline" style="font-size:clamp(30px,4.5vw,52px)">What are you<br><em>looking for?</em></h2>
-    <p class="sub" style="margin-bottom:28px">Select all that apply — no judgment here.</p>
-    <div class="intents">
-      <div class="intent" onclick="this.classList.toggle('selected')">
-        <div class="intent-icon">⛳</div>
-        <div class="intent-label">Golf friends & playing partners</div>
-        <div class="intent-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>
-      </div>
-      <div class="intent" onclick="this.classList.toggle('selected')">
-        <div class="intent-icon">💼</div>
-        <div class="intent-label">Networking & professional connections</div>
-        <div class="intent-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>
-      </div>
-      <div class="intent" onclick="this.classList.toggle('selected')">
-        <div class="intent-icon">💘</div>
-        <div class="intent-label">Dating</div>
-        <div class="intent-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>
-      </div>
-      <div class="intent" onclick="this.classList.toggle('selected')">
-        <div class="intent-icon">🎬</div>
-        <div class="intent-label">Content collabs & brand deals</div>
-        <div class="intent-check"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="2,5 4,7.5 8,2.5"/></svg></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- S7: SKILL -->
-  <div class="screen" id="s7">
-    <div class="eyebrow">Step 7 of 9</div>
-    <h2 class="headline" style="font-size:clamp(30px,4.5vw,52px)">Your <em>skill level?</em></h2>
-    <p class="sub" style="margin-bottom:28px">Be honest — it helps us find your best match.</p>
-    <div class="slider-section">
-      <div class="skill-label" id="skill-label">Intermediate</div>
-      <div class="skill-desc" id="skill-desc">Handicap 10–20 · Plays regularly, improving</div>
-      <input type="range" min="0" max="3" value="1" step="1" id="skill-slider" oninput="updateSkill(this.value)">
-      <div class="slider-ticks">
-        <span class="slider-tick">Beginner</span>
-        <span class="slider-tick">Intermediate</span>
-        <span class="slider-tick">Advanced</span>
-        <span class="slider-tick">Competitive</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- S8: AVAILABILITY -->
-  <div class="screen" id="s8">
-    <div class="eyebrow">Step 8 of 9</div>
-    <h2 class="headline" style="font-size:clamp(30px,4.5vw,52px)">When do you<br><em>usually play?</em></h2>
-    <p class="sub" style="margin-bottom:28px">Match with people on your schedule.</p>
-    <div class="avail-row">
-      <div class="avail-btn" onclick="availSel(this)"><div class="avail-icon">☀️</div><div class="avail-lbl">Weekdays</div></div>
-      <div class="avail-btn selected" onclick="availSel(this)"><div class="avail-icon">🏖</div><div class="avail-lbl">Weekends</div></div>
-      <div class="avail-btn" onclick="availSel(this)"><div class="avail-icon">🌀</div><div class="avail-lbl">Flexible</div></div>
-    </div>
-    <div class="toggle-row" onclick="toggleTravel()" style="cursor:pointer">
-      <div>
-        <div class="toggle-lbl">Willing to travel for golf?</div>
-        <div class="toggle-sub">Weekend trips, destination courses</div>
-      </div>
-      <div class="toggle-switch" id="travel-toggle"><div class="toggle-knob"></div></div>
-    </div>
-  </div>
-
-  <!-- S9: MATCH PREVIEW -->
-  <div class="screen" id="s9">
-    <div class="eyebrow">Your profile is ready</div>
-    <h2 class="headline" style="font-size:clamp(28px,4vw,48px)">Here's who you'd<br><em>match with.</em></h2>
-    <p class="sub" style="margin-bottom:24px">Create your account to unlock your full match list.</p>
-    <div class="match-box">
-      <div class="match-box-title">Your AI match profile</div>
-      <div class="match-tags" id="match-tags-display">
-        <span class="match-tag">⛳ Golf-first</span>
-        <span class="match-tag">🌅 Weekend vibes</span>
-        <span class="match-tag">🥂 Social</span>
-        <span class="match-tag">📈 Finance / Tech</span>
-      </div>
-      <div style="font-size:11px;color:rgba(245,242,237,0.35);margin-bottom:12px;font-weight:500;letter-spacing:0.5px;">Best matches for you</div>
-      <div class="match-profiles-row">
-        <div class="match-p">
-          <div class="match-av" style="background:rgba(61,122,86,0.25);color:#6FA882">MR</div>
-          <div class="match-name">Marcus R.</div>
-          <div style="font-size:11px;color:rgba(245,242,237,0.3)">Finance · Boston</div>
-          <div class="match-pct">94%</div>
-          <div class="match-pct-lbl">match</div>
+    <div class="intent-grid">
+      <div class="icrd" id="ic-play" onclick="setIntent('play')">
+        <div class="ic-dot"></div>
+        <div>
+          <div class="ic-title">Play &amp; connect</div>
+          <div class="ic-sub">Find games, meet players, track your golf life. Get matched by skill, vibe, and schedule.</div>
         </div>
-        <div class="match-p">
-          <div class="match-av" style="background:rgba(212,83,126,0.18);color:#F0A0B8">SK</div>
-          <div class="match-name">Sofia K.</div>
-          <div style="font-size:11px;color:rgba(245,242,237,0.3)">Tech · NYC</div>
-          <div class="match-pct">91%</div>
-          <div class="match-pct-lbl">match</div>
+      </div>
+      <div class="icrd" id="ic-host" onclick="setIntent('host')">
+        <div class="ic-dot"></div>
+        <div>
+          <div class="ic-title">Host &amp; earn</div>
+          <div class="ic-sub">Lead premium sessions as an athlete or coach. Earn $1,200–$3,500/month on your schedule.</div>
         </div>
-        <div class="match-p">
-          <div class="match-av" style="background:rgba(168,145,90,0.2);color:#D4A84B">JL</div>
-          <div class="match-name">James L.</div>
-          <div style="font-size:11px;color:rgba(245,242,237,0.3)">Creative · D.C.</div>
-          <div class="match-pct">88%</div>
-          <div class="match-pct-lbl">match</div>
+      </div>
+      <div class="icrd" id="ic-both" onclick="setIntent('both')">
+        <div class="ic-dot"></div>
+        <div>
+          <div class="ic-title">Both — play and host</div>
+          <div class="ic-sub">Compete, earn, and build your golf community all in one place.</div>
         </div>
       </div>
     </div>
-    <button class="btn-next green" style="font-size:13px;padding:15px 44px" onclick="createAccount()">Create Your Account →</button>
-    <div style="font-size:11px;color:rgba(245,242,237,0.25);margin-top:12px">Free to join · Takes 30 seconds</div>
+
+    <div class="s-nav">
+      <span></span>
+      <button class="btn b-ink" id="s0-next" disabled onclick="go(1)">Continue &rarr;</button>
+    </div>
   </div>
 
-</div>
+  <!-- ── S1: IDENTITY ── -->
+  <div class="step" id="s1">
+    <span class="sey" id="s1-ey">Step 1 of 5</span>
+    <h2 class="sh">How do you <em>identify?</em></h2>
+    <p class="ss">Helps us personalize your community and sessions.</p>
 
-<!-- Bottom actions (Back + Next) -->
-<div class="actions" id="main-actions" style="display:none">
-  <button class="btn-back" id="btn-back" onclick="goBack()">← Back</button>
-  <button class="btn-next" id="btn-next" onclick="goNext()">Continue →</button>
-</div>
+    <div class="id-grid">
+      <div class="idcrd" onclick="selId('man')">
+        <div class="id-t">Man</div>
+      </div>
+      <div class="idcrd" onclick="selId('woman')">
+        <div class="id-t">Woman</div>
+      </div>
+    </div>
 
-<a class="skip-link" id="skip-link" onclick="goNext()">Skip →</a>
+    <div class="womens-note" id="womens-note">
+      <div class="wn-h">Women's Space &mdash; Golf is for <em>everyone</em>, especially you.</div>
+      <p class="wn-p">Lyfe.fy has a dedicated women's community. Safe, welcoming, and curated &mdash; whether you're a scratch golfer or just starting out. You'll always have the option to play in women-only or mixed sessions.</p>
+      <div class="wn-pills">
+        <span class="wn-pill">Women-only sessions</span>
+        <span class="wn-pill">Mixed groups welcome</span>
+        <span class="wn-pill">Beginner-friendly</span>
+        <span class="wn-pill">Mentor matching</span>
+      </div>
+    </div>
+
+    <div class="s-nav">
+      <button class="btn b-out" onclick="go(0)">&larr; Back</button>
+      <button class="btn b-ink" id="s1-next" disabled onclick="goNext(1)">Continue &rarr;</button>
+    </div>
+  </div>
+
+  <!-- ── S2: YOUR WORLD ── -->
+  <div class="step" id="s2">
+    <span class="sey" id="s2-ey">Step 2 of 5</span>
+    <h2 class="sh">Your world <em>off the course?</em></h2>
+    <p class="ss">We match on lifestyle compatibility too.</p>
+
+    <div class="g3">
+      <div class="ocrd" onclick="sngl(this,'s2')"><div class="ot">Finance</div><div class="os">Banking · Consulting</div></div>
+      <div class="ocrd" onclick="sngl(this,'s2')"><div class="ot">Tech</div><div class="os">Startup · Product</div></div>
+      <div class="ocrd" onclick="sngl(this,'s2')"><div class="ot">Creative</div><div class="os">Fashion · Media</div></div>
+      <div class="ocrd" onclick="sngl(this,'s2')"><div class="ot">Student</div><div class="os">University · Grad</div></div>
+      <div class="ocrd" onclick="sngl(this,'s2')"><div class="ot">Athlete</div><div class="os">Coach · Pro</div></div>
+      <div class="ocrd" onclick="sngl(this,'s2')"><div class="ot">Healthcare</div><div class="os">Medicine · Research</div></div>
+      <div class="ocrd" onclick="sngl(this,'s2')"><div class="ot">Real Estate</div><div class="os">Development · Sales</div></div>
+      <div class="ocrd" onclick="sngl(this,'s2')"><div class="ot">Law</div><div class="os">Firm · Practice</div></div>
+      <div class="ocrd" onclick="sngl(this,'s2')"><div class="ot">Other</div><div class="os">Something else</div></div>
+    </div>
+
+    <div class="s-nav">
+      <button class="btn b-out" onclick="go(1)">&larr; Back</button>
+      <button class="btn b-ink" id="s2-next" disabled onclick="goNext(2)">Continue &rarr;</button>
+    </div>
+  </div>
+
+  <!-- ── S3: GOLF STYLE + ENERGY (combined) ── -->
+  <div class="step" id="s3">
+    <span class="sey" id="s3-ey">Step 3 of 5</span>
+    <h2 class="sh">Your golf <em>personality?</em></h2>
+    <p class="ss">Pick your style and how you show up on the course.</p>
+
+    <!-- Style -->
+    <div style="font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;">Playing style</div>
+    <div class="g2" style="margin-bottom:18px">
+      <div class="rcrd" onclick="sngl(this,'s3-style')"><div class="rt">Competitive grinder</div><div class="rs">Tracks handicap, plays to win</div></div>
+      <div class="rcrd" onclick="sngl(this,'s3-style')"><div class="rt">Weekend vibes</div><div class="rs">Casual, social rounds</div></div>
+      <div class="rcrd" onclick="sngl(this,'s3-style')"><div class="rt">Luxury golfer</div><div class="rs">Country clubs, destination trips</div></div>
+      <div class="rcrd" onclick="sngl(this,'s3-style')"><div class="rt">Content creator</div><div class="rs">Films, posts, aesthetic</div></div>
+      <div class="rcrd" onclick="sngl(this,'s3-style')"><div class="rt">Beginner energy</div><div class="rs">Learning, chill, no pressure</div></div>
+      <div class="rcrd" onclick="sngl(this,'s3-style')"><div class="rt">Range rat</div><div class="rs">Always working the swing</div></div>
+    </div>
+
+    <!-- Energy pills -->
+    <div style="font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;">Your energy (pick 2–3)</div>
+    <div class="pill-row" id="s3-pills">
+      <div class="opill" onclick="mmx(this,'s3',3)">Chill</div>
+      <div class="opill" onclick="mmx(this,'s3',3)">Competitive</div>
+      <div class="opill" onclick="mmx(this,'s3',3)">Funny &amp; chaotic</div>
+      <div class="opill" onclick="mmx(this,'s3',3)">Locked-in</div>
+      <div class="opill" onclick="mmx(this,'s3',3)">Social butterfly</div>
+      <div class="opill" onclick="mmx(this,'s3',3)">Vibes first</div>
+      <div class="opill" onclick="mmx(this,'s3',3)">Stat nerd</div>
+      <div class="opill" onclick="mmx(this,'s3',3)">Here for the sunsets</div>
+    </div>
+    <p class="hint">Pick at least one style and 2 energy tags</p>
+
+    <div class="s-nav">
+      <button class="btn b-out" onclick="go(2)">&larr; Back</button>
+      <button class="btn b-ink" id="s3-next" disabled onclick="goNext(3)">Continue &rarr;</button>
+    </div>
+  </div>
+
+  <!-- ── S4: SKILL ── -->
+  <div class="step" id="s4">
+    <span class="sey" id="s4-ey">Step 4 of 5</span>
+    <h2 class="sh">Your <em>skill level?</em></h2>
+    <p class="ss">Be honest &mdash; it helps us find your best match.</p>
+
+    <div class="sk-strip">
+      <div class="skbtn" onclick="sngl(this,'s4')"><div class="sk-t">Beginner</div><div class="sk-s">New to golf</div></div>
+      <div class="skbtn" onclick="sngl(this,'s4')"><div class="sk-t">Intermediate</div><div class="sk-s">HCP 10–20</div></div>
+      <div class="skbtn" onclick="sngl(this,'s4')"><div class="sk-t">Advanced</div><div class="sk-s">HCP &lt; 10</div></div>
+      <div class="skbtn" onclick="sngl(this,'s4')"><div class="sk-t">Competitive</div><div class="sk-s">Scratch or better</div></div>
+    </div>
+
+    <div class="s-nav">
+      <button class="btn b-out" onclick="go(3)">&larr; Back</button>
+      <button class="btn b-ink" id="s4-next" disabled onclick="goNext(4)">Continue &rarr;</button>
+    </div>
+  </div>
+
+  <!-- ── S5: SCHEDULE ── -->
+  <div class="step" id="s5">
+    <span class="sey" id="s5-ey">Step 5 of 5</span>
+    <h2 class="sh">When do you <em>usually play?</em></h2>
+    <p class="ss">Match with players on your schedule.</p>
+
+    <div class="sc-strip">
+      <div class="scbtn" onclick="msc(this)"><div class="sc-t">Weekdays</div></div>
+      <div class="scbtn" onclick="msc(this)"><div class="sc-t">Weekends</div></div>
+      <div class="scbtn" onclick="msc(this)"><div class="sc-t">Flexible</div></div>
+    </div>
+
+    <div class="travel" id="travel" onclick="this.classList.toggle('on')">
+      <div class="tr-txt">
+        <div class="trt">Willing to travel for golf?</div>
+        <div class="trs">Weekend trips &amp; destination courses</div>
+      </div>
+      <div class="knob"></div>
+    </div>
+
+    <div class="s-nav">
+      <button class="btn b-out" onclick="go(4)">&larr; Back</button>
+      <button class="btn b-ink" id="s5-next" disabled onclick="goNext(5)">Continue &rarr;</button>
+    </div>
+  </div>
+
+  <!-- ── HOST BRIDGE (for host/both intent) ── -->
+  <div class="step" id="s-bridge">
+    <div class="host-bridge">
+      <span class="hb-eyebrow">Almost there</span>
+      <h2 class="hb-h">Ready to <em>earn?</em></h2>
+      <p class="hb-sub">Your player profile is set. Now complete your host application to start leading sessions and earning income.</p>
+      <div class="earn-cards">
+        <div class="earn-card">
+          <div class="ec-av" style="background:#c8821a">JK</div>
+          <div class="ec-info"><div class="ec-name">James K.</div><div class="ec-role">Pro · 4.5 UTR</div></div>
+          <div class="ec-amt">$3,210 / mo</div>
+        </div>
+        <div class="earn-card">
+          <div class="ec-av" style="background:#2a9e6a">MT</div>
+          <div class="ec-info"><div class="ec-name">Marcus T.</div><div class="ec-role">Duke Tennis · D1</div></div>
+          <div class="ec-amt">$2,840 / mo</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:18px; display:flex; flex-direction:column; gap:10px;">
+      <a href="hostapplication.html" class="btn b-ink b-lg b-fw">Complete host application &rarr;</a>
+      <button class="btn b-out b-fw" onclick="go(6)">Skip for now, create account</button>
+    </div>
+  </div>
+
+  <!-- ── S6: CREATE ACCOUNT ── -->
+  <div class="step" id="s6">
+    <span class="sey">Almost there</span>
+    <h2 class="sh">Create your <em>account.</em></h2>
+    <p class="ss">Your profile is built. One step to unlock your full match list.</p>
+
+    <div class="soc-grid">
+      <button class="soc-btn" onclick="finish()">&#63743; Apple</button>
+      <button class="soc-btn" onclick="finish()">G &nbsp;Google</button>
+    </div>
+    <div class="or-row"><div class="or-line"></div><span class="or-txt">or sign up with email</span><div class="or-line"></div></div>
+
+    <div class="a2" style="margin-bottom:14px">
+      <div class="ag"><label class="al">First name</label><input class="ai" type="text" placeholder="Alex"></div>
+      <div class="ag"><label class="al">Last name</label><input class="ai" type="text" placeholder="Johnson"></div>
+    </div>
+    <div class="ag"><label class="al">Email</label><input class="ai" type="email" placeholder="alex@example.com"></div>
+    <div class="ag">
+      <label class="al">City</label>
+      <select class="ai" style="cursor:pointer">
+        <option value="">Select your city</option>
+        <option>Boston, MA</option>
+        <option>New York, NY</option>
+        <option>Washington, D.C.</option>
+        <option>Other (join waitlist)</option>
+      </select>
+    </div>
+    <div class="ag"><label class="al">Password</label><input class="ai" type="password" placeholder="Create a password"></div>
+
+    <div class="s-nav">
+      <button class="btn b-out" onclick="goBack6()">&larr; Back</button>
+      <button class="btn b-grn b-lg" onclick="finish()">See my matches &rarr;</button>
+    </div>
+    <p style="font-size:11px;color:var(--ink3);text-align:center;margin-top:14px">Already have an account? <a href="dashboard.html" style="color:var(--green);font-weight:500">Log in &rarr;</a></p>
+  </div>
+
+  <!-- ── MATCH REVEAL ── -->
+  <div class="step" id="s-reveal">
+    <div class="rv-wrap">
+      <div class="rv-ey">Your match profile is ready</div>
+      <h2 class="rv-h">Here&rsquo;s who you&rsquo;d <em>match with.</em></h2>
+      <p class="rv-sub">Based on your style, energy, lifestyle, and schedule.</p>
+      <div class="rv-tags">
+        <span class="rv-tag g">Golf-first</span>
+        <span class="rv-tag">Weekend vibes</span>
+        <span class="rv-tag">Social</span>
+        <span class="rv-tag">Finance</span>
+      </div>
+      <div class="m-list">
+        <div class="m-row">
+          <div class="m-av" style="background:#2a9e6a">MR</div>
+          <div class="m-info"><div class="m-name">Marcus R.</div><div class="m-meta">Finance &middot; Boston &middot; Weekend golfer</div></div>
+          <div class="m-pct">94%</div>
+        </div>
+        <div class="m-row">
+          <div class="m-av" style="background:#7c5fa0">SK</div>
+          <div class="m-info"><div class="m-name">Sofia K.</div><div class="m-meta">Tech &middot; NYC &middot; Competitive grinder</div></div>
+          <div class="m-pct">91%</div>
+        </div>
+        <div class="m-row">
+          <div class="m-av" style="background:#c8821a">JL</div>
+          <div class="m-info"><div class="m-name">James L.</div><div class="m-meta">Creative &middot; D.C. &middot; Luxury golfer</div></div>
+          <div class="m-pct">88%</div>
+        </div>
+      </div>
+      <a href="games.html" class="btn b-grn b-fw b-lg">Find a game &rarr;</a>
+      <div style="margin-top:10px"><a href="dashboard.html" class="btn b-out b-fw">Go to my dashboard</a></div>
+    </div>
+  </div>
+
+</div><!-- /form-panel -->
+</div><!-- /shell -->
 
 <script>
-  /* ─── CANVAS PARTICLE BACKGROUND ─────────────────── */
-  const canvas = document.getElementById('bg-canvas');
-  const ctx    = canvas.getContext('2d');
-  let W, H, particles = [];
+/* ════════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════════ */
+let intent = null;   // 'play' | 'host' | 'both'
+let gender = null;   // 'man'  | 'woman'
+let cur    = 0;
+const TOTAL_STEPS = 5; // s1–s5 are the shared questions
 
-  function resize() {
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
+/* ════════════════════════════════════════════════
+   INTENT GATE
+════════════════════════════════════════════════ */
+function setIntent(val) {
+  intent = val;
+  ['play','host','both'].forEach(v => {
+    document.getElementById('ic-'+v).classList.toggle('sel', v === val);
+  });
+  document.getElementById('s0-next').disabled = false;
+
+  // Update brand rail
+  const rail  = document.getElementById('brand-rail');
+  const bh    = document.getElementById('brand-h');
+  const bs    = document.getElementById('brand-sub');
+  const cplay = document.getElementById('ctx-player');
+  const chost = document.getElementById('ctx-host');
+
+  if (val === 'host') {
+    bh.innerHTML   = 'Lead the field.<br><em>Get paid for it.</em>';
+    bs.textContent = 'Turn your athletic credentials into real income. Top hosts earn $1,200–$3,500 per month.';
+    cplay.style.display = 'none';
+    chost.style.display = 'block';
+    rail.classList.remove('pink-mode');
+  } else if (val === 'both') {
+    bh.innerHTML   = 'Play. Host.<br><em>Own your game.</em>';
+    bs.textContent = 'Compete on the course and earn off it. The full Lyfe.fy experience.';
+    cplay.style.display = 'none';
+    chost.style.display = 'block';
+    rail.classList.remove('pink-mode');
+  } else {
+    bh.innerHTML   = 'Find your people.<br><em>On and off the course.</em>';
+    bs.textContent = 'Powered by AI matching. Built for players who take their game — and their social life — seriously.';
+    cplay.style.display = 'block';
+    chost.style.display = 'none';
+    rail.classList.remove('pink-mode');
   }
-  resize();
-  window.addEventListener('resize', () => { resize(); initParticles(); });
+}
 
-  function initParticles() {
-    particles = [];
-    const count = Math.floor((W * H) / 8000);
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        r: Math.random() * 1.4 + 0.3,
-        o: Math.random() * 0.5 + 0.08,
-        sp: Math.random() * 0.12 + 0.04,
-        drift: (Math.random() - 0.5) * 0.08
-      });
-    }
+/* ════════════════════════════════════════════════
+   IDENTITY
+════════════════════════════════════════════════ */
+function selId(val) {
+  gender = val;
+  const cards = document.querySelectorAll('.idcrd');
+  cards[0].classList.toggle('sel-m', val === 'man');
+  cards[0].classList.toggle('sel-w', false);
+  cards[1].classList.toggle('sel-w', val === 'woman');
+  cards[1].classList.toggle('sel-m', false);
+
+  const note = document.getElementById('womens-note');
+  const rail = document.getElementById('brand-rail');
+  note.classList.toggle('show', val === 'woman');
+  rail.classList.toggle('pink-mode', val === 'woman');
+
+  document.getElementById('s1-next').disabled = false;
+  updateProg();
+}
+
+/* ════════════════════════════════════════════════
+   SELECTION HELPERS
+════════════════════════════════════════════════ */
+// single-select within a group key (ocrd / rcrd / skbtn)
+function sngl(el, key) {
+  // key can be step id or a custom group like 's3-style'
+  const stepEl = key.startsWith('s') && !key.includes('-')
+    ? document.getElementById(key)
+    : null;
+
+  if (stepEl) {
+    // normal step — clear all selectable in step
+    stepEl.querySelectorAll('.ocrd,.rcrd,.skbtn').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    const btn = document.getElementById(key + '-next');
+    if (btn) btn.disabled = false;
+  } else {
+    // group key like 's3-style' — only clear siblings
+    const parent = el.closest('.g2, .g3, .sk-strip');
+    if (parent) parent.querySelectorAll('.rcrd,.ocrd,.skbtn').forEach(c => c.classList.remove('sel'));
+    el.classList.add('sel');
+    checkS3();
   }
-  initParticles();
+  updateProg();
+}
 
-  /* soft radial glow — matches the reference image feel */
-  function drawBg() {
-    /* deep warm-dark base matching --ink but slightly warmer */
-    ctx.fillStyle = '#1E1E1B';
-    ctx.fillRect(0, 0, W, H);
+// multi no cap
+function mult(el, sid) {
+  el.classList.toggle('sel');
+  const step = document.getElementById(sid);
+  const any  = step.querySelectorAll('.sel').length > 0;
+  const btn  = document.getElementById(sid + '-next');
+  if (btn) btn.disabled = !any;
+  updateProg();
+}
 
-    /* subtle green-tinted glow at centre-top */
-    const g1 = ctx.createRadialGradient(W * 0.5, H * 0.25, 0, W * 0.5, H * 0.25, W * 0.55);
-    g1.addColorStop(0, 'rgba(42,92,63,0.18)');
-    g1.addColorStop(1, 'rgba(42,92,63,0)');
-    ctx.fillStyle = g1; ctx.fillRect(0, 0, W, H);
+// multi with max cap (used for energy pills in s3)
+function mmx(el, sid, max) {
+  const pills = document.querySelectorAll('#s3-pills .opill');
+  const selCount = Array.from(pills).filter(p => p.classList.contains('sel')).length;
+  if (!el.classList.contains('sel') && selCount >= max) return;
+  el.classList.toggle('sel');
+  checkS3();
+  updateProg();
+}
 
-    /* warm amber glow lower-right — adds depth */
-    const g2 = ctx.createRadialGradient(W * 0.8, H * 0.75, 0, W * 0.8, H * 0.75, W * 0.45);
-    g2.addColorStop(0, 'rgba(168,145,90,0.07)');
-    g2.addColorStop(1, 'rgba(168,145,90,0)');
-    ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
-  }
+// s3 needs both a style card AND ≥ 1 energy pill
+function checkS3() {
+  const hasStyle  = document.querySelector('#s3 .rcrd.sel') !== null;
+  const hasPills  = document.querySelectorAll('#s3-pills .opill.sel').length >= 1;
+  document.getElementById('s3-next').disabled = !(hasStyle && hasPills);
+}
 
-  let raf;
-  function animate() {
-    drawBg();
-    for (const p of particles) {
-      p.y -= p.sp;
-      p.x += p.drift;
-      if (p.y < -2) { p.y = H + 2; p.x = Math.random() * W; }
-      if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(245,242,237,${p.o})`;
-      ctx.fill();
-    }
-    raf = requestAnimationFrame(animate);
-  }
-  animate();
+// schedule multi
+function msc(el) {
+  el.classList.toggle('sel');
+  const any = document.querySelectorAll('#s5 .scbtn.sel').length > 0;
+  document.getElementById('s5-next').disabled = !any;
+  updateProg();
+}
 
-  /* ─── NAVIGATION STATE ────────────────────────────── */
-  const TOTAL  = 9;
-  let current  = 0;
-  let gender   = null;
+/* ════════════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════════════ */
+function go(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const id = typeof n === 'string' ? n : 's' + n;
+  document.getElementById(id)?.classList.add('active');
+  cur = (typeof n === 'number') ? n : cur;
+  updateProg();
+  document.querySelector('.form-panel').scrollTo({ top:0, behavior:'smooth' });
+}
 
-  function go(n) {
-    const cur = document.getElementById('s' + current);
-    cur.classList.add('exit');
-    setTimeout(() => {
-      cur.classList.remove('active', 'exit');
-      current = n;
-      const next = document.getElementById('s' + n);
-      next.classList.add('active');
-      updateUI();
-    }, 280);
-  }
-
-  function goNext() { if (current < TOTAL) go(current + 1); }
-  function goBack() { if (current > 0)     go(current - 1); }
-
-  function updateUI() {
-    const act = document.getElementById('main-actions');
-    const skip = document.getElementById('skip-link');
-    const counter = document.getElementById('step-counter');
-
-    if (current === 0 || current === TOTAL) {
-      act.style.display = 'none';
-      skip.style.display = 'none';
+// "Continue" from each shared step: after s5, branch on intent
+function goNext(stepNum) {
+  if (stepNum < 5) {
+    go(stepNum + 1);
+  } else {
+    // s5 done — branch
+    if (intent === 'host' || intent === 'both') {
+      go('s-bridge');
     } else {
-      act.style.display = 'flex';
-      skip.style.display = '';
+      go(6);
     }
-
-    counter.textContent = current > 0 && current < TOTAL ? current + ' / ' + TOTAL : '';
-    document.getElementById('progress-fill').style.width =
-      current === 0 ? '0%' : Math.round((current / TOTAL) * 100) + '%';
   }
+}
 
-  /* ─── GENDER SELECTION ────────────────────────────── */
-  function genderSel(card, val) {
-    document.querySelectorAll('.gender-card').forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-    gender = val;
-    const womenCard = document.getElementById('women-card');
-    womenCard.style.display = val === 'woman' ? '' : 'none';
+function goBack6() {
+  // going back from account step
+  if (intent === 'host' || intent === 'both') {
+    go('s-bridge');
+  } else {
+    go(5);
   }
+}
 
-  /* ─── SINGLE-SELECT CARDS ─────────────────────────── */
-  function singleSel(gridId, card) {
-    document.querySelectorAll('#' + gridId + ' .card').forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-  }
+function finish() {
+  go('s-reveal');
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-pct').textContent = '100%';
+  document.getElementById('prog-note').textContent = 'Profile complete';
+}
 
-  /* ─── SKILL SLIDER ────────────────────────────────── */
-  const skillData = [
-    ['Beginner',     'Just starting out · No handicap yet'],
-    ['Intermediate', 'Handicap 10–20 · Plays regularly, improving'],
-    ['Advanced',     'Handicap 5–10 · Consistent ball-striker'],
-    ['Competitive',  'Sub-5 handicap · Tournament player']
-  ];
-  function updateSkill(v) {
-    document.getElementById('skill-label').textContent = skillData[v][0];
-    document.getElementById('skill-desc').textContent  = skillData[v][1];
-  }
+/* ════════════════════════════════════════════════
+   PROGRESS BAR
+════════════════════════════════════════════════ */
+function updateProg() {
+  // progress only reflects s1–s5 (shared questions)
+  const stepNum = Math.max(0, Math.min(cur, TOTAL_STEPS));
+  const pct = Math.round((stepNum / TOTAL_STEPS) * 100);
+  document.getElementById('prog-bar').style.width  = pct + '%';
+  document.getElementById('prog-pct').textContent  = pct + '%';
+  document.getElementById('prog-note').textContent =
+    cur >= 1 && cur <= TOTAL_STEPS
+      ? 'Step ' + cur + ' of ' + TOTAL_STEPS
+      : 'Under 60 seconds';
+}
 
-  /* ─── AVAILABILITY ─────────────────────────────────── */
-  function availSel(btn) {
-    document.querySelectorAll('.avail-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-  }
-  function toggleTravel() {
-    document.getElementById('travel-toggle').classList.toggle('on');
-  }
-
-  /* ─── CREATE ACCOUNT ──────────────────────────────── */
-  function createAccount() {
-    const waitForClerk = () => new Promise(resolve => {
-      if (window.Clerk) { resolve(); return; }
-      const t = setInterval(() => { if (window.Clerk) { clearInterval(t); resolve(); } }, 100);
-      setTimeout(() => { clearInterval(t); resolve(); }, 5000);
-    });
-
-    waitForClerk().then(() => {
-      if (!window.Clerk) {
-        window.location.href = 'https://www.lyfefy.com/dashboard.html';
-        return;
-      }
-      Clerk.load().then(() => {
-        // Already signed in — go straight to dashboard
-        if (Clerk.user) {
-          window.location.href = 'https://www.lyfefy.com/dashboard.html';
-          return;
-        }
-        // Open sign-up with full absolute URLs (required by Clerk)
-        Clerk.openSignUp({
-          afterSignUpUrl: 'https://www.lyfefy.com/dashboard.html',
-          afterSignInUrl: 'https://www.lyfefy.com/dashboard.html',
-        });
-      });
-    });
-  }
-
-  /* ─── INIT ─────────────────────────────────────────── */
-  updateUI();
+updateProg();
 </script>
 </body>
 </html>
