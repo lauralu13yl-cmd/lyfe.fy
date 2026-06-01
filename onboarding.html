@@ -704,7 +704,9 @@ async function resendOtp() {
     err.style.display = 'block';
     setTimeout(() => { err.style.display = 'none'; }, 4000);
   }
-} */
+}
+
+/* ── EMAIL LOGIN ── */
 async function emailLogin() {
   const email = document.getElementById('login-email').value.trim();
   const pass  = document.getElementById('login-pass').value;
