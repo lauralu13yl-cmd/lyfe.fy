@@ -602,10 +602,10 @@ function showOtpScreen(email) {
     <h2 class="sh">Check your <em>inbox.</em></h2>
     <p class="ss">We sent a 6-digit code to <strong style="color:var(--ink);font-weight:500">${email}</strong></p>
 
-    <div id="otp-boxes" style="display:flex;gap:10px;justify-content:center;margin-bottom:20px">
-      ${[1,2,3,4,5,6].map(i => `
+    <div id="otp-boxes" style="display:flex;gap:8px;justify-content:center;margin-bottom:20px">
+      ${[1,2,3,4,5,6,7,8].map(i => `
         <input type="text" inputmode="numeric" maxlength="1" id="otp-${i}"
-          style="width:46px;height:56px;text-align:center;font-size:22px;font-weight:500;
+          style="width:42px;height:52px;text-align:center;font-size:20px;font-weight:500;
                  font-family:var(--mono);border:1.5px solid var(--c3);border-radius:var(--r);
                  background:var(--w);color:var(--ink);outline:none;transition:border-color .15s"
           oninput="otpNext(this,${i})"
@@ -635,7 +635,7 @@ function showOtpScreen(email) {
 /* ── OTP keyboard UX ── */
 function otpNext(el, pos) {
   el.value = el.value.replace(/\D/g, '').slice(-1);
-  if (el.value && pos < 6) document.getElementById('otp-' + (pos + 1))?.focus();
+  if (el.value && pos < 8) document.getElementById('otp-' + (pos + 1))?.focus();
 }
 function otpBack(el, pos, e) {
   if (e.key === 'Backspace' && !el.value && pos > 1) {
@@ -644,25 +644,25 @@ function otpBack(el, pos, e) {
   // Paste support
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'v') {
     navigator.clipboard.readText().then(t => {
-      const digits = t.replace(/\D/g, '').slice(0, 6);
+      const digits = t.replace(/\D/g, '').slice(0, 8);
       digits.split('').forEach((d, i) => {
         const inp = document.getElementById('otp-' + (i + 1));
         if (inp) inp.value = d;
       });
-      document.getElementById('otp-6')?.focus();
+      document.getElementById('otp-8')?.focus();
     }).catch(() => {});
   }
 }
 function collectOtp() {
-  return [1,2,3,4,5,6].map(i => document.getElementById('otp-' + i)?.value || '').join('');
+  return [1,2,3,4,5,6,7,8].map(i => document.getElementById('otp-' + i)?.value || '').join('');
 }
 
 /* ── VERIFY OTP ── */
 async function verifyOtp() {
   const code = collectOtp();
-  if (code.length < 6) {
+  if (code.length < 8) {
     const err = document.getElementById('otp-error');
-    if (err) { err.textContent = 'Please enter all 6 digits.'; err.style.display = 'block'; }
+    if (err) { err.textContent = 'Please enter all 8 digits.'; err.style.display = 'block'; }
     return;
   }
 
