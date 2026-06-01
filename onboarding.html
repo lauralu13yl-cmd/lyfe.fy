@@ -575,18 +575,136 @@ async function emailSignUp() {
     return;
   }
 
-  if (data?.user) await saveProfile(data.user.id, { city });
+  // Save profile data before OTP step (user may not have a session yet)
+  if (data?.user) {
+    await saveProfile(data.user.id, { city });
+  }
 
   setLoading(false, 'btn-submit', 'btn-txt', 'btn-spin');
 
-  if (data?.user?.identities?.length === 0 || !data?.session) {
-    showConfirmMsg(email);
-  } else {
+  // If Supabase returned a session immediately (email confirm disabled), go straight to reveal
+  if (data?.session) {
     finishOnboarding();
+    return;
   }
+
+  // Email confirmation required — show 6-digit OTP entry screen
+  pendingEmail = email;
+  showOtpScreen(email);
 }
 
-/* ── EMAIL LOGIN ── */
+/* ── OTP SCREEN — shown after signup ── */
+let pendingEmail = null;
+
+function showOtpScreen(email) {
+  document.getElementById('s6').innerHTML = `
+    <span class="sey">Verify your email</span>
+    <h2 class="sh">Check your <em>inbox.</em></h2>
+    <p class="ss">We sent a 6-digit code to <strong style="color:var(--ink);font-weight:500">${email}</strong></p>
+
+    <div id="otp-boxes" style="display:flex;gap:10px;justify-content:center;margin-bottom:20px">
+      ${[1,2,3,4,5,6].map(i => `
+        <input type="text" inputmode="numeric" maxlength="1" id="otp-${i}"
+          style="width:46px;height:56px;text-align:center;font-size:22px;font-weight:500;
+                 font-family:var(--mono);border:1.5px solid var(--c3);border-radius:var(--r);
+                 background:var(--w);color:var(--ink);outline:none;transition:border-color .15s"
+          oninput="otpNext(this,${i})"
+          onkeydown="otpBack(this,${i},event)"
+          onfocus="this.style.borderColor='var(--gm)'"
+          onblur="this.style.borderColor='var(--c3)'">`
+      ).join('')}
+    </div>
+
+    <div id="otp-error" style="display:none;background:#fef2f2;border:1px solid #fecaca;
+         border-radius:var(--r);padding:10px 14px;font-size:13px;color:#b91c1c;margin-bottom:12px"></div>
+
+    <button onclick="verifyOtp()" id="otp-btn" class="btn b-grn b-fw b-lg">
+      <span id="otp-btn-txt">Verify &amp; see my matches &rarr;</span>
+      <span id="otp-btn-spin" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 1s linear infinite"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></span>
+    </button>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px">
+      <button onclick="go(6)" style="font-size:12px;color:var(--ink3);font-family:var(--sans);cursor:pointer;background:none;border:none">&larr; Wrong email?</button>
+      <button onclick="resendOtp()" style="font-size:12px;color:var(--green);font-weight:500;font-family:var(--sans);cursor:pointer;background:none;border:none">Resend code</button>
+    </div>`;
+
+  // Auto-focus first box after render
+  setTimeout(() => document.getElementById('otp-1')?.focus(), 100);
+}
+
+/* ── OTP keyboard UX ── */
+function otpNext(el, pos) {
+  el.value = el.value.replace(/\D/g, '').slice(-1);
+  if (el.value && pos < 6) document.getElementById('otp-' + (pos + 1))?.focus();
+}
+function otpBack(el, pos, e) {
+  if (e.key === 'Backspace' && !el.value && pos > 1) {
+    document.getElementById('otp-' + (pos - 1))?.focus();
+  }
+  // Paste support
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'v') {
+    navigator.clipboard.readText().then(t => {
+      const digits = t.replace(/\D/g, '').slice(0, 6);
+      digits.split('').forEach((d, i) => {
+        const inp = document.getElementById('otp-' + (i + 1));
+        if (inp) inp.value = d;
+      });
+      document.getElementById('otp-6')?.focus();
+    }).catch(() => {});
+  }
+}
+function collectOtp() {
+  return [1,2,3,4,5,6].map(i => document.getElementById('otp-' + i)?.value || '').join('');
+}
+
+/* ── VERIFY OTP ── */
+async function verifyOtp() {
+  const code = collectOtp();
+  if (code.length < 6) {
+    const err = document.getElementById('otp-error');
+    if (err) { err.textContent = 'Please enter all 6 digits.'; err.style.display = 'block'; }
+    return;
+  }
+
+  setLoading(true, 'otp-btn', 'otp-btn-txt', 'otp-btn-spin');
+
+  const { data, error } = await db.auth.verifyOtp({
+    email: pendingEmail,
+    token: code,
+    type:  'signup'
+  });
+
+  if (error) {
+    setLoading(false, 'otp-btn', 'otp-btn-txt', 'otp-btn-spin');
+    const err = document.getElementById('otp-error');
+    if (err) {
+      err.textContent = error.message.includes('expired') || error.message.includes('invalid')
+        ? 'Incorrect or expired code. Try again or resend.'
+        : error.message;
+      err.style.display = 'block';
+    }
+    return;
+  }
+
+  finishOnboarding();
+}
+
+/* ── RESEND OTP ── */
+async function resendOtp() {
+  const { error } = await db.auth.resend({ type: 'signup', email: pendingEmail });
+  const err = document.getElementById('otp-error');
+  if (err) {
+    if (error) {
+      err.textContent = 'Could not resend. Please wait a moment and try again.';
+      err.style.color = '#b91c1c'; err.style.background = '#fef2f2'; err.style.borderColor = '#fecaca';
+    } else {
+      err.textContent = '✓ New code sent to ' + pendingEmail;
+      err.style.color = '#065f46'; err.style.background = '#d1fae5'; err.style.borderColor = '#a7f3d0';
+    }
+    err.style.display = 'block';
+    setTimeout(() => { err.style.display = 'none'; }, 4000);
+  }
+} */
 async function emailLogin() {
   const email = document.getElementById('login-email').value.trim();
   const pass  = document.getElementById('login-pass').value;
@@ -673,21 +791,6 @@ function toggleLoginPw() {
 
 function showLogin()  { document.getElementById('login-overlay').classList.add('open'); }
 function hideLogin()  { document.getElementById('login-overlay').classList.remove('open'); }
-
-function showConfirmMsg(email) {
-  document.getElementById('s6').innerHTML = `
-    <div style="text-align:center;padding:20px 0">
-      <div style="font-size:48px;margin-bottom:16px">&#128236;</div>
-      <span style="font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--green);display:block;margin-bottom:10px">Check your inbox</span>
-      <h2 style="font-family:var(--serif);font-size:26px;font-weight:900;letter-spacing:-.025em;color:var(--ink);margin-bottom:8px">Confirm your <em style="font-style:italic;color:var(--green)">email.</em></h2>
-      <p style="font-size:13px;color:var(--ink3);font-weight:300;line-height:1.65;margin-bottom:24px">We sent a confirmation link to <strong style="color:var(--ink);font-weight:500">${email}</strong>. Click it to activate your account and unlock your matches.</p>
-      <p style="font-size:12px;color:var(--ink3)">Didn't get it? <button onclick="resendConfirm('${email}')" style="color:var(--green);font-weight:500;font-family:var(--sans);font-size:12px;text-decoration:underline;cursor:pointer">Resend email</button></p>
-    </div>`;
-}
-async function resendConfirm(email) {
-  await db.auth.resend({ type: 'signup', email });
-  alert('Confirmation email resent!');
-}
 
 function friendlyError(msg) {
   if (msg.includes('already registered'))  return 'An account with this email already exists. Try logging in instead.';
