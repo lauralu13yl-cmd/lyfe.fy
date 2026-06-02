@@ -21,7 +21,7 @@ input,select,textarea{font-family:var(--sans)}
 .bo{background:transparent!important;color:var(--ink2);border-color:var(--cream3)}.bo:hover{background:var(--cream2)!important}
 .bfw{width:100%;justify-content:center}
 /* ── LOADING SCREEN ── */
-#loading-screen{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:999;transition:opacity .4s}
+#loading-screen{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:999;transition:opacity .4s ease}
 #loading-screen.hide{opacity:0;pointer-events:none}
 .ls-logo{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--cream);text-align:center}
 .ls-logo span{color:var(--gm)}
@@ -141,14 +141,14 @@ select.finp{cursor:pointer}
 <!-- LOADING SCREEN -->
 <div id="loading-screen">
   <div>
-    <div class="ls-logo"><img src="logo-white.png" alt="Lyfe.fy" style="height:100px;width:auto;display:block">
+    <div class="ls-logo">Lyfe<span>.</span>fy</div>
     <div class="ls-spin"></div>
   </div>
 </div>
 
 <!-- SIDEBAR -->
 <div class="sb">
-  <div class="sblogo"><a href="index.html">Lyfe<span>.</span>fy</a></div>
+  <div class="sblogo"><a href="index.html"><img src="logo-white.png" alt="Lyfe.fy" style="height:32px;width:auto;display:block"></a></div>
   <div class="sbuser">
     <div class="urow">
       <div class="uav" id="sb-av">?</div>
@@ -472,22 +472,62 @@ function xpRank(xp) {
 }
 
 /* ════════════════════════════════════════
-   BOOT — check session, load data, render
+   BOOT — wait for Supabase auth to initialize
+   Uses onAuthStateChange so we don't redirect
+   before the session token is restored from storage
 ════════════════════════════════════════ */
 (async function boot() {
-  const { data: { session } } = await db.auth.getSession();
-  if (!session) { window.location.href = 'onboarding.html'; return; }
+  // Give Supabase a chance to restore session from localStorage
+  // getSession() alone can return null on first render before tokens load
+  const { data: { session: initialSession } } = await db.auth.getSession();
+
+  if (initialSession) {
+    await loadDashboard(initialSession);
+    return;
+  }
+
+  // Session not immediately available — wait for auth state change
+  // (handles cases where token exists in storage but hasn't loaded yet)
+  const timeout = setTimeout(() => {
+    // After 3s with no session, redirect to login
+    window.location.href = 'onboarding.html';
+  }, 3000);
+
+  db.auth.onAuthStateChange(async (event, session) => {
+    if (session) {
+      clearTimeout(timeout);
+      await loadDashboard(session);
+    } else if (event === 'SIGNED_OUT') {
+      clearTimeout(timeout);
+      window.location.href = 'onboarding.html';
+    }
+  });
+})();
+
+async function loadDashboard(session) {
   U = session.user;
 
   // Load profile
-  const { data: profile } = await db.from('profiles').select('*').eq('id', U.id).single();
+  const { data: profile } = await db
+    .from('profiles')
+    .select('*')
+    .eq('id', U.id)
+    .single();
   P = profile;
 
-  // Load rounds
-  const { data: r } = await db.from('rounds').select('*').eq('user_id', U.id).order('played_at', { ascending: false });
-  rounds = r || [];
+  // Load rounds (gracefully handle if table doesn't exist yet)
+  try {
+    const { data: r } = await db
+      .from('rounds')
+      .select('*')
+      .eq('user_id', U.id)
+      .order('played_at', { ascending: false });
+    rounds = r || [];
+  } catch(e) {
+    rounds = [];
+  }
 
-  // Render role-specific UI
+  // Render everything
   const role = P?.role || 'member';
   applyRole(role);
   renderSidebar(role);
@@ -495,9 +535,16 @@ function xpRank(xp) {
   renderProfile();
   if (role === 'host') loadHostData();
 
-  // Hide loading screen
-  $('loading-screen').classList.add('hide');
-})();
+  // Hide loading screen — small delay so content is painted first
+  setTimeout(() => {
+    $('loading-screen').classList.add('hide');
+    // Remove from DOM after transition completes so it can't block clicks
+    setTimeout(() => {
+      const ls = $('loading-screen');
+      if (ls) ls.style.display = 'none';
+    }, 500);
+  }, 100);
+}
 
 /* ════════════════════════════════════════
    ROLE — show/hide nav + views
