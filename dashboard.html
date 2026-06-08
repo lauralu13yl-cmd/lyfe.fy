@@ -278,12 +278,59 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
-  <!-- ── HOST SESSIONS VIEW ── -->
+ <!-- ── HOST SESSIONS VIEW ── -->
   <div class="view" id="v-host-sessions">
     <div class="topbar"><div class="greet">My Sessions <span>Sessions you've created</span></div></div>
-    <div class="panel">
-      <div class="ph"><span class="pt">Active sessions</span></div>
-      <div id="host-sessions-list"><div class="empty"><p>No sessions yet.</p><a href="games.html" class="btn bi" style="margin-top:10px;display:inline-flex">Browse existing sessions</a></div></div>
+    <div class="cgrid">
+      <div class="panel">
+        <div class="ph"><span class="pt">Active sessions</span></div>
+        <div id="host-sessions-list"><div class="empty"><p>No sessions yet.</p></div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><span class="pt">Create a session</span></div>
+        <div class="fgrp2"><label class="flbl">Title *</label><input class="finp" id="sess-title" type="text" placeholder="e.g. Saturday Tennis Doubles"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="fgrp2"><label class="flbl">Sport *</label>
+            <select class="finp" id="sess-sport">
+              <option value="">Select…</option>
+              <option>Tennis</option><option>Golf</option><option>Basketball</option>
+              <option>Soccer</option><option>Volleyball</option><option>Other</option>
+            </select>
+          </div>
+          <div class="fgrp2"><label class="flbl">Format</label>
+            <select class="finp" id="sess-format">
+              <option>1v1</option><option>Small Group (2-4)</option>
+              <option>Group (5-10)</option><option>Open</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="fgrp2"><label class="flbl">Date *</label><input class="finp" id="sess-date" type="date"></div>
+          <div class="fgrp2"><label class="flbl">Time</label><input class="finp" id="sess-time" type="time"></div>
+        </div>
+        <div class="fgrp2"><label class="flbl">Location *</label><input class="finp" id="sess-location" type="text" placeholder="e.g. Central Park Courts, NYC"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="fgrp2"><label class="flbl">Price per person ($)</label><input class="finp" id="sess-price" type="number" placeholder="0" min="0"></div>
+          <div class="fgrp2"><label class="flbl">Total spots</label><input class="finp" id="sess-spots" type="number" placeholder="8" min="1" max="50"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="fgrp2"><label class="flbl">Skill level</label>
+            <select class="finp" id="sess-skill">
+              <option>All levels</option><option>Beginner</option>
+              <option>Intermediate</option><option>Advanced</option>
+            </select>
+          </div>
+          <div class="fgrp2"><label class="flbl">Type</label>
+            <select class="finp" id="sess-type">
+              <option>Casual</option><option>Coached</option>
+              <option>Tournament</option><option>Training</option>
+            </select>
+          </div>
+        </div>
+        <div class="fgrp2"><label class="flbl">Description</label><textarea class="finp" id="sess-desc" rows="3" placeholder="Tell players what to expect…"></textarea></div>
+        <button class="btn bg bfw" id="publish-btn" onclick="publishSession()">Publish Session ✓</button>
+        <div id="sess-msg" style="display:none;margin-top:10px;font-size:12px;text-align:center"></div>
+      </div>
     </div>
   </div>
 
@@ -905,6 +952,59 @@ function showMsg(el, txt, color) {
   el.style.display = 'block';
   setTimeout(() => { el.style.display = 'none'; }, 5000);
 }
-</script>
+/* ════════════════════════════════════════
+   PUBLISH SESSION — host creates a session
+════════════════════════════════════════ */
+async function publishSession() {
+  const msg = $('sess-msg');
+  const btn = $('publish-btn');
+
+  const title    = $('sess-title').value.trim();
+  const sport    = $('sess-sport').value;
+  const date     = $('sess-date').value;
+  const location = $('sess-location').value.trim();
+
+  if (!title)    { showMsg(msg, 'Please enter a session title.', 'red'); return; }
+  if (!sport)    { showMsg(msg, 'Please select a sport.', 'red'); return; }
+  if (!date)     { showMsg(msg, 'Please pick a date.', 'red'); return; }
+  if (!location) { showMsg(msg, 'Please enter a location.', 'red'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Publishing…';
+
+  const { error } = await db.from('sessions').insert({
+    host_id:      U.id,
+    title,
+    sport,
+    format:       $('sess-format').value,
+    session_date: date,
+    session_time: $('sess-time').value || null,
+    location,
+    price:        parseFloat($('sess-price').value) || 0,
+    spots_total:  parseInt($('sess-spots').value) || 8,
+    spots_taken:  0,
+    skill_level:  $('sess-skill').value,
+    session_type: $('sess-type').value,
+    description:  $('sess-desc').value.trim() || null,
+    status:       'active'
+  });
+
+  btn.disabled = false;
+  btn.textContent = 'Publish Session ✓';
+
+  if (error) {
+    showMsg(msg, 'Error: ' + error.message, 'red');
+    return;
+  }
+
+  // Clear form
+  ['sess-title','sess-sport','sess-date','sess-time',
+   'sess-location','sess-price','sess-spots','sess-desc']
+    .forEach(id => { $(''+id).value = ''; });
+
+  showMsg(msg, '✓ Session published! Players can now find and book it.', 'green');
+  await loadHostData(); // refresh the sessions list
+}
+  </script>
 </body>
 </html>
