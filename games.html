@@ -330,6 +330,6 @@ const _nav=document.getElementById('nav');
 if(_nav) window.addEventListener('scroll',()=>_nav.classList.toggle('sc',window.scrollY>30));
 const _io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('on');_io.unobserve(x.target);}}),{threshold:.07});
 document.querySelectorAll('.rv').forEach(el=>_io.observe(el));
-
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/lyfe-core.js"></script>
 </body></html>
