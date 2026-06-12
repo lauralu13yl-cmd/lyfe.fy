@@ -426,6 +426,10 @@ select.finp{cursor:pointer}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/lyfe-core.js"></script>
 <script>
+const SUPA_URL = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
+const { createClient } = supabase;
+const db = createClient(SUPA_URL, SUPA_KEY);
 
 let U = null;
 let P = null;
@@ -454,16 +458,16 @@ function xpRank(xp) {
 }
 
 (async function boot() {
-  const { data: { session: initialSession } } = await db.auth.getSession();
-  if (initialSession) {
-    await loadDashboard(initialSession);
-    return;
-  }
+  // Fix for Edge tracking prevention — use onAuthStateChange as primary
+  let loaded = false;
+
   const timeout = setTimeout(() => {
-    window.location.href = 'onboarding.html';
-  }, 1500);
+    if (!loaded) window.location.href = 'onboarding.html';
+  }, 4000);
+
   db.auth.onAuthStateChange(async (event, session) => {
-    if (session) {
+    if (session && !loaded) {
+      loaded = true;
       clearTimeout(timeout);
       await loadDashboard(session);
     } else if (event === 'SIGNED_OUT') {
@@ -471,19 +475,32 @@ function xpRank(xp) {
       window.location.href = 'onboarding.html';
     }
   });
+
+  // Also try getSession immediately as a fast path
+  const { data: { session: initialSession } } = await db.auth.getSession();
+  if (initialSession && !loaded) {
+    loaded = true;
+    clearTimeout(timeout);
+    await loadDashboard(initialSession);
+  }
 })();
 
 async function loadDashboard(session) {
   U = session.user;
 
   // Run profile + rounds in parallel — twice as fast
-  const [profileRes, roundsRes] = await Promise.all([
-    db.from('profiles').select('*').eq('id', U.id).single(),
-    db.from('rounds').select('*').eq('user_id', U.id).order('played_at', { ascending: false }).catch(() => ({ data: [] }))
-  ]);
+  // Wrap rounds in try/catch properly (Supabase doesn't support .catch() on queries)
+  const profileRes = await db.from('profiles').select('*').eq('id', U.id).single();
+  let roundsData = [];
+  try {
+    const { data } = await db.from('rounds').select('*').eq('user_id', U.id).order('played_at', { ascending: false });
+    roundsData = data || [];
+  } catch(e) { roundsData = []; }
+
+  const roundsRes = { data: roundsData };
 
   P = profileRes.data;
-  rounds = roundsRes.data || [];
+  rounds = roundsData;
 
   const role = P?.role || 'member';
   applyRole(role);
