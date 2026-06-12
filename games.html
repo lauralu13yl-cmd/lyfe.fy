@@ -29,7 +29,6 @@ input,select,textarea{font-family:var(--sans)}
 .bsm{font-size:12px;padding:7px 14px}.bfw{width:100%;justify-content:center}
 .tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px}
 .tg{background:var(--gl);color:var(--green)}.ta{background:var(--al);color:var(--amber)}.ts{background:var(--cream2);color:var(--ink3)}
-.pulse::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pa 2s ease-in-out infinite;display:inline-block;margin-right:6px;border-radius:50%}
 @keyframes pa{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
 .ft{background:var(--ink);padding:32px 40px;border-top:1px solid rgba(255,255,255,.06)}
 .fti{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
@@ -65,14 +64,13 @@ input,select,textarea{font-family:var(--sans)}
 .ghost-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;margin-top:6px}
 .ghav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff;background:var(--gm)}
 .ghn{font-size:12px;font-weight:500;color:var(--ink2)}
-.ghb{font-size:10px;color:var(--green);background:var(--gl);padding:2px 7px;border-radius:20px}
 .gmeta{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:12px}
 .gmi{font-size:12px;color:var(--ink3)}
 .gtags{display:flex;gap:6px;flex-wrap:wrap}
 .gr{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 .gprice{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--ink)}
 .gpnote{font-size:11px;color:var(--ink3);font-family:var(--sans);margin-top:-6px}
-.gspots{font-size:12px;color:var(--amber);font-weight:500}
+.gspots{font-size:12px;font-weight:500}
 .sbar{width:80px;height:4px;background:var(--cream2);border-radius:2px;overflow:hidden}
 .sfill{height:100%;border-radius:2px;background:var(--gm)}
 .empty-state{text-align:center;padding:60px 20px;color:var(--ink3)}
@@ -174,7 +172,6 @@ input,select,textarea{font-family:var(--sans)}
   </main>
 </div>
 
-<!-- Booking modal -->
 <div class="modal-bg" id="mbg" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal">
     <div class="mh" id="mname">Session</div>
@@ -204,19 +201,18 @@ input,select,textarea{font-family:var(--sans)}
   </div>
 </footer>
 
+<!-- ONE script block — no duplicates, no lyfe-core conflict -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/lyfe-core.js"></script>
 <script>
-const SUPA_URL = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
-const { createClient } = supabase;
-const supa = createClient(SUPA_URL, SUPA_KEY);
+// Create our own client — no lyfe-core.js on this page to avoid conflicts
+const _URL = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
+const _KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
+const supa = supabase.createClient(_URL, _KEY);
 
 let allSessions = [];
 let currentBookingId = null;
 let currentBookingPrice = 0;
 
-// ── COLORS for host avatars
 const avatarColors = ['#2a9e6a','#7c5fa0','#c8821a','#2a7ac8','#c8402a','#2a9eb8'];
 function colorFor(str) {
   let h = 0;
@@ -224,8 +220,10 @@ function colorFor(str) {
   return avatarColors[Math.abs(h) % avatarColors.length];
 }
 
-// ── LOAD sessions from Supabase
 async function loadSessions() {
+  const grid = document.getElementById('ggrid');
+  grid.innerHTML = '<div class="loading-state"><div class="spin"></div><p>Loading sessions…</p></div>';
+
   const { data, error } = await supa
     .from('sessions')
     .select('*')
@@ -233,45 +231,41 @@ async function loadSessions() {
     .order('session_date', { ascending: true });
 
   if (error) {
-    document.getElementById('ggrid').innerHTML = `<div class="empty-state"><p>Could not load sessions. Please try again.</p></div>`;
+    console.error('Supabase error:', error);
+    grid.innerHTML = `<div class="empty-state"><p style="color:#c0392b">Error: ${error.message}</p></div>`;
     return;
   }
 
   allSessions = data || [];
   renderCards();
-
-  // Show live badge — we're now subscribed to real-time
   document.getElementById('live-badge').style.display = 'inline-flex';
 }
 
-// ── RENDER cards with current filters + sort
 function renderCards() {
-  const sport  = document.getElementById('sport-filter').value;
-  const type   = document.querySelector('#type-chips .chip.act')?.dataset.val || 'all';
-  const level  = document.querySelector('#level-chips .chip.act')?.dataset.val || 'all';
-  const sort   = document.getElementById('sort-select').value;
+  const sport = document.getElementById('sport-filter').value;
+  const type  = document.querySelector('#type-chips .chip.act')?.dataset.val || 'all';
+  const level = document.querySelector('#level-chips .chip.act')?.dataset.val || 'all';
+  const sort  = document.getElementById('sort-select').value;
 
   let filtered = allSessions.filter(s => {
-    const matchSport = sport === 'all' || (s.sport || '').toLowerCase() === sport.toLowerCase();
-    const matchType  = type  === 'all' || (s.session_type || '').toLowerCase() === type.toLowerCase();
-    const matchLevel = level === 'all' || (s.skill_level  || '').toLowerCase() === level.toLowerCase() || (s.skill_level || '').toLowerCase() === 'all levels';
+    const matchSport = sport === 'all' || (s.sport||'').toLowerCase() === sport.toLowerCase();
+    const matchType  = type  === 'all' || (s.session_type||'').toLowerCase() === type.toLowerCase();
+    const matchLevel = level === 'all' || (s.skill_level||'').toLowerCase() === level.toLowerCase() || (s.skill_level||'').toLowerCase() === 'all levels';
     return matchSport && matchType && matchLevel;
   });
 
-  // Sort
-  if (sort === 'price_asc') filtered.sort((a,b) => (a.price||0) - (b.price||0));
-  else if (sort === 'spots') filtered.sort((a,b) => ((b.spots_total||0)-(b.spots_taken||0)) - ((a.spots_total||0)-(a.spots_taken||0)));
-  else filtered.sort((a,b) => new Date(a.session_date||'9999') - new Date(b.session_date||'9999'));
+  if (sort === 'price_asc') filtered.sort((a,b) => (a.price||0)-(b.price||0));
+  else if (sort === 'spots') filtered.sort((a,b) => ((b.spots_total||0)-(b.spots_taken||0))-((a.spots_total||0)-(a.spots_taken||0)));
+  else filtered.sort((a,b) => new Date(a.session_date||'9999')-new Date(b.session_date||'9999'));
 
-  const cnt = document.getElementById('gcnt');
-  cnt.textContent = filtered.length + ' session' + (filtered.length !== 1 ? 's' : '') + ' available';
+  document.getElementById('gcnt').textContent = filtered.length + ' session' + (filtered.length!==1?'s':'') + ' available';
 
   if (!filtered.length) {
     document.getElementById('ggrid').innerHTML = `
       <div class="empty-state">
         <div style="font-size:36px;margin-bottom:12px">🏌️</div>
         <p style="font-weight:500;color:var(--ink)">No sessions found</p>
-        <p>Try changing your filters, or check back soon.</p>
+        <p>Try adjusting your filters, or check back soon.</p>
       </div>`;
     return;
   }
@@ -279,86 +273,72 @@ function renderCards() {
   document.getElementById('ggrid').innerHTML = filtered.map(s => buildCard(s)).join('');
 }
 
-// ── BUILD a single card
 function buildCard(s) {
-  const spotsLeft  = (s.spots_total || 0) - (s.spots_taken || 0);
-  const spotsPct   = s.spots_total ? Math.round((s.spots_taken / s.spots_total) * 100) : 0;
-  const price      = parseFloat(s.price || 0);
-  const priceStr   = price === 0 ? 'Free' : '$' + price.toFixed(0);
+  const spotsLeft = (s.spots_total||0) - (s.spots_taken||0);
+  const spotsPct  = s.spots_total ? Math.round((s.spots_taken/s.spots_total)*100) : 0;
+  const price     = parseFloat(s.price||0);
+  const priceStr  = price===0 ? 'Free' : '$'+price.toFixed(0);
+  const hostName  = 'Host';
+  const initials  = 'H';
+  const avatarBg  = colorFor(s.host_id||'');
+  const dateStr   = s.session_date ? new Date(s.session_date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'TBD';
+  const timeStr   = s.session_time ? formatTime(s.session_time) : '';
+  const sportEmoji = {Golf:'⛳',Tennis:'🎾',Basketball:'🏀',Soccer:'⚽',Volleyball:'🏐'}[s.sport]||'🏅';
+  const spotsColor = spotsLeft<=2 ? 'color:var(--amber)' : 'color:var(--green)';
+  const spotsText  = spotsLeft<=0 ? 'Full' : spotsLeft+' spot'+(spotsLeft!==1?'s':'')+' left';
 
-  const hostFirst  = s.profiles?.first_name || '';
-  const hostLast   = s.profiles?.last_name  || '';
-  const hostName   = hostFirst || hostLast ? `${hostFirst} ${hostLast}`.trim() : 'Host';
-  const initials   = (hostFirst[0]||'') + (hostLast[0]||'') || 'H';
-  const avatarBg   = colorFor(hostName);
-
-  const dateStr    = s.session_date
-    ? new Date(s.session_date + 'T00:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric'})
-    : 'TBD';
-  const timeStr    = s.session_time ? formatTime(s.session_time) : '';
-
-  const sportEmoji = { Golf:'⛳', Tennis:'🎾', Basketball:'🏀', Soccer:'⚽', Volleyball:'🏐' }[s.sport] || '🏅';
-  const typeTag    = s.session_type ? `<span class="tag ts">${s.session_type}</span>` : '';
-  const levelTag   = s.skill_level  ? `<span class="tag ts">${s.skill_level}</span>`  : '';
-  const sportTag   = s.sport        ? `<span class="tag tg">${sportEmoji} ${s.sport}</span>` : '';
-
-  const spotsColor = spotsLeft <= 2 ? 'color:var(--amber)' : 'color:var(--green)';
-  const spotsText  = spotsLeft <= 0 ? 'Full' : spotsLeft + ' spot' + (spotsLeft !== 1 ? 's' : '') + ' left';
-
-  return `
-    <div class="gcard" id="card-${s.id}">
-      <div>
-        ${sportTag}
-        <div class="gname" style="margin-top:8px">${s.title || 'Untitled session'}</div>
-        <div class="ghost-row">
-          <div class="ghav" style="background:${avatarBg}">${initials.toUpperCase()}</div>
-          <span class="ghn">${hostName}</span>
-        </div>
-        <div class="gmeta">
-          ${dateStr ? `<span class="gmi">📅 ${dateStr}${timeStr ? ' · ' + timeStr : ''}</span>` : ''}
-          ${s.location ? `<span class="gmi">📍 ${s.location}</span>` : ''}
-          ${s.format   ? `<span class="gmi">👥 ${s.format}</span>`   : ''}
-        </div>
-        <div class="gtags">${typeTag}${levelTag}</div>
-        ${s.description ? `<p style="font-size:12px;color:var(--ink3);margin-top:10px;line-height:1.5">${s.description}</p>` : ''}
+  return `<div class="gcard" id="card-${s.id}">
+    <div>
+      ${s.sport ? `<span class="tag tg" style="margin-bottom:8px;display:inline-flex">${sportEmoji} ${s.sport}</span>` : ''}
+      <div class="gname" style="margin-top:8px">${s.title||'Untitled session'}</div>
+      <div class="ghost-row">
+        <div class="ghav" style="background:${avatarBg}">${initials}</div>
+        <span class="ghn">${hostName}</span>
       </div>
-      <div class="gr">
-        <div><div class="gprice">${priceStr}</div><div class="gpnote">per player</div></div>
-        <div class="gspots" style="${spotsColor}">${spotsText}</div>
-        <div class="sbar"><div class="sfill" style="width:${spotsPct}%"></div></div>
-        ${spotsLeft > 0
-          ? `<button class="btn bi bsm" onclick="openBook('${s.id}','${s.title?.replace(/'/g,"\\'")}',${price})">Book →</button>`
-          : `<button class="btn bo bsm" disabled style="opacity:.5;cursor:not-allowed">Full</button>`
-        }
+      <div class="gmeta">
+        <span class="gmi">📅 ${dateStr}${timeStr?' · '+timeStr:''}</span>
+        ${s.location?`<span class="gmi">📍 ${s.location}</span>`:''}
+        ${s.format?`<span class="gmi">👥 ${s.format}</span>`:''}
       </div>
-    </div>`;
+      <div class="gtags">
+        ${s.session_type?`<span class="tag ts">${s.session_type}</span>`:''}
+        ${s.skill_level?`<span class="tag ts">${s.skill_level}</span>`:''}
+      </div>
+      ${s.description?`<p style="font-size:12px;color:var(--ink3);margin-top:10px;line-height:1.5">${s.description}</p>`:''}
+    </div>
+    <div class="gr">
+      <div><div class="gprice">${priceStr}</div><div class="gpnote">per player</div></div>
+      <div class="gspots" style="${spotsColor}">${spotsText}</div>
+      <div class="sbar"><div class="sfill" style="width:${spotsPct}%"></div></div>
+      ${spotsLeft>0
+        ? `<button class="btn bi bsm" onclick="openBook('${s.id}','${(s.title||'').replace(/'/g,"\\'")}',${price})">Book →</button>`
+        : `<button class="btn bo bsm" disabled style="opacity:.5;cursor:not-allowed">Full</button>`}
+    </div>
+  </div>`;
 }
 
 function formatTime(t) {
   if (!t) return '';
-  const [h, m] = t.split(':');
+  const [h,m] = t.split(':');
   const hour = parseInt(h);
-  const ampm = hour >= 12 ? 'pm' : 'am';
-  return (hour % 12 || 12) + ':' + m + ' ' + ampm;
+  return (hour%12||12)+':'+m+(hour>=12?'pm':'am');
 }
 
-// ── FILTERS
 function setChip(el, gid) {
-  document.querySelectorAll('#' + gid + ' .chip').forEach(c => c.classList.remove('act'));
+  document.querySelectorAll('#'+gid+' .chip').forEach(c=>c.classList.remove('act'));
   el.classList.add('act');
   renderCards();
 }
 function applyFilters() { renderCards(); }
 
-// ── BOOKING MODAL
 function openBook(id, name, price) {
   currentBookingId    = id;
   currentBookingPrice = price;
-  const fee = Math.round(price * 0.1);
+  const fee = Math.round(price*0.1);
   document.getElementById('mname').textContent  = name;
-  document.getElementById('mprice').textContent = price === 0 ? 'Free' : '$' + price;
-  document.getElementById('mfee').textContent   = '$' + fee;
-  document.getElementById('mtotal').textContent = '$' + (price + fee);
+  document.getElementById('mprice').textContent = price===0?'Free':'$'+price;
+  document.getElementById('mfee').textContent   = '$'+fee;
+  document.getElementById('mtotal').textContent = '$'+(price+fee);
   document.getElementById('book-msg').style.display = 'none';
   document.getElementById('mbg').classList.add('open');
 }
@@ -366,92 +346,53 @@ function openBook(id, name, price) {
 async function confirmBooking() {
   const btn = document.getElementById('confirm-btn');
   const msg = document.getElementById('book-msg');
-
-  // Check if logged in
   const { data: { session } } = await supa.auth.getSession();
-  if (!session) {
-    window.location.href = 'onboarding.html';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'Booking…';
-
+  if (!session) { window.location.href = 'onboarding.html'; return; }
+  btn.disabled = true; btn.textContent = 'Booking…';
   const { error } = await supa.from('bookings').insert({
     session_id:  currentBookingId,
     player_id:   session.user.id,
     paid_amount: currentBookingPrice,
     status:      'confirmed'
   });
-
   if (error) {
-    btn.disabled = false;
-    btn.textContent = 'Confirm booking →';
-    if (error.message.includes('unique')) {
-      msg.textContent = 'You already booked this session!';
-      msg.style.color = 'var(--amber)';
-    } else {
-      msg.textContent = 'Error: ' + error.message;
-      msg.style.color = '#c0392b';
-    }
+    btn.disabled = false; btn.textContent = 'Confirm booking →';
+    msg.textContent = error.message.includes('unique') ? 'You already booked this!' : 'Error: '+error.message;
+    msg.style.color = 'var(--amber)';
     msg.style.display = 'block';
     return;
   }
-
-  // Increment spot counter
   await supa.rpc('increment_spots', { sid: currentBookingId });
-
   btn.textContent = '✓ Booked!';
-  msg.textContent = 'You\'re in! Check your dashboard for details.';
+  msg.textContent = "You're in! Check your dashboard.";
   msg.style.color = 'var(--green)';
   msg.style.display = 'block';
-
-  // Refresh sessions after 1.5s and close modal
   setTimeout(async () => {
     document.getElementById('mbg').classList.remove('open');
-    btn.disabled = false;
-    btn.textContent = 'Confirm booking →';
+    btn.disabled = false; btn.textContent = 'Confirm booking →';
     await loadSessions();
   }, 1500);
 }
 
-// ── REAL-TIME — new session appears instantly without refresh
 function subscribeRealtime() {
   supa.channel('games-live')
-    .on('postgres_changes', {
-      event:  'INSERT',
-      schema: 'public',
-      table:  'sessions',
-      filter: 'status=eq.active'
-    }, payload => {
-      // Add new session to top of list and re-render
-      allSessions.unshift(payload.new);
-      renderCards();
-      // Flash the new card
-      setTimeout(() => {
-        const card = document.getElementById('card-' + payload.new.id);
-        if (card) {
-          card.classList.add('new-session');
-          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 100);
-    })
-    .on('postgres_changes', {
-      event:  'UPDATE',
-      schema: 'public',
-      table:  'sessions'
-    }, payload => {
-      // Update spots in real-time when someone books
-      const idx = allSessions.findIndex(s => s.id === payload.new.id);
-      if (idx !== -1) {
-        allSessions[idx] = { ...allSessions[idx], ...payload.new };
+    .on('postgres_changes', { event:'INSERT', schema:'public', table:'sessions' }, payload => {
+      if (payload.new.status === 'active') {
+        allSessions.unshift(payload.new);
         renderCards();
+        setTimeout(() => {
+          const card = document.getElementById('card-'+payload.new.id);
+          if (card) { card.classList.add('new-session'); card.scrollIntoView({behavior:'smooth',block:'center'}); }
+        }, 100);
       }
+    })
+    .on('postgres_changes', { event:'UPDATE', schema:'public', table:'sessions' }, payload => {
+      const idx = allSessions.findIndex(s => s.id === payload.new.id);
+      if (idx !== -1) { allSessions[idx] = {...allSessions[idx], ...payload.new}; renderCards(); }
     })
     .subscribe();
 }
 
-// ── BOOT
 document.addEventListener('DOMContentLoaded', async () => {
   await loadSessions();
   subscribeRealtime();
