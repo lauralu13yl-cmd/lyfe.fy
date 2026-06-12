@@ -29,7 +29,6 @@ input,select,textarea{font-family:var(--sans)}
 .sb{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:var(--ink);display:flex;flex-direction:column;z-index:100}
 .sblogo{padding:20px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
 .sblogo a{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--cream)}
-.sblogo a span{color:var(--gm)}
 .sbuser{padding:16px 22px;border-bottom:1px solid rgba(255,255,255,.06)}
 .urow{display:flex;align-items:center;gap:10px}
 .uav{width:36px;height:36px;border-radius:50%;background:var(--gm);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fff;flex-shrink:0}
@@ -117,6 +116,13 @@ select.finp{cursor:pointer}
 .ndot{width:6px;height:6px;border-radius:50%;margin-top:5px;flex-shrink:0}
 .ntxt{font-size:12px;color:var(--ink2);line-height:1.5}
 .ntime{font-size:11px;color:var(--ink3);margin-top:2px}
+/* booking card */
+.bkcard{background:var(--cream2);border:1px solid var(--cream3);border-radius:var(--rlg);padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.bkcard:last-of-type{margin-bottom:0}
+.bktitle{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px}
+.bkmeta{font-size:11px;color:var(--ink3)}
+.bkprice{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--green);white-space:nowrap}
+.bkbadge{font-size:10px;font-weight:500;background:var(--gl);color:var(--green);padding:2px 8px;border-radius:20px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -143,8 +149,9 @@ select.finp{cursor:pointer}
   </div>
   <nav class="sbnav">
     <button class="sbl act" onclick="sv('home')">&#127968; Home</button>
+    <button class="sbl" onclick="sv('my-sessions')">&#127944; My Sessions</button>
     <button class="sbl" onclick="sv('logbook')">&#128202; Logbook</button>
-    <button class="sbl" onclick="window.location.href='games.html'">&#127944; Find a game</button>
+    <button class="sbl" onclick="window.location.href='games.html'">&#128269; Find a game</button>
     <span class="nslbl">Compete</span>
     <button class="sbl" onclick="sv('challenges')">&#127919; Challenges</button>
     <button class="sbl" onclick="sv('rivals')">&#9876;&#65039; Rivals</button>
@@ -154,7 +161,7 @@ select.finp{cursor:pointer}
     <button class="sbl" onclick="window.location.href='index.html#pass'">&#11088; Lyfe Pass</button>
     <span class="nslbl host-only" id="host-nav-label">Host</span>
     <button class="sbl host-only" onclick="sv('host-home')">&#127881; Host Home</button>
-    <button class="sbl host-only" onclick="sv('host-sessions')">&#128197; My Sessions</button>
+    <button class="sbl host-only" onclick="sv('host-sessions')">&#128197; Create Session</button>
     <button class="sbl host-only" onclick="sv('host-earnings')">&#128200; Earnings</button>
     <span class="nslbl pending-only">Host Application</span>
     <button class="sbl pending-only" onclick="sv('pending-status')">&#9203; Application Status</button>
@@ -169,6 +176,7 @@ select.finp{cursor:pointer}
 
 <main class="main">
 
+  <!-- HOME VIEW -->
   <div class="view act" id="v-home">
     <div class="topbar">
       <div class="greet" id="home-greet">Good morning <span>Here's your golf life today</span></div>
@@ -181,20 +189,25 @@ select.finp{cursor:pointer}
       <div class="pb-icon">&#9203;</div>
       <div>
         <div class="pb-title">Application under review</div>
-        <div class="pb-sub">Your host application is being reviewed by our team. We'll email you within 24–48 hours.</div>
+        <div class="pb-sub">Your host application is being reviewed. We'll email you within 24–48 hours.</div>
       </div>
     </div>
     <div class="statcards" id="home-stats">
       <div class="sc scg"><div class="sclbl">Handicap</div><div class="scval" id="stat-hcp">—</div><div class="scsub" id="stat-hcp-sub">Not set yet</div></div>
       <div class="sc"><div class="sclbl">Rounds logged</div><div class="scval" id="stat-rounds">0</div><div class="scsub">This season</div></div>
       <div class="sc sca"><div class="sclbl">XP earned</div><div class="scval" id="stat-xp">0</div><div class="scsub" id="stat-rank">Bogey tier</div></div>
-      <div class="sc"><div class="sclbl">City</div><div class="scval" id="stat-city" style="font-size:16px;margin-top:4px">—</div><div class="scsub" id="stat-intent">—</div></div>
+      <div class="sc"><div class="sclbl">Sessions booked</div><div class="scval" id="stat-booked">0</div><div class="scsub">On platform</div></div>
     </div>
     <div class="cgrid">
+      <!-- My Booked Sessions -->
       <div class="panel">
-        <div class="ph"><span class="pt">Your match profile</span><button class="pl" onclick="sv('profile')">Edit</button></div>
-        <div id="profile-summary"><div class="empty"><p>Complete your profile to get matched.</p></div></div>
+        <div class="ph">
+          <span class="pt">My booked sessions</span>
+          <button class="pl" onclick="sv('my-sessions')">View all →</button>
+        </div>
+        <div id="home-bookings"><div class="empty"><p>No sessions booked yet. <a href="games.html" style="color:var(--green);font-weight:500">Find a game →</a></p></div></div>
       </div>
+      <!-- Challenges -->
       <div class="panel">
         <div class="ph"><span class="pt">This week's challenges</span><button class="pl" onclick="sv('challenges')">All →</button></div>
         <div class="crow"><div class="cico cg">&#127919;</div><div style="flex:1"><div class="ct">Break 90 this week</div><div class="cprog"><div class="cbar"><div class="cf" style="width:65%;background:var(--gm)"></div></div><span class="cxp">+150 XP</span></div></div></div>
@@ -202,15 +215,28 @@ select.finp{cursor:pointer}
         <div class="crow"><div class="cico cp">&#9876;&#65039;</div><div style="flex:1"><div class="ct">Beat your rival</div><div class="cprog"><div class="cbar"><div class="cf" style="width:40%;background:#b49cd4"></div></div><span class="cxp">+300 XP</span></div></div></div>
         <div class="crow"><div class="cico cr">&#128293;</div><div style="flex:1"><div class="ct">5-round month streak</div><div class="cprog"><div class="cbar"><div class="cf" style="width:20%;background:#e89070"></div></div><span class="cxp">+500 XP</span></div></div></div>
       </div>
+      <!-- Recent Activity — real data -->
       <div class="panel cw">
         <div class="ph"><span class="pt">Recent activity</span></div>
         <div id="home-activity">
-          <div class="nitem"><div class="ndot" style="background:var(--green)"></div><div><div class="ntxt">Welcome to Lyfe.fy! Complete your profile to get matched with players.</div><div class="ntime">Just now</div></div></div>
+          <div class="nitem"><div class="ndot" style="background:var(--green)"></div><div><div class="ntxt">Welcome to Lyfe.fy! Complete your profile to get matched.</div><div class="ntime">Just now</div></div></div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- MY SESSIONS VIEW (player bookings) -->
+  <div class="view" id="v-my-sessions">
+    <div class="topbar">
+      <div class="greet">My Sessions <span>All sessions you've booked on Lyfe.fy</span></div>
+      <div class="tact"><button class="btn bi" onclick="window.location.href='games.html'">+ Find a game</button></div>
+    </div>
+    <div class="panel cw">
+      <div id="my-sessions-list"><div class="empty"><p>No sessions booked yet. <a href="games.html" style="color:var(--green);font-weight:500">Browse sessions →</a></p></div></div>
+    </div>
+  </div>
+
+  <!-- HOST HOME VIEW -->
   <div class="view" id="v-host-home">
     <div class="topbar">
       <div class="greet" id="host-greet">Host Dashboard <span>Your sessions and earnings at a glance</span></div>
@@ -228,17 +254,18 @@ select.finp{cursor:pointer}
           <div class="earn-lbl">Total earned this month</div>
           <div class="earn-big" id="h-earn-big">$0.00</div>
         </div>
-        <div class="ph" style="margin-bottom:8px"><span class="pt">Recent bookings</span></div>
+        <div class="ph" style="margin-bottom:8px"><span class="pt">Recent bookings on your sessions</span></div>
         <div id="host-bookings-list"><div class="empty"><p>No bookings yet. Create your first session to get started.</p></div></div>
       </div>
     </div>
   </div>
 
+  <!-- HOST SESSIONS VIEW -->
   <div class="view" id="v-host-sessions">
-    <div class="topbar"><div class="greet">My Sessions <span>Sessions you've created</span></div></div>
+    <div class="topbar"><div class="greet">Create a Session <span>Publish a new session for players to book</span></div></div>
     <div class="cgrid">
       <div class="panel">
-        <div class="ph"><span class="pt">Active sessions</span></div>
+        <div class="ph"><span class="pt">Your active sessions</span></div>
         <div id="host-sessions-list"><div class="empty"><p>No sessions yet.</p></div></div>
       </div>
       <div class="panel">
@@ -289,6 +316,7 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
+  <!-- HOST EARNINGS -->
   <div class="view" id="v-host-earnings">
     <div class="topbar"><div class="greet">Earnings <span>Your income breakdown</span></div></div>
     <div class="cgrid">
@@ -304,7 +332,7 @@ select.finp{cursor:pointer}
       </div>
       <div class="panel">
         <div class="ph"><span class="pt">Payout info</span></div>
-        <p style="font-size:13px;color:var(--ink3);line-height:1.7">Payouts are processed every Monday for the previous week's earnings. 70% of session revenue goes to you, 30% to Lyfe.fy.</p>
+        <p style="font-size:13px;color:var(--ink3);line-height:1.7">Payouts are processed every Monday. 70% of session revenue goes to you, 30% to Lyfe.fy.</p>
         <div style="margin-top:16px;padding:14px;background:var(--cream2);border-radius:var(--rsm)">
           <div style="font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Your share (70%)</div>
           <div style="font-family:var(--mono);font-size:22px;font-weight:500;color:var(--green)" id="h-earn-share">$0.00</div>
@@ -313,32 +341,31 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
+  <!-- PENDING STATUS -->
   <div class="view" id="v-pending-status">
     <div class="topbar"><div class="greet">Host Application <span>Your application status</span></div></div>
     <div class="panel" style="max-width:560px">
       <div style="text-align:center;padding:20px 0">
         <div style="font-size:48px;margin-bottom:16px">&#9203;</div>
         <h2 style="font-family:var(--serif);font-size:24px;font-weight:900;color:var(--ink);margin-bottom:8px">Under <em style="font-style:italic;color:var(--amber)">review.</em></h2>
-        <p style="font-size:13px;color:var(--ink3);font-weight:300;line-height:1.65;margin-bottom:24px">Our team is reviewing your application. You'll receive an email within 24–48 hours once approved.</p>
-        <div style="background:var(--cream2);border-radius:var(--rlg);padding:18px;text-align:left">
-          <div style="display:flex;align-items:flex-start;gap:11px;padding:8px 0;border-bottom:1px solid var(--cream3)"><div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">✓</div><div style="font-size:13px;color:var(--ink2)"><strong>Application submitted</strong> — under review now</div></div>
-          <div style="display:flex;align-items:flex-start;gap:11px;padding:8px 0;border-bottom:1px solid var(--cream3)"><div style="width:22px;height:22px;border-radius:50%;background:var(--gl);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</div><div style="font-size:13px;color:var(--ink2)">Team reviews credentials — within 24–48 hours</div></div>
-          <div style="display:flex;align-items:flex-start;gap:11px;padding:8px 0;border-bottom:1px solid var(--cream3)"><div style="width:22px;height:22px;border-radius:50%;background:var(--gl);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</div><div style="font-size:13px;color:var(--ink2)">Approval email — host dashboard unlocks</div></div>
-          <div style="display:flex;align-items:flex-start;gap:11px;padding:8px 0"><div style="width:22px;height:22px;border-radius:50%;background:var(--gl);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">4</div><div style="font-size:13px;color:var(--ink2)">Host your first session — start earning</div></div>
-        </div>
+        <p style="font-size:13px;color:var(--ink3);font-weight:300;line-height:1.65;margin-bottom:24px">Our team reviews every application within 24–48 hours.</p>
       </div>
     </div>
   </div>
 
+  <!-- LOGBOOK VIEW — shows rounds + platform sessions -->
   <div class="view" id="v-logbook">
     <div class="topbar">
-      <div class="greet">Logbook <span>Your full round history</span></div>
+      <div class="greet">Logbook <span>Your rounds and platform activity</span></div>
       <div class="tact"><button class="btn bi" onclick="showLogForm()">+ Log a round</button></div>
     </div>
     <div class="cgrid">
       <div class="panel cw">
-        <div class="ph"><span class="pt">All rounds</span><span style="font-family:var(--mono);font-size:12px;color:var(--green)" id="lb-hcp">HCP —</span></div>
-        <div id="logbook-rounds"><div class="empty"><p>No rounds logged yet. Hit the button above to log your first round!</p></div></div>
+        <div class="ph">
+          <span class="pt">All activity</span>
+          <span style="font-family:var(--mono);font-size:12px;color:var(--green)" id="lb-hcp">HCP —</span>
+        </div>
+        <div id="logbook-rounds"><div class="empty"><p>No activity yet.</p></div></div>
       </div>
       <div class="panel">
         <div class="ph"><span class="pt">Course badges</span></div>
@@ -363,22 +390,25 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
+  <!-- CHALLENGES -->
   <div class="view" id="v-challenges">
     <div class="topbar"><div class="greet">Challenges <span>Weekly, monthly, and seasonal missions</span></div></div>
     <div class="panel">
       <div class="ph"><span class="pt">This week · resets Monday</span></div>
-      <div class="crow"><div class="cico cg">&#127919;</div><div style="flex:1"><div class="ct">Break 90 this week</div><p style="font-size:12px;color:var(--ink3);margin-bottom:6px">Post a round of 89 or better at any course before Sunday</p><div class="cprog"><div class="cbar"><div class="cf" style="width:65%;background:var(--gm)"></div></div><span class="cxp">+150 XP · 65% done</span></div></div></div>
-      <div class="crow"><div class="cico ca">&#127942;</div><div style="flex:1"><div class="ct">New course explorer</div><p style="font-size:12px;color:var(--ink3);margin-bottom:6px">Play a course you've never logged on Lyfe.fy</p><div class="cprog"><div class="cbar"><div class="cf" style="width:0%;background:#e8a030"></div></div><span class="cxp">+200 XP · Not started</span></div></div></div>
-      <div class="crow"><div class="cico cp">&#9876;&#65039;</div><div style="flex:1"><div class="ct">Beat your rival</div><p style="font-size:12px;color:var(--ink3);margin-bottom:6px">Post a lower score than any rival at a shared course</p><div class="cprog"><div class="cbar"><div class="cf" style="width:40%;background:#b49cd4"></div></div><span class="cxp">+300 XP · In progress</span></div></div></div>
-      <div class="crow"><div class="cico cr">&#128293;</div><div style="flex:1"><div class="ct">5-round month streak</div><p style="font-size:12px;color:var(--ink3);margin-bottom:6px">Log 5 rounds before end of month.</p><div class="cprog"><div class="cbar"><div class="cf" style="width:20%;background:#e89070"></div></div><span class="cxp">+500 XP · 1 / 5</span></div></div></div>
+      <div class="crow"><div class="cico cg">&#127919;</div><div style="flex:1"><div class="ct">Break 90 this week</div><p style="font-size:12px;color:var(--ink3);margin-bottom:6px">Post a round of 89 or better</p><div class="cprog"><div class="cbar"><div class="cf" style="width:65%;background:var(--gm)"></div></div><span class="cxp">+150 XP · 65% done</span></div></div></div>
+      <div class="crow"><div class="cico ca">&#127942;</div><div style="flex:1"><div class="ct">New course explorer</div><p style="font-size:12px;color:var(--ink3);margin-bottom:6px">Play a course you've never logged</p><div class="cprog"><div class="cbar"><div class="cf" style="width:0%;background:#e8a030"></div></div><span class="cxp">+200 XP · Not started</span></div></div></div>
+      <div class="crow"><div class="cico cp">&#9876;&#65039;</div><div style="flex:1"><div class="ct">Beat your rival</div><p style="font-size:12px;color:var(--ink3);margin-bottom:6px">Post a lower score than any rival</p><div class="cprog"><div class="cbar"><div class="cf" style="width:40%;background:#b49cd4"></div></div><span class="cxp">+300 XP · In progress</span></div></div></div>
+      <div class="crow"><div class="cico cr">&#128293;</div><div style="flex:1"><div class="ct">5-round month streak</div><p style="font-size:12px;color:var(--ink3);margin-bottom:6px">Log 5 rounds before end of month</p><div class="cprog"><div class="cbar"><div class="cf" style="width:20%;background:#e89070"></div></div><span class="cxp">+500 XP · 1 / 5</span></div></div></div>
     </div>
   </div>
 
+  <!-- RIVALS -->
   <div class="view" id="v-rivals">
     <div class="topbar"><div class="greet">Rivals <span>Season head-to-head records</span></div><div class="tact"><button class="btn bi">+ Add rival</button></div></div>
-    <div class="panel"><div class="empty"><p>Add rivals to track your head-to-head scores.</p><p style="font-size:12px;color:var(--ink3);margin-top:6px">Once you add rivals, their scores on every shared course will appear here.</p></div></div>
+    <div class="panel"><div class="empty"><p>Add rivals to track head-to-head scores.</p></div></div>
   </div>
 
+  <!-- TOURNAMENTS -->
   <div class="view" id="v-tournaments">
     <div class="topbar"><div class="greet">Tournaments <span>Monthly city events</span></div><div class="tact"><a href="games.html" class="btn bi">Browse all →</a></div></div>
     <div class="panel">
@@ -389,6 +419,7 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
+  <!-- TRIPS -->
   <div class="view" id="v-trips">
     <div class="topbar"><div class="greet">Lyfe Trips <span>Drop-style bucket list golf travel</span></div></div>
     <div class="cgrid">
@@ -397,13 +428,13 @@ select.finp{cursor:pointer}
         <p style="font-size:12px;color:var(--ink3);margin-top:10px">Eagle tier or above required for this trip.</p>
       </div>
       <div class="panel">
-        <div class="tripm" style="background:rgba(200,130,26,.08);border:1px solid rgba(200,130,26,.15)"><div><div class="tmn" style="color:var(--amber)">Pebble Beach</div><div class="tms" style="color:rgba(200,130,26,.55)">Oct 8–11 · drops in 3 days · Eagle+ early access</div></div></div>
-        <p style="font-size:12px;color:var(--ink3);margin-top:10px">Upgrade to <strong>Lyfe Pass</strong> for early trip access.</p>
+        <div class="tripm" style="background:rgba(200,130,26,.08);border:1px solid rgba(200,130,26,.15)"><div><div class="tmn" style="color:var(--amber)">Pebble Beach</div><div class="tms" style="color:rgba(200,130,26,.55)">Oct 8–11 · drops in 3 days</div></div></div>
         <a href="index.html#pass" class="btn bo bfw" style="margin-top:12px;font-size:12px">Upgrade to Lyfe Pass →</a>
       </div>
     </div>
   </div>
 
+  <!-- PROFILE VIEW -->
   <div class="view" id="v-profile">
     <div class="topbar"><div class="greet">My Profile <span>Your match profile and account settings</span></div></div>
     <div class="cgrid">
@@ -426,19 +457,18 @@ select.finp{cursor:pointer}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/lyfe-core.js"></script>
 <script>
-
-
+// Use db from lyfe-core.js — no redeclaration
 let U = null;
 let P = null;
 let rounds = [];
+let myBookings = [];
 
 function $(id) { return document.getElementById(id); }
-function set(id, val) { const el = $(id); if (el) el.textContent = val; }
-function html(id, val) { const el = $(id); if (el) el.innerHTML = val; }
-function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+function set(id, val) { const el=$(id); if(el) el.textContent=val; }
+function html(id, val) { const el=$(id); if(el) el.innerHTML=val; }
+function cap(s) { return s ? s.charAt(0).toUpperCase()+s.slice(1) : ''; }
 function pill(txt, green) {
-  const c  = green ? 'var(--green)' : 'var(--ink3)';
-  const bg = green ? 'var(--gl)'    : 'var(--cream2)';
+  const c=green?'var(--green)':'var(--ink3)', bg=green?'var(--gl)':'var(--cream2)';
   return `<span style="font-size:11px;font-weight:500;color:${c};background:${bg};padding:3px 9px;border-radius:20px;display:inline-block;margin:2px 3px 2px 0">${txt}</span>`;
 }
 function field(lbl, val) {
@@ -446,320 +476,384 @@ function field(lbl, val) {
   return `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--cream3);font-size:13px"><span style="color:var(--ink3)">${lbl}</span><span style="font-weight:500;color:var(--ink)">${val}</span></div>`;
 }
 function xpRank(xp) {
-  if (xp >= 25000) return 'Legend';
-  if (xp >= 10000) return 'Albatross';
-  if (xp >=  4000) return 'Eagle';
-  if (xp >=  1500) return 'Birdie';
-  if (xp >=   500) return 'Par';
-  return 'Bogey';
+  if(xp>=25000)return'Legend';if(xp>=10000)return'Albatross';
+  if(xp>=4000)return'Eagle';if(xp>=1500)return'Birdie';
+  if(xp>=500)return'Par';return'Bogey';
+}
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff/60000);
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return mins + 'm ago';
+  const hrs = Math.floor(mins/60);
+  if (hrs < 24) return hrs + 'h ago';
+  return Math.floor(hrs/24) + 'd ago';
 }
 
+// ── BOOT
 (async function boot() {
-  // Fix for Edge tracking prevention — use onAuthStateChange as primary
   let loaded = false;
-
-  const timeout = setTimeout(() => {
-    if (!loaded) window.location.href = 'onboarding.html';
-  }, 4000);
+  const timeout = setTimeout(() => { if(!loaded) window.location.href='onboarding.html'; }, 4000);
 
   db.auth.onAuthStateChange(async (event, session) => {
-    if (session && !loaded) {
-      loaded = true;
-      clearTimeout(timeout);
-      await loadDashboard(session);
-    } else if (event === 'SIGNED_OUT') {
-      clearTimeout(timeout);
-      window.location.href = 'onboarding.html';
-    }
+    if (session && !loaded) { loaded=true; clearTimeout(timeout); await loadDashboard(session); }
+    else if (event==='SIGNED_OUT') { clearTimeout(timeout); window.location.href='onboarding.html'; }
   });
 
-  // Also try getSession immediately as a fast path
-  const { data: { session: initialSession } } = await db.auth.getSession();
-  if (initialSession && !loaded) {
-    loaded = true;
-    clearTimeout(timeout);
-    await loadDashboard(initialSession);
-  }
+  const { data: { session: s } } = await db.auth.getSession();
+  if (s && !loaded) { loaded=true; clearTimeout(timeout); await loadDashboard(s); }
 })();
 
 async function loadDashboard(session) {
   U = session.user;
 
-  // Run profile + rounds in parallel — twice as fast
-  // Wrap rounds in try/catch properly (Supabase doesn't support .catch() on queries)
-  const profileRes = await db.from('profiles').select('*').eq('id', U.id).single();
-  let roundsData = [];
-  try {
-    const { data } = await db.from('rounds').select('*').eq('user_id', U.id).order('played_at', { ascending: false });
-    roundsData = data || [];
-  } catch(e) { roundsData = []; }
-
-  const roundsRes = { data: roundsData };
+  // Load profile, rounds and bookings in parallel
+  const [profileRes, roundsRes, bookingsRes] = await Promise.all([
+    db.from('profiles').select('*').eq('id', U.id).single(),
+    db.from('rounds').select('*').eq('user_id', U.id).order('played_at', { ascending: false }).then(r => r).catch(() => ({ data: [] })),
+    db.from('bookings').select('*, sessions(id, title, session_date, session_time, location, sport, price, spots_total, spots_taken, status)')
+      .eq('player_id', U.id).eq('status', 'confirmed').order('created_at', { ascending: false })
+  ]);
 
   P = profileRes.data;
-  rounds = roundsData;
+  rounds = roundsRes.data || [];
+  myBookings = bookingsRes.data || [];
 
   const role = P?.role || 'member';
   applyRole(role);
   renderSidebar(role);
   renderHome(role);
   renderProfile();
+  renderMyBookings();
+  renderActivityFeed();
+  renderLogbook();
   if (role === 'host') loadHostData();
 
-  // Hide loading screen immediately
   $('loading-screen').classList.add('hide');
-  setTimeout(() => {
-    const ls = $('loading-screen');
-    if (ls) ls.style.display = 'none';
-  }, 400);
+  setTimeout(() => { const ls=$('loading-screen'); if(ls) ls.style.display='none'; }, 400);
 }
 
+// ── ROLE
 function applyRole(role) {
-  document.querySelectorAll('.host-only').forEach(el => {
-    el.style.display = role === 'host' ? 'flex' : 'none';
-  });
-  document.getElementById('host-nav-label').style.display = role === 'host' ? 'block' : 'none';
-  document.querySelectorAll('.pending-only').forEach(el => {
-    el.style.display = role === 'pending_host' ? 'flex' : 'none';
-  });
-  const becomeBtn = $('become-host-btn');
-  const becomeLbl = $('become-host-label');
-  if (becomeBtn) becomeBtn.style.display = (role === 'host' || role === 'pending_host') ? 'none' : 'flex';
-  if (becomeLbl) becomeLbl.style.display = (role === 'host' || role === 'pending_host') ? 'none' : 'block';
+  document.querySelectorAll('.host-only').forEach(el => el.style.display = role==='host'?'flex':'none');
+  $('host-nav-label').style.display = role==='host'?'block':'none';
+  document.querySelectorAll('.pending-only').forEach(el => el.style.display = role==='pending_host'?'flex':'none');
+  const bb=$('become-host-btn'), bl=$('become-host-label');
+  if(bb) bb.style.display=(role==='host'||role==='pending_host')?'none':'flex';
+  if(bl) bl.style.display=(role==='host'||role==='pending_host')?'none':'block';
 }
 
+// ── SIDEBAR
 function renderSidebar(role) {
-  const name     = P?.full_name || U?.user_metadata?.full_name || U?.email?.split('@')[0] || 'Player';
-  const initials = name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
-  const xp       = rounds.length * 50;
-  const xpPct    = Math.min((xp / 500) * 100, 100);
-  set('sb-av',   initials);
-  set('sb-name', name);
-  set('xp-cur',  xp + ' XP');
-  set('xp-next', Math.max(0, 500 - xp) + ' to next');
-  $('xp-fill').style.width = xpPct + '%';
-  const roleBadge = $('sb-role');
-  if (role === 'host') {
-    roleBadge.textContent = 'Host'; roleBadge.className = 'urole role-host';
-  } else if (role === 'pending_host') {
-    roleBadge.textContent = 'Pending host'; roleBadge.className = 'urole role-pending';
-  } else {
-    roleBadge.textContent = 'Member'; roleBadge.className = 'urole role-member';
-  }
+  const name = P?.full_name || U?.user_metadata?.full_name || U?.email?.split('@')[0] || 'Player';
+  const initials = name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
+  const xp = rounds.length*50 + myBookings.length*100;
+  const xpPct = Math.min((xp/500)*100, 100);
+  set('sb-av', initials); set('sb-name', name);
+  set('xp-cur', xp+' XP'); set('xp-next', Math.max(0,500-xp)+' to next');
+  $('xp-fill').style.width = xpPct+'%';
+  const rb=$('sb-role');
+  if(role==='host'){rb.textContent='Host';rb.className='urole role-host';}
+  else if(role==='pending_host'){rb.textContent='Pending host';rb.className='urole role-pending';}
+  else{rb.textContent='Member';rb.className='urole role-member';}
 }
 
+// ── HOME
 function renderHome(role) {
-  const name  = P?.full_name || U?.user_metadata?.full_name || U?.email?.split('@')[0] || 'there';
+  const name = P?.full_name || U?.user_metadata?.full_name || U?.email?.split('@')[0] || 'there';
   const first = name.split(' ')[0];
-  const hour  = new Date().getHours();
-  const tod   = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
-  const xp    = rounds.length * 50;
-  $('home-greet').innerHTML = `Good ${tod}, ${first} <span>Here's your golf life today</span>`;
-  if (role === 'pending_host') $('pending-banner').style.display = 'flex';
-  const hcpMap = { Beginner: '25+', Intermediate: '10–20', Advanced: '< 10', Competitive: 'Scratch' };
-  if (role === 'host') {
-    $('home-stats').innerHTML = `
-      <div class="sc host-stat"><div class="sclbl">Host since</div><div class="scval" style="font-size:15px;margin-top:4px">${P?.created_at ? new Date(P.created_at).toLocaleDateString('en-US',{month:'short',year:'numeric'}) : '—'}</div><div class="scsub">Active host</div></div>
+  const hour = new Date().getHours();
+  const tod = hour<12?'morning':hour<17?'afternoon':'evening';
+  $('home-greet').innerHTML = `Good ${tod}, ${first} <span>Here's your Lyfe.fy today</span>`;
+  if(role==='pending_host') $('pending-banner').style.display='flex';
+
+  const hcpMap={Beginner:'25+',Intermediate:'10–20',Advanced:'< 10',Competitive:'Scratch'};
+  if(role==='host') {
+    $('home-stats').innerHTML=`
+      <div class="sc host-stat"><div class="sclbl">Host since</div><div class="scval" style="font-size:15px;margin-top:4px">${P?.created_at?new Date(P.created_at).toLocaleDateString('en-US',{month:'short',year:'numeric'}):'—'}</div><div class="scsub">Active host</div></div>
       <div class="sc"><div class="sclbl">Sessions hosted</div><div class="scval" id="stat-sessions-hosted">0</div><div class="scsub">Loading…</div></div>
       <div class="sc scg"><div class="sclbl">Earnings (70%)</div><div class="scval" id="stat-earnings-home">$0</div><div class="scsub">This month</div></div>
       <div class="sc"><div class="sclbl">City</div><div class="scval" style="font-size:15px;margin-top:4px">${P?.city||'—'}</div><div class="scsub">${P?.skill_level||'—'}</div></div>`;
   } else {
-    set('stat-hcp',     hcpMap[P?.skill_level] || '—');
-    set('stat-hcp-sub', P?.skill_level || 'Set in profile');
-    set('stat-rounds',  rounds.length);
-    set('stat-xp',      xp);
-    set('stat-rank',    xpRank(xp));
-    set('stat-city',    P?.city || '—');
-    set('stat-intent',  P?.intent ? cap(P.intent) : '—');
+    const xp = rounds.length*50 + myBookings.length*100;
+    set('stat-hcp', hcpMap[P?.skill_level]||'—');
+    set('stat-hcp-sub', P?.skill_level||'Set in profile');
+    set('stat-rounds', rounds.length);
+    set('stat-xp', xp);
+    set('stat-rank', xpRank(xp));
+    set('stat-booked', myBookings.length);
   }
-  renderProfileSummary();
 }
 
-function renderProfileSummary() {
-  const el = $('profile-summary');
-  if (!el || !P) return;
-  const energy   = Array.isArray(P.energy)   ? P.energy   : [];
-  const schedule = Array.isArray(P.schedule) ? P.schedule : [];
-  const rows = [
-    P.industry    && ['Industry', P.industry],
-    P.golf_style  && ['Style',    P.golf_style],
-    P.skill_level && ['Skill',    P.skill_level],
-    P.city        && ['City',     P.city],
-    P.intent      && ['Goal',     cap(P.intent)],
-  ].filter(Boolean);
-  if (!rows.length && !energy.length) {
-    el.innerHTML = `<div class="empty"><p>Profile not complete. <a href="onboarding.html" style="color:var(--green);font-weight:500">Complete onboarding →</a></p></div>`;
+// ── MY BOOKINGS (home panel + full view)
+function renderMyBookings() {
+  if (!myBookings.length) {
+    html('home-bookings', '<div class="empty"><p>No sessions booked yet. <a href="games.html" style="color:var(--green);font-weight:500">Find a game →</a></p></div>');
+    html('my-sessions-list', '<div class="empty"><p>No sessions booked yet. <a href="games.html" style="color:var(--green);font-weight:500">Browse sessions →</a></p></div>');
     return;
   }
-  el.innerHTML =
-    rows.map(([l, v]) => `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--cream3);font-size:13px"><span style="color:var(--ink3)">${l}</span><span style="font-weight:500">${v}</span></div>`).join('') +
-    (energy.length   ? `<div style="padding-top:10px">${energy.map(e => pill(e, true)).join('')}</div>` : '') +
-    (schedule.length ? `<div style="padding-top:8px">${schedule.map(s => pill(s, false)).join('')}</div>` : '');
+
+  const cards = myBookings.map(b => {
+    const s = b.sessions;
+    const dateStr = s?.session_date
+      ? new Date(s.session_date+'T00:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
+      : 'Date TBD';
+    const timeStr = s?.session_time ? formatTime(s.session_time) : '';
+    const sport = s?.sport || 'Session';
+    const sportEmoji = {Golf:'⛳',Tennis:'🎾',Basketball:'🏀',Soccer:'⚽',Volleyball:'🏐'}[sport]||'🏅';
+    const price = parseFloat(b.paid_amount||s?.price||0);
+    const upcoming = s?.session_date ? new Date(s.session_date+'T00:00:00') > new Date() : false;
+
+    return `<div class="bkcard">
+      <div>
+        <div class="bktitle">${sportEmoji} ${s?.title||'Session'}</div>
+        <div class="bkmeta">📅 ${dateStr}${timeStr?' · '+timeStr:''} ${s?.location?'· 📍'+s.location:''}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+        <span class="bkbadge">${upcoming?'Upcoming':'Past'}</span>
+        <span class="bkprice">$${price.toFixed(0)} paid</span>
+      </div>
+    </div>`;
+  });
+
+  // Home panel shows latest 3
+  html('home-bookings', cards.slice(0,3).join('') +
+    (myBookings.length>3 ? `<button class="pl" onclick="sv('my-sessions')" style="margin-top:10px;display:block;width:100%;text-align:center;font-size:12px;color:var(--green);font-weight:500;border:none;background:none;cursor:pointer">View all ${myBookings.length} sessions →</button>` : ''));
+
+  // Full view shows all
+  html('my-sessions-list', cards.join(''));
 }
 
-function renderProfile() {
-  const name   = P?.full_name || U?.user_metadata?.full_name || '—';
-  const email  = U?.email || P?.email || '—';
-  const joined = P?.created_at ? new Date(P.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '—';
-  html('account-info', `<div style="display:flex;flex-direction:column;gap:2px">${field('Name',name)}${field('Email',email)}${field('Role',cap(P?.role||'member'))}${field('Joined',joined)}</div>`);
-  if (!P) { html('full-profile-display', `<div class="empty"><p>No profile data. <a href="onboarding.html" style="color:var(--green);font-weight:500">Complete onboarding →</a></p></div>`); return; }
-  const energy   = Array.isArray(P.energy)   ? P.energy   : [];
-  const schedule = Array.isArray(P.schedule) ? P.schedule : [];
-  const content =
-    field('Intent',     P.intent      ? cap(P.intent)  : null) +
-    field('Gender',     P.gender      ? cap(P.gender)  : null) +
-    field('Industry',   P.industry) +
-    field('Golf style', P.golf_style) +
-    field('Skill level',P.skill_level) +
-    field('City',       P.city) +
-    field('Travel',     P.willing_to_travel ? 'Yes — willing to travel' : P.willing_to_travel === false ? 'Prefers local' : null) +
-    (energy.length   ? `<div style="padding:10px 0;border-bottom:1px solid var(--cream3)"><div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px">Energy</div>${energy.map(e => pill(e, true)).join('')}</div>` : '') +
-    (schedule.length ? `<div style="padding:10px 0"><div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px">Schedule</div>${schedule.map(s => pill(s, false)).join('')}</div>` : '');
-  html('full-profile-display', content || `<div class="empty"><p>Profile incomplete. <a href="onboarding.html" style="color:var(--green);font-weight:500">Complete onboarding →</a></p></div>`);
+// ── ACTIVITY FEED — real data from bookings + rounds
+function renderActivityFeed() {
+  const items = [];
+
+  // Add bookings to activity
+  myBookings.forEach(b => {
+    const s = b.sessions;
+    items.push({
+      time: new Date(b.created_at),
+      dot: 'var(--gm)',
+      text: `Booked <strong>${s?.title||'a session'}</strong>${s?.location?' at '+s.location:''}`,
+      sub: timeAgo(b.created_at) + (b.paid_amount ? ' · $'+parseFloat(b.paid_amount).toFixed(0)+' paid' : '')
+    });
+  });
+
+  // Add rounds to activity
+  rounds.forEach(r => {
+    items.push({
+      time: new Date(r.played_at||r.created_at),
+      dot: 'var(--green)',
+      text: `Logged a round at <strong>${r.course||'a course'}</strong> — scored ${r.score}`,
+      sub: timeAgo(r.played_at||r.created_at) + ' · +50 XP'
+    });
+  });
+
+  // Sort newest first
+  items.sort((a,b) => b.time - a.time);
+
+  if (!items.length) {
+    html('home-activity', '<div class="nitem"><div class="ndot" style="background:var(--green)"></div><div><div class="ntxt">Welcome to Lyfe.fy! Book a session or log a round to see your activity.</div><div class="ntime">Just now</div></div></div>');
+    return;
+  }
+
+  html('home-activity', items.slice(0,8).map(i =>
+    `<div class="nitem">
+      <div class="ndot" style="background:${i.dot}"></div>
+      <div>
+        <div class="ntxt">${i.text}</div>
+        <div class="ntime">${i.sub}</div>
+      </div>
+    </div>`
+  ).join(''));
 }
 
+// ── LOGBOOK — rounds + booked sessions combined
+function renderLogbook() {
+  // Best score from rounds
+  const bestScore = rounds.length ? Math.min(...rounds.map(r=>r.score)) : null;
+  set('lb-hcp', bestScore ? 'Best: '+bestScore : 'HCP —');
+
+  const roundItems = rounds.map(r => {
+    const date = r.played_at ? new Date(r.played_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
+    const diff = r.score-72;
+    return { sortDate: new Date(r.played_at||0), html:
+      `<div class="row">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">⛳</div>
+        <div class="rinfo">
+          <div class="rname">${r.course||'Unknown course'}</div>
+          <div class="rdate">${date}${r.notes?' · '+r.notes:''} · Manual round</div>
+        </div>
+        <span class="rscore">${r.score}</span>
+        <span class="rdel ${diff<=0?'du':'do'}">${diff>0?'+':''}${diff}</span>
+      </div>`
+    };
+  });
+
+  const bookingItems = myBookings.map(b => {
+    const s = b.sessions;
+    const date = s?.session_date ? new Date(s.session_date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
+    const sport = s?.sport||'Session';
+    const sportEmoji = {Golf:'⛳',Tennis:'🎾',Basketball:'🏀',Soccer:'⚽',Volleyball:'🏐'}[sport]||'🏅';
+    return { sortDate: new Date(s?.session_date||b.created_at||0), html:
+      `<div class="row">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">${sportEmoji}</div>
+        <div class="rinfo">
+          <div class="rname">${s?.title||'Session'}</div>
+          <div class="rdate">${date}${s?.location?' · '+s.location:''} · Platform session</div>
+        </div>
+        <span class="rscore" style="font-size:11px;color:var(--green);font-weight:500">Booked</span>
+      </div>`
+    };
+  });
+
+  const all = [...roundItems, ...bookingItems].sort((a,b)=>b.sortDate-a.sortDate);
+
+  if (!all.length) {
+    html('logbook-rounds', '<div class="empty"><p>No activity yet. Log a round or book a session to get started.</p></div>');
+    return;
+  }
+
+  html('logbook-rounds', all.map(i=>i.html).join(''));
+}
+
+function formatTime(t) {
+  if(!t)return'';
+  const[h,m]=t.split(':');const hour=parseInt(h);
+  return(hour%12||12)+':'+m+(hour>=12?'pm':'am');
+}
+
+// ── ROUNDS
 async function loadRounds() {
   const { data } = await db.from('rounds').select('*').eq('user_id', U.id).order('played_at', { ascending: false });
   rounds = data || [];
   set('stat-rounds', rounds.length);
   renderLogbook();
-  renderSidebar(P?.role || 'member');
-}
-
-function renderLogbook() {
-  set('lb-hcp', rounds.length ? 'Best: ' + Math.min(...rounds.map(r => r.score)) : 'HCP —');
-  if (!rounds.length) { html('logbook-rounds', '<div class="empty"><p>No rounds yet. Log your first round above!</p></div>'); return; }
-  html('logbook-rounds', rounds.map(r => {
-    const date = r.played_at ? new Date(r.played_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
-    const diff = r.score - 72;
-    const cls  = diff <= 0 ? 'du' : 'do';
-    return `<div class="row"><div class="rinfo"><div class="rname">${r.course || 'Unknown course'}</div><div class="rdate">${date}${r.notes ? ' · ' + r.notes : ''}</div></div><span class="rscore">${r.score}</span><span class="rdel ${cls}">${diff > 0 ? '+' : ''}${diff}</span></div>`;
-  }).join(''));
+  renderActivityFeed();
+  renderSidebar(P?.role||'member');
 }
 
 async function logRound() {
-  const course = $('log-course').value.trim();
-  const score  = parseInt($('log-score').value);
-  const date   = $('log-date').value;
-  const notes  = $('log-notes').value.trim();
-  const msg    = $('log-msg');
-  if (!course)                           { showMsg(msg, 'Please enter a course name.', 'red'); return; }
-  if (!score || score < 50 || score > 200) { showMsg(msg, 'Enter a valid score (50–200).', 'red'); return; }
-  const btn = document.querySelector('#logform .btn.bg');
-  btn.disabled = true; btn.textContent = 'Saving…';
-  const { error } = await db.from('rounds').insert({
-    user_id: U.id, course, score,
-    played_at: date ? new Date(date).toISOString() : new Date().toISOString(),
-    notes: notes || null
+  const course=$('log-course').value.trim(), score=parseInt($('log-score').value);
+  const date=$('log-date').value, notes=$('log-notes').value.trim(), msg=$('log-msg');
+  if(!course){showMsg(msg,'Please enter a course name.','red');return;}
+  if(!score||score<50||score>200){showMsg(msg,'Enter a valid score (50–200).','red');return;}
+  const btn=document.querySelector('#logform .btn.bg');
+  btn.disabled=true;btn.textContent='Saving…';
+  const{error}=await db.from('rounds').insert({
+    user_id:U.id,course,score,
+    played_at:date?new Date(date).toISOString():new Date().toISOString(),
+    notes:notes||null
   });
-  btn.disabled = false; btn.textContent = 'Log round →';
-  if (error) { showMsg(msg, 'Error: ' + error.message, 'red'); return; }
-  showMsg(msg, '✓ Round logged! +50 XP earned.', 'green');
-  $('log-course').value = ''; $('log-score').value = ''; $('log-notes').value = '';
+  btn.disabled=false;btn.textContent='Log round →';
+  if(error){showMsg(msg,'Error: '+error.message,'red');return;}
+  showMsg(msg,'✓ Round logged! +50 XP earned.','green');
+  $('log-course').value='';$('log-score').value='';$('log-notes').value='';
   await loadRounds();
 }
 
+// ── HOST DATA
 async function loadHostData() {
-  const { data: sessions } = await db.from('sessions').select('*').eq('host_id', U.id);
-  const mySessions = sessions || [];
-  let myBookings = [];
-  if (mySessions.length) {
-    const ids = mySessions.map(s => s.id);
-    const { data: bookings } = await db.from('bookings').select('*').in('session_id', ids);
-    myBookings = bookings || [];
+  const{data:sessions}=await db.from('sessions').select('*').eq('host_id',U.id);
+  const mySessions=sessions||[];
+  let hBookings=[];
+  if(mySessions.length){
+    const ids=mySessions.map(s=>s.id);
+    const{data:bookings}=await db.from('bookings').select('*').in('session_id',ids);
+    hBookings=bookings||[];
   }
-  const totalRaw = myBookings.reduce((sum, b) => sum + (parseFloat(b.amount_paid) || 0), 0);
-  const earnings = totalRaw * 0.7;
-  const earnStr  = '$' + earnings.toFixed(2);
-  const sesCount = mySessions.length;
-  const avg      = sesCount > 0 ? '$' + (earnings / sesCount).toFixed(0) : '$0';
-  const uniquePl = new Set(myBookings.map(b => b.player_id)).size;
-  set('stat-sessions-hosted', sesCount);
-  set('stat-earnings-home',   '$' + Math.round(earnings));
-  set('h-earnings',      earnStr); set('h-sessions', sesCount);
-  set('h-players',       uniquePl); set('h-rating', '—');
-  set('h-earn-big',      earnStr); set('h-earn-big2', earnStr);
-  set('h-earn-share',    earnStr); set('h-earn-sessions', sesCount);
-  set('h-earn-players',  uniquePl); set('h-earn-avg', avg);
-  const hname = P?.full_name || U?.user_metadata?.full_name || U?.email?.split('@')[0] || 'Host';
-  $('host-greet').innerHTML = `Welcome back, ${hname.split(' ')[0]} <span>Your host dashboard</span>`;
-  html('host-bookings-list', myBookings.length
-    ? myBookings.slice(0,5).map(b => {
-        const sess = mySessions.find(s => s.id === b.session_id);
-        const date = b.created_at ? new Date(b.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
-        return `<div class="row"><div class="rinfo"><div class="rname">${b.player_name||'Player'}</div><div class="rdate">${sess?.title||'Session'} · ${date}</div></div><span class="rscore" style="color:var(--green);font-size:12px">$${parseFloat(b.amount_paid||0).toFixed(0)}</span></div>`;
+  const totalRaw=hBookings.reduce((sum,b)=>sum+(parseFloat(b.paid_amount)||0),0);
+  const earnings=totalRaw*0.7,earnStr='$'+earnings.toFixed(2);
+  const sesCount=mySessions.length,avg=sesCount>0?'$'+(earnings/sesCount).toFixed(0):'$0';
+  const uniquePl=new Set(hBookings.map(b=>b.player_id)).size;
+  set('stat-sessions-hosted',sesCount);set('stat-earnings-home','$'+Math.round(earnings));
+  set('h-earnings',earnStr);set('h-sessions',sesCount);set('h-players',uniquePl);set('h-rating','—');
+  set('h-earn-big',earnStr);set('h-earn-big2',earnStr);set('h-earn-share',earnStr);
+  set('h-earn-sessions',sesCount);set('h-earn-players',uniquePl);set('h-earn-avg',avg);
+  const hname=P?.full_name||U?.user_metadata?.full_name||U?.email?.split('@')[0]||'Host';
+  $('host-greet').innerHTML=`Welcome back, ${hname.split(' ')[0]} <span>Your host dashboard</span>`;
+  html('host-bookings-list',hBookings.length
+    ?hBookings.slice(0,5).map(b=>{
+        const sess=mySessions.find(s=>s.id===b.session_id);
+        const date=b.created_at?new Date(b.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'—';
+        return`<div class="row"><div class="rinfo"><div class="rname">Player booked</div><div class="rdate">${sess?.title||'Session'} · ${date}</div></div><span class="rscore" style="color:var(--green);font-size:12px">$${parseFloat(b.paid_amount||0).toFixed(0)}</span></div>`;
       }).join('')
-    : '<div class="empty"><p>No bookings yet. Create your first session to start.</p></div>');
-  html('host-sessions-list', mySessions.length
-    ? mySessions.map(s => {
-        const booked = (s.spots_total||0) - (s.spots_left||0);
-        const date   = s.date ? new Date(s.date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'TBD';
-        return `<div class="row"><div class="rinfo"><div class="rname">${s.title||'Session'}</div><div class="rdate">${date} · ${cap(s.sport||'')} · ${booked}/${s.spots_total||4} booked</div></div><span class="rscore" style="font-size:12px;color:var(--green)">$${parseFloat(s.price||0).toFixed(0)}</span></div>`;
+    :'<div class="empty"><p>No bookings yet.</p></div>');
+  html('host-sessions-list',mySessions.length
+    ?mySessions.map(s=>{
+        const date=s.session_date?new Date(s.session_date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}):'TBD';
+        return`<div class="row"><div class="rinfo"><div class="rname">${s.title||'Session'}</div><div class="rdate">${date} · ${cap(s.sport||'')} · ${s.spots_taken||0}/${s.spots_total||4} booked</div></div><span class="rscore" style="font-size:12px;color:var(--green)">$${parseFloat(s.price||0).toFixed(0)}</span></div>`;
       }).join('')
-    : '<div class="empty"><p>No sessions created yet.</p></div>');
+    :'<div class="empty"><p>No sessions created yet.</p></div>');
 }
 
-async function signOut() {
-  await db.auth.signOut();
-  window.location.href = 'onboarding.html';
+// ── PROFILE
+function renderProfileSummary() {
+  const el=$('profile-summary');if(!el||!P)return;
+  const energy=Array.isArray(P.energy)?P.energy:[];
+  const schedule=Array.isArray(P.schedule)?P.schedule:[];
+  const rows=[P.industry&&['Industry',P.industry],P.golf_style&&['Style',P.golf_style],P.skill_level&&['Skill',P.skill_level],P.city&&['City',P.city],P.intent&&['Goal',cap(P.intent)]].filter(Boolean);
+  if(!rows.length&&!energy.length){el.innerHTML=`<div class="empty"><p>Profile not complete. <a href="onboarding.html" style="color:var(--green);font-weight:500">Complete onboarding →</a></p></div>`;return;}
+  el.innerHTML=rows.map(([l,v])=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--cream3);font-size:13px"><span style="color:var(--ink3)">${l}</span><span style="font-weight:500">${v}</span></div>`).join('')+(energy.length?`<div style="padding-top:10px">${energy.map(e=>pill(e,true)).join('')}</div>`:'')+( schedule.length?`<div style="padding-top:8px">${schedule.map(s=>pill(s,false)).join('')}</div>`:'');
 }
 
+function renderProfile() {
+  const name=P?.full_name||U?.user_metadata?.full_name||'—';
+  const email=U?.email||P?.email||'—';
+  const joined=P?.created_at?new Date(P.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}):'—';
+  html('account-info',`<div style="display:flex;flex-direction:column;gap:2px">${field('Name',name)}${field('Email',email)}${field('Role',cap(P?.role||'member'))}${field('Joined',joined)}</div>`);
+  if(!P){html('full-profile-display',`<div class="empty"><p>No profile data.</p></div>`);return;}
+  const energy=Array.isArray(P.energy)?P.energy:[];
+  const schedule=Array.isArray(P.schedule)?P.schedule:[];
+  const content=field('Intent',P.intent?cap(P.intent):null)+field('Gender',P.gender?cap(P.gender):null)+field('Industry',P.industry)+field('Golf style',P.golf_style)+field('Skill level',P.skill_level)+field('City',P.city)+(energy.length?`<div style="padding:10px 0">${energy.map(e=>pill(e,true)).join('')}</div>`:'')+( schedule.length?`<div style="padding:10px 0">${schedule.map(s=>pill(s,false)).join('')}</div>`:'');
+  html('full-profile-display',content||`<div class="empty"><p>Profile incomplete. <a href="onboarding.html" style="color:var(--green);font-weight:500">Complete onboarding →</a></p></div>`);
+}
+
+// ── NAV
 function sv(name) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('act'));
-  $('v-' + name)?.classList.add('act');
-  document.querySelectorAll('.sbl').forEach(b => {
-    b.classList.toggle('act', (b.getAttribute('onclick') || '').includes("'" + name + "'"));
-  });
-  if (name === 'logbook') renderLogbook();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('act'));
+  $('v-'+name)?.classList.add('act');
+  document.querySelectorAll('.sbl').forEach(b=>b.classList.toggle('act',(b.getAttribute('onclick')||'').includes("'"+name+"'")));
+  if(name==='logbook')renderLogbook();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 function showLogForm() {
   sv('logbook');
-  setTimeout(() => {
-    const lf = $('logform');
-    if (lf) { lf.style.display = 'block'; lf.scrollIntoView({ behavior: 'smooth' }); }
-  }, 100);
+  setTimeout(()=>{const lf=$('logform');if(lf){lf.style.display='block';lf.scrollIntoView({behavior:'smooth'});}},100);
 }
 
-function showMsg(el, txt, color) {
-  el.textContent = txt;
-  el.style.color = color === 'red' ? '#c0392b' : 'var(--green)';
-  el.style.display = 'block';
-  setTimeout(() => { el.style.display = 'none'; }, 5000);
+function showMsg(el,txt,color) {
+  el.textContent=txt;el.style.color=color==='red'?'#c0392b':'var(--green)';el.style.display='block';
+  setTimeout(()=>{el.style.display='none';},5000);
+}
+
+async function signOut() {
+  await db.auth.signOut();
+  window.location.href='onboarding.html';
 }
 
 async function publishSession() {
-  const msg = $('sess-msg');
-  const btn = $('publish-btn');
-  const title    = $('sess-title').value.trim();
-  const sport    = $('sess-sport').value;
-  const date     = $('sess-date').value;
-  const location = $('sess-location').value.trim();
-  if (!title)    { showMsg(msg, 'Please enter a session title.', 'red'); return; }
-  if (!sport)    { showMsg(msg, 'Please select a sport.', 'red'); return; }
-  if (!date)     { showMsg(msg, 'Please pick a date.', 'red'); return; }
-  if (!location) { showMsg(msg, 'Please enter a location.', 'red'); return; }
-  btn.disabled = true; btn.textContent = 'Publishing…';
-  const { error } = await db.from('sessions').insert({
-    host_id: U.id, title, sport,
-    format:       $('sess-format').value,
-    session_date: date,
-    session_time: $('sess-time').value || null,
-    location,
-    price:        parseFloat($('sess-price').value) || 0,
-    spots_total:  parseInt($('sess-spots').value) || 8,
-    spots_taken:  0,
-    skill_level:  $('sess-skill').value,
-    session_type: $('sess-type').value,
-    description:  $('sess-desc').value.trim() || null,
-    status:       'active'
+  const msg=$('sess-msg'),btn=$('publish-btn');
+  const title=$('sess-title').value.trim(),sport=$('sess-sport').value;
+  const date=$('sess-date').value,location=$('sess-location').value.trim();
+  if(!title){showMsg(msg,'Please enter a session title.','red');return;}
+  if(!sport){showMsg(msg,'Please select a sport.','red');return;}
+  if(!date){showMsg(msg,'Please pick a date.','red');return;}
+  if(!location){showMsg(msg,'Please enter a location.','red');return;}
+  btn.disabled=true;btn.textContent='Publishing…';
+  const{error}=await db.from('sessions').insert({
+    host_id:U.id,title,sport,format:$('sess-format').value,
+    session_date:date,session_time:$('sess-time').value||null,location,
+    price:parseFloat($('sess-price').value)||0,spots_total:parseInt($('sess-spots').value)||8,
+    spots_taken:0,skill_level:$('sess-skill').value,session_type:$('sess-type').value,
+    description:$('sess-desc').value.trim()||null,status:'active'
   });
-  btn.disabled = false; btn.textContent = 'Publish Session ✓';
-  if (error) { showMsg(msg, 'Error: ' + error.message, 'red'); return; }
-  ['sess-title','sess-sport','sess-date','sess-time','sess-location','sess-price','sess-spots','sess-desc']
-    .forEach(id => { $(id).value = ''; });
-  showMsg(msg, '✓ Session published! Players can now find and book it.', 'green');
+  btn.disabled=false;btn.textContent='Publish Session ✓';
+  if(error){showMsg(msg,'Error: '+error.message,'red');return;}
+  ['sess-title','sess-sport','sess-date','sess-time','sess-location','sess-price','sess-spots','sess-desc'].forEach(id=>{$(id).value='';});
+  showMsg(msg,'✓ Session published!','green');
   await loadHostData();
 }
 </script>
