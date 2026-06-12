@@ -11,13 +11,11 @@
 :root{--ink:#0e0e0c;--ink2:#2a2a26;--ink3:#5a5a52;--cream:#f5f2eb;--cream2:#ede9df;--cream3:#e2ddd2;--green:#1a7a52;--gl:#d4ede2;--gm:#2a9e6a;--amber:#c8821a;--al:#faeeda;--w:#fff;--serif:'Playfair Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;--rsm:8px;--rmd:14px;--rlg:20px;--rxl:28px;--ease:cubic-bezier(.25,.46,.45,.94);--nav:64px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--sans);background:var(--cream);color:var(--ink);overflow-x:hidden;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+body{font-family:var(--sans);background:var(--cream2);color:var(--ink);overflow-x:hidden;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
 a{text-decoration:none;color:inherit}
 button{font-family:var(--sans);cursor:pointer;border:none}
 input,select,textarea{font-family:var(--sans)}
-.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav);padding:0 40px;display:flex;align-items:center;justify-content:space-between;transition:background .3s,border-color .3s;border-bottom:1px solid transparent}
-.nav.sc{background:rgba(245,242,235,.95);backdrop-filter:blur(20px);border-bottom-color:rgba(90,90,82,.12)}
-.nav.solid{background:rgba(245,242,235,.97);border-bottom-color:rgba(90,90,82,.12)}
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav);padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(245,242,235,.97);border-bottom:1px solid rgba(90,90,82,.12)}
 .logo{font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
 .logo span{color:var(--gm)}
 .nav-links{display:flex;align-items:center;gap:26px;list-style:none}
@@ -28,32 +26,11 @@ input,select,textarea{font-family:var(--sans)}
 .bi{background:var(--ink);color:var(--cream);border-color:var(--ink)}.bi:hover{background:var(--ink2);transform:translateY(-1px)}
 .bg{background:var(--gm);color:#fff;border-color:var(--gm)}.bg:hover{background:var(--green);transform:translateY(-1px)}
 .bo{background:transparent;color:var(--ink2);border-color:var(--cream3)}.bo:hover{background:var(--cream2);border-color:var(--ink3)}
-.bgl{background:transparent;color:rgba(245,242,235,.75);border:1px solid rgba(255,255,255,.15)}.bgl:hover{background:rgba(255,255,255,.07);color:var(--cream)}
-.blg{font-size:15px;padding:13px 28px}.bsm{font-size:12px;padding:7px 14px}.bfw{width:100%;justify-content:center}
+.bsm{font-size:12px;padding:7px 14px}.bfw{width:100%;justify-content:center}
 .tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px}
-.tg{background:var(--gl);color:var(--green)}.ta{background:var(--al);color:var(--amber)}.ts{background:var(--cream2);color:var(--ink3)}.td{background:rgba(255,255,255,.08);color:rgba(245,242,235,.6);border:1px solid rgba(255,255,255,.06)}
-.pulse{display:inline-flex;align-items:center;gap:6px}
-.pulse::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pa 2s ease-in-out infinite}
+.tg{background:var(--gl);color:var(--green)}.ta{background:var(--al);color:var(--amber)}.ts{background:var(--cream2);color:var(--ink3)}
+.pulse::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pa 2s ease-in-out infinite;display:inline-block;margin-right:6px;border-radius:50%}
 @keyframes pa{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-.rv{opacity:0;transform:translateY(22px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
-.rv.on{opacity:1;transform:translateY(0)}
-.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
-.sec{padding:90px 40px}
-.sd{background:var(--ink);color:var(--cream)}.sm{background:var(--cream2)}
-.eyebrow{font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--green);margin-bottom:12px;display:block}
-.sd .eyebrow,.sd-eyebrow{color:#6ecfa0}
-.h2{font-family:var(--serif);font-size:clamp(34px,4vw,54px);font-weight:900;line-height:1.08;letter-spacing:-.03em;margin-bottom:14px}
-.h2 em{font-style:italic;color:var(--green)}.sd .h2 em{color:#6ecfa0}
-.lead{font-size:16px;color:var(--ink3);max-width:540px;font-weight:300;line-height:1.65;margin-bottom:48px}
-.sd .lead{color:rgba(245,242,235,.55)}
-.wc{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rlg);padding:22px}
-.fgrp{margin-bottom:18px}
-.flbl{display:block;font-size:12px;font-weight:500;color:var(--ink3);margin-bottom:6px;letter-spacing:.04em;text-transform:uppercase}
-.finp{width:100%;padding:11px 14px;border:1px solid var(--cream3);border-radius:var(--rsm);background:var(--w);color:var(--ink);font-size:14px;transition:border-color .2s;outline:none;font-family:var(--sans)}
-.finp:focus{border-color:var(--green)}
-select.finp{cursor:pointer}
-textarea.finp{resize:vertical;min-height:90px}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .ft{background:var(--ink);padding:32px 40px;border-top:1px solid rgba(255,255,255,.06)}
 .fti{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
 .flogo{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--cream)}
@@ -61,15 +38,11 @@ textarea.finp{resize:vertical;min-height:90px}
 .flinks a{font-size:12px;color:rgba(245,242,235,.4);transition:color .2s}
 .flinks a:hover{color:var(--cream)}
 .fcopy{font-size:12px;color:rgba(245,242,235,.25)}
-</style>
-<style>
-body{background:var(--cream2)}
 .page-top{padding:calc(var(--nav) + 52px) 40px 36px}
 .page-h1{font-family:var(--serif);font-size:clamp(38px,5vw,58px);font-weight:900;line-height:1.06;letter-spacing:-.03em;margin-bottom:10px}
 .page-h1 em{font-style:italic;color:var(--green)}
 .page-sub{font-size:16px;color:var(--ink3);font-weight:300;max-width:520px}
 .glayout{display:grid;grid-template-columns:250px 1fr;gap:24px;padding:0 40px 80px}
-/* Sidebar */
 .gsidebar{position:sticky;top:calc(var(--nav) + 16px);height:fit-content}
 .fpanel{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rlg);padding:20px}
 .ftitle{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:14px}
@@ -80,15 +53,17 @@ body{background:var(--cream2)}
 .chip:hover,.chip.act{background:var(--ink);color:var(--cream);border-color:var(--ink)}
 .csel{width:100%;padding:9px 12px;border:1px solid var(--cream3);border-radius:var(--rsm);background:var(--w);color:var(--ink);font-size:13px;cursor:pointer;outline:none;font-family:var(--sans)}
 .csel:focus{border-color:var(--green)}
-/* Game cards */
 .ghead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .gcnt{font-size:13px;color:var(--ink3)}
+.live-badge{font-size:11px;font-weight:500;color:var(--green);background:var(--gl);padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
+.live-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pa 2s ease-in-out infinite}
 .gcard{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rlg);padding:22px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;transition:transform .2s var(--ease),border-color .2s;margin-bottom:12px}
 .gcard:hover{transform:translateY(-2px);border-color:var(--gl)}
-.gcard.feat{border-color:var(--ink)}
+.gcard.new-session{border-color:var(--gm);animation:pulse-border 2s ease-in-out 3}
+@keyframes pulse-border{0%,100%{border-color:var(--gm)}50%{border-color:var(--green);box-shadow:0 0 0 3px rgba(42,158,106,.15)}}
 .gname{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:3px;line-height:1.2}
 .ghost-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;margin-top:6px}
-.ghav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff}
+.ghav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff;background:var(--gm)}
 .ghn{font-size:12px;font-weight:500;color:var(--ink2)}
 .ghb{font-size:10px;color:var(--green);background:var(--gl);padding:2px 7px;border-radius:20px}
 .gmeta{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:12px}
@@ -100,7 +75,11 @@ body{background:var(--cream2)}
 .gspots{font-size:12px;color:var(--amber);font-weight:500}
 .sbar{width:80px;height:4px;background:var(--cream2);border-radius:2px;overflow:hidden}
 .sfill{height:100%;border-radius:2px;background:var(--gm)}
-/* Modal */
+.empty-state{text-align:center;padding:60px 20px;color:var(--ink3)}
+.empty-state p{font-size:14px;margin-top:8px}
+.loading-state{text-align:center;padding:60px 20px;color:var(--ink3)}
+.spin{width:24px;height:24px;border:2px solid var(--cream3);border-top-color:var(--gm);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
 .modal-bg{position:fixed;inset:0;background:rgba(14,14,12,.55);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
 .modal-bg.open{opacity:1;pointer-events:all}
 .modal{background:var(--w);border-radius:var(--rxl);padding:32px;max-width:420px;width:100%;transform:translateY(16px);transition:transform .3s var(--ease)}
@@ -113,8 +92,9 @@ body{background:var(--cream2)}
 </style>
 </head>
 <body>
-<nav class="nav solid" id="nav">
-  <a href="index.html" class="logo"> <img src="logo.png" alt="Lyfe.fy" style="height:100px;width:auto;display:block"> </a>
+
+<nav class="nav" id="nav">
+  <a href="index.html" class="logo"><img src="logo.png" alt="Lyfe.fy" style="height:100px;width:auto;display:block"></a>
   <ul class="nav-links">
     <li><a href="index.html#universe">Experiences</a></li>
     <li><a href="games.html" class="active">Find a game</a></li>
@@ -125,14 +105,14 @@ body{background:var(--cream2)}
   </ul>
   <div class="nav-act">
     <a href="dashboard.html" class="btn bo">Dashboard</a>
-    <a href="onboarding.html" class="btn bi">Join free &#8594;</a>
+    <a href="onboarding.html" class="btn bi">Join free →</a>
   </div>
 </nav>
 
-<div class="page-top rv">
-  <span class="eyebrow">Golf &#183; Boston &#183; NYC &#183; D.C.</span>
+<div class="page-top">
+  <span class="eyebrow">Golf · Boston · NYC · D.C.</span>
   <h1 class="page-h1">Find a <em>Game</em></h1>
-  <p class="page-sub">Upcoming sessions hosted by certified athletes. Reserve your spot &#8212; group fills, then you play.</p>
+  <p class="page-sub">Upcoming sessions hosted by certified athletes. Reserve your spot — group fills, then you play.</p>
 </div>
 
 <div class="glayout">
@@ -140,155 +120,75 @@ body{background:var(--cream2)}
     <div class="fpanel">
       <div class="ftitle">Filters</div>
       <div class="fgrp2">
-        <span class="flbl2">City</span>
-        <select class="csel" id="cfilter" onchange="filterGames()">
-          <option value="all">All cities</option>
-          <option value="nyc">New York</option>
-          <option value="bos">Boston</option>
-          <option value="dc">Washington D.C.</option>
+        <span class="flbl2">Sport</span>
+        <select class="csel" id="sport-filter" onchange="applyFilters()">
+          <option value="all">All sports</option>
+          <option value="Golf">Golf</option>
+          <option value="Tennis">Tennis</option>
+          <option value="Basketball">Basketball</option>
+          <option value="Soccer">Soccer</option>
+          <option value="Volleyball">Volleyball</option>
         </select>
       </div>
       <div class="fgrp2">
         <span class="flbl2">Session type</span>
         <div class="chips" id="type-chips">
           <span class="chip act" data-val="all" onclick="setChip(this,'type-chips')">All</span>
-          <span class="chip" data-val="athlete" onclick="setChip(this,'type-chips')">Athlete-led</span>
-          <span class="chip" data-val="social" onclick="setChip(this,'type-chips')">Social</span>
-          <span class="chip" data-val="coached" onclick="setChip(this,'type-chips')">Coached</span>
-          <span class="chip" data-val="tournament" onclick="setChip(this,'type-chips')">Tournament</span>
+          <span class="chip" data-val="Casual" onclick="setChip(this,'type-chips')">Casual</span>
+          <span class="chip" data-val="Coached" onclick="setChip(this,'type-chips')">Coached</span>
+          <span class="chip" data-val="Tournament" onclick="setChip(this,'type-chips')">Tournament</span>
+          <span class="chip" data-val="Training" onclick="setChip(this,'type-chips')">Training</span>
         </div>
       </div>
       <div class="fgrp2" style="margin-bottom:0">
         <span class="flbl2">Skill level</span>
         <div class="chips" id="level-chips">
           <span class="chip act" data-val="all" onclick="setChip(this,'level-chips')">All</span>
-          <span class="chip" data-val="beginner" onclick="setChip(this,'level-chips')">Beginner</span>
-          <span class="chip" data-val="intermediate" onclick="setChip(this,'level-chips')">Intermediate</span>
-          <span class="chip" data-val="advanced" onclick="setChip(this,'level-chips')">Competitive</span>
+          <span class="chip" data-val="Beginner" onclick="setChip(this,'level-chips')">Beginner</span>
+          <span class="chip" data-val="Intermediate" onclick="setChip(this,'level-chips')">Intermediate</span>
+          <span class="chip" data-val="Advanced" onclick="setChip(this,'level-chips')">Advanced</span>
         </div>
       </div>
     </div>
-    <div style="margin-top:12px"><a href="hostapplication.html" class="btn bo bfw">Become a host &#8594;</a></div>
+    <div style="margin-top:12px"><a href="hostapplication.html" class="btn bo bfw">Become a host →</a></div>
   </aside>
 
   <main>
     <div class="ghead">
-      <span class="gcnt" id="gcnt">6 sessions available</span>
-      <select class="csel" style="width:auto;font-size:12px">
-        <option>Sort: Soonest</option>
-        <option>Sort: Price low&#8211;high</option>
-        <option>Sort: Spots remaining</option>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="gcnt" id="gcnt">Loading…</span>
+        <span class="live-badge" id="live-badge" style="display:none">Live</span>
+      </div>
+      <select class="csel" style="width:auto;font-size:12px" id="sort-select" onchange="renderCards()">
+        <option value="date">Sort: Soonest</option>
+        <option value="price_asc">Sort: Price low–high</option>
+        <option value="spots">Sort: Spots remaining</option>
       </select>
     </div>
     <div id="ggrid">
-      <div class="gcard feat" data-city="nyc" data-type="tournament" data-level="intermediate">
-        <div>
-          <span class="tag ta" style="margin-bottom:8px;display:inline-flex">&#127942; Tournament</span>
-          <div class="gname">NYC Summer Scramble</div>
-          <div class="ghost-row"><div class="ghav" style="background:#2a9e6a">MT</div><span class="ghn">Marcus T.</span><span class="ghb">D1 Athlete</span></div>
-          <div class="gmeta"><span class="gmi">&#128197; July 19, 7:30am</span><span class="gmi">&#128205; Bethpage State Park</span><span class="gmi">&#128101; 4-person scramble</span></div>
-          <div class="gtags"><span class="tag ts">Scramble</span><span class="tag ts">All levels</span><span class="tag tg">Prize pool</span></div>
-        </div>
-        <div class="gr">
-          <div><div class="gprice">$95</div><div class="gpnote">per player</div></div>
-          <div class="gspots">6 spots left</div>
-          <div class="sbar"><div class="sfill" style="width:40%"></div></div>
-          <button class="btn bi bsm" onclick="openBook('NYC Summer Scramble','95')">Book &#8594;</button>
-        </div>
-      </div>
-      <div class="gcard" data-city="nyc" data-type="athlete" data-level="intermediate">
-        <div>
-          <span class="tag tg" style="margin-bottom:8px;display:inline-flex">&#127944; Athlete-led</span>
-          <div class="gname">Sunday Morning 9 @ Bethpage</div>
-          <div class="ghost-row"><div class="ghav" style="background:#7c5fa0">SR</div><span class="ghn">Sofia R.</span><span class="ghb">Stanford Golf D1</span></div>
-          <div class="gmeta"><span class="gmi">&#128197; July 20, 8:00am</span><span class="gmi">&#128205; Bethpage Black, NYC</span><span class="gmi">&#128101; 4 players</span></div>
-          <div class="gtags"><span class="tag ts">Casual</span><span class="tag ts">Intermediate</span><span class="tag ts">Coaching</span></div>
-        </div>
-        <div class="gr">
-          <div><div class="gprice">$65</div><div class="gpnote">per player</div></div>
-          <div class="gspots">2 spots left</div>
-          <div class="sbar"><div class="sfill" style="width:80%"></div></div>
-          <button class="btn bi bsm" onclick="openBook('Sunday Morning 9','65')">Book &#8594;</button>
-        </div>
-      </div>
-      <div class="gcard" data-city="bos" data-type="tournament" data-level="advanced">
-        <div>
-          <span class="tag ta" style="margin-bottom:8px;display:inline-flex">&#127942; Tournament</span>
-          <div class="gname">Boston Match Play Open</div>
-          <div class="ghost-row"><div class="ghav" style="background:#c8821a">JK</div><span class="ghn">James K.</span><span class="ghb">Pro &#183; 4.5 UTR</span></div>
-          <div class="gmeta"><span class="gmi">&#128197; July 26, 7:00am</span><span class="gmi">&#128205; TPC Boston</span><span class="gmi">&#128101; 16-player bracket</span></div>
-          <div class="gtags"><span class="tag ts">Match play</span><span class="tag ts">Competitive</span><span class="tag tg">Trophy</span></div>
-        </div>
-        <div class="gr">
-          <div><div class="gprice">$120</div><div class="gpnote">per player</div></div>
-          <div class="gspots">3 spots left</div>
-          <div class="sbar"><div class="sfill" style="width:85%"></div></div>
-          <button class="btn bi bsm" onclick="openBook('Boston Match Play Open','120')">Book &#8594;</button>
-        </div>
-      </div>
-      <div class="gcard" data-city="bos" data-type="coached" data-level="beginner">
-        <div>
-          <span class="tag tg" style="margin-bottom:8px;display:inline-flex">&#127891; Coached</span>
-          <div class="gname">Beginner&#39;s Golf Clinic</div>
-          <div class="ghost-row"><div class="ghav" style="background:#2a9e6a">MT</div><span class="ghn">Marcus T.</span><span class="ghb">D1 Athlete</span></div>
-          <div class="gmeta"><span class="gmi">&#128197; July 22, 9:00am</span><span class="gmi">&#128205; Charles River Golf</span><span class="gmi">&#128101; 6 players max</span></div>
-          <div class="gtags"><span class="tag ts">Coaching</span><span class="tag ts">Beginner</span><span class="tag ts">Range + 9 holes</span></div>
-        </div>
-        <div class="gr">
-          <div><div class="gprice">$45</div><div class="gpnote">per player</div></div>
-          <div class="gspots">4 spots left</div>
-          <div class="sbar"><div class="sfill" style="width:35%"></div></div>
-          <button class="btn bi bsm" onclick="openBook('Beginner Golf Clinic','45')">Book &#8594;</button>
-        </div>
-      </div>
-      <div class="gcard" data-city="dc" data-type="tournament" data-level="intermediate">
-        <div>
-          <span class="tag ta" style="margin-bottom:8px;display:inline-flex">&#127942; Tournament</span>
-          <div class="gname">D.C. Skins Game</div>
-          <div class="ghost-row"><div class="ghav" style="background:#7c5fa0">SR</div><span class="ghn">Sofia R.</span><span class="ghb">Stanford Golf D1</span></div>
-          <div class="gmeta"><span class="gmi">&#128197; August 2, 7:30am</span><span class="gmi">&#128205; Congressional CC</span><span class="gmi">&#128101; 12 players</span></div>
-          <div class="gtags"><span class="tag ts">Skins</span><span class="tag ts">Cash prizes</span><span class="tag tg">Premium venue</span></div>
-        </div>
-        <div class="gr">
-          <div><div class="gprice">$150</div><div class="gpnote">per player</div></div>
-          <div class="gspots">8 spots open</div>
-          <div class="sbar"><div class="sfill" style="width:25%"></div></div>
-          <button class="btn bi bsm" onclick="openBook('D.C. Skins Game','150')">Book &#8594;</button>
-        </div>
-      </div>
-      <div class="gcard" data-city="nyc" data-type="social" data-level="all">
-        <div>
-          <span class="tag tg" style="margin-bottom:8px;display:inline-flex">&#129309; Social play</span>
-          <div class="gname">Casual Evening 9 &#8212; Winged Foot</div>
-          <div class="ghost-row"><div class="ghav" style="background:#c8821a">JK</div><span class="ghn">James K.</span><span class="ghb">Pro &#183; 4.5 UTR</span></div>
-          <div class="gmeta"><span class="gmi">&#128197; July 24, 5:30pm</span><span class="gmi">&#128205; Winged Foot GC</span><span class="gmi">&#128101; 4 players</span></div>
-          <div class="gtags"><span class="tag ts">Casual</span><span class="tag ts">All levels</span><span class="tag ts">Post-round drinks</span></div>
-        </div>
-        <div class="gr">
-          <div><div class="gprice">$55</div><div class="gpnote">per player</div></div>
-          <div class="gspots">1 spot left</div>
-          <div class="sbar"><div class="sfill" style="width:95%"></div></div>
-          <button class="btn bi bsm" onclick="openBook('Casual Evening 9','55')">Book &#8594;</button>
-        </div>
+      <div class="loading-state">
+        <div class="spin"></div>
+        <p>Loading sessions…</p>
       </div>
     </div>
   </main>
 </div>
 
+<!-- Booking modal -->
 <div class="modal-bg" id="mbg" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal">
     <div class="mh" id="mname">Session</div>
     <div class="ms">Review your booking details before confirming.</div>
-    <div class="mrow"><span>Session price</span><span id="mprice" style="font-family:var(--mono)">&#8212;</span></div>
-    <div class="mrow"><span>Platform fee (10%)</span><span id="mfee" style="font-family:var(--mono)">&#8212;</span></div>
-    <div class="mrow"><span>Total</span><span id="mtotal" style="font-family:var(--mono);color:var(--green)">&#8212;</span></div>
+    <div class="mrow"><span>Session price</span><span id="mprice" style="font-family:var(--mono)">—</span></div>
+    <div class="mrow"><span>Platform fee (10%)</span><span id="mfee" style="font-family:var(--mono)">—</span></div>
+    <div class="mrow"><span>Total</span><span id="mtotal" style="font-family:var(--mono);color:var(--green)">—</span></div>
     <div class="mact">
-      <a href="onboarding.html" class="btn bg bfw">Confirm booking &#8594;</a>
+      <button class="btn bg bfw" id="confirm-btn" onclick="confirmBooking()">Confirm booking →</button>
       <button class="btn bo" onclick="document.getElementById('mbg').classList.remove('open')">Cancel</button>
     </div>
+    <div id="book-msg" style="display:none;margin-top:12px;font-size:12px;text-align:center;color:var(--green)"></div>
   </div>
 </div>
-
 
 <footer class="ft">
   <div class="fti">
@@ -300,36 +200,262 @@ body{background:var(--cream2)}
       <a href="shop.html">Shop</a>
       <a href="#">Privacy</a>
     </div>
-    <div class="fcopy">&#169; 2025 Lyfe, Inc.</div>
+    <div class="fcopy">© 2025 Lyfe, Inc.</div>
   </div>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/lyfe-core.js"></script>
 <script>
-function setChip(el,gid){document.querySelectorAll('#'+gid+' .chip').forEach(c=>c.classList.remove('act'));el.classList.add('act');filterGames();}
-function filterGames(){
-  const city=document.getElementById('cfilter').value;
-  const type=document.querySelector('#type-chips .chip.act')?.dataset.val||'all';
-  const level=document.querySelector('#level-chips .chip.act')?.dataset.val||'all';
-  let n=0;
-  document.querySelectorAll('.gcard').forEach(c=>{
-    const ok=(city==='all'||c.dataset.city===city)&&(type==='all'||c.dataset.type===type)&&(level==='all'||c.dataset.level===level||c.dataset.level==='all');
-    c.style.display=ok?'':'none';if(ok)n++;
-  });
-  document.getElementById('gcnt').textContent=n+' session'+(n!==1?'s':'')+' available';
+const SUPA_URL = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
+const { createClient } = supabase;
+const supa = createClient(SUPA_URL, SUPA_KEY);
+
+let allSessions = [];
+let currentBookingId = null;
+let currentBookingPrice = 0;
+
+// ── COLORS for host avatars
+const avatarColors = ['#2a9e6a','#7c5fa0','#c8821a','#2a7ac8','#c8402a','#2a9eb8'];
+function colorFor(str) {
+  let h = 0;
+  for (let i = 0; i < (str||'').length; i++) h = str.charCodeAt(i) + ((h << 5) - h);
+  return avatarColors[Math.abs(h) % avatarColors.length];
 }
-function openBook(name,price){
-  const p=parseInt(price),fee=Math.round(p*.1);
-  document.getElementById('mname').textContent=name;
-  document.getElementById('mprice').textContent='$'+p;
-  document.getElementById('mfee').textContent='$'+fee;
-  document.getElementById('mtotal').textContent='$'+(p+fee);
+
+// ── LOAD sessions from Supabase
+async function loadSessions() {
+  const { data, error } = await supa
+    .from('sessions')
+    .select('*, profiles(first_name, last_name, role)')
+    .eq('status', 'active')
+    .order('session_date', { ascending: true });
+
+  if (error) {
+    document.getElementById('ggrid').innerHTML = `<div class="empty-state"><p>Could not load sessions. Please try again.</p></div>`;
+    return;
+  }
+
+  allSessions = data || [];
+  renderCards();
+
+  // Show live badge — we're now subscribed to real-time
+  document.getElementById('live-badge').style.display = 'inline-flex';
+}
+
+// ── RENDER cards with current filters + sort
+function renderCards() {
+  const sport  = document.getElementById('sport-filter').value;
+  const type   = document.querySelector('#type-chips .chip.act')?.dataset.val || 'all';
+  const level  = document.querySelector('#level-chips .chip.act')?.dataset.val || 'all';
+  const sort   = document.getElementById('sort-select').value;
+
+  let filtered = allSessions.filter(s => {
+    const matchSport = sport === 'all' || (s.sport || '').toLowerCase() === sport.toLowerCase();
+    const matchType  = type  === 'all' || (s.session_type || '').toLowerCase() === type.toLowerCase();
+    const matchLevel = level === 'all' || (s.skill_level  || '').toLowerCase() === level.toLowerCase() || (s.skill_level || '').toLowerCase() === 'all levels';
+    return matchSport && matchType && matchLevel;
+  });
+
+  // Sort
+  if (sort === 'price_asc') filtered.sort((a,b) => (a.price||0) - (b.price||0));
+  else if (sort === 'spots') filtered.sort((a,b) => ((b.spots_total||0)-(b.spots_taken||0)) - ((a.spots_total||0)-(a.spots_taken||0)));
+  else filtered.sort((a,b) => new Date(a.session_date||'9999') - new Date(b.session_date||'9999'));
+
+  const cnt = document.getElementById('gcnt');
+  cnt.textContent = filtered.length + ' session' + (filtered.length !== 1 ? 's' : '') + ' available';
+
+  if (!filtered.length) {
+    document.getElementById('ggrid').innerHTML = `
+      <div class="empty-state">
+        <div style="font-size:36px;margin-bottom:12px">🏌️</div>
+        <p style="font-weight:500;color:var(--ink)">No sessions found</p>
+        <p>Try changing your filters, or check back soon.</p>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('ggrid').innerHTML = filtered.map(s => buildCard(s)).join('');
+}
+
+// ── BUILD a single card
+function buildCard(s) {
+  const spotsLeft  = (s.spots_total || 0) - (s.spots_taken || 0);
+  const spotsPct   = s.spots_total ? Math.round((s.spots_taken / s.spots_total) * 100) : 0;
+  const price      = parseFloat(s.price || 0);
+  const priceStr   = price === 0 ? 'Free' : '$' + price.toFixed(0);
+
+  const hostFirst  = s.profiles?.first_name || '';
+  const hostLast   = s.profiles?.last_name  || '';
+  const hostName   = hostFirst || hostLast ? `${hostFirst} ${hostLast}`.trim() : 'Host';
+  const initials   = (hostFirst[0]||'') + (hostLast[0]||'') || 'H';
+  const avatarBg   = colorFor(hostName);
+
+  const dateStr    = s.session_date
+    ? new Date(s.session_date + 'T00:00:00').toLocaleDateString('en-US', {month:'short', day:'numeric'})
+    : 'TBD';
+  const timeStr    = s.session_time ? formatTime(s.session_time) : '';
+
+  const sportEmoji = { Golf:'⛳', Tennis:'🎾', Basketball:'🏀', Soccer:'⚽', Volleyball:'🏐' }[s.sport] || '🏅';
+  const typeTag    = s.session_type ? `<span class="tag ts">${s.session_type}</span>` : '';
+  const levelTag   = s.skill_level  ? `<span class="tag ts">${s.skill_level}</span>`  : '';
+  const sportTag   = s.sport        ? `<span class="tag tg">${sportEmoji} ${s.sport}</span>` : '';
+
+  const spotsColor = spotsLeft <= 2 ? 'color:var(--amber)' : 'color:var(--green)';
+  const spotsText  = spotsLeft <= 0 ? 'Full' : spotsLeft + ' spot' + (spotsLeft !== 1 ? 's' : '') + ' left';
+
+  return `
+    <div class="gcard" id="card-${s.id}">
+      <div>
+        ${sportTag}
+        <div class="gname" style="margin-top:8px">${s.title || 'Untitled session'}</div>
+        <div class="ghost-row">
+          <div class="ghav" style="background:${avatarBg}">${initials.toUpperCase()}</div>
+          <span class="ghn">${hostName}</span>
+        </div>
+        <div class="gmeta">
+          ${dateStr ? `<span class="gmi">📅 ${dateStr}${timeStr ? ' · ' + timeStr : ''}</span>` : ''}
+          ${s.location ? `<span class="gmi">📍 ${s.location}</span>` : ''}
+          ${s.format   ? `<span class="gmi">👥 ${s.format}</span>`   : ''}
+        </div>
+        <div class="gtags">${typeTag}${levelTag}</div>
+        ${s.description ? `<p style="font-size:12px;color:var(--ink3);margin-top:10px;line-height:1.5">${s.description}</p>` : ''}
+      </div>
+      <div class="gr">
+        <div><div class="gprice">${priceStr}</div><div class="gpnote">per player</div></div>
+        <div class="gspots" style="${spotsColor}">${spotsText}</div>
+        <div class="sbar"><div class="sfill" style="width:${spotsPct}%"></div></div>
+        ${spotsLeft > 0
+          ? `<button class="btn bi bsm" onclick="openBook('${s.id}','${s.title?.replace(/'/g,"\\'")}',${price})">Book →</button>`
+          : `<button class="btn bo bsm" disabled style="opacity:.5;cursor:not-allowed">Full</button>`
+        }
+      </div>
+    </div>`;
+}
+
+function formatTime(t) {
+  if (!t) return '';
+  const [h, m] = t.split(':');
+  const hour = parseInt(h);
+  const ampm = hour >= 12 ? 'pm' : 'am';
+  return (hour % 12 || 12) + ':' + m + ' ' + ampm;
+}
+
+// ── FILTERS
+function setChip(el, gid) {
+  document.querySelectorAll('#' + gid + ' .chip').forEach(c => c.classList.remove('act'));
+  el.classList.add('act');
+  renderCards();
+}
+function applyFilters() { renderCards(); }
+
+// ── BOOKING MODAL
+function openBook(id, name, price) {
+  currentBookingId    = id;
+  currentBookingPrice = price;
+  const fee = Math.round(price * 0.1);
+  document.getElementById('mname').textContent  = name;
+  document.getElementById('mprice').textContent = price === 0 ? 'Free' : '$' + price;
+  document.getElementById('mfee').textContent   = '$' + fee;
+  document.getElementById('mtotal').textContent = '$' + (price + fee);
+  document.getElementById('book-msg').style.display = 'none';
   document.getElementById('mbg').classList.add('open');
 }
 
+async function confirmBooking() {
+  const btn = document.getElementById('confirm-btn');
+  const msg = document.getElementById('book-msg');
 
-const _nav=document.getElementById('nav');
-if(_nav) window.addEventListener('scroll',()=>_nav.classList.toggle('sc',window.scrollY>30));
-const _io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('on');_io.unobserve(x.target);}}),{threshold:.07});
-document.querySelectorAll('.rv').forEach(el=>_io.observe(el));
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="/lyfe-core.js"></script>
-</body></html>
+  // Check if logged in
+  const { data: { session } } = await supa.auth.getSession();
+  if (!session) {
+    window.location.href = 'onboarding.html';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Booking…';
+
+  const { error } = await supa.from('bookings').insert({
+    session_id:  currentBookingId,
+    player_id:   session.user.id,
+    paid_amount: currentBookingPrice,
+    status:      'confirmed'
+  });
+
+  if (error) {
+    btn.disabled = false;
+    btn.textContent = 'Confirm booking →';
+    if (error.message.includes('unique')) {
+      msg.textContent = 'You already booked this session!';
+      msg.style.color = 'var(--amber)';
+    } else {
+      msg.textContent = 'Error: ' + error.message;
+      msg.style.color = '#c0392b';
+    }
+    msg.style.display = 'block';
+    return;
+  }
+
+  // Increment spot counter
+  await supa.rpc('increment_spots', { sid: currentBookingId });
+
+  btn.textContent = '✓ Booked!';
+  msg.textContent = 'You\'re in! Check your dashboard for details.';
+  msg.style.color = 'var(--green)';
+  msg.style.display = 'block';
+
+  // Refresh sessions after 1.5s and close modal
+  setTimeout(async () => {
+    document.getElementById('mbg').classList.remove('open');
+    btn.disabled = false;
+    btn.textContent = 'Confirm booking →';
+    await loadSessions();
+  }, 1500);
+}
+
+// ── REAL-TIME — new session appears instantly without refresh
+function subscribeRealtime() {
+  supa.channel('games-live')
+    .on('postgres_changes', {
+      event:  'INSERT',
+      schema: 'public',
+      table:  'sessions',
+      filter: 'status=eq.active'
+    }, payload => {
+      // Add new session to top of list and re-render
+      allSessions.unshift(payload.new);
+      renderCards();
+      // Flash the new card
+      setTimeout(() => {
+        const card = document.getElementById('card-' + payload.new.id);
+        if (card) {
+          card.classList.add('new-session');
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+    })
+    .on('postgres_changes', {
+      event:  'UPDATE',
+      schema: 'public',
+      table:  'sessions'
+    }, payload => {
+      // Update spots in real-time when someone books
+      const idx = allSessions.findIndex(s => s.id === payload.new.id);
+      if (idx !== -1) {
+        allSessions[idx] = { ...allSessions[idx], ...payload.new };
+        renderCards();
+      }
+    })
+    .subscribe();
+}
+
+// ── BOOT
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadSessions();
+  subscribeRealtime();
+});
+</script>
+</body>
+</html>
