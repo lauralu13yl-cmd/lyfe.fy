@@ -20,14 +20,12 @@ input,select,textarea{font-family:var(--sans)}
 .bg{background:var(--gm)!important;color:#fff;border-color:var(--gm)}.bg:hover{background:var(--green)!important}
 .bo{background:transparent!important;color:var(--ink2);border-color:var(--cream3)}.bo:hover{background:var(--cream2)!important}
 .bfw{width:100%;justify-content:center}
-/* ── LOADING SCREEN ── */
 #loading-screen{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:999;transition:opacity .4s ease}
 #loading-screen.hide{opacity:0;pointer-events:none}
 .ls-logo{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--cream);text-align:center}
 .ls-logo span{color:var(--gm)}
 .ls-spin{width:20px;height:20px;border:2px solid rgba(255,255,255,.15);border-top-color:var(--gm);border-radius:50%;animation:spin .7s linear infinite;margin:16px auto 0}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* ── SIDEBAR ── */
 .sb{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:var(--ink);display:flex;flex-direction:column;z-index:100}
 .sblogo{padding:20px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
 .sblogo a{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--cream)}
@@ -48,29 +46,23 @@ input,select,textarea{font-family:var(--sans)}
 .sbl{display:flex;align-items:center;gap:9px;padding:9px 22px;font-size:13px;color:rgba(245,242,235,.52);transition:all .2s;cursor:pointer;border-left:2px solid transparent;width:100%;text-align:left;background:none;border-top:none;border-right:none;border-bottom:none}
 .sbl:hover{color:var(--cream);background:rgba(255,255,255,.04)}
 .sbl.act{color:var(--cream);background:rgba(255,255,255,.06);border-left-color:var(--gm)}
-/* host-only nav items */
 .host-only{display:none}
-/* pending-host nav item */
 .pending-only{display:none}
-/* ── MAIN ── */
 .main{margin-left:var(--sb);padding:28px 32px}
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
 .greet{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink)}
 .greet span{color:var(--ink3);font-family:var(--sans);font-size:13px;font-weight:300;display:block;margin-top:2px}
 .tact{display:flex;gap:10px}
-/* stat cards */
 .statcards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
 .sc{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rlg);padding:16px 16px 12px}
 .sclbl{font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
 .scval{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--ink);line-height:1;margin-bottom:2px}
 .scsub{font-size:11px;color:var(--ink3)}
 .scg .scval{color:var(--green)}.sca .scval{color:var(--amber)}
-/* host stat cards */
 .host-stat{background:var(--ink);border-color:var(--ink)}
 .host-stat .sclbl{color:rgba(245,242,235,.4)}
 .host-stat .scval{color:var(--cream)}
 .host-stat .scsub{color:#6ecfa0}
-/* content */
 .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .cw{grid-column:span 2}
 .panel{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rlg);padding:18px 20px}
@@ -85,7 +77,6 @@ input,select,textarea{font-family:var(--sans)}
 .rscore{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink);min-width:30px;text-align:right}
 .rdel{font-size:11px;font-weight:500;padding:2px 6px;border-radius:20px}
 .du{background:rgba(26,122,82,.1);color:var(--green)}.do{background:rgba(200,130,26,.1);color:var(--amber)}
-/* challenges */
 .crow{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--cream3)}
 .crow:last-of-type{border-bottom:none}
 .cico{width:32px;height:32px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
@@ -95,16 +86,13 @@ input,select,textarea{font-family:var(--sans)}
 .cbar{flex:1;height:4px;background:var(--cream2);border-radius:2px;overflow:hidden}
 .cf{height:100%;border-radius:2px}
 .cxp{font-size:11px;color:var(--green);font-family:var(--mono);white-space:nowrap}
-/* badges */
 .badges{display:flex;flex-wrap:wrap;gap:7px}
 .cbadge{font-size:12px;padding:4px 11px;border-radius:20px}
 .cb-on{background:rgba(26,122,82,.1);color:var(--green);font-weight:500}
 .cb-off{background:var(--cream2);color:var(--ink3)}
-/* trip */
 .tripm{background:var(--ink);border-radius:var(--rsm);padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
 .tmn{font-family:var(--serif);font-size:13px;font-weight:700;color:var(--cream);margin-bottom:2px}
 .tms{font-size:11px;color:rgba(245,242,235,.4)}
-/* host earnings */
 .earn-card{background:linear-gradient(135deg,#0e3d28 0%,#1a5c3a 100%);border-radius:var(--rlg);padding:22px;color:var(--cream);margin-bottom:14px}
 .earn-big{font-family:var(--serif);font-size:36px;font-weight:900;color:#a8dfc4;line-height:1;margin-bottom:4px}
 .earn-lbl{font-size:11px;color:rgba(245,242,235,.5);text-transform:uppercase;letter-spacing:.06em}
@@ -112,23 +100,18 @@ input,select,textarea{font-family:var(--sans)}
 .earn-row:last-of-type{border-bottom:none}
 .earn-name{color:rgba(245,242,235,.7)}
 .earn-val{font-family:var(--mono);font-weight:500;color:var(--cream)}
-/* views */
 .view{display:none}.view.act{display:block}
-/* log form */
 .fgrp2{margin-bottom:14px}
 .flbl{display:block;font-size:11px;font-weight:500;color:var(--ink3);margin-bottom:5px;letter-spacing:.04em;text-transform:uppercase}
 .finp{width:100%;padding:9px 12px;border:1px solid var(--cream3);border-radius:var(--rsm);background:var(--w);color:var(--ink);font-size:13px;outline:none;font-family:var(--sans)}
 .finp:focus{border-color:var(--green)}
 select.finp{cursor:pointer}
-/* empty */
 .empty{text-align:center;padding:28px 16px;color:var(--ink3)}
 .empty p{font-size:13px}
-/* pending banner */
 .pending-banner{background:var(--al);border:1px solid rgba(200,130,26,.2);border-radius:var(--rlg);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
 .pb-icon{font-size:24px;flex-shrink:0}
 .pb-title{font-size:14px;font-weight:500;color:var(--amber);margin-bottom:3px}
 .pb-sub{font-size:12px;color:var(--ink3)}
-/* notif */
 .nitem{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--cream3)}
 .nitem:last-of-type{border-bottom:none}
 .ndot{width:6px;height:6px;border-radius:50%;margin-top:5px;flex-shrink:0}
@@ -138,7 +121,6 @@ select.finp{cursor:pointer}
 </head>
 <body>
 
-<!-- LOADING SCREEN -->
 <div id="loading-screen">
   <div>
     <div class="ls-logo">Lyfe<span>.</span>fy</div>
@@ -146,7 +128,6 @@ select.finp{cursor:pointer}
   </div>
 </div>
 
-<!-- SIDEBAR -->
 <div class="sb">
   <div class="sblogo"><a href="index.html"><img src="logo-white.png" alt="Lyfe.fy" style="height:32px;width:auto;display:block"></a></div>
   <div class="sbuser">
@@ -161,33 +142,22 @@ select.finp{cursor:pointer}
     <div class="xplbl"><span id="xp-cur">0 XP</span><span id="xp-next">500 to next</span></div>
   </div>
   <nav class="sbnav">
-    <!-- All users -->
     <button class="sbl act" onclick="sv('home')">&#127968; Home</button>
     <button class="sbl" onclick="sv('logbook')">&#128202; Logbook</button>
     <button class="sbl" onclick="window.location.href='games.html'">&#127944; Find a game</button>
-
-    <!-- Competitive (all users) -->
     <span class="nslbl">Compete</span>
     <button class="sbl" onclick="sv('challenges')">&#127919; Challenges</button>
     <button class="sbl" onclick="sv('rivals')">&#9876;&#65039; Rivals</button>
     <button class="sbl" onclick="sv('tournaments')">&#127942; Tournaments</button>
-
-    <!-- Premium (all users) -->
     <span class="nslbl">Premium</span>
     <button class="sbl" onclick="sv('trips')">&#9992;&#65039; Lyfe Trips</button>
     <button class="sbl" onclick="window.location.href='index.html#pass'">&#11088; Lyfe Pass</button>
-
-    <!-- Host only -->
     <span class="nslbl host-only" id="host-nav-label">Host</span>
     <button class="sbl host-only" onclick="sv('host-home')">&#127881; Host Home</button>
     <button class="sbl host-only" onclick="sv('host-sessions')">&#128197; My Sessions</button>
     <button class="sbl host-only" onclick="sv('host-earnings')">&#128200; Earnings</button>
-
-    <!-- Pending host -->
     <span class="nslbl pending-only">Host Application</span>
     <button class="sbl pending-only" onclick="sv('pending-status')">&#9203; Application Status</button>
-
-    <!-- Not yet applied -->
     <span class="nslbl" id="become-host-label">Host</span>
     <button class="sbl" id="become-host-btn" onclick="window.location.href='hostapplication.html'">&#127891; Become a host</button>
     <button class="sbl" onclick="window.location.href='shop.html'">&#128722; Shop</button>
@@ -197,10 +167,8 @@ select.finp{cursor:pointer}
   </div>
 </div>
 
-<!-- MAIN -->
 <main class="main">
 
-  <!-- ── HOME VIEW (Member) ── -->
   <div class="view act" id="v-home">
     <div class="topbar">
       <div class="greet" id="home-greet">Good morning <span>Here's your golf life today</span></div>
@@ -209,8 +177,6 @@ select.finp{cursor:pointer}
         <button class="btn bi" onclick="showLogForm()">Log a round +</button>
       </div>
     </div>
-
-    <!-- Pending host banner (shown only for pending_host role) -->
     <div class="pending-banner" id="pending-banner" style="display:none">
       <div class="pb-icon">&#9203;</div>
       <div>
@@ -218,22 +184,17 @@ select.finp{cursor:pointer}
         <div class="pb-sub">Your host application is being reviewed by our team. We'll email you within 24–48 hours.</div>
       </div>
     </div>
-
     <div class="statcards" id="home-stats">
       <div class="sc scg"><div class="sclbl">Handicap</div><div class="scval" id="stat-hcp">—</div><div class="scsub" id="stat-hcp-sub">Not set yet</div></div>
       <div class="sc"><div class="sclbl">Rounds logged</div><div class="scval" id="stat-rounds">0</div><div class="scsub">This season</div></div>
       <div class="sc sca"><div class="sclbl">XP earned</div><div class="scval" id="stat-xp">0</div><div class="scsub" id="stat-rank">Bogey tier</div></div>
       <div class="sc"><div class="sclbl">City</div><div class="scval" id="stat-city" style="font-size:16px;margin-top:4px">—</div><div class="scsub" id="stat-intent">—</div></div>
     </div>
-
     <div class="cgrid">
-      <!-- Profile summary -->
       <div class="panel">
         <div class="ph"><span class="pt">Your match profile</span><button class="pl" onclick="sv('profile')">Edit</button></div>
         <div id="profile-summary"><div class="empty"><p>Complete your profile to get matched.</p></div></div>
       </div>
-
-      <!-- Challenges -->
       <div class="panel">
         <div class="ph"><span class="pt">This week's challenges</span><button class="pl" onclick="sv('challenges')">All →</button></div>
         <div class="crow"><div class="cico cg">&#127919;</div><div style="flex:1"><div class="ct">Break 90 this week</div><div class="cprog"><div class="cbar"><div class="cf" style="width:65%;background:var(--gm)"></div></div><span class="cxp">+150 XP</span></div></div></div>
@@ -241,8 +202,6 @@ select.finp{cursor:pointer}
         <div class="crow"><div class="cico cp">&#9876;&#65039;</div><div style="flex:1"><div class="ct">Beat your rival</div><div class="cprog"><div class="cbar"><div class="cf" style="width:40%;background:#b49cd4"></div></div><span class="cxp">+300 XP</span></div></div></div>
         <div class="crow"><div class="cico cr">&#128293;</div><div style="flex:1"><div class="ct">5-round month streak</div><div class="cprog"><div class="cbar"><div class="cf" style="width:20%;background:#e89070"></div></div><span class="cxp">+500 XP</span></div></div></div>
       </div>
-
-      <!-- Recent activity -->
       <div class="panel cw">
         <div class="ph"><span class="pt">Recent activity</span></div>
         <div id="home-activity">
@@ -252,13 +211,10 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
-  <!-- ── HOST HOME VIEW ── -->
   <div class="view" id="v-host-home">
     <div class="topbar">
       <div class="greet" id="host-greet">Host Dashboard <span>Your sessions and earnings at a glance</span></div>
-      <div class="tact">
-        <button class="btn bi" onclick="sv('host-sessions')">+ Create session</button>
-      </div>
+      <div class="tact"><button class="btn bi" onclick="sv('host-sessions')">+ Create session</button></div>
     </div>
     <div class="statcards">
       <div class="sc host-stat"><div class="sclbl">This month</div><div class="scval" id="h-earnings">$0</div><div class="scsub">Revenue earned</div></div>
@@ -278,7 +234,6 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
- <!-- ── HOST SESSIONS VIEW ── -->
   <div class="view" id="v-host-sessions">
     <div class="topbar"><div class="greet">My Sessions <span>Sessions you've created</span></div></div>
     <div class="cgrid">
@@ -334,7 +289,6 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
-  <!-- ── HOST EARNINGS VIEW ── -->
   <div class="view" id="v-host-earnings">
     <div class="topbar"><div class="greet">Earnings <span>Your income breakdown</span></div></div>
     <div class="cgrid">
@@ -359,7 +313,6 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
-  <!-- ── PENDING STATUS VIEW ── -->
   <div class="view" id="v-pending-status">
     <div class="topbar"><div class="greet">Host Application <span>Your application status</span></div></div>
     <div class="panel" style="max-width:560px">
@@ -377,7 +330,6 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
-  <!-- ── LOGBOOK VIEW ── -->
   <div class="view" id="v-logbook">
     <div class="topbar">
       <div class="greet">Logbook <span>Your full round history</span></div>
@@ -411,7 +363,6 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
-  <!-- ── CHALLENGES ── -->
   <div class="view" id="v-challenges">
     <div class="topbar"><div class="greet">Challenges <span>Weekly, monthly, and seasonal missions</span></div></div>
     <div class="panel">
@@ -423,13 +374,11 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
-  <!-- ── RIVALS ── -->
   <div class="view" id="v-rivals">
     <div class="topbar"><div class="greet">Rivals <span>Season head-to-head records</span></div><div class="tact"><button class="btn bi">+ Add rival</button></div></div>
     <div class="panel"><div class="empty"><p>Add rivals to track your head-to-head scores.</p><p style="font-size:12px;color:var(--ink3);margin-top:6px">Once you add rivals, their scores on every shared course will appear here.</p></div></div>
   </div>
 
-  <!-- ── TOURNAMENTS ── -->
   <div class="view" id="v-tournaments">
     <div class="topbar"><div class="greet">Tournaments <span>Monthly city events</span></div><div class="tact"><a href="games.html" class="btn bi">Browse all →</a></div></div>
     <div class="panel">
@@ -440,7 +389,6 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
-  <!-- ── TRIPS ── -->
   <div class="view" id="v-trips">
     <div class="topbar"><div class="greet">Lyfe Trips <span>Drop-style bucket list golf travel</span></div></div>
     <div class="cgrid">
@@ -456,7 +404,6 @@ select.finp{cursor:pointer}
     </div>
   </div>
 
-  <!-- ── PROFILE VIEW ── -->
   <div class="view" id="v-profile">
     <div class="topbar"><div class="greet">My Profile <span>Your match profile and account settings</span></div></div>
     <div class="cgrid">
@@ -477,26 +424,17 @@ select.finp{cursor:pointer}
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/lyfe-core.js"></script>
-</body>
-/* ════════════════════════════════════════
-   CONFIG
-════════════════════════════════════════ */
+<script src="/lyfe-core.js"></script>
+<script>
 const SUPA_URL = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
 const { createClient } = supabase;
 const db = createClient(SUPA_URL, SUPA_KEY);
 
-/* ════════════════════════════════════════
-   STATE
-════════════════════════════════════════ */
-let U = null;   // auth user
-let P = null;   // profile row
+let U = null;
+let P = null;
 let rounds = [];
 
-/* ════════════════════════════════════════
-   HELPERS
-════════════════════════════════════════ */
 function $(id) { return document.getElementById(id); }
 function set(id, val) { const el = $(id); if (el) el.textContent = val; }
 function html(id, val) { const el = $(id); if (el) el.innerHTML = val; }
@@ -519,28 +457,15 @@ function xpRank(xp) {
   return 'Bogey';
 }
 
-/* ════════════════════════════════════════
-   BOOT — wait for Supabase auth to initialize
-   Uses onAuthStateChange so we don't redirect
-   before the session token is restored from storage
-════════════════════════════════════════ */
 (async function boot() {
-  // Give Supabase a chance to restore session from localStorage
-  // getSession() alone can return null on first render before tokens load
   const { data: { session: initialSession } } = await db.auth.getSession();
-
   if (initialSession) {
     await loadDashboard(initialSession);
     return;
   }
-
-  // Session not immediately available — wait for auth state change
-  // (handles cases where token exists in storage but hasn't loaded yet)
   const timeout = setTimeout(() => {
-    // After 3s with no session, redirect to login
     window.location.href = 'onboarding.html';
-  }, 3000);
-
+  }, 1500);
   db.auth.onAuthStateChange(async (event, session) => {
     if (session) {
       clearTimeout(timeout);
@@ -555,27 +480,15 @@ function xpRank(xp) {
 async function loadDashboard(session) {
   U = session.user;
 
-  // Load profile
-  const { data: profile } = await db
-    .from('profiles')
-    .select('*')
-    .eq('id', U.id)
-    .single();
-  P = profile;
+  // Run profile + rounds in parallel — twice as fast
+  const [profileRes, roundsRes] = await Promise.all([
+    db.from('profiles').select('*').eq('id', U.id).single(),
+    db.from('rounds').select('*').eq('user_id', U.id).order('played_at', { ascending: false }).catch(() => ({ data: [] }))
+  ]);
 
-  // Load rounds (gracefully handle if table doesn't exist yet)
-  try {
-    const { data: r } = await db
-      .from('rounds')
-      .select('*')
-      .eq('user_id', U.id)
-      .order('played_at', { ascending: false });
-    rounds = r || [];
-  } catch(e) {
-    rounds = [];
-  }
+  P = profileRes.data;
+  rounds = roundsRes.data || [];
 
-  // Render everything
   const role = P?.role || 'member';
   applyRole(role);
   renderSidebar(role);
@@ -583,22 +496,15 @@ async function loadDashboard(session) {
   renderProfile();
   if (role === 'host') loadHostData();
 
-  // Hide loading screen — small delay so content is painted first
+  // Hide loading screen immediately
+  $('loading-screen').classList.add('hide');
   setTimeout(() => {
-    $('loading-screen').classList.add('hide');
-    // Remove from DOM after transition completes so it can't block clicks
-    setTimeout(() => {
-      const ls = $('loading-screen');
-      if (ls) ls.style.display = 'none';
-    }, 500);
-  }, 100);
+    const ls = $('loading-screen');
+    if (ls) ls.style.display = 'none';
+  }, 400);
 }
 
-/* ════════════════════════════════════════
-   ROLE — show/hide nav + views
-════════════════════════════════════════ */
 function applyRole(role) {
-  // Sidebar nav sections
   document.querySelectorAll('.host-only').forEach(el => {
     el.style.display = role === 'host' ? 'flex' : 'none';
   });
@@ -606,28 +512,22 @@ function applyRole(role) {
   document.querySelectorAll('.pending-only').forEach(el => {
     el.style.display = role === 'pending_host' ? 'flex' : 'none';
   });
-  // "Become a host" — hide for host and pending_host
   const becomeBtn = $('become-host-btn');
   const becomeLbl = $('become-host-label');
   if (becomeBtn) becomeBtn.style.display = (role === 'host' || role === 'pending_host') ? 'none' : 'flex';
   if (becomeLbl) becomeLbl.style.display = (role === 'host' || role === 'pending_host') ? 'none' : 'block';
 }
 
-/* ════════════════════════════════════════
-   SIDEBAR
-════════════════════════════════════════ */
 function renderSidebar(role) {
   const name     = P?.full_name || U?.user_metadata?.full_name || U?.email?.split('@')[0] || 'Player';
   const initials = name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
   const xp       = rounds.length * 50;
   const xpPct    = Math.min((xp / 500) * 100, 100);
-
   set('sb-av',   initials);
   set('sb-name', name);
   set('xp-cur',  xp + ' XP');
   set('xp-next', Math.max(0, 500 - xp) + ' to next');
   $('xp-fill').style.width = xpPct + '%';
-
   const roleBadge = $('sb-role');
   if (role === 'host') {
     roleBadge.textContent = 'Host'; roleBadge.className = 'urole role-host';
@@ -638,50 +538,22 @@ function renderSidebar(role) {
   }
 }
 
-/* ════════════════════════════════════════
-   HOME — adapts to member vs host
-════════════════════════════════════════ */
 function renderHome(role) {
   const name  = P?.full_name || U?.user_metadata?.full_name || U?.email?.split('@')[0] || 'there';
   const first = name.split(' ')[0];
   const hour  = new Date().getHours();
   const tod   = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
   const xp    = rounds.length * 50;
-
   $('home-greet').innerHTML = `Good ${tod}, ${first} <span>Here's your golf life today</span>`;
-
-  // Pending banner
-  if (role === 'pending_host') {
-    $('pending-banner').style.display = 'flex';
-  }
-
+  if (role === 'pending_host') $('pending-banner').style.display = 'flex';
   const hcpMap = { Beginner: '25+', Intermediate: '10–20', Advanced: '< 10', Competitive: 'Scratch' };
-
   if (role === 'host') {
-    // Host sees earnings-focused stats
     $('home-stats').innerHTML = `
-      <div class="sc host-stat">
-        <div class="sclbl">Host since</div>
-        <div class="scval" style="font-size:15px;margin-top:4px">${P?.created_at ? new Date(P.created_at).toLocaleDateString('en-US',{month:'short',year:'numeric'}) : '—'}</div>
-        <div class="scsub">Active host</div>
-      </div>
-      <div class="sc">
-        <div class="sclbl">Sessions hosted</div>
-        <div class="scval" id="stat-sessions-hosted">0</div>
-        <div class="scsub">Loading…</div>
-      </div>
-      <div class="sc scg">
-        <div class="sclbl">Earnings (70%)</div>
-        <div class="scval" id="stat-earnings-home">$0</div>
-        <div class="scsub">This month</div>
-      </div>
-      <div class="sc">
-        <div class="sclbl">City</div>
-        <div class="scval" style="font-size:15px;margin-top:4px">${P?.city||'—'}</div>
-        <div class="scsub">${P?.skill_level||'—'}</div>
-      </div>`;
+      <div class="sc host-stat"><div class="sclbl">Host since</div><div class="scval" style="font-size:15px;margin-top:4px">${P?.created_at ? new Date(P.created_at).toLocaleDateString('en-US',{month:'short',year:'numeric'}) : '—'}</div><div class="scsub">Active host</div></div>
+      <div class="sc"><div class="sclbl">Sessions hosted</div><div class="scval" id="stat-sessions-hosted">0</div><div class="scsub">Loading…</div></div>
+      <div class="sc scg"><div class="sclbl">Earnings (70%)</div><div class="scval" id="stat-earnings-home">$0</div><div class="scsub">This month</div></div>
+      <div class="sc"><div class="sclbl">City</div><div class="scval" style="font-size:15px;margin-top:4px">${P?.city||'—'}</div><div class="scsub">${P?.skill_level||'—'}</div></div>`;
   } else {
-    // Member sees golf stats
     set('stat-hcp',     hcpMap[P?.skill_level] || '—');
     set('stat-hcp-sub', P?.skill_level || 'Set in profile');
     set('stat-rounds',  rounds.length);
@@ -690,20 +562,14 @@ function renderHome(role) {
     set('stat-city',    P?.city || '—');
     set('stat-intent',  P?.intent ? cap(P.intent) : '—');
   }
-
   renderProfileSummary();
 }
 
-/* ════════════════════════════════════════
-   PROFILE SUMMARY (home panel)
-════════════════════════════════════════ */
 function renderProfileSummary() {
   const el = $('profile-summary');
   if (!el || !P) return;
-
   const energy   = Array.isArray(P.energy)   ? P.energy   : [];
   const schedule = Array.isArray(P.schedule) ? P.schedule : [];
-
   const rows = [
     P.industry    && ['Industry', P.industry],
     P.golf_style  && ['Style',    P.golf_style],
@@ -711,44 +577,24 @@ function renderProfileSummary() {
     P.city        && ['City',     P.city],
     P.intent      && ['Goal',     cap(P.intent)],
   ].filter(Boolean);
-
   if (!rows.length && !energy.length) {
     el.innerHTML = `<div class="empty"><p>Profile not complete. <a href="onboarding.html" style="color:var(--green);font-weight:500">Complete onboarding →</a></p></div>`;
     return;
   }
-
   el.innerHTML =
     rows.map(([l, v]) => `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--cream3);font-size:13px"><span style="color:var(--ink3)">${l}</span><span style="font-weight:500">${v}</span></div>`).join('') +
     (energy.length   ? `<div style="padding-top:10px">${energy.map(e => pill(e, true)).join('')}</div>` : '') +
     (schedule.length ? `<div style="padding-top:8px">${schedule.map(s => pill(s, false)).join('')}</div>` : '');
 }
 
-/* ════════════════════════════════════════
-   FULL PROFILE VIEW
-════════════════════════════════════════ */
 function renderProfile() {
   const name   = P?.full_name || U?.user_metadata?.full_name || '—';
   const email  = U?.email || P?.email || '—';
-  const joined = P?.created_at
-    ? new Date(P.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})
-    : '—';
-
-  html('account-info', `
-    <div style="display:flex;flex-direction:column;gap:2px">
-      ${field('Name',   name)}
-      ${field('Email',  email)}
-      ${field('Role',   cap(P?.role || 'member'))}
-      ${field('Joined', joined)}
-    </div>`);
-
-  if (!P) {
-    html('full-profile-display', `<div class="empty"><p>No profile data. <a href="onboarding.html" style="color:var(--green);font-weight:500">Complete onboarding →</a></p></div>`);
-    return;
-  }
-
+  const joined = P?.created_at ? new Date(P.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}) : '—';
+  html('account-info', `<div style="display:flex;flex-direction:column;gap:2px">${field('Name',name)}${field('Email',email)}${field('Role',cap(P?.role||'member'))}${field('Joined',joined)}</div>`);
+  if (!P) { html('full-profile-display', `<div class="empty"><p>No profile data. <a href="onboarding.html" style="color:var(--green);font-weight:500">Complete onboarding →</a></p></div>`); return; }
   const energy   = Array.isArray(P.energy)   ? P.energy   : [];
   const schedule = Array.isArray(P.schedule) ? P.schedule : [];
-
   const content =
     field('Intent',     P.intent      ? cap(P.intent)  : null) +
     field('Gender',     P.gender      ? cap(P.gender)  : null) +
@@ -759,15 +605,9 @@ function renderProfile() {
     field('Travel',     P.willing_to_travel ? 'Yes — willing to travel' : P.willing_to_travel === false ? 'Prefers local' : null) +
     (energy.length   ? `<div style="padding:10px 0;border-bottom:1px solid var(--cream3)"><div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px">Energy</div>${energy.map(e => pill(e, true)).join('')}</div>` : '') +
     (schedule.length ? `<div style="padding:10px 0"><div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px">Schedule</div>${schedule.map(s => pill(s, false)).join('')}</div>` : '');
-
-  html('full-profile-display',
-    content ||
-    `<div class="empty"><p>Profile incomplete. <a href="onboarding.html" style="color:var(--green);font-weight:500">Complete onboarding →</a></p></div>`);
+  html('full-profile-display', content || `<div class="empty"><p>Profile incomplete. <a href="onboarding.html" style="color:var(--green);font-weight:500">Complete onboarding →</a></p></div>`);
 }
 
-/* ════════════════════════════════════════
-   LOGBOOK — rounds from Supabase
-════════════════════════════════════════ */
 async function loadRounds() {
   const { data } = await db.from('rounds').select('*').eq('user_id', U.id).order('played_at', { ascending: false });
   rounds = data || [];
@@ -778,24 +618,12 @@ async function loadRounds() {
 
 function renderLogbook() {
   set('lb-hcp', rounds.length ? 'Best: ' + Math.min(...rounds.map(r => r.score)) : 'HCP —');
-
-  if (!rounds.length) {
-    html('logbook-rounds', '<div class="empty"><p>No rounds yet. Log your first round above!</p></div>');
-    return;
-  }
-
+  if (!rounds.length) { html('logbook-rounds', '<div class="empty"><p>No rounds yet. Log your first round above!</p></div>'); return; }
   html('logbook-rounds', rounds.map(r => {
     const date = r.played_at ? new Date(r.played_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
     const diff = r.score - 72;
     const cls  = diff <= 0 ? 'du' : 'do';
-    return `<div class="row">
-      <div class="rinfo">
-        <div class="rname">${r.course || 'Unknown course'}</div>
-        <div class="rdate">${date}${r.notes ? ' · ' + r.notes : ''}</div>
-      </div>
-      <span class="rscore">${r.score}</span>
-      <span class="rdel ${cls}">${diff > 0 ? '+' : ''}${diff}</span>
-    </div>`;
+    return `<div class="row"><div class="rinfo"><div class="rname">${r.course || 'Unknown course'}</div><div class="rdate">${date}${r.notes ? ' · ' + r.notes : ''}</div></div><span class="rscore">${r.score}</span><span class="rdel ${cls}">${diff > 0 ? '+' : ''}${diff}</span></div>`;
   }).join(''));
 }
 
@@ -805,135 +633,73 @@ async function logRound() {
   const date   = $('log-date').value;
   const notes  = $('log-notes').value.trim();
   const msg    = $('log-msg');
-
-  if (!course)                      { showMsg(msg, 'Please enter a course name.', 'red'); return; }
+  if (!course)                           { showMsg(msg, 'Please enter a course name.', 'red'); return; }
   if (!score || score < 50 || score > 200) { showMsg(msg, 'Enter a valid score (50–200).', 'red'); return; }
-
   const btn = document.querySelector('#logform .btn.bg');
   btn.disabled = true; btn.textContent = 'Saving…';
-
   const { error } = await db.from('rounds').insert({
-    user_id:   U.id,
-    course,
-    score,
+    user_id: U.id, course, score,
     played_at: date ? new Date(date).toISOString() : new Date().toISOString(),
-    notes:     notes || null
+    notes: notes || null
   });
-
   btn.disabled = false; btn.textContent = 'Log round →';
-
-  if (error) {
-    // rounds table might not exist — create it first
-    if (error.message.includes('relation') || error.message.includes('exist')) {
-      showMsg(msg, 'Run the rounds table SQL first (see setup.sql).', 'red');
-    } else {
-      showMsg(msg, 'Error: ' + error.message, 'red');
-    }
-    return;
-  }
-
+  if (error) { showMsg(msg, 'Error: ' + error.message, 'red'); return; }
   showMsg(msg, '✓ Round logged! +50 XP earned.', 'green');
-  $('log-course').value = '';
-  $('log-score').value  = '';
-  $('log-notes').value  = '';
+  $('log-course').value = ''; $('log-score').value = ''; $('log-notes').value = '';
   await loadRounds();
 }
 
-/* ════════════════════════════════════════
-   HOST DATA — only loads for role=host
-════════════════════════════════════════ */
 async function loadHostData() {
   const { data: sessions } = await db.from('sessions').select('*').eq('host_id', U.id);
   const mySessions = sessions || [];
-
-  // Get bookings for my sessions
   let myBookings = [];
   if (mySessions.length) {
     const ids = mySessions.map(s => s.id);
     const { data: bookings } = await db.from('bookings').select('*').in('session_id', ids);
     myBookings = bookings || [];
   }
-
-  const totalRaw  = myBookings.reduce((sum, b) => sum + (parseFloat(b.amount_paid) || 0), 0);
-  const earnings  = totalRaw * 0.7; // 70% to host
-  const earnStr   = '$' + earnings.toFixed(2);
-  const sesCount  = mySessions.length;
-  const avg       = sesCount > 0 ? '$' + (earnings / sesCount).toFixed(0) : '$0';
-  const uniquePl  = new Set(myBookings.map(b => b.player_id)).size;
-
-  // Home stat cards (host version)
+  const totalRaw = myBookings.reduce((sum, b) => sum + (parseFloat(b.amount_paid) || 0), 0);
+  const earnings = totalRaw * 0.7;
+  const earnStr  = '$' + earnings.toFixed(2);
+  const sesCount = mySessions.length;
+  const avg      = sesCount > 0 ? '$' + (earnings / sesCount).toFixed(0) : '$0';
+  const uniquePl = new Set(myBookings.map(b => b.player_id)).size;
   set('stat-sessions-hosted', sesCount);
   set('stat-earnings-home',   '$' + Math.round(earnings));
-
-  // Host home
-  set('h-earnings',      earnStr);
-  set('h-sessions',      sesCount);
-  set('h-players',       uniquePl);
-  set('h-rating',        '—');
-
-  // Host earnings view
-  set('h-earn-big',      earnStr);
-  set('h-earn-big2',     earnStr);
-  set('h-earn-share',    earnStr);
-  set('h-earn-sessions', sesCount);
-  set('h-earn-players',  uniquePl);
-  set('h-earn-avg',      avg);
-
-  // Host greeting
+  set('h-earnings',      earnStr); set('h-sessions', sesCount);
+  set('h-players',       uniquePl); set('h-rating', '—');
+  set('h-earn-big',      earnStr); set('h-earn-big2', earnStr);
+  set('h-earn-share',    earnStr); set('h-earn-sessions', sesCount);
+  set('h-earn-players',  uniquePl); set('h-earn-avg', avg);
   const hname = P?.full_name || U?.user_metadata?.full_name || U?.email?.split('@')[0] || 'Host';
   $('host-greet').innerHTML = `Welcome back, ${hname.split(' ')[0]} <span>Your host dashboard</span>`;
-
-  // Recent bookings panel
   html('host-bookings-list', myBookings.length
-    ? myBookings.slice(0, 5).map(b => {
+    ? myBookings.slice(0,5).map(b => {
         const sess = mySessions.find(s => s.id === b.session_id);
         const date = b.created_at ? new Date(b.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
-        const amt  = '$' + parseFloat(b.amount_paid || 0).toFixed(0);
-        return `<div class="row">
-          <div class="rinfo">
-            <div class="rname">${b.player_name || 'Player'}</div>
-            <div class="rdate">${sess?.title || 'Session'} · ${date}</div>
-          </div>
-          <span class="rscore" style="color:var(--green);font-size:12px">${amt}</span>
-        </div>`;
+        return `<div class="row"><div class="rinfo"><div class="rname">${b.player_name||'Player'}</div><div class="rdate">${sess?.title||'Session'} · ${date}</div></div><span class="rscore" style="color:var(--green);font-size:12px">$${parseFloat(b.amount_paid||0).toFixed(0)}</span></div>`;
       }).join('')
     : '<div class="empty"><p>No bookings yet. Create your first session to start.</p></div>');
-
-  // My sessions panel
   html('host-sessions-list', mySessions.length
     ? mySessions.map(s => {
-        const booked = (s.spots_total || 0) - (s.spots_left || 0);
-        const price  = '$' + parseFloat(s.price || 0).toFixed(0);
-        const date   = s.date ? new Date(s.date + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'TBD';
-        return `<div class="row">
-          <div class="rinfo">
-            <div class="rname">${s.title || 'Session'}</div>
-            <div class="rdate">${date} · ${cap(s.sport || '')} · ${booked}/${s.spots_total || 4} booked</div>
-          </div>
-          <span class="rscore" style="font-size:12px;color:var(--green)">${price}</span>
-        </div>`;
+        const booked = (s.spots_total||0) - (s.spots_left||0);
+        const date   = s.date ? new Date(s.date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'TBD';
+        return `<div class="row"><div class="rinfo"><div class="rname">${s.title||'Session'}</div><div class="rdate">${date} · ${cap(s.sport||'')} · ${booked}/${s.spots_total||4} booked</div></div><span class="rscore" style="font-size:12px;color:var(--green)">$${parseFloat(s.price||0).toFixed(0)}</span></div>`;
       }).join('')
     : '<div class="empty"><p>No sessions created yet.</p></div>');
 }
 
-/* ════════════════════════════════════════
-   SIGN OUT
-════════════════════════════════════════ */
 async function signOut() {
   await db.auth.signOut();
   window.location.href = 'onboarding.html';
 }
 
-/* ════════════════════════════════════════
-   NAVIGATION
-════════════════════════════════════════ */
 function sv(name) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('act'));
   $('v-' + name)?.classList.add('act');
   document.querySelectorAll('.sbl').forEach(b => {
     b.classList.toggle('act', (b.getAttribute('onclick') || '').includes("'" + name + "'"));
   });
-  // Lazy-load logbook when navigating to it
   if (name === 'logbook') renderLogbook();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -952,30 +718,21 @@ function showMsg(el, txt, color) {
   el.style.display = 'block';
   setTimeout(() => { el.style.display = 'none'; }, 5000);
 }
-/* ════════════════════════════════════════
-   PUBLISH SESSION — host creates a session
-════════════════════════════════════════ */
+
 async function publishSession() {
   const msg = $('sess-msg');
   const btn = $('publish-btn');
-
   const title    = $('sess-title').value.trim();
   const sport    = $('sess-sport').value;
   const date     = $('sess-date').value;
   const location = $('sess-location').value.trim();
-
   if (!title)    { showMsg(msg, 'Please enter a session title.', 'red'); return; }
   if (!sport)    { showMsg(msg, 'Please select a sport.', 'red'); return; }
   if (!date)     { showMsg(msg, 'Please pick a date.', 'red'); return; }
   if (!location) { showMsg(msg, 'Please enter a location.', 'red'); return; }
-
-  btn.disabled = true;
-  btn.textContent = 'Publishing…';
-
+  btn.disabled = true; btn.textContent = 'Publishing…';
   const { error } = await db.from('sessions').insert({
-    host_id:      U.id,
-    title,
-    sport,
+    host_id: U.id, title, sport,
     format:       $('sess-format').value,
     session_date: date,
     session_time: $('sess-time').value || null,
@@ -988,23 +745,13 @@ async function publishSession() {
     description:  $('sess-desc').value.trim() || null,
     status:       'active'
   });
-
-  btn.disabled = false;
-  btn.textContent = 'Publish Session ✓';
-
-  if (error) {
-    showMsg(msg, 'Error: ' + error.message, 'red');
-    return;
-  }
-
-  // Clear form
-  ['sess-title','sess-sport','sess-date','sess-time',
-   'sess-location','sess-price','sess-spots','sess-desc']
-    .forEach(id => { $(''+id).value = ''; });
-
+  btn.disabled = false; btn.textContent = 'Publish Session ✓';
+  if (error) { showMsg(msg, 'Error: ' + error.message, 'red'); return; }
+  ['sess-title','sess-sport','sess-date','sess-time','sess-location','sess-price','sess-spots','sess-desc']
+    .forEach(id => { $(id).value = ''; });
   showMsg(msg, '✓ Session published! Players can now find and book it.', 'green');
-  await loadHostData(); // refresh the sessions list
+  await loadHostData();
 }
-  </script>
+</script>
 </body>
 </html>
