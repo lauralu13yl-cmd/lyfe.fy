@@ -208,6 +208,7 @@ input,select,textarea{font-family:var(--sans)}
 const _URL = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
 const _KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
 const supa = supabase.createClient(_URL, _KEY);
+  const FUNCTIONS_URL = 'https://bcvhlkncezqzzzrrbkum.functions.supabase.co';
 
 let allSessions = [];
 let currentBookingId = null;
@@ -331,48 +332,82 @@ function setChip(el, gid) {
 }
 function applyFilters() { renderCards(); }
 
-function openBook(id, name, price) {
+  function openBook(id, name, price) {
   currentBookingId    = id;
   currentBookingPrice = price;
-  const fee = Math.round(price*0.1);
   document.getElementById('mname').textContent  = name;
   document.getElementById('mprice').textContent = price===0?'Free':'$'+price;
-  document.getElementById('mfee').textContent   = '$'+fee;
-  document.getElementById('mtotal').textContent = '$'+(price+fee);
+  document.getElementById('mfee').textContent   = '$0';
+  document.getElementById('mtotal').textContent = price===0?'Free':'$'+price;
   document.getElementById('book-msg').style.display = 'none';
   document.getElementById('mbg').classList.add('open');
 }
+
 
 async function confirmBooking() {
   const btn = document.getElementById('confirm-btn');
   const msg = document.getElementById('book-msg');
   const { data: { session } } = await supa.auth.getSession();
   if (!session) { window.location.href = 'onboarding.html'; return; }
-  btn.disabled = true; btn.textContent = 'Booking…';
-  const { error } = await supa.from('bookings').insert({
-    session_id:  currentBookingId,
-    player_id:   session.user.id,
-    paid_amount: currentBookingPrice,
-    status:      'confirmed'
-  });
-  if (error) {
-    btn.disabled = false; btn.textContent = 'Confirm booking →';
-    msg.textContent = error.message.includes('unique') ? 'You already booked this!' : 'Error: '+error.message;
-    msg.style.color = 'var(--amber)';
+
+  // Free sessions: keep the old direct-insert flow, no payment needed.
+  if (currentBookingPrice === 0) {
+    btn.disabled = true; btn.textContent = 'Booking…';
+    const { error } = await supa.from('bookings').insert({
+      session_id:  currentBookingId,
+      player_id:   session.user.id,
+      paid_amount: 0,
+      status:      'confirmed'
+    });
+    if (error) {
+      btn.disabled = false; btn.textContent = 'Confirm booking →';
+      msg.textContent = error.message.includes('unique') ? 'You already booked this!' : 'Error: '+error.message;
+      msg.style.color = 'var(--amber)';
+      msg.style.display = 'block';
+      return;
+    }
+    await supa.rpc('increment_spots', { sid: currentBookingId });
+    btn.textContent = '✓ Booked!';
+    msg.textContent = "You're in! Check your dashboard.";
+    msg.style.color = 'var(--green)';
     msg.style.display = 'block';
+    setTimeout(async () => {
+      document.getElementById('mbg').classList.remove('open');
+      btn.disabled = false; btn.textContent = 'Confirm booking →';
+      await loadSessions();
+    }, 1500);
     return;
   }
-  await supa.rpc('increment_spots', { sid: currentBookingId });
-  btn.textContent = '✓ Booked!';
-  msg.textContent = "You're in! Check your dashboard.";
-  msg.style.color = 'var(--green)';
-  msg.style.display = 'block';
-  setTimeout(async () => {
-    document.getElementById('mbg').classList.remove('open');
+
+  // Paid sessions: go through Stripe Checkout.
+  btn.disabled = true; btn.textContent = 'Redirecting to payment…';
+  try {
+    const res = await fetch(FUNCTIONS_URL + '/create-checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + session.access_token
+      },
+      body: JSON.stringify({ session_id: currentBookingId })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      btn.disabled = false; btn.textContent = 'Confirm booking →';
+      msg.textContent = data.error || 'Something went wrong.';
+      msg.style.color = 'var(--amber)';
+      msg.style.display = 'block';
+      return;
+    }
+    window.location.href = data.url;
+  } catch (err) {
+    console.error(err);
     btn.disabled = false; btn.textContent = 'Confirm booking →';
-    await loadSessions();
-  }, 1500);
+    msg.textContent = 'Could not start checkout. Please try again.';
+    msg.style.color = 'var(--amber)';
+    msg.style.display = 'block';
+  }
 }
+  
 
 function subscribeRealtime() {
   supa.channel('games-live')
