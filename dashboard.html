@@ -20,14 +20,12 @@ input,select,textarea{font-family:var(--sans)}
 .bg{background:var(--gm)!important;color:#fff;border-color:var(--gm)}.bg:hover{background:var(--green)!important}
 .bo{background:transparent!important;color:var(--ink2);border-color:var(--cream3)}.bo:hover{background:var(--cream2)!important}
 .bfw{width:100%;justify-content:center}
-/* LOADING */
 #loading-screen{position:fixed;inset:0;background:var(--ink);display:flex;align-items:center;justify-content:center;z-index:999;transition:opacity .4s ease}
 #loading-screen.hide{opacity:0;pointer-events:none}
 .ls-logo{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--cream);text-align:center}
 .ls-logo span{color:var(--gm)}
 .ls-spin{width:20px;height:20px;border:2px solid rgba(255,255,255,.15);border-top-color:var(--gm);border-radius:50%;animation:spin .7s linear infinite;margin:16px auto 0}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* SIDEBAR */
 .sb{position:fixed;top:0;left:0;bottom:0;width:var(--sb);background:var(--ink);display:flex;flex-direction:column;z-index:100}
 .sblogo{padding:20px 22px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
 .sblogo a{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--cream)}
@@ -40,6 +38,7 @@ input,select,textarea{font-family:var(--sans)}
 .role-member{background:rgba(255,255,255,.08);color:rgba(245,242,235,.5)}
 .role-host{background:rgba(42,158,106,.25);color:#6ecfa0}
 .role-pending{background:rgba(200,130,26,.2);color:#e8a030}
+.role-academy{background:rgba(42,158,106,.2);color:#6ecfa0}
 .xpbar{height:3px;background:rgba(255,255,255,.08);border-radius:2px;margin-top:8px;overflow:hidden}
 .xpfill{height:100%;background:var(--gm);border-radius:2px;width:0%;transition:width 1s var(--ease)}
 .xplbl{display:flex;justify-content:space-between;font-size:10px;color:rgba(245,242,235,.28);margin-top:3px;font-family:var(--mono)}
@@ -50,13 +49,12 @@ input,select,textarea{font-family:var(--sans)}
 .sbl.act{color:var(--cream);background:rgba(255,255,255,.06);border-left-color:var(--gm)}
 .host-only{display:none}
 .pending-only{display:none}
-/* MAIN */
+.academy-only{display:none}
 .main{margin-left:var(--sb);padding:28px 32px}
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
 .greet{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink)}
 .greet span{color:var(--ink3);font-family:var(--sans);font-size:13px;font-weight:300;display:block;margin-top:2px}
 .tact{display:flex;gap:10px}
-/* STAT CARDS */
 .statcards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
 .sc{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rlg);padding:16px 16px 12px}
 .sclbl{font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
@@ -67,7 +65,6 @@ input,select,textarea{font-family:var(--sans)}
 .host-stat .sclbl{color:rgba(245,242,235,.4)}
 .host-stat .scval{color:var(--cream)}
 .host-stat .scsub{color:#6ecfa0}
-/* GRID / PANELS */
 .cgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .cw{grid-column:span 2}
 .panel{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rlg);padding:18px 20px}
@@ -82,7 +79,6 @@ input,select,textarea{font-family:var(--sans)}
 .rscore{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink);min-width:30px;text-align:right}
 .rdel{font-size:11px;font-weight:500;padding:2px 6px;border-radius:20px}
 .du{background:rgba(26,122,82,.1);color:var(--green)}.do{background:rgba(200,130,26,.1);color:var(--amber)}
-/* CHALLENGES */
 .crow{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--cream3)}
 .crow:last-of-type{border-bottom:none}
 .cico{width:32px;height:32px;border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
@@ -92,16 +88,13 @@ input,select,textarea{font-family:var(--sans)}
 .cbar{flex:1;height:4px;background:var(--cream2);border-radius:2px;overflow:hidden}
 .cf{height:100%;border-radius:2px}
 .cxp{font-size:11px;color:var(--green);font-family:var(--mono);white-space:nowrap}
-/* BADGES */
 .badges{display:flex;flex-wrap:wrap;gap:7px}
 .cbadge{font-size:12px;padding:4px 11px;border-radius:20px}
 .cb-on{background:rgba(26,122,82,.1);color:var(--green);font-weight:500}
 .cb-off{background:var(--cream2);color:var(--ink3)}
-/* TRIPS */
 .tripm{background:var(--ink);border-radius:var(--rsm);padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
 .tmn{font-family:var(--serif);font-size:13px;font-weight:700;color:var(--cream);margin-bottom:2px}
 .tms{font-size:11px;color:rgba(245,242,235,.4)}
-/* HOST EARNINGS */
 .earn-card{background:linear-gradient(135deg,#0e3d28 0%,#1a5c3a 100%);border-radius:var(--rlg);padding:22px;color:var(--cream);margin-bottom:14px}
 .earn-big{font-family:var(--serif);font-size:36px;font-weight:900;color:#a8dfc4;line-height:1;margin-bottom:4px}
 .earn-lbl{font-size:11px;color:rgba(245,242,235,.5);text-transform:uppercase;letter-spacing:.06em}
@@ -109,9 +102,7 @@ input,select,textarea{font-family:var(--sans)}
 .earn-row:last-of-type{border-bottom:none}
 .earn-name{color:rgba(245,242,235,.7)}
 .earn-val{font-family:var(--mono);font-weight:500;color:var(--cream)}
-/* VIEWS */
 .view{display:none}.view.act{display:block}
-/* LOG FORM */
 .fgrp2{margin-bottom:14px}
 .flbl{display:block;font-size:11px;font-weight:500;color:var(--ink3);margin-bottom:5px;letter-spacing:.04em;text-transform:uppercase}
 .finp{width:100%;padding:9px 12px;border:1px solid var(--cream3);border-radius:var(--rsm);background:var(--w);color:var(--ink);font-size:13px;outline:none;font-family:var(--sans)}
@@ -119,18 +110,21 @@ input,select,textarea{font-family:var(--sans)}
 select.finp{cursor:pointer}
 .empty{text-align:center;padding:28px 16px;color:var(--ink3)}
 .empty p{font-size:13px}
-/* PENDING BANNER */
 .pending-banner{background:var(--al);border:1px solid rgba(200,130,26,.2);border-radius:var(--rlg);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
 .pb-icon{font-size:24px;flex-shrink:0}
 .pb-title{font-size:14px;font-weight:500;color:var(--amber);margin-bottom:3px}
 .pb-sub{font-size:12px;color:var(--ink3)}
-/* ACTIVITY */
+.academy-banner{background:var(--gl);border:1px solid rgba(42,158,106,.25);border-radius:var(--rlg);padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.ab-icon{font-size:24px;flex-shrink:0}
+.ab-title{font-size:14px;font-weight:500;color:var(--green);margin-bottom:3px}
+.ab-sub{font-size:12px;color:var(--ink3)}
+.ab-bar-bg{height:4px;background:rgba(26,122,82,.12);border-radius:2px;margin-top:8px;max-width:220px;overflow:hidden}
+.ab-bar-fill{height:100%;background:var(--gm);border-radius:2px;width:0%;transition:width .4s var(--ease)}
 .nitem{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--cream3)}
 .nitem:last-of-type{border-bottom:none}
 .ndot{width:6px;height:6px;border-radius:50%;margin-top:5px;flex-shrink:0}
 .ntxt{font-size:12px;color:var(--ink2);line-height:1.5}
 .ntime{font-size:11px;color:var(--ink3);margin-top:2px}
-/* BOOKING CARDS */
 .bkcard{background:var(--cream2);border:1px solid var(--cream3);border-radius:var(--rlg);padding:13px 16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .bkcard:last-of-type{margin-bottom:0}
 .bktitle{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px}
@@ -138,6 +132,8 @@ select.finp{cursor:pointer}
 .bkprice{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--green)}
 .bkbadge{font-size:10px;font-weight:500;background:var(--gl);color:var(--green);padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:4px}
 .bkbadge.past{background:var(--cream2);color:var(--ink3)}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:10px 22px;border-radius:30px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1}
 </style>
 </head>
 <body>
@@ -180,6 +176,8 @@ select.finp{cursor:pointer}
     <button class="sbl host-only" onclick="sv('host-earnings')">&#128200; Earnings</button>
     <span class="nslbl pending-only">Host Application</span>
     <button class="sbl pending-only" onclick="sv('pending-status')">&#9203; Application Status</button>
+    <span class="nslbl academy-only" id="academy-nav-label">Host Academy</span>
+    <button class="sbl academy-only" onclick="window.location.href='host-academy.html'">&#127891; Continue Training</button>
     <span class="nslbl" id="become-host-label">Host</span>
     <button class="sbl" id="become-host-btn" onclick="window.location.href='hostapplication.html'">&#127891; Become a host</button>
     <button class="sbl" onclick="window.location.href='shop.html'">&#128722; Shop</button>
@@ -206,6 +204,16 @@ select.finp{cursor:pointer}
         <div class="pb-title">Application under review</div>
         <div class="pb-sub">Your host application is being reviewed. We'll email you within 24–48 hours.</div>
       </div>
+    </div>
+    <!-- Host Academy banner — shown when role = host_training -->
+    <div class="academy-banner" id="academy-banner" style="display:none">
+      <div class="ab-icon">&#127891;</div>
+      <div style="flex:1">
+        <div class="ab-title">You're approved — complete Host Academy to start hosting</div>
+        <div class="ab-sub">5 short modules on building a great session. <span id="academy-progress-text">0 of 5 complete</span></div>
+        <div class="ab-bar-bg"><div class="ab-bar-fill" id="academy-progress-bar"></div></div>
+      </div>
+      <a href="host-academy.html" class="btn bg">Continue →</a>
     </div>
     <div class="statcards" id="home-stats">
       <div class="sc scg"><div class="sclbl">Handicap</div><div class="scval" id="stat-hcp">—</div><div class="scsub" id="stat-hcp-sub">Not set yet</div></div>
@@ -346,7 +354,7 @@ select.finp{cursor:pointer}
         <div style="background:var(--cream2);border-radius:var(--rlg);padding:18px;text-align:left">
           <div style="display:flex;align-items:flex-start;gap:11px;padding:8px 0;border-bottom:1px solid var(--cream3)"><div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">✓</div><div style="font-size:13px;color:var(--ink2)"><strong>Application submitted</strong> — under review now</div></div>
           <div style="display:flex;align-items:flex-start;gap:11px;padding:8px 0;border-bottom:1px solid var(--cream3)"><div style="width:22px;height:22px;border-radius:50%;background:var(--gl);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">2</div><div style="font-size:13px;color:var(--ink2)">Team reviews credentials — within 24–48 hours</div></div>
-          <div style="display:flex;align-items:flex-start;gap:11px;padding:8px 0;border-bottom:1px solid var(--cream3)"><div style="width:22px;height:22px;border-radius:50%;background:var(--gl);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</div><div style="font-size:13px;color:var(--ink2)">Approval email — host dashboard unlocks</div></div>
+          <div style="display:flex;align-items:flex-start;gap:11px;padding:8px 0;border-bottom:1px solid var(--cream3)"><div style="width:22px;height:22px;border-radius:50%;background:var(--gl);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">3</div><div style="font-size:13px;color:var(--ink2)">Approved → complete the Host Academy</div></div>
           <div style="display:flex;align-items:flex-start;gap:11px;padding:8px 0"><div style="width:22px;height:22px;border-radius:50%;background:var(--gl);color:var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">4</div><div style="font-size:13px;color:var(--ink2)">Host your first session — start earning</div></div>
         </div>
       </div>
@@ -452,6 +460,8 @@ select.finp{cursor:pointer}
 
 </main>
 
+<div id="toast"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/lyfe-core.js"></script>
 <script>
@@ -466,6 +476,13 @@ function field(lbl,val){if(!val)return'';return`<div style="display:flex;justify
 function xpRank(xp){if(xp>=25000)return'Legend';if(xp>=10000)return'Albatross';if(xp>=4000)return'Eagle';if(xp>=1500)return'Birdie';if(xp>=500)return'Par';return'Bogey';}
 function timeAgo(d){if(!d)return'';const m=Math.floor((Date.now()-new Date(d))/60000);if(m<1)return'Just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'h ago';return Math.floor(h/24)+'d ago';}
 function formatTime(t){if(!t)return'';const[h,m]=t.split(':');const hr=parseInt(h);return(hr%12||12)+':'+m+(hr>=12?'pm':'am');}
+
+// TOAST
+function toast(msg){
+  const t=$('toast');if(!t)return;
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
 
 // BOOT
 (async function boot(){
@@ -498,6 +515,7 @@ async function loadDashboard(session){
   renderActivityFeed();
   renderLogbook();
   if(role==='host')loadHostData();
+  checkAcademyComplete(role);
   $('loading-screen').classList.add('hide');
   setTimeout(()=>{const ls=$('loading-screen');if(ls)ls.style.display='none';},400);
 }
@@ -506,9 +524,11 @@ function applyRole(role){
   document.querySelectorAll('.host-only').forEach(el=>el.style.display=role==='host'?'flex':'none');
   $('host-nav-label').style.display=role==='host'?'block':'none';
   document.querySelectorAll('.pending-only').forEach(el=>el.style.display=role==='pending_host'?'flex':'none');
+  document.querySelectorAll('.academy-only').forEach(el=>el.style.display=role==='host_training'?'flex':'none');
+  const ab=$('academy-nav-label');if(ab)ab.style.display=role==='host_training'?'block':'none';
   const bb=$('become-host-btn'),bl=$('become-host-label');
-  if(bb)bb.style.display=(role==='host'||role==='pending_host')?'none':'flex';
-  if(bl)bl.style.display=(role==='host'||role==='pending_host')?'none':'block';
+  if(bb)bb.style.display=(role==='host'||role==='pending_host'||role==='host_training')?'none':'flex';
+  if(bl)bl.style.display=(role==='host'||role==='pending_host'||role==='host_training')?'none':'block';
 }
 
 function renderSidebar(role){
@@ -522,6 +542,7 @@ function renderSidebar(role){
   const rb=$('sb-role');
   if(role==='host'){rb.textContent='Host';rb.className='urole role-host';}
   else if(role==='pending_host'){rb.textContent='Pending host';rb.className='urole role-pending';}
+  else if(role==='host_training'){rb.textContent='Host Academy';rb.className='urole role-academy';}
   else{rb.textContent='Member';rb.className='urole role-member';}
 }
 
@@ -532,6 +553,10 @@ function renderHome(role){
   const tod=hour<12?'morning':hour<17?'afternoon':'evening';
   $('home-greet').innerHTML=`Good ${tod}, ${first} <span>Here's your Lyfe.fy today</span>`;
   if(role==='pending_host')$('pending-banner').style.display='flex';
+  if(role==='host_training'){
+    $('academy-banner').style.display='flex';
+    renderAcademyProgress();
+  }
   const hcpMap={Beginner:'25+',Intermediate:'10–20',Advanced:'< 10',Competitive:'Scratch'};
   if(role==='host'){
     $('home-stats').innerHTML=`
@@ -547,6 +572,29 @@ function renderHome(role){
     set('stat-xp',xp);
     set('stat-rank',xpRank(xp));
     set('stat-booked',myBookings.length);
+  }
+}
+
+// Host Academy progress — reads training_progress jsonb array directly from profile (already loaded in P)
+function renderAcademyProgress(){
+  if(!P)return;
+  const progress=Array.isArray(P.training_progress)?P.training_progress:[];
+  const total=5; // total modules in host-academy.html
+  const done=progress.length;
+  const pct=Math.round((done/total)*100);
+  const bar=$('academy-progress-bar');
+  const txt=$('academy-progress-text');
+  if(bar)bar.style.width=pct+'%';
+  if(txt)txt.textContent=done+' of '+total+' complete';
+}
+
+// Detect redirect back from host-academy.html on completion
+function checkAcademyComplete(role){
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('academy')==='complete'){
+    window.history.replaceState({},'','dashboard.html');
+    toast('🎓 Host Academy complete — you can now create sessions!');
+    if(role==='host')sv('host-home');
   }
 }
 
