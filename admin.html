@@ -678,7 +678,7 @@ body::before {
     const level   = lvlMap[a.level] || a.level || '—';
     const statusHtml = statusBadge(a.status || 'pending');
     const actions = a.status === 'pending'
-      ? `<div class="action-btns"><button class="btn-approve" onclick="approveApp('${a.id}','${a.clerk_user_id || ''}',event)">Approve</button><button class="btn-reject" onclick="rejectApp('${a.id}',event)">Reject</button></div>`
+      ? `<div class="action-btns"><button class="btn-approve" onclick="approveApp('${a.id}','${a.user_id || ''}',event)">Approve</button><button class="btn-reject" onclick="rejectApp('${a.id}',event)">Reject</button></div>`
       : `<button class="btn-view" onclick="viewApp('${a.id}',event)">View</button>`;
 
     return `<div class="table-row app-grid" onclick="viewApp('${a.id}',event)">
@@ -731,8 +731,8 @@ body::before {
     await sbPatch('host_applications?id=eq.' + appId, { status: 'rejected' });
     // Reset their profile role back to member if they had pending_host
     const app = allApplications.find(a => a.id === appId);
-    if (app && app.clerk_user_id) {
-      await sbPatch('profiles?id=eq.' + app.clerk_user_id, { role: 'member' });
+    if (app && app.user_id) {
+      await sbPatch('profiles?id=eq.' + app.user_id, { role: 'member' });
     }
     toast('Application rejected');
     await loadAll();
@@ -790,7 +790,7 @@ body::before {
     if (a.status === 'pending') {
       actions.innerHTML = `
         <button class="btn-reject" onclick="rejectApp('${a.id}');closeModal('appModal')">Reject</button>
-        <button class="btn-approve" style="padding:10px 24px" onclick="approveApp('${a.id}','${a.clerk_user_id || ''}');closeModal('appModal')">Approve → Send to Host Academy</button>
+        <button class="btn-approve" style="padding:10px 24px" onclick="approveApp('${a.id}','${a.user_id || ''}');closeModal('appModal')">Approve → Send to Host Academy</button>
       `;
     } else {
       actions.innerHTML = `<button class="btn-view" onclick="closeModal('appModal')">Close</button>`;
@@ -893,7 +893,7 @@ body::before {
     if (event) event.stopPropagation();
     if (!confirm('Approve this user and send them to the Host Academy?')) return;
     await sbPatch('profiles?id=eq.' + userId, { role: 'host_training' });
-    const app = allApplications.find(a => a.clerk_user_id === userId);
+    const app = allApplications.find(a => a.user_id === userId);
     if (app) await sbPatch('host_applications?id=eq.' + app.id, { status: 'approved' });
     toast('✓ User approved — sent to Host Academy');
     await loadAll(); renderUsers(); renderOverview();
