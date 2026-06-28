@@ -493,19 +493,20 @@ input,select{font-family:var(--sans)}
 </div><!-- /shell -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/lyfe-core.js"></script>
 <style>
   @keyframes spin{to{transform:rotate(360deg)}}
   #login-overlay{display:none}
   #login-overlay.open{display:flex}
 </style>
 <script>
-/* ── CONFIG ── */
-const SUPA_URL = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
-const SUPA_KEY = 'sb_publishable_rfM5630kfWC8SpXhXtj2Lg_n_OJkFdI';
+/* ── CONFIG ──
+   db is provided globally by lyfe-core.js — the SAME Supabase client
+   used by dashboard.html and host-academy.html. Do NOT create a
+   separate client here; doing so previously caused signed-up users
+   to be bounced back to onboarding because the two clients disagreed
+   about whether a session existed. */
 const REDIRECT = window.location.origin + '/onboarding.html';
-
-const { createClient } = supabase;
-const db = createClient(SUPA_URL, SUPA_KEY);
 
 /* ── STATE ── */
 let intent = null;
