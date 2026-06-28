@@ -31,6 +31,41 @@ input,select{font-family:var(--sans)}
 .nav-links a:hover{color:var(--ink)}
 .nav-act{display:flex;gap:10px;align-items:center}
 .uav-mini{width:32px;height:32px;border-radius:50%;background:var(--gm);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#fff;cursor:pointer}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.hamburger span{display:block;width:20px;height:1.5px;background:var(--ink)}
+
+/* ACCOUNT DROPDOWN */
+.account-wrap{position:relative}
+.account-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:var(--w);border:1px solid var(--cream3);border-radius:var(--rsm);box-shadow:0 8px 28px rgba(14,14,12,.1);overflow:hidden;min-width:150px;z-index:200}
+.account-dropdown.open{display:block}
+.account-dropdown button{display:block;width:100%;font-size:12.5px;font-weight:500;color:var(--ink2);background:none;border:none;border-bottom:1px solid var(--cream3);padding:11px 16px;text-align:left;cursor:pointer;font-family:var(--sans);transition:background .15s}
+.account-dropdown button:last-child{border-bottom:none}
+.account-dropdown button:hover{background:var(--gl);color:var(--green)}
+
+/* MODALS */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(14,14,12,.5);z-index:300;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--cream);border-radius:var(--rxl);padding:32px;max-width:400px;width:100%;position:relative}
+.modal-close{position:absolute;top:14px;right:14px;font-size:18px;color:var(--ink3);line-height:1;padding:4px 8px;border-radius:6px;background:var(--cream2);cursor:pointer;border:none}
+.modal-eyebrow{font-size:10px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--green);display:block;margin-bottom:10px}
+.modal-title{font-family:var(--serif);font-size:22px;font-weight:900;letter-spacing:-.02em;color:var(--ink);margin-bottom:6px}
+.modal-title em{font-style:italic;color:var(--green)}
+.modal-sub{font-size:13px;color:var(--ink3);margin-bottom:20px;font-weight:300}
+.modal-field{margin-bottom:14px}
+.modal-label{display:block;font-size:11px;font-weight:500;color:var(--ink3);margin-bottom:5px;letter-spacing:.04em;text-transform:uppercase}
+.modal-input{width:100%;padding:10px 13px;border:1px solid var(--cream3);border-radius:var(--rsm);background:var(--w);color:var(--ink);font-size:13.5px;outline:none;font-family:var(--sans)}
+.modal-input:focus{border-color:var(--green)}
+.modal-error{display:none;background:#fef2f2;border:1px solid #fecaca;border-radius:var(--rsm);padding:9px 13px;font-size:12.5px;color:#b91c1c;margin-bottom:10px}
+.invite-link-box{display:flex;gap:8px;margin-bottom:16px}
+.invite-link-inp{flex:1;padding:10px 13px;border:1px solid var(--cream3);border-radius:var(--rsm);background:var(--w);font-size:12.5px;color:var(--ink3);font-family:var(--mono)}
+
+
+@media(max-width:880px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .nav-act .btn{display:none}
+  .nav-act #account-wrap,.nav-act .uav-mini{display:flex}
+}
 
 /* PAGE HEAD */
 .pagehead{max-width:1180px;margin:0 auto;padding:36px 32px 0}
@@ -85,14 +120,27 @@ input,select{font-family:var(--sans)}
 <body>
 
 <nav class="nav">
-  <a href="index.html" class="logo">Lyfe<span>.</span>fy</a>
+  <a href="index.html" class="logo"><img src="logo.png" alt="Lyfe.fy" style="height:30px;width:auto;display:block"></a>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="index.html#how">How It Works</a></li>
+    <li><a href="index.html#hosts">For Hosts</a></li>
+    <li><a href="index.html#partners">Partner with us</a></li>
+    <li><a href="index.html#contact">Contact us</a></li>
+    <li><a href="shop-lyfefy.html">Shop Lyfefy</a></li>
   </ul>
   <div class="nav-act" id="nav-act">
-    <a href="onboarding.html" class="btn bi" id="nav-join-btn">Join Lyfe.fy</a>
+    <a href="hostapplication.html" class="btn bo" id="nav-become-host">Become a Host</a>
+    <a href="dashboard.html" class="btn bo" id="nav-host-dash" style="display:none">Host Dashboard</a>
+    <button class="btn bg" id="nav-invite-btn" style="display:none" onclick="openInvite()">Invite friends</button>
+    <div class="account-wrap" id="account-wrap">
+      <button class="btn bi" id="account-btn" onclick="toggleAccountDrop()">Account</button>
+      <div class="account-dropdown" id="account-dropdown">
+        <button onclick="window.location.href='onboarding.html'">Sign up</button>
+        <button onclick="openLogin()">Log in</button>
+      </div>
+    </div>
   </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
 
 <div class="pagehead">
@@ -110,6 +158,40 @@ input,select{font-family:var(--sans)}
 
 <div class="grid" id="grid">
   <div class="loading"><div class="spinner"></div>Loading sessions...</div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="login-overlay" onclick="if(event.target===this)closeLogin()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeLogin()">&times;</button>
+    <span class="modal-eyebrow">Welcome back</span>
+    <h3 class="modal-title">Log <em>in.</em></h3>
+    <p class="modal-sub">Good to have you back.</p>
+    <div class="modal-field"><label class="modal-label">Email</label><input class="modal-input" id="login-email" type="email" placeholder="alex@example.com" autocomplete="email"></div>
+    <div class="modal-field"><label class="modal-label">Password</label><input class="modal-input" id="login-pass" type="password" placeholder="Your password" autocomplete="current-password"></div>
+    <div class="modal-error" id="login-error"></div>
+    <button class="btn bi bfw" style="padding:11px" onclick="emailLogin()">
+      <span id="login-txt">Log in</span>
+    </button>
+    <p style="font-size:11px;color:var(--ink3);text-align:center;margin-top:12px">
+      Don't have an account? <a href="onboarding.html" style="color:var(--green);font-weight:500">Sign up →</a>
+    </p>
+  </div>
+</div>
+
+<!-- INVITE MODAL -->
+<div class="modal-overlay" id="invite-overlay" onclick="if(event.target===this)closeInvite()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeInvite()">&times;</button>
+    <span class="modal-eyebrow">Grow the foursome</span>
+    <h3 class="modal-title">Invite a <em>friend.</em></h3>
+    <p class="modal-sub">Share your link — when they join, you'll both be ready to book a round together.</p>
+    <div class="invite-link-box">
+      <input class="invite-link-inp" id="invite-link" type="text" readonly>
+      <button class="btn bi bsm" onclick="copyInviteLink()" id="invite-copy-btn">Copy</button>
+    </div>
+    <button class="btn bg bfw" style="padding:11px" onclick="shareInviteLink()">Share invite link</button>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -311,15 +393,108 @@ async function bookSession(sessionId) {
 }
 
 /* ════ AUTH (optional — page browsable as guest) ════ */
+function toggleMenu() {
+  const links = document.querySelector('.nav-links');
+  if (!links) return;
+  const open = links.style.display === 'flex';
+  if (open) { links.style.display = ''; return; }
+  Object.assign(links.style, {
+    display:'flex', flexDirection:'column', position:'absolute',
+    top:'64px', left:'0', right:'0', background:'rgba(237,233,223,.98)',
+    padding:'20px 28px', gap:'16px', zIndex:'150',
+    borderBottom:'1px solid rgba(90,90,82,.12)'
+  });
+}
+
+function toggleAccountDrop() {
+  $('account-dropdown')?.classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  const drop = $('account-dropdown'), btn = $('account-btn');
+  if (drop && drop.classList.contains('open') && !drop.contains(e.target) && e.target !== btn) {
+    drop.classList.remove('open');
+  }
+});
+
+/* ── LOGIN MODAL ── */
+function openLogin() { $('account-dropdown')?.classList.remove('open'); $('login-overlay').classList.add('open'); }
+function closeLogin() { $('login-overlay').classList.remove('open'); }
+
+async function emailLogin() {
+  const email = $('login-email').value.trim();
+  const pass  = $('login-pass').value;
+  const errEl = $('login-error');
+  if (!email || !pass) { errEl.textContent = 'Please enter your email and password.'; errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+  $('login-txt').textContent = 'Logging in…';
+  const { error } = await db.auth.signInWithPassword({ email, password: pass });
+  if (error) {
+    errEl.textContent = error.message.includes('Invalid') ? 'Incorrect email or password.' : error.message;
+    errEl.style.display = 'block';
+    $('login-txt').textContent = 'Log in';
+    return;
+  }
+  window.location.reload();
+}
+
+/* ── INVITE MODAL — new feature: invite friends to join Lyfe.fy ── */
+function openInvite() {
+  if (!U) return;
+  const link = window.location.origin + '/onboarding.html?ref=' + U.id;
+  $('invite-link').value = link;
+  $('invite-overlay').classList.add('open');
+}
+function closeInvite() { $('invite-overlay').classList.remove('open'); }
+
+function copyInviteLink() {
+  const inp = $('invite-link');
+  inp.select();
+  navigator.clipboard?.writeText(inp.value).then(() => {
+    const btn = $('invite-copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = orig; }, 1800);
+  }).catch(() => {
+    document.execCommand('copy');
+  });
+}
+
+function shareInviteLink() {
+  const link = $('invite-link').value;
+  const text = "Join me on Lyfe.fy — find golf rounds and players that actually fit your game.";
+  if (navigator.share) {
+    navigator.share({ title: 'Join me on Lyfe.fy', text, url: link }).catch(() => {});
+  } else {
+    copyInviteLink();
+  }
+}
+
 (async function boot() {
   const { data: { session } } = await db.auth.getSession();
+  const becomeHostBtn = $('nav-become-host');
+  const hostDashBtn   = $('nav-host-dash');
+  const inviteBtn      = $('nav-invite-btn');
+  const accountWrap    = $('account-wrap');
+
   if (session) {
     U = session.user;
     const { data: profile } = await db.from('profiles').select('*').eq('id', U.id).maybeSingle();
     P = profile;
-    const navAct = $('nav-act');
+    const role = P?.role || 'member';
     const name = P?.full_name || U.email?.split('@')[0] || 'Player';
-    navAct.innerHTML = `<a href="dashboard.html" class="uav-mini" title="${name}">${initials(name)}</a>`;
+
+    // Replace the Account dropdown with an avatar linking to the dashboard
+    if (accountWrap) accountWrap.outerHTML = `<a href="dashboard.html" class="uav-mini" title="${name}">${initials(name)}</a>`;
+
+    // Show the Invite button — signed-in users only
+    if (inviteBtn) inviteBtn.style.display = '';
+
+    // Role-aware host buttons
+    if (role === 'host' || role === 'certified' || role === 'host_training' || role === 'pending_host') {
+      if (becomeHostBtn) becomeHostBtn.style.display = 'none';
+      if (hostDashBtn)   hostDashBtn.style.display   = '';
+    }
+
     await loadFairwayMatchBanner();
   }
   await loadSessions();
