@@ -388,6 +388,15 @@ body::before {
           </div>
         </div>
 
+        <!-- Stuck approvals repair banner — shown only when a fix is needed -->
+        <div id="repair-banner" style="display:none;background:var(--warn-light);border:0.5px solid rgba(184,134,11,0.25);border-radius:var(--radius-sm);padding:14px 18px;display:none;align-items:center;justify-content:space-between;gap:14px;">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--warn);">⚠ <span id="repair-count">0</span> approved application(s) never reached Host Academy</div>
+            <div style="font-size:12px;color:var(--ink-40);margin-top:2px;">Their profile role is stuck — usually from older bugs or a missing linked account.</div>
+          </div>
+          <button class="btn-approve" style="flex-shrink:0;" onclick="repairStuckApprovals()">Fix Now</button>
+        </div>
+
         <!-- Recent pending applications -->
         <div style="margin-top: 8px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
@@ -633,6 +642,16 @@ body::before {
     if (pending > 0) { badge.textContent = pending; badge.style.display = ''; }
     else { badge.style.display = 'none'; }
 
+    // ── Detect approved applications whose linked profile never moved past member/pending_host ──
+    const stuck = findStuckApprovals();
+    const repairBanner = document.getElementById('repair-banner');
+    if (stuck.length > 0) {
+      document.getElementById('repair-count').textContent = stuck.length;
+      repairBanner.style.display = 'flex';
+    } else {
+      repairBanner.style.display = 'none';
+    }
+
     // Pending list on overview
     const pendingApps = allApplications.filter(a => a.status === 'pending').slice(0, 5);
     const el = document.getElementById('overview-pending-list');
@@ -641,6 +660,35 @@ body::before {
       return;
     }
     el.innerHTML = pendingApps.map(a => buildAppRow(a, true)).join('');
+  }
+
+  // ── Find approved applications whose profile is still stuck on member/pending_host ──
+  function findStuckApprovals() {
+    return allApplications
+      .filter(a => a.status === 'approved')
+      .map(a => {
+        let profile = null;
+        if (a.user_id) profile = allUsers.find(u => u.id === a.user_id);
+        if (!profile && a.email) profile = allUsers.find(u => (u.email || '').toLowerCase() === (a.email || '').toLowerCase());
+        return { app: a, profile };
+      })
+      .filter(x => x.profile && (x.profile.role === 'member' || x.profile.role === 'pending_host'));
+  }
+
+  // ── Bulk-fix every stuck approval in one click ──
+  async function repairStuckApprovals() {
+    const stuck = findStuckApprovals();
+    if (!stuck.length) { toast('Nothing to fix'); return; }
+    if (!confirm('Send ' + stuck.length + ' stuck applicant(s) to Host Academy now?')) return;
+
+    let fixed = 0;
+    for (const { profile } of stuck) {
+      await sbPatch('profiles?id=eq.' + profile.id, { role: 'host_training' });
+      fixed++;
+    }
+    toast('✓ Fixed ' + fixed + ' applicant(s) — sent to Host Academy');
+    await loadAll();
+    renderOverview();
   }
 
   // ── APPLICATIONS ─────────────────────────────────────
@@ -714,12 +762,31 @@ body::before {
     // 1. Update application status
     await sbPatch('host_applications?id=eq.' + appId, { status: 'approved' });
 
-    // 2. Move user into Host Academy (NOT full host access yet)
-    if (clerkUserId) {
-      await sbPatch('profiles?id=eq.' + clerkUserId, { role: 'host_training' });
+    // 2. Resolve the target profile id — prefer user_id, fall back to matching by email
+    const app = allApplications.find(a => a.id === appId);
+    let targetId = clerkUserId || (app ? app.user_id : null);
+
+    if (!targetId && app && app.email) {
+      const matchByEmail = allUsers.find(u => (u.email || '').toLowerCase() === app.email.toLowerCase());
+      if (matchByEmail) targetId = matchByEmail.id;
     }
 
-    toast('✓ Approved — user must complete Host Academy before hosting');
+    if (!targetId) {
+      toast('⚠ Approved, but no linked account found — use "All Users" to manually send to Academy');
+      await loadAll(); renderApplications(); renderOverview();
+      return;
+    }
+
+    // 3. Move user into Host Academy (NOT full host access yet) — and VERIFY it actually wrote
+    await sbPatch('profiles?id=eq.' + targetId, { role: 'host_training' });
+    const verify = await sbGet('profiles?id=eq.' + targetId + '&select=role');
+    const wrote = Array.isArray(verify) && verify[0] && verify[0].role === 'host_training';
+
+    toast(wrote
+      ? '✓ Approved — sent to Host Academy'
+      : '⚠ Approved, but profile update failed — check console / RLS');
+    if (!wrote) console.error('approveApp: profile role did not update for id', targetId, verify);
+
     await loadAll();
     renderApplications();
     renderOverview();
