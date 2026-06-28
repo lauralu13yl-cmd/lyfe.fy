@@ -8,430 +8,322 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#0e0e0c;--ink2:#2a2a26;--ink3:#5a5a52;--cream:#f5f2eb;--cream2:#ede9df;--cream3:#e2ddd2;--green:#1a7a52;--gl:#d4ede2;--gm:#2a9e6a;--amber:#c8821a;--al:#faeeda;--w:#fff;--serif:'Playfair Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;--rsm:8px;--rmd:14px;--rlg:20px;--rxl:28px;--ease:cubic-bezier(.25,.46,.45,.94);--nav:64px}
+:root{--ink:#0e0e0c;--ink2:#2a2a26;--ink3:#5a5a52;--cream:#f5f2eb;--cream2:#ede9df;--cream3:#e2ddd2;--green:#1a7a52;--gl:#d4ede2;--gm:#2a9e6a;--amber:#c8821a;--al:#faeeda;--w:#fff;--serif:'Playfair Display',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;--mono:'DM Mono',monospace;--rsm:8px;--rlg:20px;--rxl:28px;--ease:cubic-bezier(.25,.46,.45,.94)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--sans);background:var(--cream2);color:var(--ink);overflow-x:hidden;font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+body{font-family:var(--sans);background:var(--cream2);color:var(--ink);font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased}
 a{text-decoration:none;color:inherit}
-button{font-family:var(--sans);cursor:pointer;border:none}
-input,select,textarea{font-family:var(--sans)}
-.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav);padding:0 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(245,242,235,.97);border-bottom:1px solid rgba(90,90,82,.12)}
-.logo{font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
-.logo span{color:var(--gm)}
-.nav-links{display:flex;align-items:center;gap:26px;list-style:none}
-.nav-links a{font-size:13px;color:var(--ink3);transition:color .2s}
-.nav-links a:hover,.nav-links a.active{color:var(--ink)}
-.nav-act{display:flex;gap:10px;align-items:center}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:var(--sans);font-size:13px;font-weight:500;padding:9px 18px;border-radius:var(--rsm);border:1px solid transparent;cursor:pointer;transition:all .2s var(--ease);letter-spacing:.01em;white-space:nowrap;text-decoration:none}
+button{font-family:var(--sans);cursor:pointer;border:none;background:none}
+input,select{font-family:var(--sans)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:var(--sans);font-size:12px;font-weight:500;padding:8px 16px;border-radius:var(--rsm);border:1px solid transparent;cursor:pointer;transition:all .2s;text-decoration:none}
 .bi{background:var(--ink);color:var(--cream);border-color:var(--ink)}.bi:hover{background:var(--ink2);transform:translateY(-1px)}
 .bg{background:var(--gm);color:#fff;border-color:var(--gm)}.bg:hover{background:var(--green);transform:translateY(-1px)}
-.bo{background:transparent;color:var(--ink2);border-color:var(--cream3)}.bo:hover{background:var(--cream2);border-color:var(--ink3)}
-.bsm{font-size:12px;padding:7px 14px}.bfw{width:100%;justify-content:center}
-.tag{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px}
-.tg{background:var(--gl);color:var(--green)}.ta{background:var(--al);color:var(--amber)}.ts{background:var(--cream2);color:var(--ink3)}
-@keyframes pa{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
-.ft{background:var(--ink);padding:32px 40px;border-top:1px solid rgba(255,255,255,.06)}
-.fti{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
-.flogo{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--cream)}
-.flinks{display:flex;gap:20px;flex-wrap:wrap}
-.flinks a{font-size:12px;color:rgba(245,242,235,.4);transition:color .2s}
-.flinks a:hover{color:var(--cream)}
-.fcopy{font-size:12px;color:rgba(245,242,235,.25)}
-.page-top{padding:calc(var(--nav) + 52px) 40px 36px}
-.page-h1{font-family:var(--serif);font-size:clamp(38px,5vw,58px);font-weight:900;line-height:1.06;letter-spacing:-.03em;margin-bottom:10px}
-.page-h1 em{font-style:italic;color:var(--green)}
-.page-sub{font-size:16px;color:var(--ink3);font-weight:300;max-width:520px}
-.glayout{display:grid;grid-template-columns:250px 1fr;gap:24px;padding:0 40px 80px}
-.gsidebar{position:sticky;top:calc(var(--nav) + 16px);height:fit-content}
-.fpanel{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rlg);padding:20px}
-.ftitle{font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:14px}
-.fgrp2{margin-bottom:20px}
-.flbl2{font-size:12px;font-weight:500;color:var(--ink3);margin-bottom:8px;display:block}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{font-size:12px;color:var(--ink3);background:var(--cream2);padding:5px 12px;border-radius:20px;border:1px solid var(--cream3);cursor:pointer;transition:all .2s}
-.chip:hover,.chip.act{background:var(--ink);color:var(--cream);border-color:var(--ink)}
-.csel{width:100%;padding:9px 12px;border:1px solid var(--cream3);border-radius:var(--rsm);background:var(--w);color:var(--ink);font-size:13px;cursor:pointer;outline:none;font-family:var(--sans)}
-.csel:focus{border-color:var(--green)}
-.ghead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.gcnt{font-size:13px;color:var(--ink3)}
-.live-badge{font-size:11px;font-weight:500;color:var(--green);background:var(--gl);padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
-.live-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pa 2s ease-in-out infinite}
-.gcard{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rlg);padding:22px;display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start;transition:transform .2s var(--ease),border-color .2s;margin-bottom:12px}
-.gcard:hover{transform:translateY(-2px);border-color:var(--gl)}
-.gcard.new-session{border-color:var(--gm);animation:pulse-border 2s ease-in-out 3}
-@keyframes pulse-border{0%,100%{border-color:var(--gm)}50%{border-color:var(--green);box-shadow:0 0 0 3px rgba(42,158,106,.15)}}
-.gname{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:3px;line-height:1.2}
-.ghost-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;margin-top:6px}
-.ghav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff;background:var(--gm)}
-.ghn{font-size:12px;font-weight:500;color:var(--ink2)}
-.gmeta{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:12px}
-.gmi{font-size:12px;color:var(--ink3)}
-.gtags{display:flex;gap:6px;flex-wrap:wrap}
-.gr{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-.gprice{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--ink)}
-.gpnote{font-size:11px;color:var(--ink3);font-family:var(--sans);margin-top:-6px}
-.gspots{font-size:12px;font-weight:500}
-.sbar{width:80px;height:4px;background:var(--cream2);border-radius:2px;overflow:hidden}
-.sfill{height:100%;border-radius:2px;background:var(--gm)}
-.empty-state{text-align:center;padding:60px 20px;color:var(--ink3)}
-.empty-state p{font-size:14px;margin-top:8px}
-.loading-state{text-align:center;padding:60px 20px;color:var(--ink3)}
-.spin{width:24px;height:24px;border:2px solid var(--cream3);border-top-color:var(--gm);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 12px}
+.bo{background:transparent;color:var(--ink2);border-color:var(--cream3)}.bo:hover{background:var(--cream2)}
+.bfw{width:100%;justify-content:center}
+.bsm{font-size:11px;padding:5px 11px}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;height:64px;padding:0 32px;display:flex;align-items:center;justify-content:space-between;background:rgba(237,233,223,.97);border-bottom:1px solid rgba(90,90,82,.12);backdrop-filter:blur(8px)}
+.logo{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--ink)}
+.logo span{color:var(--gm)}
+.nav-links{display:flex;align-items:center;gap:24px;list-style:none}
+.nav-links a{font-size:13px;color:var(--ink3);transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-act{display:flex;gap:10px;align-items:center}
+.uav-mini{width:32px;height:32px;border-radius:50%;background:var(--gm);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#fff;cursor:pointer}
+
+/* PAGE HEAD */
+.pagehead{max-width:1180px;margin:0 auto;padding:36px 32px 0}
+.ph-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:8px}
+.ph-title{font-family:var(--serif);font-size:clamp(28px,4vw,40px);font-weight:900;letter-spacing:-.02em;margin-bottom:6px}
+.ph-title em{font-style:italic;color:var(--green)}
+.ph-sub{font-size:14px;color:var(--ink3);font-weight:300}
+
+/* FAIRWAY MATCH BANNER */
+.fm-banner{background:linear-gradient(135deg,#0e3d28 0%,#1a5c3a 100%);border-radius:var(--rlg);padding:22px 26px;color:var(--cream);display:flex;align-items:center;gap:18px;margin:20px 0}
+.fm-b-icon{font-size:26px;flex-shrink:0}
+.fm-b-eyebrow{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#6ecfa0;margin-bottom:4px}
+.fm-b-title{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--cream);margin-bottom:2px}
+.fm-b-sub{font-size:12.5px;color:rgba(245,242,235,.5)}
+.fm-b-score{font-family:var(--serif);font-size:26px;font-weight:900;color:#a8dfc4;flex-shrink:0;text-align:center}
+.fm-b-score-lbl{font-size:9px;color:rgba(245,242,235,.4);text-transform:uppercase;letter-spacing:.08em}
+
+/* FILTERS */
+.filters{max-width:1180px;margin:0 auto;padding:0 32px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.search-inp{flex:1;min-width:220px;max-width:320px;padding:9px 14px;border:1px solid var(--cream3);border-radius:var(--rsm);background:var(--w);font-size:13px;outline:none}
+.search-inp:focus{border-color:var(--green)}
+.chip{font-size:11.5px;font-weight:500;padding:7px 15px;border-radius:30px;border:1px solid var(--cream3);background:var(--w);color:var(--ink3);cursor:pointer;transition:all .15s;white-space:nowrap}
+.chip:hover{border-color:var(--ink3)}
+.chip.sel{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+
+/* GRID */
+.grid{max-width:1180px;margin:0 auto;padding:0 32px 80px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.loading{display:flex;align-items:center;gap:10px;justify-content:center;padding:60px;color:var(--ink3);font-size:13px;grid-column:1/-1}
+.spinner{width:18px;height:18px;border:2px solid var(--cream3);border-top-color:var(--gm);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.modal-bg{position:fixed;inset:0;background:rgba(14,14,12,.55);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
-.modal-bg.open{opacity:1;pointer-events:all}
-.modal{background:var(--w);border-radius:var(--rxl);padding:32px;max-width:420px;width:100%;transform:translateY(16px);transition:transform .3s var(--ease)}
-.modal-bg.open .modal{transform:translateY(0)}
-.mh{font-family:var(--serif);font-size:22px;font-weight:700;margin-bottom:6px}
-.ms{font-size:13px;color:var(--ink3);margin-bottom:20px}
-.mrow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--cream3);font-size:13px}
-.mrow:last-of-type{border-bottom:none;font-weight:500}
-.mact{display:flex;gap:10px;margin-top:20px}
+.empty-state{grid-column:1/-1;text-align:center;padding:60px 24px;color:var(--ink3)}
+.empty-icon{font-size:32px;margin-bottom:10px;opacity:.5}
+
+/* SESSION CARD */
+.scard{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rlg);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s,transform .2s}
+.scard:hover{box-shadow:0 8px 28px rgba(14,14,12,.08);transform:translateY(-2px)}
+.sc-top{padding:18px 18px 14px}
+.sc-match{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:var(--green);background:var(--gl);border:1px solid rgba(42,158,106,.2);padding:3px 10px;border-radius:20px;margin-bottom:10px}
+.sc-title{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.25}
+.sc-host{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.sc-host-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:600;color:#fff;flex-shrink:0}
+.sc-host-name{font-size:12px;color:var(--ink2)}
+.sc-meta{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--ink3)}
+.sc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.sc-tag{font-size:10px;font-weight:500;padding:2px 9px;border-radius:14px;background:var(--cream2);color:var(--ink3)}
+.sc-foot{border-top:1px solid var(--cream3);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;background:var(--cream2)}
+.sc-price{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink)}
+.sc-spots{font-size:10.5px;color:var(--ink3)}
+.sc-spots.low{color:var(--amber);font-weight:600}
 </style>
 </head>
 <body>
 
-<nav class="nav" id="nav">
-  <a href="index.html" class="logo"><img src="logo.png" alt="Lyfe.fy" style="height:100px;width:auto;display:block"></a>
+<nav class="nav">
+  <a href="index.html" class="logo">Lyfe<span>.</span>fy</a>
   <ul class="nav-links">
-    <li><a href="index.html#universe">Experiences</a></li>
-    <li><a href="games.html" class="active">Find a game</a></li>
-    <li><a href="index.html#trips">Trips</a></li>
-    <li><a href="index.html#tournaments">Tournaments</a></li>
-    <li><a href="hostapplication.html">Become a host</a></li>
-    <li><a href="shop.html">Shop</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
   </ul>
-  <div class="nav-act">
-    <a href="dashboard.html" class="btn bo">Dashboard</a>
-    <a href="onboarding.html" class="btn bi">Join free →</a>
+  <div class="nav-act" id="nav-act">
+    <a href="onboarding.html" class="btn bi" id="nav-join-btn">Join Lyfe.fy</a>
   </div>
 </nav>
 
-<div class="page-top">
-  <span class="eyebrow">Golf · Boston · NYC · D.C.</span>
-  <h1 class="page-h1">Find a <em>Game</em></h1>
-  <p class="page-sub">Upcoming sessions hosted by certified athletes. Reserve your spot — group fills, then you play.</p>
+<div class="pagehead">
+  <div class="ph-eyebrow">Find a Round</div>
+  <h1 class="ph-title">Your next <em>round</em> starts here</h1>
+  <p class="ph-sub">Browse hosted golf sessions, see who's a great fit, and book your tee time in seconds.</p>
+
+  <!-- FAIRWAY MATCH BANNER — shown only when signed in -->
+  <div class="fm-banner" id="fm-banner" style="display:none"></div>
 </div>
 
-<div class="glayout">
-  <aside class="gsidebar">
-    <div class="fpanel">
-      <div class="ftitle">Filters</div>
-      <div class="fgrp2">
-        <span class="flbl2">Sport</span>
-        <select class="csel" id="sport-filter" onchange="applyFilters()">
-          <option value="all">All sports</option>
-          <option value="Golf">Golf</option>
-          <option value="Tennis">Tennis</option>
-          <option value="Basketball">Basketball</option>
-          <option value="Soccer">Soccer</option>
-          <option value="Volleyball">Volleyball</option>
-        </select>
-      </div>
-      <div class="fgrp2">
-        <span class="flbl2">Session type</span>
-        <div class="chips" id="type-chips">
-          <span class="chip act" data-val="all" onclick="setChip(this,'type-chips')">All</span>
-          <span class="chip" data-val="Casual" onclick="setChip(this,'type-chips')">Casual</span>
-          <span class="chip" data-val="Coached" onclick="setChip(this,'type-chips')">Coached</span>
-          <span class="chip" data-val="Tournament" onclick="setChip(this,'type-chips')">Tournament</span>
-          <span class="chip" data-val="Training" onclick="setChip(this,'type-chips')">Training</span>
-        </div>
-      </div>
-      <div class="fgrp2" style="margin-bottom:0">
-        <span class="flbl2">Skill level</span>
-        <div class="chips" id="level-chips">
-          <span class="chip act" data-val="all" onclick="setChip(this,'level-chips')">All</span>
-          <span class="chip" data-val="Beginner" onclick="setChip(this,'level-chips')">Beginner</span>
-          <span class="chip" data-val="Intermediate" onclick="setChip(this,'level-chips')">Intermediate</span>
-          <span class="chip" data-val="Advanced" onclick="setChip(this,'level-chips')">Advanced</span>
-        </div>
-      </div>
-    </div>
-    <div style="margin-top:12px"><a href="hostapplication.html" class="btn bo bfw">Become a host →</a></div>
-  </aside>
-
-  <main>
-    <div class="ghead">
-      <div style="display:flex;align-items:center;gap:12px">
-        <span class="gcnt" id="gcnt">Loading…</span>
-        <span class="live-badge" id="live-badge" style="display:none">Live</span>
-      </div>
-      <select class="csel" style="width:auto;font-size:12px" id="sort-select" onchange="renderCards()">
-        <option value="date">Sort: Soonest</option>
-        <option value="price_asc">Sort: Price low–high</option>
-        <option value="spots">Sort: Spots remaining</option>
-      </select>
-    </div>
-    <div id="ggrid">
-      <div class="loading-state">
-        <div class="spin"></div>
-        <p>Loading sessions…</p>
-      </div>
-    </div>
-  </main>
+<div class="filters">
+  <input class="search-inp" id="search" type="text" placeholder="Search title, location, host..." oninput="renderSessions()">
 </div>
 
-<div class="modal-bg" id="mbg" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal">
-    <div class="mh" id="mname">Session</div>
-    <div class="ms">Review your booking details before confirming.</div>
-    <div class="mrow"><span>Session price</span><span id="mprice" style="font-family:var(--mono)">—</span></div>
-    <div class="mrow"><span>Platform fee (10%)</span><span id="mfee" style="font-family:var(--mono)">—</span></div>
-    <div class="mrow"><span>Total</span><span id="mtotal" style="font-family:var(--mono);color:var(--green)">—</span></div>
-    <div class="mact">
-      <button class="btn bg bfw" id="confirm-btn" onclick="confirmBooking()">Confirm booking →</button>
-      <button class="btn bo" onclick="document.getElementById('mbg').classList.remove('open')">Cancel</button>
-    </div>
-    <div id="book-msg" style="display:none;margin-top:12px;font-size:12px;text-align:center;color:var(--green)"></div>
-  </div>
+<div class="grid" id="grid">
+  <div class="loading"><div class="spinner"></div>Loading sessions...</div>
 </div>
 
-<footer class="ft">
-  <div class="fti">
-    <div class="flogo">Lyfe<span style="color:var(--gm)">.</span>fy</div>
-    <div class="flinks">
-      <a href="index.html">Home</a>
-      <a href="games.html">Find a game</a>
-      <a href="hostapplication.html">For hosts</a>
-      <a href="shop.html">Shop</a>
-      <a href="#">Privacy</a>
-    </div>
-    <div class="fcopy">© 2025 Lyfe, Inc.</div>
-  </div>
-</footer>
-
-<!-- ONE script block — no duplicates, no lyfe-core conflict -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/lyfe-core.js"></script>
 <script>
-// Create our own client — no lyfe-core.js on this page to avoid conflicts
-const _URL = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
-const _KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
-const supa = supabase.createClient(_URL, _KEY);
-  const FUNCTIONS_URL = 'https://bcvhlkncezqzzzrrbkum.functions.supabase.co';
-
+let U = null, P = null;
 let allSessions = [];
-let currentBookingId = null;
-let currentBookingPrice = 0;
+let hostProfiles = {};
+let myWeeklyMatch = null;
 
-const avatarColors = ['#2a9e6a','#7c5fa0','#c8821a','#2a7ac8','#c8402a','#2a9eb8'];
-function colorFor(str) {
-  let h = 0;
-  for (let i = 0; i < (str||'').length; i++) h = str.charCodeAt(i) + ((h << 5) - h);
-  return avatarColors[Math.abs(h) % avatarColors.length];
+function $(id){return document.getElementById(id);}
+function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):'';}
+function avColor(seed){
+  const colors=['#2a9e6a','#7c5fa0','#c8821a','#3a7ca5','#c0526a'];
+  let h=0; for(let i=0;i<(seed||'').length;i++) h=(h+seed.charCodeAt(i))%colors.length;
+  return colors[h];
+}
+function initials(name){return (name||'?').split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();}
+function formatTime(t){if(!t)return'';const[h,m]=t.split(':');const hr=parseInt(h);return(hr%12||12)+':'+m+(hr>=12?'pm':'am');}
+function fmtDate(d){return d?new Date(d+'T00:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}):'TBD';}
+
+/* ════ MATCHING ENGINE (shared logic with dashboard.html) ════ */
+function computeMatchScore(me, them) {
+  let score = 0;
+  const sharedTags = [];
+  if (!me || !them) return { score: 0, sharedTags: [] };
+
+  const sameCity = me.city && them.city && me.city === them.city;
+  if (!sameCity && !(me.willing_to_travel || them.willing_to_travel)) return { score: 0, sharedTags: [] };
+  if (sameCity) { score += 10; sharedTags.push(me.city); }
+
+  const skillOrder = ['Beginner','Intermediate','Advanced','Competitive'];
+  const mySkillIdx = skillOrder.indexOf(me.skill_level);
+  const theirSkillIdx = skillOrder.indexOf(them.skill_level);
+  if (mySkillIdx >= 0 && theirSkillIdx >= 0) {
+    const diff = Math.abs(mySkillIdx - theirSkillIdx);
+    score += diff === 0 ? 25 : diff === 1 ? 15 : 5;
+    if (diff <= 1) sharedTags.push(them.skill_level + ' level');
+  }
+
+  const mySchedule = Array.isArray(me.schedule) ? me.schedule : [];
+  const theirSchedule = Array.isArray(them.schedule) ? them.schedule : [];
+  const scheduleOverlap = mySchedule.filter(s => theirSchedule.includes(s));
+  if (scheduleOverlap.length > 0) { score += Math.min(20, scheduleOverlap.length * 10); sharedTags.push(scheduleOverlap[0]); }
+
+  const myEnergy = Array.isArray(me.energy) ? me.energy : [];
+  const theirEnergy = Array.isArray(them.energy) ? them.energy : [];
+  const energyOverlap = myEnergy.filter(e => theirEnergy.includes(e));
+  if (energyOverlap.length > 0) { score += Math.min(20, energyOverlap.length * 10); sharedTags.push(energyOverlap[0]); }
+
+  if (me.industry && them.industry && me.industry === them.industry) { score += 15; sharedTags.push(them.industry); }
+  if (me.golf_style && them.golf_style && me.golf_style === them.golf_style) { score += 10; sharedTags.push(them.golf_style); }
+
+  return { score: Math.min(100, score), sharedTags: sharedTags.slice(0,4) };
 }
 
+function isoWeekMonday(d) {
+  const date = new Date(d);
+  const day = date.getDay();
+  const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+  return new Date(date.setDate(diff)).toISOString().split('T')[0];
+}
+
+async function loadFairwayMatchBanner() {
+  if (!U || !P) return;
+  const weekOf = isoWeekMonday(new Date());
+  const { data: existing } = await db.from('weekly_matches').select('*').eq('user_id', U.id).eq('week_of', weekOf).maybeSingle();
+
+  let match = existing;
+  if (!match) {
+    const { data: candidates } = await db.from('profiles').select('*').neq('id', U.id).not('role','in','(host_training)');
+    let best = null;
+    (candidates || []).forEach(c => {
+      const { score, sharedTags } = computeMatchScore(P, c);
+      if (score > 0 && (!best || score > best.score)) best = { matched_user_id: c.id, score, sharedTags, profile: c };
+    });
+    if (best) {
+      const { data: inserted } = await db.from('weekly_matches').insert({
+        user_id: U.id, matched_user_id: best.matched_user_id, score: best.score,
+        shared_tags: best.sharedTags, week_of: weekOf, status: 'suggested'
+      }).select().single();
+      match = inserted || { ...best, week_of: weekOf, status: 'suggested' };
+    }
+  }
+  if (!match) return;
+
+  let profile = match.profile;
+  if (!profile) {
+    const { data } = await db.from('profiles').select('*').eq('id', match.matched_user_id).maybeSingle();
+    profile = data;
+  }
+  myWeeklyMatch = { ...match, profile };
+
+  const banner = $('fm-banner');
+  banner.style.display = 'flex';
+  banner.innerHTML = `
+    <div class="fm-b-icon">⛳</div>
+    <div style="flex:1">
+      <div class="fm-b-eyebrow">Fairway Match</div>
+      <div class="fm-b-title">${profile?.full_name || 'A fellow golfer'} could be your next great round</div>
+      <div class="fm-b-sub">${(Array.isArray(match.shared_tags)?match.shared_tags:[]).slice(0,3).join(' · ') || 'Compatible schedule and skill level'}</div>
+    </div>
+    <div class="fm-b-score">${match.score}%<div class="fm-b-score-lbl">Match</div></div>
+    <a href="dashboard.html" class="btn bo" style="background:rgba(255,255,255,.08);color:var(--cream);border-color:rgba(255,255,255,.18);flex-shrink:0">View in Dashboard →</a>
+  `;
+}
+
+/* ════ SESSIONS ════ */
 async function loadSessions() {
-  const grid = document.getElementById('ggrid');
-  grid.innerHTML = '<div class="loading-state"><div class="spin"></div><p>Loading sessions…</p></div>';
+  // Golf-only platform — hard filter at the query level
+  const { data: sessions } = await db.from('sessions').select('*').eq('status','active').eq('sport','Golf').order('session_date',{ascending:true});
+  allSessions = sessions || [];
 
-  const { data, error } = await supa
-    .from('sessions')
-    .select('*')
-    .eq('status', 'active')
-    .order('session_date', { ascending: true });
+  // Fetch host profiles in bulk for match scoring + avatar display
+  const hostIds = [...new Set(allSessions.map(s => s.host_id).filter(Boolean))];
+  if (hostIds.length) {
+    const { data: hosts } = await db.from('profiles').select('*').in('id', hostIds);
+    (hosts || []).forEach(h => { hostProfiles[h.id] = h; });
+  }
+  renderSessions();
+}
 
-  if (error) {
-    console.error('Supabase error:', error);
-    grid.innerHTML = `<div class="empty-state"><p style="color:#c0392b">Error: ${error.message}</p></div>`;
+function renderSessions() {
+  const q = ($('search').value || '').toLowerCase();
+  let data = allSessions;
+  if (q) data = data.filter(s =>
+    (s.title||'').toLowerCase().includes(q) ||
+    (s.location||'').toLowerCase().includes(q) ||
+    (hostProfiles[s.host_id]?.full_name||'').toLowerCase().includes(q)
+  );
+
+  const grid = $('grid');
+  if (!data.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">⛳</div><div style="font-weight:500">No sessions found</div><div style="font-size:12px;margin-top:4px">Try a different sport or search term.</div></div>';
     return;
   }
 
-  allSessions = data || [];
-  renderCards();
-  document.getElementById('live-badge').style.display = 'inline-flex';
+  grid.innerHTML = data.map(s => {
+    const host = hostProfiles[s.host_id] || {};
+    const hostName = host.full_name || 'Lyfe.fy Host';
+    const booked = s.spots_taken || 0;
+    const total = s.spots_total || 8;
+    const left = total - booked;
+    const lowSpots = left > 0 && left <= 2;
+    const price = parseFloat(s.price) === 0 ? 'Free' : '$' + parseFloat(s.price).toFixed(0);
+    const emoji = '⛳';
+
+    // Compatibility with host — only meaningful if viewer is signed in
+    let matchBadge = '';
+    if (P && host.id) {
+      const { score } = computeMatchScore(P, host);
+      if (score > 0) matchBadge = `<div class="sc-match">✨ ${score}% match with host</div>`;
+    }
+
+    return `<div class="scard">
+      <div class="sc-top">
+        ${matchBadge}
+        <div class="sc-title">${emoji} ${s.title || 'Session'}</div>
+        <div class="sc-host">
+          <div class="sc-host-av" style="background:${avColor(host.id||hostName)}">${initials(hostName)}</div>
+          <div class="sc-host-name">${hostName}</div>
+        </div>
+        <div class="sc-meta">
+          <div>📅 ${fmtDate(s.session_date)}${s.session_time?' · '+formatTime(s.session_time):''}</div>
+          <div>📍 ${s.location || 'Location TBD'}</div>
+          <div>${cap(s.skill_level||'All levels')} · ${cap(s.format||'')}</div>
+        </div>
+        <div class="sc-tags">
+          <span class="sc-tag">${cap(s.session_type||'Casual')}</span>
+        </div>
+      </div>
+      <div class="sc-foot">
+        <div>
+          <div class="sc-price">${price}</div>
+          <div class="sc-spots ${lowSpots?'low':''}">${left>0 ? left+' spot'+(left!==1?'s':'')+' left' : 'Full'}</div>
+        </div>
+        ${U
+          ? (left>0 ? `<button class="btn bg bsm" onclick="bookSession('${s.id}')">Book Now</button>` : `<span style="font-size:11px;color:var(--ink3)">Full</span>`)
+          : `<a href="onboarding.html" class="btn bi bsm">Sign up to book</a>`
+        }
+      </div>
+    </div>`;
+  }).join('');
 }
 
-function renderCards() {
-  const sport = document.getElementById('sport-filter').value;
-  const type  = document.querySelector('#type-chips .chip.act')?.dataset.val || 'all';
-  const level = document.querySelector('#level-chips .chip.act')?.dataset.val || 'all';
-  const sort  = document.getElementById('sort-select').value;
+async function bookSession(sessionId) {
+  const s = allSessions.find(x => x.id === sessionId);
+  if (!s) return;
+  if (!confirm('Book "' + s.title + '" for ' + (parseFloat(s.price)===0?'free':'$'+parseFloat(s.price).toFixed(0)) + '?')) return;
 
-  let filtered = allSessions.filter(s => {
-    const matchSport = sport === 'all' || (s.sport||'').toLowerCase() === sport.toLowerCase();
-    const matchType  = type  === 'all' || (s.session_type||'').toLowerCase() === type.toLowerCase();
-    const matchLevel = level === 'all' || (s.skill_level||'').toLowerCase() === level.toLowerCase() || (s.skill_level||'').toLowerCase() === 'all levels';
-    return matchSport && matchType && matchLevel;
+  const { error } = await db.from('bookings').insert({
+    session_id: sessionId, player_id: U.id, paid_amount: parseFloat(s.price)||0, status: 'confirmed'
   });
+  if (error) { alert('Booking failed: ' + error.message); return; }
 
-  if (sort === 'price_asc') filtered.sort((a,b) => (a.price||0)-(b.price||0));
-  else if (sort === 'spots') filtered.sort((a,b) => ((b.spots_total||0)-(b.spots_taken||0))-((a.spots_total||0)-(a.spots_taken||0)));
-  else filtered.sort((a,b) => new Date(a.session_date||'9999')-new Date(b.session_date||'9999'));
+  await db.from('sessions').update({ spots_taken: (s.spots_taken||0) + 1 }).eq('id', sessionId);
+  alert('✓ Booked! Check your dashboard for details.');
+  window.location.href = 'dashboard.html';
+}
 
-  document.getElementById('gcnt').textContent = filtered.length + ' session' + (filtered.length!==1?'s':'') + ' available';
-
-  if (!filtered.length) {
-    document.getElementById('ggrid').innerHTML = `
-      <div class="empty-state">
-        <div style="font-size:36px;margin-bottom:12px">🏌️</div>
-        <p style="font-weight:500;color:var(--ink)">No sessions found</p>
-        <p>Try adjusting your filters, or check back soon.</p>
-      </div>`;
-    return;
+/* ════ AUTH (optional — page browsable as guest) ════ */
+(async function boot() {
+  const { data: { session } } = await db.auth.getSession();
+  if (session) {
+    U = session.user;
+    const { data: profile } = await db.from('profiles').select('*').eq('id', U.id).maybeSingle();
+    P = profile;
+    const navAct = $('nav-act');
+    const name = P?.full_name || U.email?.split('@')[0] || 'Player';
+    navAct.innerHTML = `<a href="dashboard.html" class="uav-mini" title="${name}">${initials(name)}</a>`;
+    await loadFairwayMatchBanner();
   }
-
-  document.getElementById('ggrid').innerHTML = filtered.map(s => buildCard(s)).join('');
-}
-
-function buildCard(s) {
-  const spotsLeft = (s.spots_total||0) - (s.spots_taken||0);
-  const spotsPct  = s.spots_total ? Math.round((s.spots_taken/s.spots_total)*100) : 0;
-  const price     = parseFloat(s.price||0);
-  const priceStr  = price===0 ? 'Free' : '$'+price.toFixed(0);
-  const hostName  = 'Host';
-  const initials  = 'H';
-  const avatarBg  = colorFor(s.host_id||'');
-  const dateStr   = s.session_date ? new Date(s.session_date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'TBD';
-  const timeStr   = s.session_time ? formatTime(s.session_time) : '';
-  const sportEmoji = {Golf:'⛳',Tennis:'🎾',Basketball:'🏀',Soccer:'⚽',Volleyball:'🏐'}[s.sport]||'🏅';
-  const spotsColor = spotsLeft<=2 ? 'color:var(--amber)' : 'color:var(--green)';
-  const spotsText  = spotsLeft<=0 ? 'Full' : spotsLeft+' spot'+(spotsLeft!==1?'s':'')+' left';
-
-  return `<div class="gcard" id="card-${s.id}">
-    <div>
-      ${s.sport ? `<span class="tag tg" style="margin-bottom:8px;display:inline-flex">${sportEmoji} ${s.sport}</span>` : ''}
-      <div class="gname" style="margin-top:8px">${s.title||'Untitled session'}</div>
-      <div class="ghost-row">
-        <div class="ghav" style="background:${avatarBg}">${initials}</div>
-        <span class="ghn">${hostName}</span>
-      </div>
-      <div class="gmeta">
-        <span class="gmi">📅 ${dateStr}${timeStr?' · '+timeStr:''}</span>
-        ${s.location?`<span class="gmi">📍 ${s.location}</span>`:''}
-        ${s.format?`<span class="gmi">👥 ${s.format}</span>`:''}
-      </div>
-      <div class="gtags">
-        ${s.session_type?`<span class="tag ts">${s.session_type}</span>`:''}
-        ${s.skill_level?`<span class="tag ts">${s.skill_level}</span>`:''}
-      </div>
-      ${s.description?`<p style="font-size:12px;color:var(--ink3);margin-top:10px;line-height:1.5">${s.description}</p>`:''}
-    </div>
-    <div class="gr">
-      <div><div class="gprice">${priceStr}</div><div class="gpnote">per player</div></div>
-      <div class="gspots" style="${spotsColor}">${spotsText}</div>
-      <div class="sbar"><div class="sfill" style="width:${spotsPct}%"></div></div>
-      ${spotsLeft>0
-        ? `<button class="btn bi bsm" onclick="openBook('${s.id}','${(s.title||'').replace(/'/g,"\\'")}',${price})">Book →</button>`
-        : `<button class="btn bo bsm" disabled style="opacity:.5;cursor:not-allowed">Full</button>`}
-    </div>
-  </div>`;
-}
-
-function formatTime(t) {
-  if (!t) return '';
-  const [h,m] = t.split(':');
-  const hour = parseInt(h);
-  return (hour%12||12)+':'+m+(hour>=12?'pm':'am');
-}
-
-function setChip(el, gid) {
-  document.querySelectorAll('#'+gid+' .chip').forEach(c=>c.classList.remove('act'));
-  el.classList.add('act');
-  renderCards();
-}
-function applyFilters() { renderCards(); }
-
-  function openBook(id, name, price) {
-  currentBookingId    = id;
-  currentBookingPrice = price;
-  document.getElementById('mname').textContent  = name;
-  document.getElementById('mprice').textContent = price===0?'Free':'$'+price;
-  document.getElementById('mfee').textContent   = '$0';
-  document.getElementById('mtotal').textContent = price===0?'Free':'$'+price;
-  document.getElementById('book-msg').style.display = 'none';
-  document.getElementById('mbg').classList.add('open');
-}
-
-
-async function confirmBooking() {
-  const btn = document.getElementById('confirm-btn');
-  const msg = document.getElementById('book-msg');
-  const { data: { session } } = await supa.auth.getSession();
-  if (!session) { window.location.href = 'onboarding.html'; return; }
-
-  // Free sessions: keep the old direct-insert flow, no payment needed.
-  if (currentBookingPrice === 0) {
-    btn.disabled = true; btn.textContent = 'Booking…';
-    const { error } = await supa.from('bookings').insert({
-      session_id:  currentBookingId,
-      player_id:   session.user.id,
-      paid_amount: 0,
-      status:      'confirmed'
-    });
-    if (error) {
-      btn.disabled = false; btn.textContent = 'Confirm booking →';
-      msg.textContent = error.message.includes('unique') ? 'You already booked this!' : 'Error: '+error.message;
-      msg.style.color = 'var(--amber)';
-      msg.style.display = 'block';
-      return;
-    }
-    await supa.rpc('increment_spots', { sid: currentBookingId });
-    btn.textContent = '✓ Booked!';
-    msg.textContent = "You're in! Check your dashboard.";
-    msg.style.color = 'var(--green)';
-    msg.style.display = 'block';
-    setTimeout(async () => {
-      document.getElementById('mbg').classList.remove('open');
-      btn.disabled = false; btn.textContent = 'Confirm booking →';
-      await loadSessions();
-    }, 1500);
-    return;
-  }
-
-  // Paid sessions: go through Stripe Checkout.
-  btn.disabled = true; btn.textContent = 'Redirecting to payment…';
-  try {
-    const res = await fetch(FUNCTIONS_URL + '/create-checkout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + session.access_token
-      },
-      body: JSON.stringify({ session_id: currentBookingId })
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      btn.disabled = false; btn.textContent = 'Confirm booking →';
-      msg.textContent = data.error || 'Something went wrong.';
-      msg.style.color = 'var(--amber)';
-      msg.style.display = 'block';
-      return;
-    }
-    window.location.href = data.url;
-  } catch (err) {
-    console.error(err);
-    btn.disabled = false; btn.textContent = 'Confirm booking →';
-    msg.textContent = 'Could not start checkout. Please try again.';
-    msg.style.color = 'var(--amber)';
-    msg.style.display = 'block';
-  }
-}
-  
-
-function subscribeRealtime() {
-  supa.channel('games-live')
-    .on('postgres_changes', { event:'INSERT', schema:'public', table:'sessions' }, payload => {
-      if (payload.new.status === 'active') {
-        allSessions.unshift(payload.new);
-        renderCards();
-        setTimeout(() => {
-          const card = document.getElementById('card-'+payload.new.id);
-          if (card) { card.classList.add('new-session'); card.scrollIntoView({behavior:'smooth',block:'center'}); }
-        }, 100);
-      }
-    })
-    .on('postgres_changes', { event:'UPDATE', schema:'public', table:'sessions' }, payload => {
-      const idx = allSessions.findIndex(s => s.id === payload.new.id);
-      if (idx !== -1) { allSessions[idx] = {...allSessions[idx], ...payload.new}; renderCards(); }
-    })
-    .subscribe();
-}
-
-document.addEventListener('DOMContentLoaded', async () => {
   await loadSessions();
-  subscribeRealtime();
-});
+})();
 </script>
 </body>
 </html>
