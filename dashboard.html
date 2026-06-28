@@ -135,23 +135,23 @@ select.finp{cursor:pointer}
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:10px 22px;border-radius:30px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 #toast.show{opacity:1}
 
-/* ── TEE TIME TWIN ── */
+/* ── FAIRWAY MATCH ── */
 .spinner{width:18px;height:18px;border:2px solid var(--cream3);border-top-color:var(--gm);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 .loading{display:flex;align-items:center;gap:10px;justify-content:center;padding:24px;color:var(--ink3);font-size:13px}
-.ttw-card{background:linear-gradient(135deg,#0e3d28 0%,#1a5c3a 100%);border-radius:var(--rlg);padding:26px 28px;color:var(--cream);position:relative;overflow:hidden}
-.ttw-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#6ecfa0;margin-bottom:6px}
-.ttw-head{display:flex;align-items:center;gap:16px;margin-bottom:18px}
-.ttw-av{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:20px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid rgba(255,255,255,.15)}
-.ttw-name{font-family:var(--serif);font-size:20px;font-weight:900;color:var(--cream);margin-bottom:2px}
-.ttw-meta{font-size:12.5px;color:rgba(245,242,235,.5)}
-.ttw-score-wrap{margin-left:auto;text-align:center;flex-shrink:0}
-.ttw-score{font-family:var(--serif);font-size:30px;font-weight:900;color:#a8dfc4;line-height:1}
-.ttw-score-lbl{font-size:9.5px;color:rgba(245,242,235,.4);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
-.ttw-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
-.ttw-tag{font-size:11.5px;font-weight:500;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:rgba(245,242,235,.75)}
-.ttw-actions{display:flex;gap:10px;position:relative;z-index:1}
-.ttw-empty{text-align:center;padding:20px 10px;color:var(--ink3)}
-.ttw-empty-icon{font-size:30px;margin-bottom:10px;opacity:.5}
+.fm-card{background:linear-gradient(135deg,#0e3d28 0%,#1a5c3a 100%);border-radius:var(--rlg);padding:26px 28px;color:var(--cream);position:relative;overflow:hidden}
+.fm-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#6ecfa0;margin-bottom:6px}
+.fm-head{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.fm-av{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:20px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid rgba(255,255,255,.15)}
+.fm-name{font-family:var(--serif);font-size:20px;font-weight:900;color:var(--cream);margin-bottom:2px}
+.fm-meta{font-size:12.5px;color:rgba(245,242,235,.5)}
+.fm-score-wrap{margin-left:auto;text-align:center;flex-shrink:0}
+.fm-score{font-family:var(--serif);font-size:30px;font-weight:900;color:#a8dfc4;line-height:1}
+.fm-score-lbl{font-size:9.5px;color:rgba(245,242,235,.4);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+.fm-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.fm-tag{font-size:11.5px;font-weight:500;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:rgba(245,242,235,.75)}
+.fm-actions{display:flex;gap:10px;position:relative;z-index:1}
+.fm-empty{text-align:center;padding:20px 10px;color:var(--ink3)}
+.fm-empty-icon{font-size:30px;margin-bottom:10px;opacity:.5}
 
 /* ── FEEDBACK PROMPT (on past bookings) ── */
 .fb-prompt{display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--cream3)}
@@ -286,7 +286,7 @@ select.finp{cursor:pointer}
     </div>
 
     <!-- Tee Time Twin card -->
-    <div class="panel" id="ttw-card-wrap">
+    <div class="panel" id="fm-card-wrap">
       <div class="loading"><div class="spinner"></div>Finding your match...</div>
     </div>
 
@@ -850,7 +850,7 @@ async function publishSession(){
 }
 
 /* ════════════════════════════════════════════════
-   TEE TIME TWIN — Phase 1 rule-based matching engine
+   FAIRWAY MATCH — Phase 1 rule-based matching engine
    ════════════════════════════════════════════════ */
 
 function isoWeekMonday(d) {
@@ -973,15 +973,15 @@ async function getOrCreateWeeklyMatch() {
 }
 
 async function loadCommunity() {
-  const wrap = $('ttw-card-wrap');
+  const wrap = $('fm-card-wrap');
   wrap.innerHTML = '<div class="loading"><div class="spinner"></div>Finding your match...</div>';
 
   const match = await getOrCreateWeeklyMatch();
 
   if (!match) {
-    wrap.innerHTML = `<div class="ttw-card" style="background:var(--w);color:var(--ink);border:1px solid var(--cream3)">
-      <div class="ttw-empty">
-        <div class="ttw-empty-icon">⛳</div>
+    wrap.innerHTML = `<div class="fm-card" style="background:var(--w);color:var(--ink);border:1px solid var(--cream3)">
+      <div class="fm-empty">
+        <div class="fm-empty-icon">⛳</div>
         <div style="font-weight:500;margin-bottom:4px">No match yet this week</div>
         <div style="font-size:12.5px;color:var(--ink3)">Complete your profile (schedule, skill, vibe) to unlock weekly matches.</div>
       </div>
@@ -997,21 +997,21 @@ async function loadCommunity() {
     const tags = Array.isArray(match.shared_tags) ? match.shared_tags : [];
     const isActed = match.status !== 'suggested';
 
-    wrap.innerHTML = `<div class="ttw-card">
-      <div class="ttw-eyebrow">Your Tee Time Twin This Week</div>
-      <div class="ttw-head">
-        <div class="ttw-av" style="background:var(--gm)">${initials}</div>
+    wrap.innerHTML = `<div class="fm-card">
+      <div class="fm-eyebrow">Your Fairway Match This Week</div>
+      <div class="fm-head">
+        <div class="fm-av" style="background:var(--gm)">${initials}</div>
         <div>
-          <div class="ttw-name">${name}</div>
-          <div class="ttw-meta">${profile?.skill_level || ''}${profile?.city ? ' · ' + profile.city : ''}</div>
+          <div class="fm-name">${name}</div>
+          <div class="fm-meta">${profile?.skill_level || ''}${profile?.city ? ' · ' + profile.city : ''}</div>
         </div>
-        <div class="ttw-score-wrap">
-          <div class="ttw-score">${match.score}%</div>
-          <div class="ttw-score-lbl">Match</div>
+        <div class="fm-score-wrap">
+          <div class="fm-score">${match.score}%</div>
+          <div class="fm-score-lbl">Match</div>
         </div>
       </div>
-      <div class="ttw-tags">${tags.map(t => `<span class="ttw-tag">${t}</span>`).join('') || '<span class="ttw-tag">Golf</span>'}</div>
-      <div class="ttw-actions">
+      <div class="fm-tags">${tags.map(t => `<span class="fm-tag">${t}</span>`).join('') || '<span class="fm-tag">Golf</span>'}</div>
+      <div class="fm-actions">
         ${isActed
           ? `<span style="font-size:12.5px;color:#a8dfc4;">${match.status === 'connected' ? '✓ Connection requested' : 'Skipped for this week'}</span>`
           : `<button class="btn bg" onclick="actOnMatch('${match.id}','${match.matched_user_id}','connected')">Send Connection Request</button>
