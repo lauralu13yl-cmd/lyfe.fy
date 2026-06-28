@@ -134,6 +134,33 @@ select.finp{cursor:pointer}
 .bkbadge.past{background:var(--cream2);color:var(--ink3)}
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--cream);padding:10px 22px;border-radius:30px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
 #toast.show{opacity:1}
+
+/* ── TEE TIME TWIN ── */
+.spinner{width:18px;height:18px;border:2px solid var(--cream3);border-top-color:var(--gm);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+.loading{display:flex;align-items:center;gap:10px;justify-content:center;padding:24px;color:var(--ink3);font-size:13px}
+.ttw-card{background:linear-gradient(135deg,#0e3d28 0%,#1a5c3a 100%);border-radius:var(--rlg);padding:26px 28px;color:var(--cream);position:relative;overflow:hidden}
+.ttw-eyebrow{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#6ecfa0;margin-bottom:6px}
+.ttw-head{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.ttw-av{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:20px;font-weight:700;color:#fff;flex-shrink:0;border:2px solid rgba(255,255,255,.15)}
+.ttw-name{font-family:var(--serif);font-size:20px;font-weight:900;color:var(--cream);margin-bottom:2px}
+.ttw-meta{font-size:12.5px;color:rgba(245,242,235,.5)}
+.ttw-score-wrap{margin-left:auto;text-align:center;flex-shrink:0}
+.ttw-score{font-family:var(--serif);font-size:30px;font-weight:900;color:#a8dfc4;line-height:1}
+.ttw-score-lbl{font-size:9.5px;color:rgba(245,242,235,.4);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+.ttw-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.ttw-tag{font-size:11.5px;font-weight:500;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:rgba(245,242,235,.75)}
+.ttw-actions{display:flex;gap:10px;position:relative;z-index:1}
+.ttw-empty{text-align:center;padding:20px 10px;color:var(--ink3)}
+.ttw-empty-icon{font-size:30px;margin-bottom:10px;opacity:.5}
+
+/* ── FEEDBACK PROMPT (on past bookings) ── */
+.fb-prompt{display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--cream3)}
+.fb-q{font-size:11.5px;color:var(--ink3);flex:1}
+.fb-btn{font-size:13px;padding:4px 10px;border-radius:var(--rsm);border:1.5px solid var(--cream3);background:var(--w);cursor:pointer;transition:all .15s}
+.fb-btn:hover{border-color:var(--gm);background:var(--gl)}
+.fb-btn.done{background:var(--gl);border-color:var(--gm);color:var(--green);font-weight:500;cursor:default;font-size:11.5px}
+
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
@@ -161,6 +188,7 @@ select.finp{cursor:pointer}
   <nav class="sbnav">
     <button class="sbl act" onclick="sv('home')">&#127968; Home</button>
     <button class="sbl" onclick="sv('my-sessions')">&#127944; My Sessions</button>
+    <button class="sbl" onclick="sv('community')">&#129309; Community</button>
     <button class="sbl" onclick="sv('logbook')">&#128202; Logbook</button>
     <button class="sbl" onclick="window.location.href='games.html'">&#128269; Find a game</button>
     <span class="nslbl">Compete</span>
@@ -248,6 +276,30 @@ select.finp{cursor:pointer}
     </div>
     <div class="panel">
       <div id="my-sessions-list"><div class="empty"><p>No sessions booked yet. <a href="games.html" style="color:var(--green);font-weight:500">Browse sessions →</a></p></div></div>
+    </div>
+  </div>
+
+  <!-- COMMUNITY — Tee Time Twin matching -->
+  <div class="view" id="v-community">
+    <div class="topbar">
+      <div class="greet">Community <span>Players matched to your game, schedule, and vibe</span></div>
+    </div>
+
+    <!-- Tee Time Twin card -->
+    <div class="panel" id="ttw-card-wrap">
+      <div class="loading"><div class="spinner"></div>Finding your match...</div>
+    </div>
+
+    <!-- Past matches / connections -->
+    <div class="cgrid" style="margin-top:14px">
+      <div class="panel">
+        <div class="ph"><span class="pt">Your Connections</span></div>
+        <div id="connections-list"><div class="empty"><p>No connections yet.</p></div></div>
+      </div>
+      <div class="panel">
+        <div class="ph"><span class="pt">Pending Requests</span></div>
+        <div id="pending-requests-list"><div class="empty"><p>No pending requests.</p></div></div>
+      </div>
     </div>
   </div>
 
@@ -604,7 +656,7 @@ function renderMyBookings(){
     html('my-sessions-list','<div class="empty"><p>No sessions booked yet. <a href="games.html" style="color:var(--green);font-weight:500">Browse sessions →</a></p></div>');
     return;
   }
-  const cards=myBookings.map(b=>{
+  const cards=myBookings.map((b,idx)=>{
     const s=b.sessions;
     const dateStr=s?.session_date?new Date(s.session_date+'T00:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}):'Date TBD';
     const timeStr=s?.session_time?formatTime(s.session_time):'';
@@ -612,15 +664,29 @@ function renderMyBookings(){
     const emoji={Golf:'⛳',Tennis:'🎾',Basketball:'🏀',Soccer:'⚽',Volleyball:'🏐'}[sport]||'🏅';
     const price=parseFloat(b.paid_amount||s?.price||0);
     const upcoming=s?.session_date?new Date(s.session_date+'T00:00:00')>new Date():false;
-    return`<div class="bkcard">
-      <div>
-        <div class="bktitle">${emoji} ${s?.title||'Session'}</div>
-        <div class="bkmeta">📅 ${dateStr}${timeStr?' · '+timeStr:''}${s?.location?' · 📍'+s.location:''}</div>
+    const hostId = s?.host_id;
+    const fbId = 'fb-' + idx;
+    const feedbackHtml = (!upcoming && hostId && hostId !== U.id)
+      ? `<div class="fb-prompt">
+           <span class="fb-q">Would you play with this host again?</span>
+           <span id="${fbId}">
+             <button class="fb-btn" onclick="submitMatchFeedback('${s.id}','${hostId}',true,'${fbId}')">👍</button>
+             <button class="fb-btn" onclick="submitMatchFeedback('${s.id}','${hostId}',false,'${fbId}')">👎</button>
+           </span>
+         </div>`
+      : '';
+    return`<div class="bkcard" style="flex-direction:column;align-items:stretch;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <div>
+          <div class="bktitle">${emoji} ${s?.title||'Session'}</div>
+          <div class="bkmeta">📅 ${dateStr}${timeStr?' · '+timeStr:''}${s?.location?' · 📍'+s.location:''}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="bkbadge ${upcoming?'':'past'}">${upcoming?'Upcoming':'Past'}</div>
+          <div class="bkprice">$${price.toFixed(0)} paid</div>
+        </div>
       </div>
-      <div style="text-align:right">
-        <div class="bkbadge ${upcoming?'':'past'}">${upcoming?'Upcoming':'Past'}</div>
-        <div class="bkprice">$${price.toFixed(0)} paid</div>
-      </div>
+      ${feedbackHtml}
     </div>`;
   });
   html('home-bookings',cards.slice(0,3).join('')+(myBookings.length>3?`<button class="pl" onclick="sv('my-sessions')" style="margin-top:10px;display:block;width:100%;text-align:center;font-size:12px;color:var(--green);font-weight:500;background:none;border:none;cursor:pointer">View all ${myBookings.length} sessions →</button>`:''));
@@ -744,6 +810,7 @@ function sv(name){
   $('v-'+name)?.classList.add('act');
   document.querySelectorAll('.sbl').forEach(b=>b.classList.toggle('act',(b.getAttribute('onclick')||'').includes("'"+name+"'")));
   if(name==='logbook')renderLogbook();
+  if(name==='community')loadCommunity();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -780,6 +847,262 @@ async function publishSession(){
   ['sess-title','sess-sport','sess-date','sess-time','sess-location','sess-price','sess-spots','sess-desc'].forEach(id=>{$(id).value='';});
   showMsg(msg,'✓ Session published! Players can now find and book it.','green');
   await loadHostData();
+}
+
+/* ════════════════════════════════════════════════
+   TEE TIME TWIN — Phase 1 rule-based matching engine
+   ════════════════════════════════════════════════ */
+
+function isoWeekMonday(d) {
+  const date = new Date(d);
+  const day = date.getDay();
+  const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(date.setDate(diff));
+  return monday.toISOString().split('T')[0];
+}
+
+// Weighted compatibility score between two profiles — 0 to 100
+function computeMatchScore(me, them) {
+  let score = 0;
+  const sharedTags = [];
+
+  // City — required gate unless either is willing to travel
+  const sameCity = me.city && them.city && me.city === them.city;
+  if (!sameCity && !(me.willing_to_travel || them.willing_to_travel)) {
+    return { score: 0, sharedTags: [] };
+  }
+  if (sameCity) { score += 10; sharedTags.push(me.city); }
+
+  // Skill level proximity (closer = better, exact match = max points)
+  const skillOrder = ['Beginner','Intermediate','Advanced','Competitive'];
+  const mySkillIdx = skillOrder.indexOf(me.skill_level);
+  const theirSkillIdx = skillOrder.indexOf(them.skill_level);
+  if (mySkillIdx >= 0 && theirSkillIdx >= 0) {
+    const diff = Math.abs(mySkillIdx - theirSkillIdx);
+    score += diff === 0 ? 25 : diff === 1 ? 15 : 5;
+    if (diff <= 1) sharedTags.push(them.skill_level + ' level');
+  }
+
+  // Schedule overlap
+  const mySchedule = Array.isArray(me.schedule) ? me.schedule : [];
+  const theirSchedule = Array.isArray(them.schedule) ? them.schedule : [];
+  const scheduleOverlap = mySchedule.filter(s => theirSchedule.includes(s));
+  if (scheduleOverlap.length > 0) {
+    score += Math.min(20, scheduleOverlap.length * 10);
+    sharedTags.push(scheduleOverlap[0]);
+  }
+
+  // Energy / vibe tag overlap
+  const myEnergy = Array.isArray(me.energy) ? me.energy : [];
+  const theirEnergy = Array.isArray(them.energy) ? them.energy : [];
+  const energyOverlap = myEnergy.filter(e => theirEnergy.includes(e));
+  if (energyOverlap.length > 0) {
+    score += Math.min(20, energyOverlap.length * 10);
+    sharedTags.push(energyOverlap[0]);
+  }
+
+  // Industry overlap — the "LinkedIn" layer
+  if (me.industry && them.industry && me.industry === them.industry) {
+    score += 15;
+    sharedTags.push(them.industry);
+  }
+
+  // Golf style overlap
+  if (me.golf_style && them.golf_style && me.golf_style === them.golf_style) {
+    score += 10;
+    sharedTags.push(them.golf_style);
+  }
+
+  return { score: Math.min(100, score), sharedTags: sharedTags.slice(0, 4) };
+}
+
+async function getOrCreateWeeklyMatch() {
+  const weekOf = isoWeekMonday(new Date());
+
+  // 1. Check cache first
+  const { data: existing } = await db
+    .from('weekly_matches')
+    .select('*')
+    .eq('user_id', U.id)
+    .eq('week_of', weekOf)
+    .maybeSingle();
+
+  if (existing) return existing;
+
+  // 2. Compute fresh — pull candidate pool (exclude self, exclude existing connections)
+  const { data: candidates } = await db
+    .from('profiles')
+    .select('*')
+    .neq('id', U.id)
+    .not('role', 'in', '(host_training)'); // don't surface mid-onboarding hosts as players
+
+  if (!candidates || !candidates.length) return null;
+
+  const { data: existingConns } = await db
+    .from('connections')
+    .select('requester_id, addressee_id')
+    .or(`requester_id.eq.${U.id},addressee_id.eq.${U.id}`);
+
+  const connectedIds = new Set();
+  (existingConns || []).forEach(c => {
+    connectedIds.add(c.requester_id === U.id ? c.addressee_id : c.requester_id);
+  });
+
+  let best = null;
+  for (const candidate of candidates) {
+    if (connectedIds.has(candidate.id)) continue;
+    const { score, sharedTags } = computeMatchScore(P, candidate);
+    if (score > 0 && (!best || score > best.score)) {
+      best = { matched_user_id: candidate.id, score, sharedTags, profile: candidate };
+    }
+  }
+
+  if (!best) return null;
+
+  // 3. Cache it
+  const { data: inserted } = await db.from('weekly_matches').insert({
+    user_id: U.id,
+    matched_user_id: best.matched_user_id,
+    score: best.score,
+    shared_tags: best.sharedTags,
+    week_of: weekOf,
+    status: 'suggested'
+  }).select().single();
+
+  return inserted || { ...best, week_of: weekOf, status: 'suggested' };
+}
+
+async function loadCommunity() {
+  const wrap = $('ttw-card-wrap');
+  wrap.innerHTML = '<div class="loading"><div class="spinner"></div>Finding your match...</div>';
+
+  const match = await getOrCreateWeeklyMatch();
+
+  if (!match) {
+    wrap.innerHTML = `<div class="ttw-card" style="background:var(--w);color:var(--ink);border:1px solid var(--cream3)">
+      <div class="ttw-empty">
+        <div class="ttw-empty-icon">⛳</div>
+        <div style="font-weight:500;margin-bottom:4px">No match yet this week</div>
+        <div style="font-size:12.5px;color:var(--ink3)">Complete your profile (schedule, skill, vibe) to unlock weekly matches.</div>
+      </div>
+    </div>`;
+  } else {
+    let profile = match.profile;
+    if (!profile) {
+      const { data } = await db.from('profiles').select('*').eq('id', match.matched_user_id).maybeSingle();
+      profile = data;
+    }
+    const name = profile?.full_name || 'A fellow golfer';
+    const initials = name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
+    const tags = Array.isArray(match.shared_tags) ? match.shared_tags : [];
+    const isActed = match.status !== 'suggested';
+
+    wrap.innerHTML = `<div class="ttw-card">
+      <div class="ttw-eyebrow">Your Tee Time Twin This Week</div>
+      <div class="ttw-head">
+        <div class="ttw-av" style="background:var(--gm)">${initials}</div>
+        <div>
+          <div class="ttw-name">${name}</div>
+          <div class="ttw-meta">${profile?.skill_level || ''}${profile?.city ? ' · ' + profile.city : ''}</div>
+        </div>
+        <div class="ttw-score-wrap">
+          <div class="ttw-score">${match.score}%</div>
+          <div class="ttw-score-lbl">Match</div>
+        </div>
+      </div>
+      <div class="ttw-tags">${tags.map(t => `<span class="ttw-tag">${t}</span>`).join('') || '<span class="ttw-tag">Golf</span>'}</div>
+      <div class="ttw-actions">
+        ${isActed
+          ? `<span style="font-size:12.5px;color:#a8dfc4;">${match.status === 'connected' ? '✓ Connection requested' : 'Skipped for this week'}</span>`
+          : `<button class="btn bg" onclick="actOnMatch('${match.id}','${match.matched_user_id}','connected')">Send Connection Request</button>
+             <button class="btn bo" style="background:rgba(255,255,255,.06);color:var(--cream);border-color:rgba(255,255,255,.15)" onclick="actOnMatch('${match.id}','${match.matched_user_id}','skipped')">Skip</button>`
+        }
+      </div>
+    </div>`;
+  }
+
+  loadConnections();
+}
+
+async function actOnMatch(matchId, matchedUserId, action) {
+  await db.from('weekly_matches').update({ status: action }).eq('id', matchId);
+  if (action === 'connected') {
+    await db.from('connections').insert({
+      requester_id: U.id,
+      addressee_id: matchedUserId,
+      status: 'pending',
+      source: 'weekly_match'
+    }).then(() => {}).catch(() => {}); // ignore unique-constraint dupes
+    toast('✓ Connection request sent');
+  } else {
+    toast('Skipped — see you next week');
+  }
+  loadCommunity();
+}
+
+async function loadConnections() {
+  const { data: conns } = await db
+    .from('connections')
+    .select('*')
+    .or(`requester_id.eq.${U.id},addressee_id.eq.${U.id}`);
+
+  const accepted = (conns || []).filter(c => c.status === 'accepted');
+  const pendingIncoming = (conns || []).filter(c => c.status === 'pending' && c.addressee_id === U.id);
+
+  // Resolve profile names for display
+  const otherIds = [...new Set([
+    ...accepted.map(c => c.requester_id === U.id ? c.addressee_id : c.requester_id),
+    ...pendingIncoming.map(c => c.requester_id)
+  ])];
+
+  let profilesMap = {};
+  if (otherIds.length) {
+    const { data: profs } = await db.from('profiles').select('id, full_name, city, skill_level').in('id', otherIds);
+    (profs || []).forEach(p => { profilesMap[p.id] = p; });
+  }
+
+  const connEl = $('connections-list');
+  if (!accepted.length) {
+    connEl.innerHTML = '<div class="empty"><p>No connections yet. Accept your Tee Time Twin above to start.</p></div>';
+  } else {
+    connEl.innerHTML = accepted.map(c => {
+      const otherId = c.requester_id === U.id ? c.addressee_id : c.requester_id;
+      const p = profilesMap[otherId] || {};
+      return `<div class="row"><div class="rinfo"><div class="rname">${p.full_name || 'Player'}</div><div class="rdate">${p.skill_level || ''}${p.city ? ' · ' + p.city : ''}</div></div></div>`;
+    }).join('');
+  }
+
+  const reqEl = $('pending-requests-list');
+  if (!pendingIncoming.length) {
+    reqEl.innerHTML = '<div class="empty"><p>No pending requests.</p></div>';
+  } else {
+    reqEl.innerHTML = pendingIncoming.map(c => {
+      const p = profilesMap[c.requester_id] || {};
+      return `<div class="row"><div class="rinfo"><div class="rname">${p.full_name || 'Player'}</div><div class="rdate">Wants to connect</div></div>
+        <button class="btn bg bsm" onclick="respondToRequest('${c.id}','accepted')">Accept</button>
+        <button class="btn bo bsm" onclick="respondToRequest('${c.id}','declined')">Decline</button>
+      </div>`;
+    }).join('');
+  }
+}
+
+async function respondToRequest(connId, status) {
+  await db.from('connections').update({ status }).eq('id', connId);
+  toast(status === 'accepted' ? '✓ Connection accepted' : 'Request declined');
+  loadConnections();
+}
+
+/* ── Post-round feedback loop: "Would you play with them again?" ──
+   Cheap to collect, highest-value training signal we have. */
+async function submitMatchFeedback(sessionId, rateeId, wouldPlayAgain, btnId) {
+  await db.from('match_feedback').insert({
+    session_id: sessionId || null,
+    rater_id: U.id,
+    ratee_id: rateeId,
+    would_play_again: wouldPlayAgain
+  }).then(() => {}).catch(() => {}); // ignore dupes via unique constraint
+  const el = $(btnId);
+  if (el) el.outerHTML = `<span class="fb-btn done">✓ Thanks for the feedback</span>`;
 }
 </script>
 </body>
