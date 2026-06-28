@@ -1,9 +1,7 @@
 const SUPA_URL = 'https://bcvhlkncezqzzzrrbkum.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmhsa25jZXpxenp6cnJia3VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1OTMyMDUsImV4cCI6MjA5MTE2OTIwNX0.XdE2d56_txfbnw24kLT7vj1AMMemb0SCA_H_WtUavN4';
-
+const SUPA_KEY = 'sb_publishable_rfM5630kfWC8SpXhXtj2Lg_n_OJkFdI';
 const { createClient } = supabase;
 const db = createClient(SUPA_URL, SUPA_KEY);
-
 const Auth = {
   async getUser() {
     const { data: { session } } = await db.auth.getSession();
@@ -25,7 +23,6 @@ const Auth = {
     window.location.href = '/index.html';
   }
 };
-
 const Sessions = {
   async create(formData) {
     const user = await Auth.requireAuth();
@@ -70,7 +67,6 @@ const Sessions = {
     return data || [];
   }
 };
-
 const Bookings = {
   async create(sessionId, price) {
     const user = await Auth.requireAuth();
@@ -96,7 +92,6 @@ const Bookings = {
     return data || [];
   }
 };
-
 const Live = {
   onNewSession(callback) {
     db.channel('public-sessions')
@@ -112,7 +107,6 @@ const Live = {
       .subscribe();
   }
 };
-
 window.db       = db;
 window.Auth     = Auth;
 window.Sessions = Sessions;
