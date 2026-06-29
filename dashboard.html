@@ -176,7 +176,7 @@ select.finp{cursor:pointer}
 </div>
 
 <div class="sb">
-  <div class="sblogo"><a href="index.html"><img src="logowhite.png" alt="Lyfe.fy" style="height:32px;width:auto;display:block"></a></div>
+  <div class="sblogo"><a href="index.html"><img src="logowhite.png" alt="Lyfe.fy" style="height:88px;width:auto;display:block"></a></div>
   <div class="sbuser">
     <div class="urow">
       <div class="uav" id="sb-av">?</div>
@@ -340,14 +340,11 @@ select.finp{cursor:pointer}
       </div>
       <div class="panel">
         <div class="ph"><span class="pt">Create a session</span></div>
-        <div class="fgrp2"><label class="flbl">Title *</label><input class="finp" id="sess-title" type="text" placeholder="e.g. Saturday Tennis Doubles"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="fgrp2"><label class="flbl">Sport *</label>
-            <select class="finp" id="sess-sport"><option value="">Select…</option><option>Tennis</option><option>Golf</option><option>Basketball</option><option>Soccer</option><option>Volleyball</option><option>Other</option></select>
-          </div>
-          <div class="fgrp2"><label class="flbl">Format</label>
-            <select class="finp" id="sess-format"><option>1v1</option><option>Small Group (2-4)</option><option>Group (5-10)</option><option>Open</option></select>
-          </div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:var(--green);background:var(--gl);border:1px solid rgba(42,158,106,.2);padding:6px 12px;border-radius:30px;margin-bottom:14px;width:fit-content">⛳ Golf — Lyfe.fy is a golf-only platform</div>
+        <input type="hidden" id="sess-sport" value="Golf">
+        <div class="fgrp2"><label class="flbl">Title *</label><input class="finp" id="sess-title" type="text" placeholder="e.g. Saturday Morning Round at Bethpage"></div>
+        <div class="fgrp2"><label class="flbl">Format</label>
+          <select class="finp" id="sess-format"><option>1v1</option><option>Small Group (2-4)</option><option>Group (5-10)</option><option>Open</option></select>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
           <div class="fgrp2"><label class="flbl">Date *</label><input class="finp" id="sess-date" type="date"></div>
@@ -880,7 +877,7 @@ async function publishSession(){
   });
   btn.disabled=false;btn.textContent='Publish Session ✓';
   if(error){showMsg(msg,'Error: '+error.message,'red');return;}
-  ['sess-title','sess-sport','sess-date','sess-time','sess-location','sess-price','sess-spots','sess-desc','sess-venue'].forEach(id=>{$(id).value='';});
+  ['sess-title','sess-date','sess-time','sess-location','sess-price','sess-spots','sess-desc','sess-venue'].forEach(id=>{$(id).value='';});
   document.querySelectorAll('.vibe-pick.sel').forEach(b=>b.classList.remove('sel'));
   sessVibeSelected=[];
   showMsg(msg,'✓ Session published! Players can now find and book it.','green');
