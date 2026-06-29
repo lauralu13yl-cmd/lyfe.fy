@@ -31,6 +31,8 @@ input,select{font-family:var(--sans)}
 .nav-links a:hover{color:var(--ink)}
 .nav-act{display:flex;gap:10px;align-items:center}
 .uav-mini{width:32px;height:32px;border-radius:50%;background:var(--gm);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#fff;cursor:pointer}
+.lang-btn{font-size:12px;font-weight:500;padding:7px 13px;border-radius:30px;border:1px solid var(--cream3);background:var(--w);color:var(--ink2);cursor:pointer;font-family:var(--sans);transition:all .15s}
+.lang-btn:hover{border-color:var(--ink3);background:var(--cream2)}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer}
 .hamburger span{display:block;width:20px;height:1.5px;background:var(--ink)}
 
@@ -136,21 +138,22 @@ input,select{font-family:var(--sans)}
 <nav class="nav">
   <a href="index.html" class="logo"><img src="logo.png" alt="Lyfe.fy" style="height:30px;width:auto;display:block"></a>
   <ul class="nav-links">
-    <li><a href="index.html#how">How It Works</a></li>
-    <li><a href="index.html#hosts">For Hosts</a></li>
-    <li><a href="index.html#partners">Partner with us</a></li>
-    <li><a href="index.html#contact">Contact us</a></li>
-    <li><a href="shop-lyfefy.html">Shop Lyfefy</a></li>
+    <li><a href="index.html#how" data-i18n="nav.how">How It Works</a></li>
+    <li><a href="index.html#hosts" data-i18n="nav.hosts">For Hosts</a></li>
+    <li><a href="index.html#partners" data-i18n="nav.partners">Partner with us</a></li>
+    <li><a href="index.html#contact" data-i18n="nav.contact">Contact us</a></li>
+    <li><a href="shop-lyfefy.html" data-i18n="nav.shop">Shop Lyfefy</a></li>
   </ul>
   <div class="nav-act" id="nav-act">
-    <a href="hostapplication.html" class="btn bo" id="nav-become-host">Become a Host</a>
-    <a href="dashboard.html" class="btn bo" id="nav-host-dash" style="display:none">Host Dashboard</a>
-    <button class="btn bg" id="nav-invite-btn" style="display:none" onclick="openInvite()">Invite friends</button>
+    <button class="lang-btn" onclick="setLanguage(getLanguage()==='zh'?'en':'zh')" data-lang-toggle title="Switch language">中文</button>
+    <a href="hostapplication.html" class="btn bo" id="nav-become-host" data-i18n="nav.become_host">Become a Host</a>
+    <a href="dashboard.html" class="btn bo" id="nav-host-dash" style="display:none" data-i18n="nav.host_dashboard">Host Dashboard</a>
+    <button class="btn bg" id="nav-invite-btn" style="display:none" onclick="openInvite()" data-i18n="nav.invite">Invite friends</button>
     <div class="account-wrap" id="account-wrap">
-      <button class="btn bi" id="account-btn" onclick="toggleAccountDrop()">Account</button>
+      <button class="btn bi" id="account-btn" onclick="toggleAccountDrop()" data-i18n="nav.account">Account</button>
       <div class="account-dropdown" id="account-dropdown">
-        <button onclick="window.location.href='onboarding.html'">Sign up</button>
-        <button onclick="openLogin()">Log in</button>
+        <button onclick="window.location.href='onboarding.html'" data-i18n="nav.signup">Sign up</button>
+        <button onclick="openLogin()" data-i18n="nav.login">Log in</button>
       </div>
     </div>
   </div>
@@ -158,9 +161,9 @@ input,select{font-family:var(--sans)}
 </nav>
 
 <div class="pagehead">
-  <div class="ph-eyebrow">Find a Round</div>
-  <h1 class="ph-title">Your next <em>round</em> starts here</h1>
-  <p class="ph-sub">Browse hosted golf sessions, see who's a great fit, and book your tee time in seconds.</p>
+  <div class="ph-eyebrow" data-i18n="games.eyebrow">Find a Round</div>
+  <h1 class="ph-title"><span data-i18n="games.title_pre">Your next </span><em data-i18n="games.title_em">round</em><span data-i18n="games.title_post"> starts here</span></h1>
+  <p class="ph-sub" data-i18n="games.sub">Browse hosted golf sessions, see who's a great fit, and book your tee time in seconds.</p>
 
   <!-- FAIRWAY MATCH BANNER — shown only when signed in -->
   <div class="fm-banner" id="fm-banner" style="display:none"></div>
@@ -168,24 +171,24 @@ input,select{font-family:var(--sans)}
 
 <div class="filters-wrap">
   <div class="filters">
-    <input class="search-inp" id="search" type="text" placeholder="Search title, location, host..." oninput="renderSessions()">
+    <input class="search-inp" id="search" type="text" placeholder="Search title, location, host..." data-i18n-placeholder="games.search_ph" oninput="renderSessions()">
   </div>
   <div class="filter-row">
-    <span class="filter-row-label">Venue</span>
-    <button class="chip sel" data-venue="all" onclick="setVenueFilter('all',this)">All</button>
-    <button class="chip" data-venue="range" onclick="setVenueFilter('range',this)">🎯 Driving Range</button>
-    <button class="chip" data-venue="sim" onclick="setVenueFilter('sim',this)">🖥️ Sim Room</button>
-    <button class="chip" data-venue="course_9" onclick="setVenueFilter('course_9',this)">⛳ 9-Hole Course</button>
-    <button class="chip" data-venue="course_18" onclick="setVenueFilter('course_18',this)">⛳ 18-Hole Course</button>
+    <span class="filter-row-label" data-i18n="games.filter_venue">Venue</span>
+    <button class="chip sel" data-venue="all" onclick="setVenueFilter('all',this)" data-i18n="games.venue_all">All</button>
+    <button class="chip" data-venue="range" onclick="setVenueFilter('range',this)" data-i18n="games.venue_range">🎯 Driving Range</button>
+    <button class="chip" data-venue="sim" onclick="setVenueFilter('sim',this)" data-i18n="games.venue_sim">🖥️ Sim Room</button>
+    <button class="chip" data-venue="course_9" onclick="setVenueFilter('course_9',this)" data-i18n="games.venue_9">⛳ 9-Hole Course</button>
+    <button class="chip" data-venue="course_18" onclick="setVenueFilter('course_18',this)" data-i18n="games.venue_18">⛳ 18-Hole Course</button>
   </div>
   <div class="filter-row">
-    <span class="filter-row-label">Vibe</span>
-    <button class="chip vibe-chip" data-vibe="Chill" onclick="toggleVibeFilter('Chill',this)">😌 Chill</button>
-    <button class="chip vibe-chip" data-vibe="Competitive" onclick="toggleVibeFilter('Competitive',this)">🔥 Competitive</button>
-    <button class="chip vibe-chip" data-vibe="Funny & chaotic" onclick="toggleVibeFilter('Funny & chaotic',this)">😂 Funny & chaotic</button>
-    <button class="chip vibe-chip" data-vibe="Locked-in" onclick="toggleVibeFilter('Locked-in',this)">🧠 Locked-in</button>
-    <button class="chip vibe-chip" data-vibe="Social butterfly" onclick="toggleVibeFilter('Social butterfly',this)">🥂 Social butterfly</button>
-    <button class="chip vibe-chip" data-vibe="Beginner-friendly" onclick="toggleVibeFilter('Beginner-friendly',this)">🌱 Beginner-friendly</button>
+    <span class="filter-row-label" data-i18n="games.filter_vibe">Vibe</span>
+    <button class="chip vibe-chip" data-vibe="Chill" onclick="toggleVibeFilter('Chill',this)" data-i18n="games.vibe_chill">😌 Chill</button>
+    <button class="chip vibe-chip" data-vibe="Competitive" onclick="toggleVibeFilter('Competitive',this)" data-i18n="games.vibe_comp">🔥 Competitive</button>
+    <button class="chip vibe-chip" data-vibe="Funny & chaotic" onclick="toggleVibeFilter('Funny & chaotic',this)" data-i18n="games.vibe_funny">😂 Funny & chaotic</button>
+    <button class="chip vibe-chip" data-vibe="Locked-in" onclick="toggleVibeFilter('Locked-in',this)" data-i18n="games.vibe_locked">🧠 Locked-in</button>
+    <button class="chip vibe-chip" data-vibe="Social butterfly" onclick="toggleVibeFilter('Social butterfly',this)" data-i18n="games.vibe_social">🥂 Social butterfly</button>
+    <button class="chip vibe-chip" data-vibe="Beginner-friendly" onclick="toggleVibeFilter('Beginner-friendly',this)" data-i18n="games.vibe_beginner">🌱 Beginner-friendly</button>
   </div>
 </div>
 
@@ -197,17 +200,17 @@ input,select{font-family:var(--sans)}
 <div class="modal-overlay" id="login-overlay" onclick="if(event.target===this)closeLogin()">
   <div class="modal">
     <button class="modal-close" onclick="closeLogin()">&times;</button>
-    <span class="modal-eyebrow">Welcome back</span>
-    <h3 class="modal-title">Log <em>in.</em></h3>
-    <p class="modal-sub">Good to have you back.</p>
-    <div class="modal-field"><label class="modal-label">Email</label><input class="modal-input" id="login-email" type="email" placeholder="alex@example.com" autocomplete="email"></div>
-    <div class="modal-field"><label class="modal-label">Password</label><input class="modal-input" id="login-pass" type="password" placeholder="Your password" autocomplete="current-password"></div>
+    <span class="modal-eyebrow" data-i18n="login.welcome_back">Welcome back</span>
+    <h3 class="modal-title" data-i18n="login.title">Log in.</h3>
+    <p class="modal-sub" data-i18n="login.sub">Good to have you back.</p>
+    <div class="modal-field"><label class="modal-label" data-i18n="login.email">Email</label><input class="modal-input" id="login-email" type="email" placeholder="alex@example.com" autocomplete="email"></div>
+    <div class="modal-field"><label class="modal-label" data-i18n="login.password">Password</label><input class="modal-input" id="login-pass" type="password" placeholder="Your password" autocomplete="current-password"></div>
     <div class="modal-error" id="login-error"></div>
     <button class="btn bi bfw" style="padding:11px" onclick="emailLogin()">
-      <span id="login-txt">Log in</span>
+      <span id="login-txt" data-i18n="login.submit">Log in</span>
     </button>
     <p style="font-size:11px;color:var(--ink3);text-align:center;margin-top:12px">
-      Don't have an account? <a href="onboarding.html" style="color:var(--green);font-weight:500">Sign up →</a>
+      <span data-i18n="login.no_account">Don't have an account?</span> <a href="onboarding.html" style="color:var(--green);font-weight:500" data-i18n="login.signup_link">Sign up →</a>
     </p>
   </div>
 </div>
@@ -216,19 +219,20 @@ input,select{font-family:var(--sans)}
 <div class="modal-overlay" id="invite-overlay" onclick="if(event.target===this)closeInvite()">
   <div class="modal">
     <button class="modal-close" onclick="closeInvite()">&times;</button>
-    <span class="modal-eyebrow">Grow the foursome</span>
-    <h3 class="modal-title">Invite a <em>friend.</em></h3>
-    <p class="modal-sub">Share your link — when they join, you'll both be ready to book a round together.</p>
+    <span class="modal-eyebrow" data-i18n="invite.eyebrow">Grow the foursome</span>
+    <h3 class="modal-title" data-i18n="invite.title">Invite a friend.</h3>
+    <p class="modal-sub" data-i18n="invite.sub">Share your link — when they join, you'll both be ready to book a round together.</p>
     <div class="invite-link-box">
       <input class="invite-link-inp" id="invite-link" type="text" readonly>
-      <button class="btn bi bsm" onclick="copyInviteLink()" id="invite-copy-btn">Copy</button>
+      <button class="btn bi bsm" onclick="copyInviteLink()" id="invite-copy-btn" data-i18n="invite.copy">Copy</button>
     </div>
-    <button class="btn bg bfw" style="padding:11px" onclick="shareInviteLink()">Share invite link</button>
+    <button class="btn bg bfw" style="padding:11px" onclick="shareInviteLink()" data-i18n="invite.share">Share invite link</button>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/lyfe-core.js"></script>
+<script src="/i18n.js"></script>
 <script>
 let U = null, P = null;
 let allSessions = [];
@@ -399,7 +403,7 @@ function buildAttendeeStack(sessionId) {
     return `<div class="attendee-av" style="background:${avColor(n)}">${initial}</div>`;
   }).join('');
   const overflowHtml = overflow > 0 ? `<div class="attendee-overflow">+${overflow}</div>` : '';
-  const label = names.length === 1 ? '1 player going' : names.length + ' players going';
+  const label = names.length === 1 ? '1 ' + t('games.player_going') : names.length + ' ' + t('games.players_going');
   return `<div class="attendees-row"><div class="attendee-stack">${avatars}${overflowHtml}</div><span class="attendees-lbl">${label}</span></div>`;
 }
 
@@ -419,7 +423,7 @@ function renderSessions() {
 
   const grid = $('grid');
   if (!data.length) {
-    grid.innerHTML = '<div class="empty-state"><div class="empty-icon">⛳</div><div style="font-weight:500">No sessions found</div><div style="font-size:12px;margin-top:4px">Try a different filter or search term.</div></div>';
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">⛳</div><div style="font-weight:500">${t('games.empty_title')}</div><div style="font-size:12px;margin-top:4px">${t('games.empty_sub')}</div></div>`;
     return;
   }
 
@@ -439,7 +443,7 @@ function renderSessions() {
     let matchBadge = '';
     if (P && host.id) {
       const { score } = computeMatchScore(P, host);
-      if (score > 0) matchBadge = `<div class="sc-match">✨ ${score}% match with host</div>`;
+      if (score > 0) matchBadge = `<div class="sc-match">✨ ${score}% ${t('games.match_with_host')}</div>`;
     }
 
     return `<div class="scard">
@@ -464,11 +468,11 @@ function renderSessions() {
       <div class="sc-foot">
         <div>
           <div class="sc-price">${price}</div>
-          <div class="sc-spots ${lowSpots?'low':''}">${left>0 ? left+' spot'+(left!==1?'s':'')+' left' : 'Full'}</div>
+          <div class="sc-spots ${lowSpots?'low':''}">${left>0 ? left+' '+(left!==1?t('games.spots_left'):t('games.spot_left')) : t('games.full')}</div>
         </div>
         ${U
-          ? (left>0 ? `<button class="btn bg bsm" onclick="bookSession('${s.id}')">Book Now</button>` : `<span style="font-size:11px;color:var(--ink3)">Full</span>`)
-          : `<a href="onboarding.html" class="btn bi bsm">Sign up to book</a>`
+          ? (left>0 ? `<button class="btn bg bsm" onclick="bookSession('${s.id}')">${t('games.book_now')}</button>` : `<span style="font-size:11px;color:var(--ink3)">${t('games.full')}</span>`)
+          : `<a href="onboarding.html" class="btn bi bsm">${t('games.signup_to_book')}</a>`
         }
       </div>
     </div>`;
@@ -524,12 +528,12 @@ async function emailLogin() {
   const errEl = $('login-error');
   if (!email || !pass) { errEl.textContent = 'Please enter your email and password.'; errEl.style.display = 'block'; return; }
   errEl.style.display = 'none';
-  $('login-txt').textContent = 'Logging in…';
+  $('login-txt').textContent = t('login.logging_in') || 'Logging in…';
   const { error } = await db.auth.signInWithPassword({ email, password: pass });
   if (error) {
     errEl.textContent = error.message.includes('Invalid') ? 'Incorrect email or password.' : error.message;
     errEl.style.display = 'block';
-    $('login-txt').textContent = 'Log in';
+    $('login-txt').textContent = t('login.submit');
     return;
   }
   window.location.reload();
