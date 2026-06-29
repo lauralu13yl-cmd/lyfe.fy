@@ -134,7 +134,7 @@ input,select{font-family:var(--sans)}
 <body>
 
 <nav class="nav">
-  <a href="index.html" class="logo"><img src="logo.png" alt="Lyfe.fy" style="height:100px;width:auto;display:block"></a>
+  <a href="index.html" class="logo"><img src="logo.png" alt="Lyfe.fy" style="height:30px;width:auto;display:block"></a>
   <ul class="nav-links">
     <li><a href="index.html#how">How It Works</a></li>
     <li><a href="index.html#hosts">For Hosts</a></li>
@@ -340,7 +340,7 @@ async function loadFairwayMatchBanner() {
 /* ════ SESSIONS ════ */
 async function loadSessions() {
   // Golf-only platform — hard filter at the query level
-  const { data: sessions } = await db.from('sessions').select('*').eq('status','active').eq('sport','Golf').order('session_date',{ascending:true});
+  const { data: sessions } = await db.from('sessions').select('*').eq('status','active').eq('sport','Golf').order('created_at',{ascending:false});
   allSessions = sessions || [];
 
   // Fetch host profiles in bulk for match scoring + avatar display
@@ -425,7 +425,7 @@ function renderSessions() {
 
   grid.innerHTML = data.map(s => {
     const host = hostProfiles[s.host_id] || {};
-    const hostName = host.full_name || 'Lyfe.fy Host';
+    const hostName = host.full_name || (host.email ? host.email.split('@')[0] : '') || 'Host';
     const booked = s.spots_taken || 0;
     const total = s.spots_total || 8;
     const left = total - booked;
