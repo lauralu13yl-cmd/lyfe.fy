@@ -482,16 +482,51 @@ function renderSessions() {
 async function bookSession(sessionId) {
   const s = allSessions.find(x => x.id === sessionId);
   if (!s) return;
-  if (!confirm('Book "' + s.title + '" for ' + (parseFloat(s.price)===0?'free':'$'+parseFloat(s.price).toFixed(0)) + '?')) return;
+  const price = parseFloat(s.price) || 0;
 
-  const { error } = await db.from('bookings').insert({
-    session_id: sessionId, player_id: U.id, paid_amount: parseFloat(s.price)||0, status: 'confirmed'
-  });
-  if (error) { alert('Booking failed: ' + error.message); return; }
+  // Free sessions: book instantly, no payment needed
+  if (price === 0) {
+    if (!confirm('Book "' + s.title + '" for free?')) return;
+    const { error } = await db.from('bookings').insert({
+      session_id: sessionId, player_id: U.id, paid_amount: 0, status: 'confirmed'
+    });
+    if (error) { alert('Booking failed: ' + error.message); return; }
+    await db.from('sessions').update({ spots_taken: (s.spots_taken||0) + 1 }).eq('id', sessionId);
+    alert('✓ Booked! Check your dashboard for details.');
+    window.location.href = 'dashboard.html';
+    return;
+  }
 
-  await db.from('sessions').update({ spots_taken: (s.spots_taken||0) + 1 }).eq('id', sessionId);
-  alert('✓ Booked! Check your dashboard for details.');
-  window.location.href = 'dashboard.html';
+  // Paid sessions: send to real Stripe Checkout
+  if (!confirm('Book "' + s.title + '" for $' + price.toFixed(0) + '?')) return;
+
+  const btn = document.querySelector(`[onclick="bookSession('${sessionId}')"]`);
+  if (btn) { btn.disabled = true; btn.textContent = 'Redirecting to payment...'; }
+
+  try {
+    const { data: { session: authSession } } = await db.auth.getSession();
+    const res = await fetch('https://bcvhlkncezqzzzrrbkum.supabase.co/functions/v1/create-checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authSession.access_token}`,
+      },
+      body: JSON.stringify({ session_id: sessionId }),
+    });
+    const data = await res.json();
+
+    if (!res.ok || data.error) {
+      alert('Booking failed: ' + (data.error || 'Please try again.'));
+      if (btn) { btn.disabled = false; btn.textContent = t('games.book_now'); }
+      return;
+    }
+
+    window.location.href = data.url;
+  } catch (err) {
+    alert('Booking failed: ' + err.message);
+    if (btn) { btn.disabled = false; btn.textContent = t('games.book_now'); }
+  }
+
 }
 
 /* ════ AUTH (optional — page browsable as guest) ════ */
