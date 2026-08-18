@@ -352,6 +352,10 @@ body::before {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9,11 12,14 22,4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
           Bookings
         </button>
+        <button class="nav-item" id="nav-payouts" onclick="showPanel('payouts')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Host Payouts
+        </button>
       </div>
     </aside>
 
@@ -516,6 +520,26 @@ body::before {
         </div>
       </div>
 
+      <div class="panel" id="panel-payouts">
+        <div class="page-header">
+          <div class="page-eyebrow">Platform</div>
+          <div class="page-title">Host Payouts</div>
+          <div class="page-sub">Beta mode: all payments land in Lyfe.fy's Stripe balance. This shows what each host has earned (80% of their session revenue) and lets you record manual payouts as you wire them.</div>
+        </div>
+        <div class="table-wrap">
+          <div class="table-head" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:12px;">
+            <div class="th">Host</div>
+            <div class="th">Total earned (80%)</div>
+            <div class="th">Already paid out</div>
+            <div class="th">Balance owed</div>
+            <div class="th"></div>
+          </div>
+          <div class="table-body" id="payout-list">
+            <div class="loading-row"><div class="spinner"></div>Loading payouts...</div>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 </div>
@@ -550,6 +574,7 @@ body::before {
   let allSessions     = [];
   let allUsers        = [];
   let allBookings     = [];
+  let allPayouts      = [];
   let appFilter       = 'all';
   let sesFilter       = 'all';
   let usrFilter       = 'all';
@@ -563,6 +588,14 @@ body::before {
   async function sbPatch(path, body) {
     const r = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
       method: 'PATCH',
+      headers: Object.assign({}, SB, { 'Prefer': 'return=minimal' }),
+      body: JSON.stringify(body)
+    });
+    return r.ok;
+  }
+  async function sbPost(path, body) {
+    const r = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+      method: 'POST',
       headers: Object.assign({}, SB, { 'Prefer': 'return=minimal' }),
       body: JSON.stringify(body)
     });
@@ -596,7 +629,7 @@ body::before {
   }
 
   // ── PANEL NAVIGATION ────────────────────────────────
-  const PANELS = ['overview','applications','sessions','users','bookings'];
+  const PANELS = ['overview','applications','sessions','users','bookings','payouts'];
   function showPanel(name) {
     PANELS.forEach(id => {
       document.getElementById('panel-' + id).classList.toggle('active', id === name);
@@ -607,20 +640,23 @@ body::before {
     if (name === 'sessions')     renderSessions();
     if (name === 'users')        renderUsers();
     if (name === 'bookings')     renderBookings();
+    if (name === 'payouts')      renderPayouts();
   }
 
   // ── LOAD ALL DATA ────────────────────────────────────
   async function loadAll() {
-    const [apps, sessions, users, bookings] = await Promise.all([
+    const [apps, sessions, users, bookings, payouts] = await Promise.all([
       sbGet('host_applications?order=created_at.desc&select=*'),
-      sbGet('sessions?order=date.desc&select=*'),
+      sbGet('sessions?order=session_date.desc&select=*'),
       sbGet('profiles?order=created_at.desc&select=*'),
-      sbGet('bookings?order=created_at.desc&select=*')
+      sbGet('bookings?order=created_at.desc&select=*'),
+      sbGet('host_payouts?order=paid_at.desc&select=*')
     ]);
     allApplications = apps    || [];
     allSessions     = sessions || [];
     allUsers        = users    || [];
     allBookings     = bookings || [];
+    allPayouts      = payouts  || [];
     renderOverview();
   }
 
@@ -882,12 +918,14 @@ body::before {
   function renderSessions() {
     const q = (document.getElementById('ses-search')?.value || '').toLowerCase();
     let data = allSessions;
-    if (sesFilter === 'active') data = data.filter(s => s.status === 'active' && s.spots_left > 0);
-    if (sesFilter === 'full')   data = data.filter(s => s.spots_left === 0);
+    const spotsLeft = s => (s.spots_total || 0) - (s.spots_taken || 0);
+    if (sesFilter === 'active') data = data.filter(s => s.status === 'active' && spotsLeft(s) > 0);
+    if (sesFilter === 'full')   data = data.filter(s => spotsLeft(s) <= 0);
+    const hostName = s => (allUsers.find(u => u.id === s.host_id)?.full_name) || '—';
     if (q) data = data.filter(s =>
       (s.title || '').toLowerCase().includes(q) ||
       (s.sport || '').toLowerCase().includes(q) ||
-      (s.host_name || '').toLowerCase().includes(q) ||
+      hostName(s).toLowerCase().includes(q) ||
       (s.location || '').toLowerCase().includes(q)
     );
     const el = document.getElementById('ses-list');
@@ -896,16 +934,17 @@ body::before {
       return;
     }
     el.innerHTML = data.map(s => {
-      const booked = (s.spots_total || 0) - (s.spots_left || 0);
-      const d = s.date ? new Date(s.date + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
-      const isFull = s.spots_left === 0;
+      const left = spotsLeft(s);
+      const booked = s.spots_taken || 0;
+      const d = s.session_date ? new Date(s.session_date + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : '—';
+      const isFull = left <= 0;
       const badge = isFull
         ? '<span class="status status-rejected"><span class="status-dot"></span>Full</span>'
         : '<span class="status status-active"><span class="status-dot"></span>Active</span>';
       const price = parseFloat(s.price) === 0 ? 'Free' : '$' + parseFloat(s.price).toFixed(0);
       return `<div class="table-row ses-grid">
         <div class="td"><div>${s.title || '—'}</div><div class="td-sub">${cap(s.sport)} · ${s.location || ''}</div></div>
-        <div class="td">${s.host_name || '—'}</div>
+        <div class="td">${hostName(s)}</div>
         <div class="td">${d}</div>
         <div class="td">${booked} / ${s.spots_total || '?'}</div>
         <div class="td">${price}</div>
@@ -927,9 +966,9 @@ body::before {
     let data = allUsers;
     if (usrFilter !== 'all') data = data.filter(u => u.role === usrFilter);
     if (q) data = data.filter(u =>
-      (u.name  || '').toLowerCase().includes(q) ||
+      (u.full_name || '').toLowerCase().includes(q) ||
       (u.email || '').toLowerCase().includes(q) ||
-      (u.sport || '').toLowerCase().includes(q)
+      (u.skill_level || '').toLowerCase().includes(q)
     );
     const el = document.getElementById('usr-list');
     if (!data.length) {
@@ -947,8 +986,8 @@ body::before {
             ? `<button class="btn-view" onclick="demoteUser('${u.id}',event)">Revoke</button>`
             : '';
       return `<div class="table-row usr-grid">
-        <div class="td"><div>${u.name || '—'}</div><div class="td-sub">${u.email || '—'}</div></div>
-        <div class="td"><div>${cap(u.sport) || '—'}</div><div class="td-sub">${u.city || '—'}</div></div>
+        <div class="td"><div>${u.full_name || '—'}</div><div class="td-sub">${u.email || '—'}</div></div>
+        <div class="td"><div>${cap(u.skill_level) || '—'}</div><div class="td-sub">${u.city || '—'}</div></div>
         <div class="td">${statusBadge(role)}</div>
         <div class="td">${joined}</div>
         <div class="td" onclick="event.stopPropagation()">${changeBtn}</div>
@@ -991,16 +1030,63 @@ body::before {
     }
     el.innerHTML = allBookings.map(b => {
       const date = b.created_at ? new Date(b.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
-      const amt  = parseFloat(b.amount_paid) === 0 ? 'Free' : '$' + parseFloat(b.amount_paid).toFixed(2);
+      const amt  = parseFloat(b.paid_amount) === 0 ? 'Free' : '$' + parseFloat(b.paid_amount || 0).toFixed(2);
       const sess = allSessions.find(s => s.id === b.session_id);
+      const player = allUsers.find(u => u.id === b.player_id);
       return `<div class="table-row" style="grid-template-columns:2fr 1.5fr 1fr 1fr 1fr;gap:12px;">
-        <div class="td"><div>${b.player_name || '—'}</div><div class="td-sub">${b.player_email || '—'}</div></div>
+        <div class="td"><div>${player?.full_name || '—'}</div><div class="td-sub">${player?.email || '—'}</div></div>
         <div class="td">${sess ? sess.title : (b.session_id ? 'Session' : '—')}</div>
         <div class="td">${amt}</div>
         <div class="td">${statusBadge(b.status || 'confirmed')}</div>
         <div class="td">${date}</div>
       </div>`;
     }).join('');
+  }
+
+  // ── PAYOUTS ─────────────────────────────────────────────
+  // Beta model: money lands in Lyfe.fy's own Stripe balance, hosts paid
+  // manually. Owed = 80% of confirmed booking revenue on the host's
+  // sessions, minus payouts already recorded in host_payouts.
+  const PLATFORM_FEE_PCT = 0.20;
+
+  function renderPayouts() {
+    const el = document.getElementById('payout-list');
+    const hosts = allUsers.filter(u => u.role === 'host' || u.role === 'certified');
+    if (!hosts.length) {
+      el.innerHTML = '<div class="empty-state"><div class="empty-icon">💸</div><div class="empty-title">No hosts yet</div></div>';
+      return;
+    }
+    const rows = hosts.map(h => {
+      const hostSessionIds = new Set(allSessions.filter(s => s.host_id === h.id).map(s => s.id));
+      const confirmedBookings = allBookings.filter(b => hostSessionIds.has(b.session_id) && (b.status || 'confirmed') === 'confirmed');
+      const totalRevenue = confirmedBookings.reduce((sum, b) => sum + (parseFloat(b.paid_amount) || 0), 0);
+      const totalEarned = totalRevenue * (1 - PLATFORM_FEE_PCT);
+      const alreadyPaid = allPayouts.filter(p => p.host_id === h.id).reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
+      const owed = Math.max(0, totalEarned - alreadyPaid);
+      return { host: h, totalEarned, alreadyPaid, owed };
+    }).sort((a, b) => b.owed - a.owed);
+
+    el.innerHTML = rows.map(r => `<div class="table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:12px;">
+        <div class="td"><div>${r.host.full_name || '—'}</div><div class="td-sub">${r.host.email || '—'}</div></div>
+        <div class="td">$${r.totalEarned.toFixed(2)}</div>
+        <div class="td">$${r.alreadyPaid.toFixed(2)}</div>
+        <div class="td"><strong>$${r.owed.toFixed(2)}</strong></div>
+        <div class="td">${r.owed > 0 ? `<button class="btn-approve" onclick="markHostPaid('${r.host.id}', ${r.owed.toFixed(2)}, event)">Mark paid</button>` : '<span class="td-sub">—</span>'}</div>
+      </div>`).join('');
+  }
+
+  async function markHostPaid(hostId, suggestedAmount, event) {
+    if (event) event.stopPropagation();
+    const input = prompt('Amount actually wired to this host ($):', suggestedAmount);
+    if (input === null) return;
+    const amount = parseFloat(input);
+    if (isNaN(amount) || amount <= 0) { toast('Enter a valid amount.'); return; }
+    const note = prompt('Optional note (e.g. "Wire, Aug 17"):', '') || null;
+    const ok = await sbPost('host_payouts', { host_id: hostId, amount, note, paid_at: new Date().toISOString() });
+    if (!ok) { toast('Failed to record payout.'); return; }
+    toast('✓ Payout recorded');
+    await loadAll();
+    renderPayouts();
   }
 
   // ── HELPERS ────────────────────────────────────────────
