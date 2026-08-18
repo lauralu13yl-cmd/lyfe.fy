@@ -941,7 +941,7 @@ body::before {
     const spotsLeft = s => (s.spots_total || 0) - (s.spots_taken || 0);
     if (sesFilter === 'active') data = data.filter(s => s.status === 'active' && spotsLeft(s) > 0);
     if (sesFilter === 'full')   data = data.filter(s => spotsLeft(s) <= 0);
-    const hostName = s => (allUsers.find(u => u.id === s.host_id)?.full_name) || '—';
+    const hostName = s => (allUsers.find(u => u.id === s.host_id)?.name) || '—';
     if (q) data = data.filter(s =>
       (s.title || '').toLowerCase().includes(q) ||
       (s.sport || '').toLowerCase().includes(q) ||
@@ -986,7 +986,7 @@ body::before {
     let data = allUsers;
     if (usrFilter !== 'all') data = data.filter(u => u.role === usrFilter);
     if (q) data = data.filter(u =>
-      (u.full_name || '').toLowerCase().includes(q) ||
+      (u.name || '').toLowerCase().includes(q) ||
       (u.email || '').toLowerCase().includes(q) ||
       (u.skill_level || '').toLowerCase().includes(q)
     );
@@ -1006,7 +1006,7 @@ body::before {
             ? `<button class="btn-view" onclick="demoteUser('${u.id}',event)">Revoke</button>`
             : '';
       return `<div class="table-row usr-grid">
-        <div class="td"><div>${u.full_name || '—'}</div><div class="td-sub">${u.email || '—'}</div></div>
+        <div class="td"><div>${u.name || '—'}</div><div class="td-sub">${u.email || '—'}</div></div>
         <div class="td"><div>${cap(u.skill_level) || '—'}</div><div class="td-sub">${u.city || '—'}</div></div>
         <div class="td">${statusBadge(role)}</div>
         <div class="td">${joined}</div>
@@ -1054,7 +1054,7 @@ body::before {
       const sess = allSessions.find(s => s.id === b.session_id);
       const player = allUsers.find(u => u.id === b.player_id);
       return `<div class="table-row" style="grid-template-columns:2fr 1.5fr 1fr 1fr 1fr;gap:12px;">
-        <div class="td"><div>${player?.full_name || '—'}</div><div class="td-sub">${player?.email || '—'}</div></div>
+        <div class="td"><div>${player?.name || '—'}</div><div class="td-sub">${player?.email || '—'}</div></div>
         <div class="td">${sess ? sess.title : (b.session_id ? 'Session' : '—')}</div>
         <div class="td">${amt}</div>
         <div class="td">${statusBadge(b.status || 'confirmed')}</div>
@@ -1093,7 +1093,7 @@ body::before {
     const rows = hosts.map(h => ({ host: h, ...payoutSummary(h.id) })).sort((a, b) => b.pending - a.pending || b.balance - a.balance);
 
     el.innerHTML = rows.map(r => `<div class="table-row" style="grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;cursor:pointer" onclick="viewHostPayout('${r.host.id}')">
-        <div class="td"><div>${r.host.full_name || '—'}</div><div class="td-sub">${r.host.email || '—'}</div></div>
+        <div class="td"><div>${r.host.name || '—'}</div><div class="td-sub">${r.host.email || '—'}</div></div>
         <div class="td">$${r.totalEarned.toFixed(2)}</div>
         <div class="td"><strong>$${r.balance.toFixed(2)}</strong></div>
         <div class="td">${r.pending > 0 ? `<span class="status status-pending"><span class="status-dot"></span>$${r.pending.toFixed(2)}</span>` : '<span class="td-sub">—</span>'}</div>
@@ -1104,7 +1104,7 @@ body::before {
     const host = allUsers.find(u => u.id === hostId);
     if (!host) return;
     const s = payoutSummary(hostId);
-    document.getElementById('modal-payout-name').textContent = host.full_name || 'Host';
+    document.getElementById('modal-payout-name').textContent = host.name || 'Host';
     document.getElementById('modal-payout-sub').textContent = host.email || '';
     document.getElementById('modal-payout-summary').innerHTML = `
       <div class="detail-field"><div class="detail-label">Total earned (lifetime)</div><div class="detail-value">$${s.totalEarned.toFixed(2)}</div></div>
