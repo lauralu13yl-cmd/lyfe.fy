@@ -339,7 +339,7 @@ select.finp{cursor:pointer}
       <div class="tact"><button class="btn bi" onclick="sv('host-sessions')">+ Create session</button></div>
     </div>
     <div class="statcards">
-      <div class="sc host-stat"><div class="sclbl">This month</div><div class="scval" id="h-earnings">$0</div><div class="scsub">Revenue earned</div></div>
+      <div class="sc host-stat"><div class="sclbl">Lifetime</div><div class="scval" id="h-earnings">$0</div><div class="scsub">Total earned</div></div>
       <div class="sc"><div class="sclbl">Sessions hosted</div><div class="scval" id="h-sessions">0</div><div class="scsub">Total</div></div>
       <div class="sc"><div class="sclbl">Players hosted</div><div class="scval" id="h-players">0</div><div class="scsub">Unique</div></div>
       <div class="sc scg"><div class="sclbl">Avg rating</div><div class="scval" id="h-rating">—</div><div class="scsub">Out of 5.0</div></div>
@@ -347,7 +347,7 @@ select.finp{cursor:pointer}
     <div class="cgrid">
       <div class="panel cw">
         <div class="earn-card">
-          <div class="earn-lbl">Total earned this month</div>
+          <div class="earn-lbl">Total earned (lifetime)</div>
           <div class="earn-big" id="h-earn-big">$0.00</div>
         </div>
         <div class="ph" style="margin-bottom:8px"><span class="pt">Recent bookings on your sessions</span></div>
@@ -417,12 +417,12 @@ select.finp{cursor:pointer}
 
   <!-- HOST EARNINGS -->
   <div class="view" id="v-host-earnings">
-    <div class="topbar"><div class="greet">Earnings <span>Your income breakdown</span></div></div>
+    <div class="topbar"><div class="greet">Earnings <span>Your income and payout history</span></div></div>
     <div class="cgrid">
       <div class="panel">
         <div class="earn-card">
-          <div class="earn-lbl">This month's revenue</div>
-          <div class="earn-big" id="h-earn-big2">$0.00</div>
+          <div class="earn-lbl">Total earnings (lifetime)</div>
+          <div class="earn-big" id="h-earn-total">$0.00</div>
         </div>
         <div class="ph"><span class="pt">Breakdown</span></div>
         <div class="earn-row"><span class="earn-name">Sessions hosted</span><span class="earn-val" id="h-earn-sessions">0</span></div>
@@ -430,12 +430,17 @@ select.finp{cursor:pointer}
         <div class="earn-row"><span class="earn-name">Avg per session</span><span class="earn-val" id="h-earn-avg">$0</span></div>
       </div>
       <div class="panel">
-        <div class="ph"><span class="pt">Payout info</span></div>
-        <p style="font-size:13px;color:var(--ink3);line-height:1.7">Payouts are processed every Monday for the previous week's earnings. 70% of session revenue goes to you, 30% to Lyfe.fy.</p>
+        <div class="ph"><span class="pt">Account balance</span></div>
+        <p style="font-size:13px;color:var(--ink3);line-height:1.7">You keep 80% of what each session earns, 20% goes to Lyfe.fy. During beta, payments are collected by Lyfe.fy and you're paid out by request — this balance is what's actually available to cash out right now.</p>
         <div style="margin-top:16px;padding:14px;background:var(--cream2);border-radius:var(--rsm)">
-          <div style="font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Your share (70%)</div>
-          <div style="font-family:var(--mono);font-size:22px;font-weight:500;color:var(--green)" id="h-earn-share">$0.00</div>
+          <div style="font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">Available balance</div>
+          <div style="font-family:var(--mono);font-size:22px;font-weight:500;color:var(--green)" id="h-earn-balance">$0.00</div>
         </div>
+        <button class="btn bg bfw" style="margin-top:14px" id="request-payout-btn" onclick="requestPayout()">Request payout →</button>
+      </div>
+      <div class="panel cw">
+        <div class="ph"><span class="pt">Payout requests</span></div>
+        <div id="host-payout-requests"><div class="empty"><p>No payout requests yet.</p></div></div>
       </div>
     </div>
   </div>
@@ -713,7 +718,7 @@ function renderHome(role){
     $('home-stats').innerHTML=`
       <div class="sc host-stat"><div class="sclbl">Host since</div><div class="scval" style="font-size:15px;margin-top:4px">${P?.created_at?new Date(P.created_at).toLocaleDateString('en-US',{month:'short',year:'numeric'}):'—'}</div><div class="scsub">Active host</div></div>
       <div class="sc"><div class="sclbl">Sessions hosted</div><div class="scval" id="stat-sessions-hosted">0</div><div class="scsub">Loading…</div></div>
-      <div class="sc scg"><div class="sclbl">Earnings (70%)</div><div class="scval" id="stat-earnings-home">$0</div><div class="scsub">This month</div></div>
+      <div class="sc scg"><div class="sclbl">Earnings (80%)</div><div class="scval" id="stat-earnings-home">$0</div><div class="scsub">Lifetime</div></div>
       <div class="sc"><div class="sclbl">City</div><div class="scval" style="font-size:15px;margin-top:4px">${P?.city||'—'}</div><div class="scsub">${P?.skill_level||'—'}</div></div>`;
   } else {
     const xp=rounds.length*50+myBookings.length*100;
@@ -858,16 +863,36 @@ async function loadHostData(){
   if(mySessions.length){
     const ids=mySessions.map(s=>s.id);
     const{data:bookings}=await db.from('bookings').select('*').in('session_id',ids);
-    hBookings=bookings||[];
+    hBookings=(bookings||[]).filter(b=>(b.status||'confirmed')==='confirmed');
   }
+  const{data:payoutReqs}=await db.from('payout_requests').select('*').eq('host_id',U.id).order('requested_at',{ascending:false});
+  myPayoutRequests=payoutReqs||[];
+
   const totalRaw=hBookings.reduce((sum,b)=>sum+(parseFloat(b.paid_amount)||0),0);
-  const earnings=totalRaw*0.7,earnStr='$'+earnings.toFixed(2);
-  const sesCount=mySessions.length,avg=sesCount>0?'$'+(earnings/sesCount).toFixed(0):'$0';
+  const totalEarned=totalRaw*0.8; // host keeps 80%, matches create-checkout's platform fee
+  const paidOut=myPayoutRequests.filter(r=>r.status==='paid').reduce((sum,r)=>sum+(parseFloat(r.amount)||0),0);
+  const pending=myPayoutRequests.filter(r=>r.status==='pending').reduce((sum,r)=>sum+(parseFloat(r.amount)||0),0);
+  const balance=Math.max(0,totalEarned-paidOut-pending);
+  myAvailableBalance=balance;
+
+  const earnStr='$'+totalEarned.toFixed(2),balStr='$'+balance.toFixed(2);
+  const sesCount=mySessions.length,avg=sesCount>0?'$'+(totalEarned/sesCount).toFixed(0):'$0';
   const uniquePl=new Set(hBookings.map(b=>b.player_id)).size;
-  set('stat-sessions-hosted',sesCount);set('stat-earnings-home','$'+Math.round(earnings));
+  set('stat-sessions-hosted',sesCount);set('stat-earnings-home','$'+Math.round(totalEarned));
   set('h-earnings',earnStr);set('h-sessions',sesCount);set('h-players',uniquePl);set('h-rating','—');
-  set('h-earn-big',earnStr);set('h-earn-big2',earnStr);set('h-earn-share',earnStr);
+  set('h-earn-total',earnStr);set('h-earn-balance',balStr);set('h-earn-big',earnStr);
   set('h-earn-sessions',sesCount);set('h-earn-players',uniquePl);set('h-earn-avg',avg);
+  const reqBtn=$('request-payout-btn');
+  if(reqBtn)reqBtn.disabled=balance<=0;
+
+  html('host-payout-requests',myPayoutRequests.length
+    ?myPayoutRequests.map(r=>{
+        const date=r.requested_at?new Date(r.requested_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
+        const statusHtml={pending:'<span class="bkbadge">Pending</span>',paid:'<span class="bkbadge" style="background:var(--gl);color:var(--green)">Paid</span>',declined:'<span class="bkbadge past">Declined</span>'}[r.status]||r.status;
+        return`<div class="row"><div class="rinfo"><div class="rname">$${parseFloat(r.amount).toFixed(2)} requested</div><div class="rdate">${date}${r.note?' · '+r.note:''}</div></div>${statusHtml}</div>`;
+      }).join('')
+    :'<div class="empty"><p>No payout requests yet.</p></div>');
+
   const hname=P?.full_name||U?.user_metadata?.full_name||U?.email?.split('@')[0]||'Host';
   $('host-greet').innerHTML=`Welcome back, ${hname.split(' ')[0]} <span>Your host dashboard</span>`;
   html('host-bookings-list',hBookings.length
@@ -883,6 +908,21 @@ async function loadHostData(){
         return`<div class="row"><div class="rinfo"><div class="rname">${s.title||'Session'}</div><div class="rdate">${date} · ${cap(s.sport||'')} · ${s.spots_taken||0}/${s.spots_total||4} booked</div></div><span class="rscore" style="font-size:12px;color:var(--green)">$${parseFloat(s.price||0).toFixed(0)}</span></div>`;
       }).join('')
     :'<div class="empty"><p>No sessions created yet.</p></div>');
+}
+
+let myPayoutRequests=[],myAvailableBalance=0;
+
+async function requestPayout(){
+  if(myAvailableBalance<=0){toast('No available balance to request.');return;}
+  const input=prompt('How much would you like to cash out?',myAvailableBalance.toFixed(2));
+  if(input===null)return;
+  const amount=parseFloat(input);
+  if(isNaN(amount)||amount<=0){toast('Enter a valid amount.');return;}
+  if(amount>myAvailableBalance){toast('That\'s more than your available balance ($'+myAvailableBalance.toFixed(2)+').');return;}
+  const{error}=await db.from('payout_requests').insert({host_id:U.id,amount,status:'pending'});
+  if(error){toast('Request failed: '+error.message);return;}
+  toast('✓ Payout request submitted');
+  await loadHostData();
 }
 
 function renderProfileSummary(){
