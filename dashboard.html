@@ -688,7 +688,7 @@ function applyRole(role){
 }
 
 function renderSidebar(role){
-  const name=P?.full_name||U?.user_metadata?.full_name||U?.email?.split('@')[0]||'Player';
+  const name=P?.name||U?.user_metadata?.full_name||U?.email?.split('@')[0]||'Player';
   const initials=name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase();
   const xp=rounds.length*50+myBookings.length*100;
   const xpPct=Math.min((xp/500)*100,100);
@@ -703,7 +703,7 @@ function renderSidebar(role){
 }
 
 function renderHome(role){
-  const name=P?.full_name||U?.user_metadata?.full_name||U?.email?.split('@')[0]||'there';
+  const name=P?.name||U?.user_metadata?.full_name||U?.email?.split('@')[0]||'there';
   const first=name.split(' ')[0];
   const hour=new Date().getHours();
   const tod=hour<12?'morning':hour<17?'afternoon':'evening';
@@ -893,7 +893,7 @@ async function loadHostData(){
       }).join('')
     :'<div class="empty"><p>No payout requests yet.</p></div>');
 
-  const hname=P?.full_name||U?.user_metadata?.full_name||U?.email?.split('@')[0]||'Host';
+  const hname=P?.name||U?.user_metadata?.full_name||U?.email?.split('@')[0]||'Host';
   $('host-greet').innerHTML=`Welcome back, ${hname.split(' ')[0]} <span>Your host dashboard</span>`;
   html('host-bookings-list',hBookings.length
     ?hBookings.slice(0,5).map(b=>{
@@ -934,7 +934,7 @@ function renderProfileSummary(){
 }
 
 function renderProfile(){
-  const name=P?.full_name||U?.user_metadata?.full_name||'—';
+  const name=P?.name||U?.user_metadata?.full_name||'—';
   const email=U?.email||P?.email||'—';
   const joined=P?.created_at?new Date(P.created_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}):'—';
   html('account-info',`<div style="display:flex;flex-direction:column;gap:2px">${field('Name',name)}${field('Email',email)}${field('Role',cap(P?.role||'member'))}${field('Joined',joined)}</div>`);
@@ -1223,7 +1223,7 @@ async function loadCommunity() {
       const { data } = await db.from('profiles').select('*').eq('id', match.matched_user_id).maybeSingle();
       profile = data;
     }
-    const name = profile?.full_name || 'A fellow golfer';
+    const name = profile?.name || 'A fellow golfer';
     const initials = name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
     const tags = Array.isArray(match.shared_tags) ? match.shared_tags : [];
     const isActed = match.status !== 'suggested';
@@ -1288,7 +1288,7 @@ async function loadConnections() {
 
   let profilesMap = {};
   if (otherIds.length) {
-    const { data: profs } = await db.from('profiles').select('id, full_name, city, skill_level').in('id', otherIds);
+    const { data: profs } = await db.from('profiles').select('id, name, city, skill_level').in('id', otherIds);
     (profs || []).forEach(p => { profilesMap[p.id] = p; });
   }
 
@@ -1299,7 +1299,7 @@ async function loadConnections() {
     connEl.innerHTML = accepted.map(c => {
       const otherId = c.requester_id === U.id ? c.addressee_id : c.requester_id;
       const p = profilesMap[otherId] || {};
-      return `<div class="row"><div class="rinfo"><div class="rname">${p.full_name || 'Player'}</div><div class="rdate">${p.skill_level || ''}${p.city ? ' · ' + p.city : ''}</div></div></div>`;
+      return `<div class="row"><div class="rinfo"><div class="rname">${p.name || 'Player'}</div><div class="rdate">${p.skill_level || ''}${p.city ? ' · ' + p.city : ''}</div></div></div>`;
     }).join('');
   }
 
@@ -1309,7 +1309,7 @@ async function loadConnections() {
   } else {
     reqEl.innerHTML = pendingIncoming.map(c => {
       const p = profilesMap[c.requester_id] || {};
-      return `<div class="row"><div class="rinfo"><div class="rname">${p.full_name || 'Player'}</div><div class="rdate">Wants to connect</div></div>
+      return `<div class="row"><div class="rinfo"><div class="rname">${p.name || 'Player'}</div><div class="rdate">Wants to connect</div></div>
         <button class="btn bg bsm" onclick="respondToRequest('${c.id}','accepted')">Accept</button>
         <button class="btn bo bsm" onclick="respondToRequest('${c.id}','declined')">Decline</button>
       </div>`;
