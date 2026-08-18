@@ -524,15 +524,14 @@ body::before {
         <div class="page-header">
           <div class="page-eyebrow">Platform</div>
           <div class="page-title">Host Payouts</div>
-          <div class="page-sub">Beta mode: all payments land in Lyfe.fy's Stripe balance. This shows what each host has earned (80% of their session revenue) and lets you record manual payouts as you wire them.</div>
+          <div class="page-sub">Beta mode: all payments land in Lyfe.fy's Stripe balance. Total earned is lifetime and never changes; account balance is what's actually available — it drops once you mark a cashout request paid. Click a host to see their request history and process pending cashouts.</div>
         </div>
         <div class="table-wrap">
-          <div class="table-head" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:12px;">
+          <div class="table-head" style="grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;">
             <div class="th">Host</div>
-            <div class="th">Total earned (80%)</div>
-            <div class="th">Already paid out</div>
-            <div class="th">Balance owed</div>
-            <div class="th"></div>
+            <div class="th">Total earned</div>
+            <div class="th">Account balance</div>
+            <div class="th">Pending requests</div>
           </div>
           <div class="table-body" id="payout-list">
             <div class="loading-row"><div class="spinner"></div>Loading payouts...</div>
@@ -558,6 +557,25 @@ body::before {
       <div class="detail-grid" id="modal-app-details"></div>
     </div>
     <div class="modal-footer" id="modal-app-actions"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="payoutModal" onclick="if(event.target===this)closeModal('payoutModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-payout-name">Host Name</div>
+        <div class="modal-sub" id="modal-payout-sub">Earnings and payout history</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('payoutModal')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-grid" id="modal-payout-summary"></div>
+      <div style="margin-top:20px">
+        <div style="font-size:12px;font-weight:600;color:var(--ink-70);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px">Payout requests</div>
+        <div id="modal-payout-requests"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -650,7 +668,7 @@ body::before {
       sbGet('sessions?order=session_date.desc&select=*'),
       sbGet('profiles?order=created_at.desc&select=*'),
       sbGet('bookings?order=created_at.desc&select=*'),
-      sbGet('host_payouts?order=paid_at.desc&select=*')
+      sbGet('payout_requests?order=requested_at.desc&select=*')
     ]);
     allApplications = apps    || [];
     allSessions     = sessions || [];
@@ -785,7 +803,9 @@ body::before {
       certified:'<span class="status status-host"><span class="status-dot"></span>Certified</span>',
       active:   '<span class="status status-active"><span class="status-dot"></span>Active</span>',
       pending_host: '<span class="status status-pending"><span class="status-dot"></span>Pending</span>',
-      host_training: '<span class="status status-pending" style="background:var(--ac-light);color:var(--ac-deep);"><span class="status-dot"></span>In Academy</span>'
+      host_training: '<span class="status status-pending" style="background:var(--ac-light);color:var(--ac-deep);"><span class="status-dot"></span>In Academy</span>',
+      paid: '<span class="status status-approved"><span class="status-dot"></span>Paid</span>',
+      declined: '<span class="status status-rejected"><span class="status-dot"></span>Declined</span>'
     };
     return map[s] || `<span class="status status-member">${s}</span>`;
   }
@@ -1045,9 +1065,23 @@ body::before {
 
   // ── PAYOUTS ─────────────────────────────────────────────
   // Beta model: money lands in Lyfe.fy's own Stripe balance, hosts paid
-  // manually. Owed = 80% of confirmed booking revenue on the host's
-  // sessions, minus payouts already recorded in host_payouts.
+  // manually. total earned = 80% of confirmed booking revenue on the
+  // host's sessions — lifetime, never decreases. account balance = total
+  // earned minus payouts already marked 'paid' minus any 'pending'
+  // requests (held so a host can't request the same money twice).
   const PLATFORM_FEE_PCT = 0.20;
+
+  function payoutSummary(hostId) {
+    const hostSessionIds = new Set(allSessions.filter(s => s.host_id === hostId).map(s => s.id));
+    const confirmedBookings = allBookings.filter(b => hostSessionIds.has(b.session_id) && (b.status || 'confirmed') === 'confirmed');
+    const totalRevenue = confirmedBookings.reduce((sum, b) => sum + (parseFloat(b.paid_amount) || 0), 0);
+    const totalEarned = totalRevenue * (1 - PLATFORM_FEE_PCT);
+    const hostRequests = allPayouts.filter(p => p.host_id === hostId).sort((a,b) => new Date(b.requested_at) - new Date(a.requested_at));
+    const paidOut = hostRequests.filter(r => r.status === 'paid').reduce((sum, r) => sum + (parseFloat(r.amount) || 0), 0);
+    const pending = hostRequests.filter(r => r.status === 'pending').reduce((sum, r) => sum + (parseFloat(r.amount) || 0), 0);
+    const balance = Math.max(0, totalEarned - paidOut - pending);
+    return { totalEarned, paidOut, pending, balance, requests: hostRequests };
+  }
 
   function renderPayouts() {
     const el = document.getElementById('payout-list');
@@ -1056,36 +1090,70 @@ body::before {
       el.innerHTML = '<div class="empty-state"><div class="empty-icon">💸</div><div class="empty-title">No hosts yet</div></div>';
       return;
     }
-    const rows = hosts.map(h => {
-      const hostSessionIds = new Set(allSessions.filter(s => s.host_id === h.id).map(s => s.id));
-      const confirmedBookings = allBookings.filter(b => hostSessionIds.has(b.session_id) && (b.status || 'confirmed') === 'confirmed');
-      const totalRevenue = confirmedBookings.reduce((sum, b) => sum + (parseFloat(b.paid_amount) || 0), 0);
-      const totalEarned = totalRevenue * (1 - PLATFORM_FEE_PCT);
-      const alreadyPaid = allPayouts.filter(p => p.host_id === h.id).reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
-      const owed = Math.max(0, totalEarned - alreadyPaid);
-      return { host: h, totalEarned, alreadyPaid, owed };
-    }).sort((a, b) => b.owed - a.owed);
+    const rows = hosts.map(h => ({ host: h, ...payoutSummary(h.id) })).sort((a, b) => b.pending - a.pending || b.balance - a.balance);
 
-    el.innerHTML = rows.map(r => `<div class="table-row" style="grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:12px;">
+    el.innerHTML = rows.map(r => `<div class="table-row" style="grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;cursor:pointer" onclick="viewHostPayout('${r.host.id}')">
         <div class="td"><div>${r.host.full_name || '—'}</div><div class="td-sub">${r.host.email || '—'}</div></div>
         <div class="td">$${r.totalEarned.toFixed(2)}</div>
-        <div class="td">$${r.alreadyPaid.toFixed(2)}</div>
-        <div class="td"><strong>$${r.owed.toFixed(2)}</strong></div>
-        <div class="td">${r.owed > 0 ? `<button class="btn-approve" onclick="markHostPaid('${r.host.id}', ${r.owed.toFixed(2)}, event)">Mark paid</button>` : '<span class="td-sub">—</span>'}</div>
+        <div class="td"><strong>$${r.balance.toFixed(2)}</strong></div>
+        <div class="td">${r.pending > 0 ? `<span class="status status-pending"><span class="status-dot"></span>$${r.pending.toFixed(2)}</span>` : '<span class="td-sub">—</span>'}</div>
       </div>`).join('');
   }
 
-  async function markHostPaid(hostId, suggestedAmount, event) {
+  function viewHostPayout(hostId) {
+    const host = allUsers.find(u => u.id === hostId);
+    if (!host) return;
+    const s = payoutSummary(hostId);
+    document.getElementById('modal-payout-name').textContent = host.full_name || 'Host';
+    document.getElementById('modal-payout-sub').textContent = host.email || '';
+    document.getElementById('modal-payout-summary').innerHTML = `
+      <div class="detail-field"><div class="detail-label">Total earned (lifetime)</div><div class="detail-value">$${s.totalEarned.toFixed(2)}</div></div>
+      <div class="detail-field"><div class="detail-label">Already paid out</div><div class="detail-value">$${s.paidOut.toFixed(2)}</div></div>
+      <div class="detail-field"><div class="detail-label">Held in pending requests</div><div class="detail-value">$${s.pending.toFixed(2)}</div></div>
+      <div class="detail-field"><div class="detail-label">Account balance</div><div class="detail-value"><strong>$${s.balance.toFixed(2)}</strong></div></div>
+    `;
+    const reqEl = document.getElementById('modal-payout-requests');
+    if (!s.requests.length) {
+      reqEl.innerHTML = '<div class="empty-state" style="padding:20px"><div class="empty-title" style="font-size:13px">No cashout requests yet</div></div>';
+    } else {
+      reqEl.innerHTML = s.requests.map(r => {
+        const date = r.requested_at ? new Date(r.requested_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '—';
+        const actions = r.status === 'pending'
+          ? `<div class="action-btns">
+               <button class="btn-approve" onclick="processPayoutRequest('${r.id}','paid',event)">Mark paid</button>
+               <button class="btn-reject" onclick="processPayoutRequest('${r.id}','declined',event)">Decline</button>
+             </div>`
+          : '';
+        return `<div class="table-row" style="grid-template-columns:1fr 1fr 1fr 1.5fr;gap:12px;margin-bottom:6px">
+          <div class="td">$${parseFloat(r.amount).toFixed(2)}</div>
+          <div class="td">${date}</div>
+          <div class="td">${statusBadge(r.status)}</div>
+          <div class="td">${actions || (r.note ? `<span class="td-sub">${r.note}</span>` : '')}</div>
+        </div>`;
+      }).join('');
+    }
+    document.getElementById('payoutModal').classList.add('open');
+  }
+
+  async function processPayoutRequest(requestId, newStatus, event) {
     if (event) event.stopPropagation();
-    const input = prompt('Amount actually wired to this host ($):', suggestedAmount);
-    if (input === null) return;
-    const amount = parseFloat(input);
-    if (isNaN(amount) || amount <= 0) { toast('Enter a valid amount.'); return; }
-    const note = prompt('Optional note (e.g. "Wire, Aug 17"):', '') || null;
-    const ok = await sbPost('host_payouts', { host_id: hostId, amount, note, paid_at: new Date().toISOString() });
-    if (!ok) { toast('Failed to record payout.'); return; }
-    toast('✓ Payout recorded');
+    const label = newStatus === 'paid' ? 'mark this request as paid' : 'decline this request';
+    let note = null;
+    if (newStatus === 'paid') {
+      note = prompt('Optional note (e.g. wire confirmation, date sent):', '') || null;
+    } else {
+      if (!confirm('Decline this cashout request? The amount returns to the host\'s available balance.')) return;
+    }
+    const ok = await sbPatch('payout_requests?id=eq.' + requestId, {
+      status: newStatus,
+      processed_at: new Date().toISOString(),
+      note
+    });
+    if (!ok) { toast('Failed to update request.'); return; }
+    toast(newStatus === 'paid' ? '✓ Marked paid' : 'Request declined');
     await loadAll();
+    const hostId = allPayouts.find(p => p.id === requestId)?.host_id;
+    if (hostId) viewHostPayout(hostId);
     renderPayouts();
   }
 
