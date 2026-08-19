@@ -130,6 +130,36 @@ input,select{font-family:var(--sans)}
 .sc-price{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink)}
 .sc-spots{font-size:10.5px;color:var(--ink3)}
 .sc-spots.low{color:var(--amber);font-weight:600}
+
+/* MODE TOGGLE */
+.mode-toggle{display:inline-flex;background:var(--w);border:1px solid var(--cream3);border-radius:30px;padding:3px;margin-top:16px}
+.mode-btn{padding:8px 20px;border-radius:30px;font-size:12.5px;font-weight:500;color:var(--ink3);cursor:pointer}
+.mode-btn.sel{background:var(--ink);color:var(--cream)}
+
+/* COACH DIRECTORY */
+.coach-card{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rlg);overflow:hidden;display:flex;flex-direction:column}
+.coach-top{padding:16px 16px 12px}
+.coach-badge{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--green);background:var(--gl);border:1px solid rgba(26,122,82,.2);padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:10px}
+.coach-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.coach-av{width:36px;height:36px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.coach-name{font-family:var(--serif);font-size:15px;font-weight:700;color:var(--ink)}
+.coach-city{font-size:11.5px;color:var(--ink3)}
+.coach-desc{font-size:12px;color:var(--ink3)}
+.coach-foot{border-top:1px solid var(--cream3);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;background:var(--cream2)}
+.coach-price{font-family:var(--mono);font-size:14px;font-weight:500;color:var(--ink)}
+
+/* COACH PROFILE */
+.coach-profile-card{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rlg);padding:20px;margin-bottom:16px}
+.coach-profile-head{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.coach-profile-av{width:52px;height:52px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:18px;font-weight:700;flex-shrink:0}
+.coach-profile-name{font-family:var(--serif);font-size:20px;font-weight:900;color:var(--ink)}
+.coach-profile-sub{font-size:12.5px;color:var(--ink3)}
+.slot-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+.slot-card{background:var(--w);border:1px solid var(--cream3);border-radius:var(--rsm);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.slot-card.booked{opacity:.55}
+.slot-time{font-size:13px;font-weight:500;color:var(--ink)}
+.slot-meta{font-size:11.5px;color:var(--ink3)}
+.back-link{font-size:12px;color:var(--green);font-weight:500;cursor:pointer;display:inline-block;margin-bottom:14px}
 </style>
 </head>
 <body>
@@ -166,8 +196,14 @@ input,select{font-family:var(--sans)}
 
   <!-- FAIRWAY MATCH BANNER — shown only when signed in -->
   <div class="fm-banner" id="fm-banner" style="display:none"></div>
+
+  <div class="mode-toggle">
+    <button class="mode-btn sel" id="mode-btn-sessions" onclick="setMode('sessions')">Sessions</button>
+    <button class="mode-btn" id="mode-btn-coaches" onclick="setMode('coaches')">Coaches</button>
+  </div>
 </div>
 
+<div id="mode-sessions">
 <div class="filters-wrap">
   <div class="filters">
     <input class="search-inp" id="search" type="text" placeholder="Search title, location, host..." data-i18n-placeholder="games.search_ph" oninput="renderSessions()">
@@ -184,6 +220,14 @@ input,select{font-family:var(--sans)}
 
 <div class="grid" id="grid">
   <div class="loading"><div class="spinner"></div>Loading sessions...</div>
+</div>
+</div>
+
+<div id="mode-coaches" style="display:none">
+  <div class="grid" id="coach-grid">
+    <div class="loading"><div class="spinner"></div>Loading coaches...</div>
+  </div>
+  <div id="coach-profile" style="display:none;max-width:640px;margin:0 auto;padding:0 32px 80px"></div>
 </div>
 
 <!-- LOGIN MODAL -->
@@ -332,7 +376,7 @@ async function loadFairwayMatchBanner() {
 /* ════ SESSIONS ════ */
 async function loadSessions() {
   // Golf-only platform — hard filter at the query level
-  const { data: sessions } = await db.from('sessions').select('*').eq('status','active').eq('sport','Golf').order('created_at',{ascending:false});
+  const { data: sessions } = await db.from('sessions').select('*').eq('status','active').eq('sport','Golf').eq('session_kind','group').order('created_at',{ascending:false});
   allSessions = sessions || [];
 
   // Fetch host profiles in bulk for match scoring + avatar display
@@ -452,7 +496,7 @@ function renderSessions() {
 }
 
 async function bookSession(sessionId) {
-  const s = allSessions.find(x => x.id === sessionId);
+  const s = allSessions.find(x => x.id === sessionId) || coachSessions.find(x => x.id === sessionId);
   if (!s) return;
   const price = parseFloat(s.price) || 0;
 
@@ -501,7 +545,137 @@ async function bookSession(sessionId) {
 
 }
 
-/* ════ AUTH (optional — page browsable as guest) ════ */
+/* ════ COACHES — Sessions/Coaches toggle + directory ════ */
+let coachesLoaded = false;
+let coachSessions = [];
+let coachProfiles = {};
+let coachLevels = {};
+
+const LEVEL_LABELS = { d1: 'NCAA D1', d2d3: 'NCAA D2/D3', pro: 'Pro', certified: 'Certified coach', competitive: 'Club competitive' };
+
+function setMode(mode) {
+  const showSessions = mode === 'sessions';
+  $('mode-sessions').style.display = showSessions ? '' : 'none';
+  $('mode-coaches').style.display = showSessions ? 'none' : '';
+  $('mode-btn-sessions').classList.toggle('sel', showSessions);
+  $('mode-btn-coaches').classList.toggle('sel', !showSessions);
+  if (!showSessions && !coachesLoaded) loadCoaches();
+}
+
+function addMinutes(timeStr, minutes) {
+  if (!timeStr) return '';
+  const [h, m] = timeStr.split(':').map(Number);
+  const total = h * 60 + m + (minutes || 60);
+  const hh = Math.floor((total % 1440) / 60), mm = total % 60;
+  return formatTime(String(hh).padStart(2, '0') + ':' + String(mm).padStart(2, '0'));
+}
+
+async function loadCoaches() {
+  const { data: sessions } = await db.from('sessions').select('*').eq('status', 'active').eq('session_kind', 'coaching').order('session_date', { ascending: true });
+  coachSessions = sessions || [];
+
+  const hostIds = [...new Set(coachSessions.map(s => s.host_id).filter(Boolean))];
+  if (hostIds.length) {
+    const [{ data: hosts }, { data: apps }] = await Promise.all([
+      db.from('profiles').select('*').in('id', hostIds),
+      db.from('host_applications').select('user_id, level').eq('status', 'approved').in('user_id', hostIds)
+    ]);
+    (hosts || []).forEach(h => { coachProfiles[h.id] = h; });
+    (apps || []).forEach(a => { coachLevels[a.user_id] = a.level; });
+  }
+
+  coachesLoaded = true;
+  renderCoaches();
+}
+
+function renderCoaches() {
+  const grid = $('coach-grid');
+  if (!coachSessions.length) {
+    grid.innerHTML = `<div class="empty-state"><div style="font-weight:500">No coaches available yet</div><div style="font-size:12px;margin-top:4px">Check back soon, or browse sessions instead.</div></div>`;
+    return;
+  }
+  const byHost = {};
+  coachSessions.forEach(s => { (byHost[s.host_id] = byHost[s.host_id] || []).push(s); });
+
+  grid.innerHTML = Object.keys(byHost).map(hostId => {
+    const coach = coachProfiles[hostId] || {};
+    const name = coach.name || (coach.email ? coach.email.split('@')[0] : 'Coach');
+    const slots = byHost[hostId];
+    const hasSolo = slots.some(s => (s.spots_total || 1) === 1);
+    const hasGroup = slots.some(s => (s.spots_total || 1) > 1);
+    const desc = hasSolo && hasGroup ? '1-on-1 and small group lessons' : hasGroup ? 'Small group lessons only' : '1-on-1 lessons only';
+    const minPrice = Math.min(...slots.map(s => parseFloat(s.price) || 0));
+    const badge = LEVEL_LABELS[coachLevels[hostId]] || 'Coach';
+
+    return `<div class="coach-card">
+      <div class="coach-top">
+        <span class="coach-badge">${badge}</span>
+        <div class="coach-head">
+          <div class="coach-av" style="background:${avColor(hostId||name)}">${initials(name)}</div>
+          <div>
+            <div class="coach-name">${name}</div>
+            <div class="coach-city">${coach.city || ''}</div>
+          </div>
+        </div>
+        <div class="coach-desc">${desc}</div>
+      </div>
+      <div class="coach-foot">
+        <div class="coach-price">From $${minPrice.toFixed(0)}</div>
+        <button class="btn bi bsm" onclick="showCoachProfile('${hostId}')">View slots</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showCoachProfile(hostId) {
+  const coach = coachProfiles[hostId] || {};
+  const name = coach.name || (coach.email ? coach.email.split('@')[0] : 'Coach');
+  const badge = LEVEL_LABELS[coachLevels[hostId]] || 'Coach';
+  const slots = coachSessions.filter(s => s.host_id === hostId);
+
+  $('coach-grid').style.display = 'none';
+  const el = $('coach-profile');
+  el.style.display = 'block';
+  el.innerHTML = `
+    <div class="back-link" onclick="backToCoaches()">&larr; All coaches</div>
+    <div class="coach-profile-card">
+      <div class="coach-profile-head">
+        <div class="coach-profile-av" style="background:${avColor(hostId||name)}">${initials(name)}</div>
+        <div>
+          <div class="coach-profile-name">${name}</div>
+          <div class="coach-profile-sub">${badge}${coach.city ? ' &middot; ' + coach.city : ''}</div>
+        </div>
+      </div>
+    </div>
+    <div class="slot-lbl">Open slots</div>
+    ${slots.map(s => {
+      const left = (s.spots_total || 1) - (s.spots_taken || 0);
+      const full = left <= 0;
+      const capacityLabel = (s.spots_total || 1) > 1 ? `Small group (up to ${s.spots_total})` : '1-on-1';
+      const priceLabel = (s.spots_total || 1) > 1 ? `$${parseFloat(s.price).toFixed(0)} / person` : `$${parseFloat(s.price).toFixed(0)}`;
+      const timeRange = s.session_time ? `${formatTime(s.session_time)}&ndash;${addMinutes(s.session_time, s.duration_minutes)}` : '';
+      return `<div class="slot-card ${full ? 'booked' : ''}">
+        <div>
+          <div class="slot-time">${fmtDate(s.session_date)}${timeRange ? ' &middot; ' + timeRange : ''}</div>
+          <div class="slot-meta">${capacityLabel}${s.location ? ' &middot; ' + s.location : ''}</div>
+        </div>
+        ${full
+          ? `<span style="font-size:11px;color:var(--ink3)">Full</span>`
+          : U
+            ? `<button class="btn bg bsm" onclick="bookSession('${s.id}')">$${priceLabel.replace('$','')}&nbsp;&middot;&nbsp;Book</button>`
+            : `<a href="onboarding.html" class="btn bi bsm">Sign up to book</a>`
+        }
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function backToCoaches() {
+  $('coach-profile').style.display = 'none';
+  $('coach-grid').style.display = '';
+}
+
+
 function toggleMenu() {
   const links = document.querySelector('.nav-links');
   if (!links) return;
