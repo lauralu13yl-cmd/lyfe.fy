@@ -50,6 +50,9 @@ input,select,textarea{font-family:var(--sans)}
 .subtab-row{display:flex;gap:8px;margin-bottom:16px}
 .subtab{font-size:12px;font-weight:500;padding:7px 15px;border-radius:20px;border:1px solid var(--cream3);background:var(--w);color:var(--ink3);cursor:pointer}
 .subtab.act{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.mode-toggle{display:inline-flex;background:var(--w);border:1px solid var(--cream3);border-radius:30px;padding:3px}
+.mode-btn{padding:8px 20px;border-radius:30px;font-size:12.5px;font-weight:500;color:var(--ink3);cursor:pointer}
+.mode-btn.sel{background:var(--ink);color:var(--cream)}
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(14,14,12,.5);z-index:300;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.open{display:flex}
 .modal{background:var(--cream);border-radius:var(--rxl);padding:32px;max-width:400px;width:100%;position:relative}
@@ -366,8 +369,15 @@ select.finp{cursor:pointer}
       </div>
       <div class="panel">
         <div class="ph"><span class="pt">Create a session</span></div>
-        <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:var(--green);background:var(--gl);border:1px solid rgba(42,158,106,.2);padding:6px 12px;border-radius:30px;margin-bottom:14px;width:fit-content">⛳ Golf — Lyfe.fy is a golf-only platform</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:var(--green);background:var(--gl);border:1px solid rgba(42,158,106,.2);padding:6px 12px;border-radius:30px;margin-bottom:14px;width:fit-content">Golf — Lyfe.fy is a golf-only platform</div>
         <input type="hidden" id="sess-sport" value="Golf">
+
+        <div class="mode-toggle" style="margin-bottom:16px">
+          <button class="mode-btn sel" id="create-mode-group" onclick="setSessionCreateMode('group')">Group session</button>
+          <button class="mode-btn" id="create-mode-coaching" onclick="setSessionCreateMode('coaching')">Coaching slot</button>
+        </div>
+
+        <div id="group-session-fields">
         <div class="fgrp2"><label class="flbl">Title *</label><input class="finp" id="sess-title" type="text" placeholder="e.g. Saturday Morning Round at Bethpage"></div>
         <div class="fgrp2"><label class="flbl">Format</label>
           <select class="finp" id="sess-format"><option>1v1</option><option>Small Group (2-4)</option><option>Group (5-10)</option><option>Open</option></select>
@@ -392,23 +402,50 @@ select.finp{cursor:pointer}
         <div class="fgrp2"><label class="flbl">Venue type</label>
           <select class="finp" id="sess-venue">
             <option value="">Select…</option>
-            <option value="range">🎯 Driving Range</option>
-            <option value="sim">🖥️ Sim Room</option>
-            <option value="course_9">⛳ 9-Hole Course</option>
-            <option value="course_18">⛳ 18-Hole Course</option>
+            <option value="range">Driving Range</option>
+            <option value="sim">Sim Room</option>
+            <option value="course_9">9-Hole Course</option>
+            <option value="course_18">18-Hole Course</option>
           </select>
         </div>
         <div class="fgrp2"><label class="flbl">Vibe (pick up to 3)</label>
           <div style="display:flex;flex-wrap:wrap;gap:6px" id="sess-vibe-chips">
-            <button type="button" class="vibe-pick" data-v="Chill" onclick="toggleSessVibe(this)">😌 Chill</button>
-            <button type="button" class="vibe-pick" data-v="Competitive" onclick="toggleSessVibe(this)">🔥 Competitive</button>
-            <button type="button" class="vibe-pick" data-v="Funny & chaotic" onclick="toggleSessVibe(this)">😂 Funny & chaotic</button>
-            <button type="button" class="vibe-pick" data-v="Locked-in" onclick="toggleSessVibe(this)">🧠 Locked-in</button>
-            <button type="button" class="vibe-pick" data-v="Social butterfly" onclick="toggleSessVibe(this)">🥂 Social butterfly</button>
-            <button type="button" class="vibe-pick" data-v="Beginner-friendly" onclick="toggleSessVibe(this)">🌱 Beginner-friendly</button>
+            <button type="button" class="vibe-pick" data-v="Chill" onclick="toggleSessVibe(this)">Chill</button>
+            <button type="button" class="vibe-pick" data-v="Competitive" onclick="toggleSessVibe(this)">Competitive</button>
+            <button type="button" class="vibe-pick" data-v="Funny & chaotic" onclick="toggleSessVibe(this)">Funny & chaotic</button>
+            <button type="button" class="vibe-pick" data-v="Locked-in" onclick="toggleSessVibe(this)">Locked-in</button>
+            <button type="button" class="vibe-pick" data-v="Social butterfly" onclick="toggleSessVibe(this)">Social butterfly</button>
+            <button type="button" class="vibe-pick" data-v="Beginner-friendly" onclick="toggleSessVibe(this)">Beginner-friendly</button>
           </div>
         </div>
         <div class="fgrp2"><label class="flbl">Description</label><textarea class="finp" id="sess-desc" rows="3" placeholder="Tell players what to expect…"></textarea></div>
+        </div>
+
+        <div id="coaching-slot-fields" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="fgrp2"><label class="flbl">Date *</label><input class="finp" id="coach-date" type="date"></div>
+          <div class="fgrp2"><label class="flbl">Start time *</label><input class="finp" id="coach-time" type="time"></div>
+        </div>
+        <div class="fgrp2"><label class="flbl">Duration</label>
+          <select class="finp" id="coach-duration"><option value="30">30 min</option><option value="45">45 min</option><option value="60" selected>60 min</option><option value="90">90 min</option></select>
+        </div>
+        <div class="fgrp2"><label class="flbl">Location *</label><input class="finp" id="coach-location" type="text" placeholder="e.g. Fresh Pond Golf Course"></div>
+        <div class="fgrp2"><label class="flbl">Lesson type</label>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <div class="grptype-opt act" id="coachtype-solo" onclick="selectCoachType('solo')">
+              <div style="font-size:13px;font-weight:500">1-on-1</div>
+              <div style="font-size:11px;color:var(--ink3)">One player</div>
+            </div>
+            <div class="grptype-opt" id="coachtype-group" onclick="selectCoachType('group')">
+              <div style="font-size:13px;font-weight:500">Small group</div>
+              <div style="font-size:11px;color:var(--ink3)">Set your own size</div>
+            </div>
+          </div>
+        </div>
+        <div class="fgrp2" id="coach-groupsize-field" style="display:none"><label class="flbl">Max players</label><input class="finp" id="coach-groupsize" type="number" placeholder="4" min="2" max="10"></div>
+        <div class="fgrp2"><label class="flbl">Price ($)<span id="coach-price-sub" style="text-transform:none;font-weight:400;color:var(--ink3)"></span></label><input class="finp" id="coach-price" type="number" placeholder="100" min="0"></div>
+        </div>
+
         <button class="btn bg bfw" id="publish-btn" onclick="publishSession()">Publish Session ✓</button>
         <div id="sess-msg" style="display:none;margin-top:10px;font-size:12px;text-align:center"></div>
       </div>
@@ -980,7 +1017,26 @@ function toggleSessVibe(btn) {
   }
 }
 
+let sessionCreateMode='group';
+function setSessionCreateMode(mode){
+  sessionCreateMode=mode;
+  $('create-mode-group').classList.toggle('sel',mode==='group');
+  $('create-mode-coaching').classList.toggle('sel',mode==='coaching');
+  $('group-session-fields').style.display=mode==='group'?'':'none';
+  $('coaching-slot-fields').style.display=mode==='coaching'?'':'none';
+}
+
+let coachTypeSelected='solo';
+function selectCoachType(type){
+  coachTypeSelected=type;
+  $('coachtype-solo').classList.toggle('act',type==='solo');
+  $('coachtype-group').classList.toggle('act',type==='group');
+  $('coach-groupsize-field').style.display=type==='group'?'':'none';
+  $('coach-price-sub').textContent=type==='group'?' (per person)':'';
+}
+
 async function publishSession(){
+  if(sessionCreateMode==='coaching') return publishCoachingSlot();
   const msg=$('sess-msg'),btn=$('publish-btn');
   const title=$('sess-title').value.trim(),sport=$('sess-sport').value;
   const date=$('sess-date').value,location=$('sess-location').value.trim();
@@ -995,7 +1051,7 @@ async function publishSession(){
     price:parseFloat($('sess-price').value)||0,spots_total:parseInt($('sess-spots').value)||8,
     spots_taken:0,skill_level:$('sess-skill').value,session_type:$('sess-type').value,
     venue_type:$('sess-venue').value||null,vibe_tags:sessVibeSelected,
-    description:$('sess-desc').value.trim()||null,status:'active'
+    description:$('sess-desc').value.trim()||null,status:'active',session_kind:'group'
   });
   btn.disabled=false;btn.textContent='Publish Session ✓';
   if(error){showMsg(msg,'Error: '+error.message,'red');return;}
@@ -1003,6 +1059,36 @@ async function publishSession(){
   document.querySelectorAll('.vibe-pick.sel').forEach(b=>b.classList.remove('sel'));
   sessVibeSelected=[];
   showMsg(msg,'✓ Session published! Players can now find and book it.','green');
+  await loadHostData();
+}
+
+async function publishCoachingSlot(){
+  const msg=$('sess-msg'),btn=$('publish-btn');
+  const date=$('coach-date').value,time=$('coach-time').value,location=$('coach-location').value.trim();
+  const price=parseFloat($('coach-price').value);
+  const groupSize=parseInt($('coach-groupsize').value);
+  if(!date){showMsg(msg,'Please pick a date.','red');return;}
+  if(!time){showMsg(msg,'Please pick a start time.','red');return;}
+  if(!location){showMsg(msg,'Please enter a location.','red');return;}
+  if(isNaN(price)||price<0){showMsg(msg,'Please enter a valid price.','red');return;}
+  if(coachTypeSelected==='group'&&(isNaN(groupSize)||groupSize<2)){showMsg(msg,'Enter a max group size of 2 or more.','red');return;}
+
+  const firstName=(P?.name||U?.user_metadata?.full_name||'Coach').split(' ')[0];
+  const title=coachTypeSelected==='solo' ? `1-on-1 coaching with ${firstName}` : `Small group lesson with ${firstName}`;
+  const spotsTotal=coachTypeSelected==='solo' ? 1 : groupSize;
+
+  btn.disabled=true;btn.textContent='Publishing…';
+  const{error}=await db.from('sessions').insert({
+    host_id:U.id,title,sport:'Golf',session_kind:'coaching',
+    session_date:date,session_time:time,duration_minutes:parseInt($('coach-duration').value)||60,
+    location,price,spots_total:spotsTotal,spots_taken:0,
+    session_type:'Coached',status:'active'
+  });
+  btn.disabled=false;btn.textContent='Publish Session ✓';
+  if(error){showMsg(msg,'Error: '+error.message,'red');return;}
+  ['coach-date','coach-time','coach-location','coach-price','coach-groupsize'].forEach(id=>{$(id).value='';});
+  selectCoachType('solo');
+  showMsg(msg,'✓ Coaching slot published! Players can now book it.','green');
   await loadHostData();
 }
 
