@@ -92,7 +92,6 @@ input,select{font-family:var(--sans)}
 .chip{font-size:11.5px;font-weight:500;padding:7px 15px;border-radius:30px;border:1px solid var(--cream3);background:var(--w);color:var(--ink3);cursor:pointer;transition:all .15s;white-space:nowrap}
 .chip:hover{border-color:var(--ink3)}
 .chip.sel{background:var(--ink);color:var(--cream);border-color:var(--ink)}
-.chip.vibe-chip.sel{background:var(--green);border-color:var(--green)}
 
 /* FILTER ROWS */
 .filters-wrap{max-width:1180px;margin:0 auto;padding:0 32px;margin-bottom:18px}
@@ -136,7 +135,7 @@ input,select{font-family:var(--sans)}
 <body>
 
 <nav class="nav">
-  <a href="index.html" class="logo"><img src="logo.png" alt="Lyfe.fy" style="height:30px;width:auto;display:block"></a>
+  <a href="index.html" class="logo"><img src="logo-trimmed.png" alt="Lyfe.fy" style="height:44px;width:auto;display:block"></a>
   <ul class="nav-links">
     <li><a href="index.html#how" data-i18n="nav.how">How It Works</a></li>
     <li><a href="index.html#hosts" data-i18n="nav.hosts">For Hosts</a></li>
@@ -176,19 +175,10 @@ input,select{font-family:var(--sans)}
   <div class="filter-row">
     <span class="filter-row-label" data-i18n="games.filter_venue">Venue</span>
     <button class="chip sel" data-venue="all" onclick="setVenueFilter('all',this)" data-i18n="games.venue_all">All</button>
-    <button class="chip" data-venue="range" onclick="setVenueFilter('range',this)" data-i18n="games.venue_range">🎯 Driving Range</button>
-    <button class="chip" data-venue="sim" onclick="setVenueFilter('sim',this)" data-i18n="games.venue_sim">🖥️ Sim Room</button>
-    <button class="chip" data-venue="course_9" onclick="setVenueFilter('course_9',this)" data-i18n="games.venue_9">⛳ 9-Hole Course</button>
-    <button class="chip" data-venue="course_18" onclick="setVenueFilter('course_18',this)" data-i18n="games.venue_18">⛳ 18-Hole Course</button>
-  </div>
-  <div class="filter-row">
-    <span class="filter-row-label" data-i18n="games.filter_vibe">Vibe</span>
-    <button class="chip vibe-chip" data-vibe="Chill" onclick="toggleVibeFilter('Chill',this)" data-i18n="games.vibe_chill">😌 Chill</button>
-    <button class="chip vibe-chip" data-vibe="Competitive" onclick="toggleVibeFilter('Competitive',this)" data-i18n="games.vibe_comp">🔥 Competitive</button>
-    <button class="chip vibe-chip" data-vibe="Funny & chaotic" onclick="toggleVibeFilter('Funny & chaotic',this)" data-i18n="games.vibe_funny">😂 Funny & chaotic</button>
-    <button class="chip vibe-chip" data-vibe="Locked-in" onclick="toggleVibeFilter('Locked-in',this)" data-i18n="games.vibe_locked">🧠 Locked-in</button>
-    <button class="chip vibe-chip" data-vibe="Social butterfly" onclick="toggleVibeFilter('Social butterfly',this)" data-i18n="games.vibe_social">🥂 Social butterfly</button>
-    <button class="chip vibe-chip" data-vibe="Beginner-friendly" onclick="toggleVibeFilter('Beginner-friendly',this)" data-i18n="games.vibe_beginner">🌱 Beginner-friendly</button>
+    <button class="chip" data-venue="range" onclick="setVenueFilter('range',this)" data-i18n="games.venue_range">Driving Range</button>
+    <button class="chip" data-venue="sim" onclick="setVenueFilter('sim',this)" data-i18n="games.venue_sim">Sim Room</button>
+    <button class="chip" data-venue="course_9" onclick="setVenueFilter('course_9',this)" data-i18n="games.venue_9">9-Hole Course</button>
+    <button class="chip" data-venue="course_18" onclick="setVenueFilter('course_18',this)" data-i18n="games.venue_18">18-Hole Course</button>
   </div>
 </div>
 
@@ -240,9 +230,8 @@ let hostProfiles = {};
 let attendeesBySession = {};
 let myWeeklyMatch = null;
 let venueFilter = 'all';
-let vibeFilters = [];
 
-const VENUE_LABELS = { range: '🎯 Driving Range', sim: '🖥️ Sim Room', course_9: '⛳ 9-Hole Course', course_18: '⛳ 18-Hole Course' };
+const VENUE_LABELS = { range: 'Driving Range', sim: 'Sim Room', course_9: '9-Hole Course', course_18: '18-Hole Course' };
 
 function $(id){return document.getElementById(id);}
 function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):'';}
@@ -330,10 +319,9 @@ async function loadFairwayMatchBanner() {
   const banner = $('fm-banner');
   banner.style.display = 'flex';
   banner.innerHTML = `
-    <div class="fm-b-icon">⛳</div>
     <div style="flex:1">
       <div class="fm-b-eyebrow">Fairway Match</div>
-      <div class="fm-b-title">${profile?.full_name || 'A fellow golfer'} could be your next great round</div>
+      <div class="fm-b-title">${profile?.name || 'A fellow golfer'} could be your next great round</div>
       <div class="fm-b-sub">${(Array.isArray(match.shared_tags)?match.shared_tags:[]).slice(0,3).join(' · ') || 'Compatible schedule and skill level'}</div>
     </div>
     <div class="fm-b-score">${match.score}%<div class="fm-b-score-lbl">Match</div></div>
@@ -361,13 +349,13 @@ async function loadSessions() {
     const playerIds = [...new Set((bookings||[]).map(b => b.player_id).filter(Boolean))];
     let playerProfiles = {};
     if (playerIds.length) {
-      const { data: players } = await db.from('profiles').select('id, full_name').in('id', playerIds);
+      const { data: players } = await db.from('profiles').select('id, name').in('id', playerIds);
       (players||[]).forEach(p => { playerProfiles[p.id] = p; });
     }
     (bookings||[]).forEach(b => {
       if (!attendeesBySession[b.session_id]) attendeesBySession[b.session_id] = [];
       const prof = playerProfiles[b.player_id];
-      attendeesBySession[b.session_id].push(prof?.full_name || 'Player');
+      attendeesBySession[b.session_id].push(prof?.name || 'Player');
     });
   }
 
@@ -378,17 +366,6 @@ function setVenueFilter(venue, btn) {
   venueFilter = venue;
   document.querySelectorAll('[data-venue]').forEach(c => c.classList.remove('sel'));
   btn.classList.add('sel');
-  renderSessions();
-}
-
-function toggleVibeFilter(vibe, btn) {
-  if (vibeFilters.includes(vibe)) {
-    vibeFilters = vibeFilters.filter(v => v !== vibe);
-    btn.classList.remove('sel');
-  } else {
-    vibeFilters.push(vibe);
-    btn.classList.add('sel');
-  }
   renderSessions();
 }
 
@@ -411,31 +388,26 @@ function renderSessions() {
   const q = ($('search').value || '').toLowerCase();
   let data = allSessions;
   if (venueFilter !== 'all') data = data.filter(s => s.venue_type === venueFilter);
-  if (vibeFilters.length) data = data.filter(s => {
-    const tags = Array.isArray(s.vibe_tags) ? s.vibe_tags : [];
-    return vibeFilters.some(v => tags.includes(v));
-  });
   if (q) data = data.filter(s =>
     (s.title||'').toLowerCase().includes(q) ||
     (s.location||'').toLowerCase().includes(q) ||
-    (hostProfiles[s.host_id]?.full_name||'').toLowerCase().includes(q)
+    (hostProfiles[s.host_id]?.name||'').toLowerCase().includes(q)
   );
 
   const grid = $('grid');
   if (!data.length) {
-    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">⛳</div><div style="font-weight:500">${t('games.empty_title')}</div><div style="font-size:12px;margin-top:4px">${t('games.empty_sub')}</div></div>`;
+    grid.innerHTML = `<div class="empty-state"><div style="font-weight:500">${t('games.empty_title')}</div><div style="font-size:12px;margin-top:4px">${t('games.empty_sub')}</div></div>`;
     return;
   }
 
   grid.innerHTML = data.map(s => {
     const host = hostProfiles[s.host_id] || {};
-    const hostName = host.full_name || (host.email ? host.email.split('@')[0] : '') || 'Host';
+    const hostName = host.name || (host.email ? host.email.split('@')[0] : '') || 'Host';
     const booked = s.spots_taken || 0;
     const total = s.spots_total || 8;
     const left = total - booked;
     const lowSpots = left > 0 && left <= 2;
     const price = parseFloat(s.price) === 0 ? 'Free' : '$' + parseFloat(s.price).toFixed(0);
-    const emoji = '⛳';
     const venueLabel = VENUE_LABELS[s.venue_type] || '';
     const vibeTags = Array.isArray(s.vibe_tags) ? s.vibe_tags : [];
 
@@ -443,20 +415,20 @@ function renderSessions() {
     let matchBadge = '';
     if (P && host.id) {
       const { score } = computeMatchScore(P, host);
-      if (score > 0) matchBadge = `<div class="sc-match">✨ ${score}% ${t('games.match_with_host')}</div>`;
+      if (score > 0) matchBadge = `<div class="sc-match">${score}% ${t('games.match_with_host')}</div>`;
     }
 
     return `<div class="scard">
       <div class="sc-top">
         ${matchBadge}
-        <div class="sc-title">${emoji} ${s.title || 'Session'}</div>
+        <div class="sc-title">${s.title || 'Session'}</div>
         <div class="sc-host">
           <div class="sc-host-av" style="background:${avColor(host.id||hostName)}">${initials(hostName)}</div>
           <div class="sc-host-name">${hostName}</div>
         </div>
         <div class="sc-meta">
-          <div>📅 ${fmtDate(s.session_date)}${s.session_time?' · '+formatTime(s.session_time):''}</div>
-          <div>📍 ${s.location || 'Location TBD'}${venueLabel?' · '+venueLabel:''}</div>
+          <div>${fmtDate(s.session_date)}${s.session_time?' · '+formatTime(s.session_time):''}</div>
+          <div>${s.location || 'Location TBD'}${venueLabel?' · '+venueLabel:''}</div>
           <div>${cap(s.skill_level||'All levels')} · ${cap(s.format||'')}</div>
         </div>
         <div class="sc-tags">
@@ -618,7 +590,7 @@ function shareInviteLink() {
     const { data: profile } = await db.from('profiles').select('*').eq('id', U.id).maybeSingle();
     P = profile;
     const role = P?.role || 'member';
-    const name = P?.full_name || U.email?.split('@')[0] || 'Player';
+    const name = P?.name || U.email?.split('@')[0] || 'Player';
 
     // Replace the Account dropdown with an avatar linking to the dashboard
     if (accountWrap) accountWrap.outerHTML = `<a href="dashboard.html" class="uav-mini" title="${name}">${initials(name)}</a>`;
